@@ -11,10 +11,10 @@ import java.util.List;
  * @author Kohsuke Kawaguchi
  */
 public class GHIssueBuilder {
-    private final GHRepository repo;
+<span class="fc" id="L14">    private List&lt;String&gt; assignees = new ArrayList&lt;String&gt;();</span>
     private final Requester builder;
 <span class="fc" id="L16">    private List&lt;String&gt; labels = new ArrayList&lt;String&gt;();</span>
-<span class="fc" id="L17">    private List&lt;String&gt; assignees = new ArrayList&lt;String&gt;();</span>
+    private final GHRepository repo;
 
     /**
      * Instantiates a new GH issue builder.
@@ -31,18 +31,6 @@ public class GHIssueBuilder {
 <span class="fc" id="L31">    }</span>
 
     /**
-     * Sets the main text of an issue, which is arbitrary multi-line text.
-     *
-     * @param str
-     *            the str
-     * @return the gh issue builder
-     */
-    public GHIssueBuilder body(String str) {
-<span class="fc" id="L41">        builder.with(&quot;body&quot;, str);</span>
-<span class="fc" id="L42">        return this;</span>
-    }
-
-    /**
      * Assignee gh issue builder.
      *
      * @param user
@@ -50,9 +38,9 @@ public class GHIssueBuilder {
      * @return the gh issue builder
      */
     public GHIssueBuilder assignee(GHUser user) {
-<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if (user != null)</span>
-<span class="fc" id="L54">            assignees.add(user.getLogin());</span>
-<span class="fc" id="L55">        return this;</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">        if (user != null)</span>
+<span class="fc" id="L42">            assignees.add(user.getLogin());</span>
+<span class="fc" id="L43">        return this;</span>
     }
 
     /**
@@ -63,35 +51,21 @@ public class GHIssueBuilder {
      * @return the gh issue builder
      */
     public GHIssueBuilder assignee(String user) {
-<span class="nc bnc" id="L66" title="All 2 branches missed.">        if (user != null)</span>
-<span class="nc" id="L67">            assignees.add(user);</span>
-<span class="nc" id="L68">        return this;</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        if (user != null)</span>
+<span class="nc" id="L55">            assignees.add(user);</span>
+<span class="nc" id="L56">        return this;</span>
     }
 
     /**
-     * Milestone gh issue builder.
+     * Sets the main text of an issue, which is arbitrary multi-line text.
      *
-     * @param milestone
-     *            the milestone
+     * @param str
+     *            the str
      * @return the gh issue builder
      */
-    public GHIssueBuilder milestone(GHMilestone milestone) {
-<span class="pc bpc" id="L79" title="1 of 2 branches missed.">        if (milestone != null)</span>
-<span class="fc" id="L80">            builder.with(&quot;milestone&quot;, milestone.getNumber());</span>
-<span class="fc" id="L81">        return this;</span>
-    }
-
-    /**
-     * Label gh issue builder.
-     *
-     * @param label
-     *            the label
-     * @return the gh issue builder
-     */
-    public GHIssueBuilder label(String label) {
-<span class="pc bpc" id="L92" title="1 of 2 branches missed.">        if (label != null)</span>
-<span class="fc" id="L93">            labels.add(label);</span>
-<span class="fc" id="L94">        return this;</span>
+    public GHIssueBuilder body(String str) {
+<span class="fc" id="L67">        builder.with(&quot;body&quot;, str);</span>
+<span class="fc" id="L68">        return this;</span>
     }
 
     /**
@@ -102,11 +76,37 @@ public class GHIssueBuilder {
      *             the io exception
      */
     public GHIssue create() throws IOException {
-<span class="fc" id="L105">        return builder.with(&quot;labels&quot;, labels)</span>
-<span class="fc" id="L106">                .with(&quot;assignees&quot;, assignees)</span>
-<span class="fc" id="L107">                .withUrlPath(repo.getApiTailUrl(&quot;issues&quot;))</span>
-<span class="fc" id="L108">                .fetch(GHIssue.class)</span>
-<span class="fc" id="L109">                .wrap(repo);</span>
+<span class="fc" id="L79">        return builder.with(&quot;labels&quot;, labels)</span>
+<span class="fc" id="L80">                .with(&quot;assignees&quot;, assignees)</span>
+<span class="fc" id="L81">                .withUrlPath(repo.getApiTailUrl(&quot;issues&quot;))</span>
+<span class="fc" id="L82">                .fetch(GHIssue.class)</span>
+<span class="fc" id="L83">                .wrap(repo);</span>
+    }
+
+    /**
+     * Label gh issue builder.
+     *
+     * @param label
+     *            the label
+     * @return the gh issue builder
+     */
+    public GHIssueBuilder label(String label) {
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        if (label != null)</span>
+<span class="fc" id="L95">            labels.add(label);</span>
+<span class="fc" id="L96">        return this;</span>
+    }
+
+    /**
+     * Milestone gh issue builder.
+     *
+     * @param milestone
+     *            the milestone
+     * @return the gh issue builder
+     */
+    public GHIssueBuilder milestone(GHMilestone milestone) {
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        if (milestone != null)</span>
+<span class="fc" id="L108">            builder.with(&quot;milestone&quot;, milestone.getNumber());</span>
+<span class="fc" id="L109">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

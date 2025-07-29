@@ -10,47 +10,6 @@ import java.util.List;
  * @see GHRepository#getCloneTraffic() GHRepository#getCloneTraffic()
  */
 public class GHRepositoryCloneTraffic extends GHRepositoryTraffic {
-    private List&lt;DailyInfo&gt; clones;
-
-    /**
-     * Instantiates a new GH repository clone traffic.
-     */
-<span class="fc" id="L18">    GHRepositoryCloneTraffic() {</span>
-<span class="fc" id="L19">    }</span>
-
-    /**
-     * Instantiates a new GH repository clone traffic.
-     *
-     * @param count
-     *            the count
-     * @param uniques
-     *            the uniques
-     * @param clones
-     *            the clones
-     */
-    GHRepositoryCloneTraffic(Integer count, Integer uniques, List&lt;DailyInfo&gt; clones) {
-<span class="fc" id="L32">        super(count, uniques);</span>
-<span class="fc" id="L33">        this.clones = clones;</span>
-<span class="fc" id="L34">    }</span>
-
-    /**
-     * Gets clones.
-     *
-     * @return the clones
-     */
-    public List&lt;DailyInfo&gt; getClones() {
-<span class="fc" id="L42">        return Collections.unmodifiableList(clones);</span>
-    }
-
-    /**
-     * Gets the daily info.
-     *
-     * @return the daily info
-     */
-    public List&lt;DailyInfo&gt; getDailyInfo() {
-<span class="fc" id="L51">        return getClones();</span>
-    }
-
     /**
      * The type DailyInfo.
      */
@@ -59,8 +18,8 @@ public class GHRepositoryCloneTraffic extends GHRepositoryTraffic {
         /**
          * Instantiates a new daily info.
          */
-<span class="fc" id="L62">        DailyInfo() {</span>
-<span class="fc" id="L63">        }</span>
+<span class="fc" id="L21">        DailyInfo() {</span>
+<span class="fc" id="L22">        }</span>
 
         /**
          * Instantiates a new daily info.
@@ -73,8 +32,49 @@ public class GHRepositoryCloneTraffic extends GHRepositoryTraffic {
          *            the uniques
          */
         DailyInfo(String timestamp, int count, int uniques) {
-<span class="fc" id="L76">            super(timestamp, count, uniques);</span>
-<span class="fc" id="L77">        }</span>
+<span class="fc" id="L35">            super(timestamp, count, uniques);</span>
+<span class="fc" id="L36">        }</span>
+    }
+
+    private List&lt;DailyInfo&gt; clones;
+
+    /**
+     * Instantiates a new GH repository clone traffic.
+     */
+<span class="fc" id="L44">    GHRepositoryCloneTraffic() {</span>
+<span class="fc" id="L45">    }</span>
+
+    /**
+     * Instantiates a new GH repository clone traffic.
+     *
+     * @param count
+     *            the count
+     * @param uniques
+     *            the uniques
+     * @param clones
+     *            the clones
+     */
+    GHRepositoryCloneTraffic(Integer count, Integer uniques, List&lt;DailyInfo&gt; clones) {
+<span class="fc" id="L58">        super(count, uniques);</span>
+<span class="fc" id="L59">        this.clones = clones;</span>
+<span class="fc" id="L60">    }</span>
+
+    /**
+     * Gets clones.
+     *
+     * @return the clones
+     */
+    public List&lt;DailyInfo&gt; getClones() {
+<span class="fc" id="L68">        return Collections.unmodifiableList(clones);</span>
+    }
+
+    /**
+     * Gets the daily info.
+     *
+     * @return the daily info
+     */
+    public List&lt;DailyInfo&gt; getDailyInfo() {
+<span class="fc" id="L77">        return getClones();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

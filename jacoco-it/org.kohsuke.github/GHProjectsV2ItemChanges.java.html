@@ -17,42 +17,22 @@ import java.util.Date;
 public class GHProjectsV2ItemChanges extends GitHubBridgeAdapterObject {
 
     /**
-     * Create default GHProjectsV2ItemChanges instance
+     * The Enum FieldType.
      */
-<span class="fc" id="L22">    public GHProjectsV2ItemChanges() {</span>
-<span class="fc" id="L23">    }</span>
+<span class="fc" id="L22">    public enum FieldType {</span>
 
-    private FieldValue fieldValue;
-
-    private FromToDate archivedAt;
-
-    private FromTo previousProjectsV2ItemNodeId;
-
-    /**
-     * Gets the field value.
-     *
-     * @return the field value
-     */
-    public FieldValue getFieldValue() {
-<span class="fc" id="L37">        return fieldValue;</span>
-    }
-
-    /**
-     * Gets the archived at.
-     *
-     * @return the archived at
-     */
-    public FromToDate getArchivedAt() {
-<span class="fc" id="L46">        return archivedAt;</span>
-    }
-
-    /**
-     * Gets the previous projects V 2 item node id.
-     *
-     * @return the previous projects V 2 item node id
-     */
-    public FromTo getPreviousProjectsV2ItemNodeId() {
-<span class="fc" id="L55">        return previousProjectsV2ItemNodeId;</span>
+        /** The date. */
+<span class="fc" id="L25">        DATE,</span>
+        /** The iteration. */
+<span class="fc" id="L27">        ITERATION,</span>
+        /** The number. */
+<span class="fc" id="L29">        NUMBER,</span>
+        /** The single select. */
+<span class="fc" id="L31">        SINGLE_SELECT,</span>
+        /** The text. */
+<span class="fc" id="L33">        TEXT,</span>
+        /** The unknown. */
+<span class="fc" id="L35">        UNKNOWN;</span>
     }
 
     /**
@@ -60,14 +40,14 @@ public class GHProjectsV2ItemChanges extends GitHubBridgeAdapterObject {
      */
     public static class FieldValue {
 
+        private String fieldNodeId;
+
+        private String fieldType;
         /**
          * Create default FieldValue instance
          */
-<span class="fc" id="L66">        public FieldValue() {</span>
-<span class="fc" id="L67">        }</span>
-
-        private String fieldNodeId;
-        private String fieldType;
+<span class="fc" id="L49">        public FieldValue() {</span>
+<span class="fc" id="L50">        }</span>
 
         /**
          * Gets the field node id.
@@ -75,7 +55,7 @@ public class GHProjectsV2ItemChanges extends GitHubBridgeAdapterObject {
          * @return the field node id
          */
         public String getFieldNodeId() {
-<span class="fc" id="L78">            return fieldNodeId;</span>
+<span class="fc" id="L58">            return fieldNodeId;</span>
         }
 
         /**
@@ -84,7 +64,7 @@ public class GHProjectsV2ItemChanges extends GitHubBridgeAdapterObject {
          * @return the field type
          */
         public FieldType getFieldType() {
-<span class="fc" id="L87">            return EnumUtils.getEnumOrDefault(FieldType.class, fieldType, FieldType.UNKNOWN);</span>
+<span class="fc" id="L67">            return EnumUtils.getEnumOrDefault(FieldType.class, fieldType, FieldType.UNKNOWN);</span>
         }
     }
 
@@ -93,14 +73,14 @@ public class GHProjectsV2ItemChanges extends GitHubBridgeAdapterObject {
      */
     public static class FromTo {
 
+        private String from;
+
+        private String to;
         /**
          * Create default FromTo instance
          */
-<span class="fc" id="L99">        public FromTo() {</span>
-<span class="fc" id="L100">        }</span>
-
-        private String from;
-        private String to;
+<span class="fc" id="L82">        public FromTo() {</span>
+<span class="fc" id="L83">        }</span>
 
         /**
          * Gets the from.
@@ -108,7 +88,7 @@ public class GHProjectsV2ItemChanges extends GitHubBridgeAdapterObject {
          * @return the from
          */
         public String getFrom() {
-<span class="fc" id="L111">            return from;</span>
+<span class="fc" id="L91">            return from;</span>
         }
 
         /**
@@ -117,7 +97,7 @@ public class GHProjectsV2ItemChanges extends GitHubBridgeAdapterObject {
          * @return the to
          */
         public String getTo() {
-<span class="fc" id="L120">            return to;</span>
+<span class="fc" id="L100">            return to;</span>
         }
     }
 
@@ -126,14 +106,14 @@ public class GHProjectsV2ItemChanges extends GitHubBridgeAdapterObject {
      */
     public static class FromToDate {
 
+        private String from;
+
+        private String to;
         /**
          * Create default FromToDate instance
          */
-<span class="fc" id="L132">        public FromToDate() {</span>
-<span class="fc" id="L133">        }</span>
-
-        private String from;
-        private String to;
+<span class="fc" id="L115">        public FromToDate() {</span>
+<span class="fc" id="L116">        }</span>
 
         /**
          * Gets the from.
@@ -142,7 +122,7 @@ public class GHProjectsV2ItemChanges extends GitHubBridgeAdapterObject {
          */
         @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
         public Instant getFrom() {
-<span class="fc" id="L145">            return GitHubClient.parseInstant(from);</span>
+<span class="fc" id="L125">            return GitHubClient.parseInstant(from);</span>
         }
 
         /**
@@ -152,27 +132,47 @@ public class GHProjectsV2ItemChanges extends GitHubBridgeAdapterObject {
          */
         @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
         public Instant getTo() {
-<span class="fc" id="L155">            return GitHubClient.parseInstant(to);</span>
+<span class="fc" id="L135">            return GitHubClient.parseInstant(to);</span>
         }
     }
 
-    /**
-     * The Enum FieldType.
-     */
-<span class="fc" id="L162">    public enum FieldType {</span>
+    private FromToDate archivedAt;
 
-        /** The text. */
-<span class="fc" id="L165">        TEXT,</span>
-        /** The number. */
-<span class="fc" id="L167">        NUMBER,</span>
-        /** The date. */
-<span class="fc" id="L169">        DATE,</span>
-        /** The single select. */
-<span class="fc" id="L171">        SINGLE_SELECT,</span>
-        /** The iteration. */
-<span class="fc" id="L173">        ITERATION,</span>
-        /** The unknown. */
-<span class="fc" id="L175">        UNKNOWN;</span>
+    private FieldValue fieldValue;
+
+    private FromTo previousProjectsV2ItemNodeId;
+
+    /**
+     * Create default GHProjectsV2ItemChanges instance
+     */
+<span class="fc" id="L148">    public GHProjectsV2ItemChanges() {</span>
+<span class="fc" id="L149">    }</span>
+
+    /**
+     * Gets the archived at.
+     *
+     * @return the archived at
+     */
+    public FromToDate getArchivedAt() {
+<span class="fc" id="L157">        return archivedAt;</span>
+    }
+
+    /**
+     * Gets the field value.
+     *
+     * @return the field value
+     */
+    public FieldValue getFieldValue() {
+<span class="fc" id="L166">        return fieldValue;</span>
+    }
+
+    /**
+     * Gets the previous projects V 2 item node id.
+     *
+     * @return the previous projects V 2 item node id
+     */
+    public FromTo getPreviousProjectsV2ItemNodeId() {
+<span class="fc" id="L175">        return previousProjectsV2ItemNodeId;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

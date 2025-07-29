@@ -14,44 +14,44 @@ import java.util.List;
  * Builder pattern for creating a new tree. Based on https://developer.github.com/v3/git/trees/#create-a-tree
  */
 public class GHTreeBuilder {
-    private final GHRepository repo;
-    private final Requester req;
-
-<span class="fc" id="L20">    private final List&lt;TreeEntry&gt; treeEntries = new ArrayList&lt;TreeEntry&gt;();</span>
-
-    // Issue #636: Create Tree no longer accepts null value in sha field
-    @JsonInclude(Include.NON_NULL)
-    @SuppressFBWarnings(&quot;URF_UNREAD_FIELD&quot;)
-    private static class TreeEntry {
-
-        private final String path;
-        private final String mode;
-        private final String type;
-        private String sha;
-        private String content;
-
-<span class="fc" id="L33">        private TreeEntry(String path, String mode, String type) {</span>
-<span class="fc" id="L34">            this.path = path;</span>
-<span class="fc" id="L35">            this.mode = mode;</span>
-<span class="fc" id="L36">            this.type = type;</span>
-<span class="fc" id="L37">        }</span>
-    }
-
     private static class DeleteTreeEntry extends TreeEntry {
         /**
          * According to reference doc https://docs.github.com/en/rest/git/trees?apiVersion=2022-11-28#create-a-tree: if
          * sha value is null then the file will be deleted. That's why in this DTO sha is always {@literal null} and is
          * included to json.
          */
-<span class="fc" id="L46">        @JsonInclude</span>
+<span class="fc" id="L23">        @JsonInclude</span>
         private final String sha = null;
 
         private DeleteTreeEntry(String path) {
             // The `mode` and `type` parameters are required by the API, but their values are ignored during delete.
             // Supply reasonable placeholders.
-<span class="fc" id="L52">            super(path, &quot;100644&quot;, &quot;blob&quot;);</span>
-<span class="fc" id="L53">        }</span>
+<span class="fc" id="L29">            super(path, &quot;100644&quot;, &quot;blob&quot;);</span>
+<span class="fc" id="L30">        }</span>
     }
+    // Issue #636: Create Tree no longer accepts null value in sha field
+    @JsonInclude(Include.NON_NULL)
+    @SuppressFBWarnings(&quot;URF_UNREAD_FIELD&quot;)
+    private static class TreeEntry {
+
+        private String content;
+        private final String mode;
+        private final String path;
+        private String sha;
+        private final String type;
+
+<span class="fc" id="L43">        private TreeEntry(String path, String mode, String type) {</span>
+<span class="fc" id="L44">            this.path = path;</span>
+<span class="fc" id="L45">            this.mode = mode;</span>
+<span class="fc" id="L46">            this.type = type;</span>
+<span class="fc" id="L47">        }</span>
+    }
+
+    private final GHRepository repo;
+
+    private final Requester req;
+
+<span class="fc" id="L54">    private final List&lt;TreeEntry&gt; treeEntries = new ArrayList&lt;TreeEntry&gt;();</span>
 
     /**
      * Instantiates a new GH tree builder.
@@ -65,6 +65,41 @@ public class GHTreeBuilder {
 <span class="fc" id="L65">    }</span>
 
     /**
+     * Adds a new entry with the given text content to the tree.
+     *
+     * @param path
+     *            the file path in the tree
+     * @param content
+     *            the file content as UTF-8 encoded string
+     * @param executable
+     *            true, if the file should be executable
+     * @return this GHTreeBuilder
+     */
+    public GHTreeBuilder add(String path, String content, boolean executable) {
+<span class="fc" id="L79">        return add(path, content.getBytes(StandardCharsets.UTF_8), executable);</span>
+    }
+
+    /**
+     * Adds a new entry with the given binary content to the tree.
+     *
+     * @param path
+     *            the file path in the tree
+     * @param content
+     *            the file content as byte array
+     * @param executable
+     *            true, if the file should be executable
+     * @return this GHTreeBuilder
+     */
+    public GHTreeBuilder add(String path, byte[] content, boolean executable) {
+        try {
+<span class="fc" id="L95">            String dataSha = repo.createBlob().binaryContent(content).create().getSha();</span>
+<span class="fc" id="L96">            return shaEntry(path, dataSha, executable);</span>
+<span class="nc" id="L97">        } catch (IOException e) {</span>
+<span class="nc" id="L98">            throw new GHException(&quot;Cannot create binary content of '&quot; + path + &quot;'&quot;, e);</span>
+        }
+    }
+
+    /**
      * Base tree gh tree builder.
      *
      * @param baseTree
@@ -72,8 +107,33 @@ public class GHTreeBuilder {
      * @return the gh tree builder
      */
     public GHTreeBuilder baseTree(String baseTree) {
-<span class="fc" id="L75">        req.with(&quot;base_tree&quot;, baseTree);</span>
-<span class="fc" id="L76">        return this;</span>
+<span class="fc" id="L110">        req.with(&quot;base_tree&quot;, baseTree);</span>
+<span class="fc" id="L111">        return this;</span>
+    }
+
+    /**
+     * Creates a tree based on the parameters specified thus far.
+     *
+     * @return the gh tree
+     * @throws IOException
+     *             the io exception
+     */
+    public GHTree create() throws IOException {
+<span class="fc" id="L122">        req.with(&quot;tree&quot;, treeEntries);</span>
+<span class="fc" id="L123">        return req.method(&quot;POST&quot;).withUrlPath(getApiTail()).fetch(GHTree.class).wrap(repo);</span>
+    }
+
+    /**
+     * Removes an entry with the given path from base tree.
+     *
+     * @param path
+     *            the file path in the tree
+     * @return this GHTreeBuilder
+     */
+    public GHTreeBuilder delete(String path) {
+<span class="fc" id="L134">        TreeEntry entry = new DeleteTreeEntry(path);</span>
+<span class="fc" id="L135">        treeEntries.add(entry);</span>
+<span class="fc" id="L136">        return this;</span>
     }
 
     /**
@@ -90,10 +150,10 @@ public class GHTreeBuilder {
      */
     @Deprecated
     public GHTreeBuilder shaEntry(String path, String sha, boolean executable) {
-<span class="fc bfc" id="L93" title="All 2 branches covered.">        TreeEntry entry = new TreeEntry(path, executable ? &quot;100755&quot; : &quot;100644&quot;, &quot;blob&quot;);</span>
-<span class="fc" id="L94">        entry.sha = sha;</span>
-<span class="fc" id="L95">        treeEntries.add(entry);</span>
-<span class="fc" id="L96">        return this;</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">        TreeEntry entry = new TreeEntry(path, executable ? &quot;100755&quot; : &quot;100644&quot;, &quot;blob&quot;);</span>
+<span class="fc" id="L154">        entry.sha = sha;</span>
+<span class="fc" id="L155">        treeEntries.add(entry);</span>
+<span class="fc" id="L156">        return this;</span>
     }
 
     /**
@@ -110,74 +170,14 @@ public class GHTreeBuilder {
      */
     @Deprecated
     public GHTreeBuilder textEntry(String path, String content, boolean executable) {
-<span class="pc bpc" id="L113" title="1 of 2 branches missed.">        TreeEntry entry = new TreeEntry(path, executable ? &quot;100755&quot; : &quot;100644&quot;, &quot;blob&quot;);</span>
-<span class="fc" id="L114">        entry.content = content;</span>
-<span class="fc" id="L115">        treeEntries.add(entry);</span>
-<span class="fc" id="L116">        return this;</span>
-    }
-
-    /**
-     * Adds a new entry with the given binary content to the tree.
-     *
-     * @param path
-     *            the file path in the tree
-     * @param content
-     *            the file content as byte array
-     * @param executable
-     *            true, if the file should be executable
-     * @return this GHTreeBuilder
-     */
-    public GHTreeBuilder add(String path, byte[] content, boolean executable) {
-        try {
-<span class="fc" id="L132">            String dataSha = repo.createBlob().binaryContent(content).create().getSha();</span>
-<span class="fc" id="L133">            return shaEntry(path, dataSha, executable);</span>
-<span class="nc" id="L134">        } catch (IOException e) {</span>
-<span class="nc" id="L135">            throw new GHException(&quot;Cannot create binary content of '&quot; + path + &quot;'&quot;, e);</span>
-        }
-    }
-
-    /**
-     * Adds a new entry with the given text content to the tree.
-     *
-     * @param path
-     *            the file path in the tree
-     * @param content
-     *            the file content as UTF-8 encoded string
-     * @param executable
-     *            true, if the file should be executable
-     * @return this GHTreeBuilder
-     */
-    public GHTreeBuilder add(String path, String content, boolean executable) {
-<span class="fc" id="L151">        return add(path, content.getBytes(StandardCharsets.UTF_8), executable);</span>
-    }
-
-    /**
-     * Removes an entry with the given path from base tree.
-     *
-     * @param path
-     *            the file path in the tree
-     * @return this GHTreeBuilder
-     */
-    public GHTreeBuilder delete(String path) {
-<span class="fc" id="L162">        TreeEntry entry = new DeleteTreeEntry(path);</span>
-<span class="fc" id="L163">        treeEntries.add(entry);</span>
-<span class="fc" id="L164">        return this;</span>
+<span class="pc bpc" id="L173" title="1 of 2 branches missed.">        TreeEntry entry = new TreeEntry(path, executable ? &quot;100755&quot; : &quot;100644&quot;, &quot;blob&quot;);</span>
+<span class="fc" id="L174">        entry.content = content;</span>
+<span class="fc" id="L175">        treeEntries.add(entry);</span>
+<span class="fc" id="L176">        return this;</span>
     }
 
     private String getApiTail() {
-<span class="fc" id="L168">        return String.format(&quot;/repos/%s/%s/git/trees&quot;, repo.getOwnerName(), repo.getName());</span>
-    }
-
-    /**
-     * Creates a tree based on the parameters specified thus far.
-     *
-     * @return the gh tree
-     * @throws IOException
-     *             the io exception
-     */
-    public GHTree create() throws IOException {
-<span class="fc" id="L179">        req.with(&quot;tree&quot;, treeEntries);</span>
-<span class="fc" id="L180">        return req.method(&quot;POST&quot;).withUrlPath(getApiTail()).fetch(GHTree.class).wrap(repo);</span>
+<span class="fc" id="L180">        return String.format(&quot;/repos/%s/%s/git/trees&quot;, repo.getOwnerName(), repo.getName());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

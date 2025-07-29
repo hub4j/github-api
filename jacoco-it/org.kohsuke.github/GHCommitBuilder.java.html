@@ -11,22 +11,22 @@ import java.util.List;
  * Builder pattern for creating a new commit. Based on https://developer.github.com/v3/git/commits/#create-a-commit
  */
 public class GHCommitBuilder {
-    private final GHRepository repo;
-    private final Requester req;
-
-<span class="fc" id="L17">    private final List&lt;String&gt; parents = new ArrayList&lt;String&gt;();</span>
-
     private static final class UserInfo {
-        private final String name;
-        private final String email;
         private final String date;
+        private final String email;
+        private final String name;
 
-<span class="fc" id="L24">        private UserInfo(String name, String email, Instant date) {</span>
-<span class="fc" id="L25">            this.name = name;</span>
-<span class="fc" id="L26">            this.email = email;</span>
-<span class="fc" id="L27">            this.date = GitHubClient.printInstant(date);</span>
-<span class="fc" id="L28">        }</span>
+<span class="fc" id="L19">        private UserInfo(String name, String email, Instant date) {</span>
+<span class="fc" id="L20">            this.name = name;</span>
+<span class="fc" id="L21">            this.email = email;</span>
+<span class="fc" id="L22">            this.date = GitHubClient.printInstant(date);</span>
+<span class="fc" id="L23">        }</span>
     }
+<span class="fc" id="L25">    private final List&lt;String&gt; parents = new ArrayList&lt;String&gt;();</span>
+
+    private final GHRepository repo;
+
+    private final Requester req;
 
     /**
      * Instantiates a new GH commit builder.
@@ -38,42 +38,6 @@ public class GHCommitBuilder {
 <span class="fc" id="L38">        this.repo = repo;</span>
 <span class="fc" id="L39">        req = repo.root().createRequest().method(&quot;POST&quot;);</span>
 <span class="fc" id="L40">    }</span>
-
-    /**
-     * Message gh commit builder.
-     *
-     * @param message
-     *            the commit message
-     * @return the gh commit builder
-     */
-    public GHCommitBuilder message(String message) {
-<span class="fc" id="L50">        req.with(&quot;message&quot;, message);</span>
-<span class="fc" id="L51">        return this;</span>
-    }
-
-    /**
-     * Tree gh commit builder.
-     *
-     * @param tree
-     *            the SHA of the tree object this commit points to
-     * @return the gh commit builder
-     */
-    public GHCommitBuilder tree(String tree) {
-<span class="fc" id="L62">        req.with(&quot;tree&quot;, tree);</span>
-<span class="fc" id="L63">        return this;</span>
-    }
-
-    /**
-     * Parent gh commit builder.
-     *
-     * @param parent
-     *            the SHA of a parent commit.
-     * @return the gh commit builder
-     */
-    public GHCommitBuilder parent(String parent) {
-<span class="fc" id="L74">        parents.add(parent);</span>
-<span class="fc" id="L75">        return this;</span>
-    }
 
     /**
      * Configures the author of this commit.
@@ -89,7 +53,7 @@ public class GHCommitBuilder {
      */
     @Deprecated
     public GHCommitBuilder author(String name, String email, Date date) {
-<span class="fc" id="L92">        return author(name, email, GitHubClient.toInstantOrNull(date));</span>
+<span class="fc" id="L56">        return author(name, email, GitHubClient.toInstantOrNull(date));</span>
     }
 
     /**
@@ -104,21 +68,8 @@ public class GHCommitBuilder {
      * @return the gh commit builder
      */
     public GHCommitBuilder author(String name, String email, Instant date) {
-<span class="fc" id="L107">        req.with(&quot;author&quot;, new UserInfo(name, email, date));</span>
-<span class="fc" id="L108">        return this;</span>
-    }
-
-    /**
-     * Configures the PGP signature of this commit.
-     *
-     * @param signature
-     *            the signature calculated from the commit
-     *
-     * @return the gh commit builder
-     */
-    public GHCommitBuilder withSignature(String signature) {
-<span class="fc" id="L120">        req.with(&quot;signature&quot;, signature);</span>
-<span class="fc" id="L121">        return this;</span>
+<span class="fc" id="L71">        req.with(&quot;author&quot;, new UserInfo(name, email, date));</span>
+<span class="fc" id="L72">        return this;</span>
     }
 
     /**
@@ -135,7 +86,7 @@ public class GHCommitBuilder {
      */
     @Deprecated
     public GHCommitBuilder committer(String name, String email, Date date) {
-<span class="fc" id="L138">        return committer(name, email, GitHubClient.toInstantOrNull(date));</span>
+<span class="fc" id="L89">        return committer(name, email, GitHubClient.toInstantOrNull(date));</span>
     }
 
     /**
@@ -150,12 +101,8 @@ public class GHCommitBuilder {
      * @return the gh commit builder
      */
     public GHCommitBuilder committer(String name, String email, Instant date) {
-<span class="fc" id="L153">        req.with(&quot;committer&quot;, new UserInfo(name, email, date));</span>
-<span class="fc" id="L154">        return this;</span>
-    }
-
-    private String getApiTail() {
-<span class="fc" id="L158">        return String.format(&quot;/repos/%s/%s/git/commits&quot;, repo.getOwnerName(), repo.getName());</span>
+<span class="fc" id="L104">        req.with(&quot;committer&quot;, new UserInfo(name, email, date));</span>
+<span class="fc" id="L105">        return this;</span>
     }
 
     /**
@@ -166,8 +113,61 @@ public class GHCommitBuilder {
      *             the io exception
      */
     public GHCommit create() throws IOException {
-<span class="fc" id="L169">        req.with(&quot;parents&quot;, parents);</span>
-<span class="fc" id="L170">        return req.method(&quot;POST&quot;).withUrlPath(getApiTail()).fetch(GHCommit.class).wrapUp(repo);</span>
+<span class="fc" id="L116">        req.with(&quot;parents&quot;, parents);</span>
+<span class="fc" id="L117">        return req.method(&quot;POST&quot;).withUrlPath(getApiTail()).fetch(GHCommit.class).wrapUp(repo);</span>
+    }
+
+    /**
+     * Message gh commit builder.
+     *
+     * @param message
+     *            the commit message
+     * @return the gh commit builder
+     */
+    public GHCommitBuilder message(String message) {
+<span class="fc" id="L128">        req.with(&quot;message&quot;, message);</span>
+<span class="fc" id="L129">        return this;</span>
+    }
+
+    /**
+     * Parent gh commit builder.
+     *
+     * @param parent
+     *            the SHA of a parent commit.
+     * @return the gh commit builder
+     */
+    public GHCommitBuilder parent(String parent) {
+<span class="fc" id="L140">        parents.add(parent);</span>
+<span class="fc" id="L141">        return this;</span>
+    }
+
+    /**
+     * Tree gh commit builder.
+     *
+     * @param tree
+     *            the SHA of the tree object this commit points to
+     * @return the gh commit builder
+     */
+    public GHCommitBuilder tree(String tree) {
+<span class="fc" id="L152">        req.with(&quot;tree&quot;, tree);</span>
+<span class="fc" id="L153">        return this;</span>
+    }
+
+    /**
+     * Configures the PGP signature of this commit.
+     *
+     * @param signature
+     *            the signature calculated from the commit
+     *
+     * @return the gh commit builder
+     */
+    public GHCommitBuilder withSignature(String signature) {
+<span class="fc" id="L165">        req.with(&quot;signature&quot;, signature);</span>
+<span class="fc" id="L166">        return this;</span>
+    }
+
+    private String getApiTail() {
+<span class="fc" id="L170">        return String.format(&quot;/repos/%s/%s/git/commits&quot;, repo.getOwnerName(), repo.getName());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

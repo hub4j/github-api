@@ -14,56 +14,56 @@ import java.util.logging.Logger;
  */
 class EnterpriseManagedSupport {
 
+<span class="fc" id="L17">    private static final Logger LOGGER = Logger.getLogger(EnterpriseManagedSupport.class.getName());</span>
     static final String COULD_NOT_RETRIEVE_ORGANIZATION_EXTERNAL_GROUPS = &quot;Could not retrieve organization external groups&quot;;
     static final String NOT_PART_OF_EXTERNALLY_MANAGED_ENTERPRISE_ERROR = &quot;This organization is not part of externally managed enterprise.&quot;;
+
     static final String TEAM_CANNOT_BE_EXTERNALLY_MANAGED_ERROR = &quot;This team cannot be externally managed since it has explicit members.&quot;;
 
-<span class="fc" id="L21">    private static final Logger LOGGER = Logger.getLogger(EnterpriseManagedSupport.class.getName());</span>
+    private static String logUnexpectedFailure(final JsonProcessingException exception, final String payload) {
+<span class="fc" id="L24">        final StringWriter sw = new StringWriter();</span>
+<span class="fc" id="L25">        final PrintWriter pw = new PrintWriter(sw);</span>
+<span class="fc" id="L26">        exception.printStackTrace(pw);</span>
+<span class="fc" id="L27">        return String.format(&quot;Could not parse GitHub error response: '%s'. Full stacktrace follows:%n%s&quot;, payload, sw);</span>
+    }
+
+    static EnterpriseManagedSupport forOrganization(final GHOrganization org) {
+<span class="fc" id="L31">        return new EnterpriseManagedSupport(org);</span>
+    }
 
     private final GHOrganization organization;
 
-<span class="fc" id="L25">    private EnterpriseManagedSupport(GHOrganization organization) {</span>
-<span class="fc" id="L26">        this.organization = organization;</span>
-<span class="fc" id="L27">    }</span>
+<span class="fc" id="L36">    private EnterpriseManagedSupport(GHOrganization organization) {</span>
+<span class="fc" id="L37">        this.organization = organization;</span>
+<span class="fc" id="L38">    }</span>
 
-    Optional&lt;GHIOException&gt; filterException(final HttpException he, final String scenario) {
-<span class="fc bfc" id="L30" title="All 2 branches covered.">        if (he.getResponseCode() == 400) {</span>
-<span class="fc" id="L31">            final String responseMessage = he.getMessage();</span>
-            try {
-<span class="fc" id="L33">                final GHError error = GitHubClient.getMappingObjectReader(this.organization.root())</span>
-<span class="fc" id="L34">                        .forType(GHError.class)</span>
-<span class="fc" id="L35">                        .readValue(responseMessage);</span>
-<span class="fc bfc" id="L36" title="All 2 branches covered.">                if (NOT_PART_OF_EXTERNALLY_MANAGED_ENTERPRISE_ERROR.equals(error.getMessage())) {</span>
-<span class="fc" id="L37">                    return Optional.of(new GHNotExternallyManagedEnterpriseException(scenario, error, he));</span>
-<span class="fc bfc" id="L38" title="All 2 branches covered.">                } else if (TEAM_CANNOT_BE_EXTERNALLY_MANAGED_ERROR.equals(error.getMessage())) {</span>
-<span class="fc" id="L39">                    return Optional.of(new GHTeamCannotBeExternallyManagedException(scenario, error, he));</span>
-                }
-<span class="fc" id="L41">            } catch (final JsonProcessingException e) {</span>
-                // We can ignore it
-<span class="fc" id="L43">                LOGGER.warning(() -&gt; logUnexpectedFailure(e, responseMessage));</span>
-<span class="fc" id="L44">            }</span>
+    Optional&lt;GHException&gt; filterException(final GHException e) {
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        if (e.getCause() instanceof HttpException) {</span>
+<span class="fc" id="L42">            final HttpException he = (HttpException) e.getCause();</span>
+<span class="fc" id="L43">            return filterException(he, COULD_NOT_RETRIEVE_ORGANIZATION_EXTERNAL_GROUPS)</span>
+<span class="fc" id="L44">                    .map(translated -&gt; new GHException(COULD_NOT_RETRIEVE_ORGANIZATION_EXTERNAL_GROUPS, translated));</span>
         }
 <span class="fc" id="L46">        return Optional.empty();</span>
     }
 
-    Optional&lt;GHException&gt; filterException(final GHException e) {
-<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (e.getCause() instanceof HttpException) {</span>
-<span class="fc" id="L51">            final HttpException he = (HttpException) e.getCause();</span>
-<span class="fc" id="L52">            return filterException(he, COULD_NOT_RETRIEVE_ORGANIZATION_EXTERNAL_GROUPS)</span>
-<span class="fc" id="L53">                    .map(translated -&gt; new GHException(COULD_NOT_RETRIEVE_ORGANIZATION_EXTERNAL_GROUPS, translated));</span>
+    Optional&lt;GHIOException&gt; filterException(final HttpException he, final String scenario) {
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (he.getResponseCode() == 400) {</span>
+<span class="fc" id="L51">            final String responseMessage = he.getMessage();</span>
+            try {
+<span class="fc" id="L53">                final GHError error = GitHubClient.getMappingObjectReader(this.organization.root())</span>
+<span class="fc" id="L54">                        .forType(GHError.class)</span>
+<span class="fc" id="L55">                        .readValue(responseMessage);</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">                if (NOT_PART_OF_EXTERNALLY_MANAGED_ENTERPRISE_ERROR.equals(error.getMessage())) {</span>
+<span class="fc" id="L57">                    return Optional.of(new GHNotExternallyManagedEnterpriseException(scenario, error, he));</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">                } else if (TEAM_CANNOT_BE_EXTERNALLY_MANAGED_ERROR.equals(error.getMessage())) {</span>
+<span class="fc" id="L59">                    return Optional.of(new GHTeamCannotBeExternallyManagedException(scenario, error, he));</span>
+                }
+<span class="fc" id="L61">            } catch (final JsonProcessingException e) {</span>
+                // We can ignore it
+<span class="fc" id="L63">                LOGGER.warning(() -&gt; logUnexpectedFailure(e, responseMessage));</span>
+<span class="fc" id="L64">            }</span>
         }
-<span class="fc" id="L55">        return Optional.empty();</span>
-    }
-
-    static EnterpriseManagedSupport forOrganization(final GHOrganization org) {
-<span class="fc" id="L59">        return new EnterpriseManagedSupport(org);</span>
-    }
-
-    private static String logUnexpectedFailure(final JsonProcessingException exception, final String payload) {
-<span class="fc" id="L63">        final StringWriter sw = new StringWriter();</span>
-<span class="fc" id="L64">        final PrintWriter pw = new PrintWriter(sw);</span>
-<span class="fc" id="L65">        exception.printStackTrace(pw);</span>
-<span class="fc" id="L66">        return String.format(&quot;Could not parse GitHub error response: '%s'. Full stacktrace follows:%n%s&quot;, payload, sw);</span>
+<span class="fc" id="L66">        return Optional.empty();</span>
     }
 
 }

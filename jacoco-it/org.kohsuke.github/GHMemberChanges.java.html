@@ -9,14 +9,75 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 public class GHMemberChanges {
 
     /**
-     * Create default GHMemberChanges instance
+     * Changes to role name.
      */
-<span class="fc" id="L14">    public GHMemberChanges() {</span>
-<span class="fc" id="L15">    }</span>
+    public static class FromRoleName {
+
+        private String to;
+
+        /**
+         * Create default FromRoleName instance
+         */
+<span class="fc" id="L21">        public FromRoleName() {</span>
+<span class="fc" id="L22">        }</span>
+
+        /**
+         * Gets the to.
+         *
+         * @return the to
+         */
+        public String getTo() {
+<span class="fc" id="L30">            return to;</span>
+        }
+    }
+
+    /**
+     * Changes to permission.
+     */
+    public static class FromToPermission {
+
+        private String from;
+
+        private String to;
+
+        /**
+         * Create default FromToPermission instance
+         */
+<span class="fc" id="L46">        public FromToPermission() {</span>
+<span class="fc" id="L47">        }</span>
+
+        /**
+         * Gets the from.
+         *
+         * Cannot use {@link GHOrganization.Permission#ADMIN} due to messy underlying design.
+         *
+         * @return the from
+         */
+        public String getFrom() {
+<span class="fc" id="L57">            return from;</span>
+        }
+
+        /**
+         * Gets the to.
+         *
+         * Cannot use {@link GHOrganization.Permission#ADMIN} due to messy underlying design.
+         *
+         * @return the to
+         */
+        public String getTo() {
+<span class="fc" id="L68">            return to;</span>
+        }
+    }
 
     private FromToPermission permission;
 
     private FromRoleName roleName;
+
+    /**
+     * Create default GHMemberChanges instance
+     */
+<span class="fc" id="L79">    public GHMemberChanges() {</span>
+<span class="fc" id="L80">    }</span>
 
     /**
      * Get changes to permission.
@@ -24,7 +85,7 @@ public class GHMemberChanges {
      * @return changes to permission
      */
     public FromToPermission getPermission() {
-<span class="fc" id="L27">        return permission;</span>
+<span class="fc" id="L88">        return permission;</span>
     }
 
     /**
@@ -36,68 +97,7 @@ public class GHMemberChanges {
      * @return changes to role name
      */
     public FromRoleName getRoleName() {
-<span class="fc" id="L39">        return roleName;</span>
-    }
-
-    /**
-     * Changes to permission.
-     */
-    public static class FromToPermission {
-
-        /**
-         * Create default FromToPermission instance
-         */
-<span class="fc" id="L50">        public FromToPermission() {</span>
-<span class="fc" id="L51">        }</span>
-
-        private String from;
-
-        private String to;
-
-        /**
-         * Gets the from.
-         *
-         * Cannot use {@link GHOrganization.Permission#ADMIN} due to messy underlying design.
-         *
-         * @return the from
-         */
-        public String getFrom() {
-<span class="fc" id="L65">            return from;</span>
-        }
-
-        /**
-         * Gets the to.
-         *
-         * Cannot use {@link GHOrganization.Permission#ADMIN} due to messy underlying design.
-         *
-         * @return the to
-         */
-        public String getTo() {
-<span class="fc" id="L76">            return to;</span>
-        }
-    }
-
-    /**
-     * Changes to role name.
-     */
-    public static class FromRoleName {
-
-        /**
-         * Create default FromRoleName instance
-         */
-<span class="fc" id="L88">        public FromRoleName() {</span>
-<span class="fc" id="L89">        }</span>
-
-        private String to;
-
-        /**
-         * Gets the to.
-         *
-         * @return the to
-         */
-        public String getTo() {
-<span class="fc" id="L99">            return to;</span>
-        }
+<span class="fc" id="L100">        return roleName;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

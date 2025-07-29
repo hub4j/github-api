@@ -15,35 +15,26 @@ import java.util.List;
  */
 public class GHMarketplacePlan extends GitHubInteractiveObject {
 
+    private String accountsUrl;
+
+    private List&lt;String&gt; bullets;
+    private String description;
+    @JsonProperty(&quot;has_free_trial&quot;)
+    private boolean freeTrial; // JavaBeans Spec 1.01 section 8.3.2 forces us to have is&lt;propertyName&gt;
+    private long id;
+    private long monthlyPriceInCents;
+    private String name;
+    private long number;
+    private GHMarketplacePriceModel priceModel;
+    private String state;
+    private String unitName;
+    private String url;
+    private long yearlyPriceInCents;
     /**
      * Create default GHMarketplacePlan instance
      */
-<span class="fc" id="L21">    public GHMarketplacePlan() {</span>
-<span class="fc" id="L22">    }</span>
-
-    private String url;
-    private String accountsUrl;
-    private long id;
-    private long number;
-    private String name;
-    private String description;
-    private long monthlyPriceInCents;
-    private long yearlyPriceInCents;
-    private GHMarketplacePriceModel priceModel;
-    @JsonProperty(&quot;has_free_trial&quot;)
-    private boolean freeTrial; // JavaBeans Spec 1.01 section 8.3.2 forces us to have is&lt;propertyName&gt;
-    private String unitName;
-    private String state;
-    private List&lt;String&gt; bullets;
-
-    /**
-     * Gets url.
-     *
-     * @return the url
-     */
-    public URL getUrl() {
-<span class="fc" id="L45">        return GitHubClient.parseURL(url);</span>
-    }
+<span class="fc" id="L36">    public GHMarketplacePlan() {</span>
+<span class="fc" id="L37">    }</span>
 
     /**
      * Gets accounts url.
@@ -51,97 +42,7 @@ public class GHMarketplacePlan extends GitHubInteractiveObject {
      * @return the accounts url
      */
     public String getAccountsUrl() {
-<span class="fc" id="L54">        return accountsUrl;</span>
-    }
-
-    /**
-     * Gets id.
-     *
-     * @return the id
-     */
-    public long getId() {
-<span class="fc" id="L63">        return id;</span>
-    }
-
-    /**
-     * Gets number.
-     *
-     * @return the number
-     */
-    public long getNumber() {
-<span class="fc" id="L72">        return number;</span>
-    }
-
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String getName() {
-<span class="fc" id="L81">        return name;</span>
-    }
-
-    /**
-     * Gets description.
-     *
-     * @return the description
-     */
-    public String getDescription() {
-<span class="fc" id="L90">        return description;</span>
-    }
-
-    /**
-     * Gets monthly price in cents.
-     *
-     * @return the monthly price in cents
-     */
-    public long getMonthlyPriceInCents() {
-<span class="fc" id="L99">        return monthlyPriceInCents;</span>
-    }
-
-    /**
-     * Gets yearly price in cents.
-     *
-     * @return the yearly price in cents
-     */
-    public long getYearlyPriceInCents() {
-<span class="nc" id="L108">        return yearlyPriceInCents;</span>
-    }
-
-    /**
-     * Gets price model.
-     *
-     * @return the price model
-     */
-    public GHMarketplacePriceModel getPriceModel() {
-<span class="fc" id="L117">        return priceModel;</span>
-    }
-
-    /**
-     * Is free trial boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isFreeTrial() {
-<span class="nc" id="L126">        return freeTrial;</span>
-    }
-
-    /**
-     * Gets unit name.
-     *
-     * @return the unit name
-     */
-    public String getUnitName() {
-<span class="nc" id="L135">        return unitName;</span>
-    }
-
-    /**
-     * Gets state.
-     *
-     * @return the state
-     */
-    public String getState() {
-<span class="fc" id="L144">        return state;</span>
+<span class="fc" id="L45">        return accountsUrl;</span>
     }
 
     /**
@@ -150,7 +51,106 @@ public class GHMarketplacePlan extends GitHubInteractiveObject {
      * @return the bullets
      */
     public List&lt;String&gt; getBullets() {
-<span class="fc" id="L153">        return Collections.unmodifiableList(bullets);</span>
+<span class="fc" id="L54">        return Collections.unmodifiableList(bullets);</span>
+    }
+
+    /**
+     * Gets description.
+     *
+     * @return the description
+     */
+    public String getDescription() {
+<span class="fc" id="L63">        return description;</span>
+    }
+
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
+    public long getId() {
+<span class="fc" id="L72">        return id;</span>
+    }
+
+    /**
+     * Gets monthly price in cents.
+     *
+     * @return the monthly price in cents
+     */
+    public long getMonthlyPriceInCents() {
+<span class="fc" id="L81">        return monthlyPriceInCents;</span>
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+<span class="fc" id="L90">        return name;</span>
+    }
+
+    /**
+     * Gets number.
+     *
+     * @return the number
+     */
+    public long getNumber() {
+<span class="fc" id="L99">        return number;</span>
+    }
+
+    /**
+     * Gets price model.
+     *
+     * @return the price model
+     */
+    public GHMarketplacePriceModel getPriceModel() {
+<span class="fc" id="L108">        return priceModel;</span>
+    }
+
+    /**
+     * Gets state.
+     *
+     * @return the state
+     */
+    public String getState() {
+<span class="fc" id="L117">        return state;</span>
+    }
+
+    /**
+     * Gets unit name.
+     *
+     * @return the unit name
+     */
+    public String getUnitName() {
+<span class="nc" id="L126">        return unitName;</span>
+    }
+
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
+    public URL getUrl() {
+<span class="fc" id="L135">        return GitHubClient.parseURL(url);</span>
+    }
+
+    /**
+     * Gets yearly price in cents.
+     *
+     * @return the yearly price in cents
+     */
+    public long getYearlyPriceInCents() {
+<span class="nc" id="L144">        return yearlyPriceInCents;</span>
+    }
+
+    /**
+     * Is free trial boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isFreeTrial() {
+<span class="nc" id="L153">        return freeTrial;</span>
     }
 
     /**

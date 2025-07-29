@@ -15,20 +15,20 @@ import java.util.Date;
  */
 public class GHMarketplacePurchase extends GitHubInteractiveObject {
 
+    private String billingCycle;
+
+    private String freeTrialEndsOn;
+    private String nextBillingDate;
+    private boolean onFreeTrial;
+    @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Field comes from JSON deserialization&quot;)
+    private GHMarketplacePlan plan;
+    private Long unitCount;
+    private String updatedAt;
     /**
      * Create default GHMarketplacePurchase instance
      */
-<span class="fc" id="L21">    public GHMarketplacePurchase() {</span>
-<span class="fc" id="L22">    }</span>
-
-    private String billingCycle;
-    private String nextBillingDate;
-    private boolean onFreeTrial;
-    private String freeTrialEndsOn;
-    private Long unitCount;
-    private String updatedAt;
-    @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Field comes from JSON deserialization&quot;)
-    private GHMarketplacePlan plan;
+<span class="fc" id="L30">    public GHMarketplacePurchase() {</span>
+<span class="fc" id="L31">    }</span>
 
     /**
      * Gets billing cycle.
@@ -40,32 +40,32 @@ public class GHMarketplacePurchase extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets next billing date.
-     *
-     * @return the next billing date
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
-    public Instant getNextBillingDate() {
-<span class="fc" id="L49">        return GitHubClient.parseInstant(nextBillingDate);</span>
-    }
-
-    /**
-     * Is on free trial boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isOnFreeTrial() {
-<span class="fc" id="L58">        return onFreeTrial;</span>
-    }
-
-    /**
      * Gets free trial ends on.
      *
      * @return the free trial ends on
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
     public Instant getFreeTrialEndsOn() {
-<span class="fc" id="L68">        return GitHubClient.parseInstant(freeTrialEndsOn);</span>
+<span class="fc" id="L49">        return GitHubClient.parseInstant(freeTrialEndsOn);</span>
+    }
+
+    /**
+     * Gets next billing date.
+     *
+     * @return the next billing date
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getNextBillingDate() {
+<span class="fc" id="L59">        return GitHubClient.parseInstant(nextBillingDate);</span>
+    }
+
+    /**
+     * Gets plan.
+     *
+     * @return the plan
+     */
+    public GHMarketplacePlan getPlan() {
+<span class="fc" id="L68">        return plan;</span>
     }
 
     /**
@@ -88,12 +88,12 @@ public class GHMarketplacePurchase extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets plan.
+     * Is on free trial boolean.
      *
-     * @return the plan
+     * @return the boolean
      */
-    public GHMarketplacePlan getPlan() {
-<span class="fc" id="L96">        return plan;</span>
+    public boolean isOnFreeTrial() {
+<span class="fc" id="L96">        return onFreeTrial;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

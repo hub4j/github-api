@@ -12,32 +12,32 @@ import java.util.Locale;
  */
 <span class="fc" id="L13">public enum GHEvent {</span>
 
+    /** Special event type that means &quot;every possible event&quot;. */
+<span class="fc" id="L16">    ALL,</span>
+
     /** The branch protection rule. */
-<span class="fc" id="L16">    BRANCH_PROTECTION_RULE,</span>
+<span class="fc" id="L19">    BRANCH_PROTECTION_RULE,</span>
 
     /** The check run. */
-<span class="fc" id="L19">    CHECK_RUN,</span>
+<span class="fc" id="L22">    CHECK_RUN,</span>
 
     /** The check suite. */
-<span class="fc" id="L22">    CHECK_SUITE,</span>
+<span class="fc" id="L25">    CHECK_SUITE,</span>
 
     /** The code scanning alert. */
-<span class="fc" id="L25">    CODE_SCANNING_ALERT,</span>
+<span class="fc" id="L28">    CODE_SCANNING_ALERT,</span>
 
     /** The commit comment. */
-<span class="fc" id="L28">    COMMIT_COMMENT,</span>
+<span class="fc" id="L31">    COMMIT_COMMENT,</span>
 
     /** The content reference. */
-<span class="fc" id="L31">    CONTENT_REFERENCE,</span>
+<span class="fc" id="L34">    CONTENT_REFERENCE,</span>
 
     /** The create. */
-<span class="fc" id="L34">    CREATE,</span>
+<span class="fc" id="L37">    CREATE,</span>
 
     /** The delete. */
-<span class="fc" id="L37">    DELETE,</span>
-
-    /** The deploy key. */
-<span class="fc" id="L40">    DEPLOY_KEY,</span>
+<span class="fc" id="L40">    DELETE,</span>
 
     /** The deployment. */
 <span class="fc" id="L43">    DEPLOYMENT,</span>
@@ -45,169 +45,169 @@ import java.util.Locale;
     /** The deployment status. */
 <span class="fc" id="L46">    DEPLOYMENT_STATUS,</span>
 
+    /** The deploy key. */
+<span class="fc" id="L49">    DEPLOY_KEY,</span>
+
     /** The discussion. */
-<span class="fc" id="L49">    DISCUSSION,</span>
+<span class="fc" id="L52">    DISCUSSION,</span>
 
     /** The discussion comment. */
-<span class="fc" id="L52">    DISCUSSION_COMMENT,</span>
+<span class="fc" id="L55">    DISCUSSION_COMMENT,</span>
 
     /** The download. */
-<span class="fc" id="L55">    DOWNLOAD,</span>
+<span class="fc" id="L58">    DOWNLOAD,</span>
 
     /** The follow. */
-<span class="fc" id="L58">    FOLLOW,</span>
+<span class="fc" id="L61">    FOLLOW,</span>
 
     /** The fork. */
-<span class="fc" id="L61">    FORK,</span>
+<span class="fc" id="L64">    FORK,</span>
 
     /** The fork apply. */
-<span class="fc" id="L64">    FORK_APPLY,</span>
-
-    /** The github app authorization. */
-<span class="fc" id="L67">    GITHUB_APP_AUTHORIZATION,</span>
+<span class="fc" id="L67">    FORK_APPLY,</span>
 
     /** The gist. */
 <span class="fc" id="L70">    GIST,</span>
 
+    /** The github app authorization. */
+<span class="fc" id="L73">    GITHUB_APP_AUTHORIZATION,</span>
+
     /** The gollum. */
-<span class="fc" id="L73">    GOLLUM,</span>
+<span class="fc" id="L76">    GOLLUM,</span>
 
     /** The installation. */
-<span class="fc" id="L76">    INSTALLATION,</span>
+<span class="fc" id="L79">    INSTALLATION,</span>
 
     /** The installation repositories. */
-<span class="fc" id="L79">    INSTALLATION_REPOSITORIES,</span>
+<span class="fc" id="L82">    INSTALLATION_REPOSITORIES,</span>
 
     /** The integration installation repositories. */
-<span class="fc" id="L82">    INTEGRATION_INSTALLATION_REPOSITORIES,</span>
-
-    /** The issue comment. */
-<span class="fc" id="L85">    ISSUE_COMMENT,</span>
+<span class="fc" id="L85">    INTEGRATION_INSTALLATION_REPOSITORIES,</span>
 
     /** The issues. */
 <span class="fc" id="L88">    ISSUES,</span>
 
+    /** The issue comment. */
+<span class="fc" id="L91">    ISSUE_COMMENT,</span>
+
     /** The label. */
-<span class="fc" id="L91">    LABEL,</span>
+<span class="fc" id="L94">    LABEL,</span>
 
     /** The marketplace purchase. */
-<span class="fc" id="L94">    MARKETPLACE_PURCHASE,</span>
+<span class="fc" id="L97">    MARKETPLACE_PURCHASE,</span>
 
     /** The member. */
-<span class="fc" id="L97">    MEMBER,</span>
+<span class="fc" id="L100">    MEMBER,</span>
 
     /** The membership. */
-<span class="fc" id="L100">    MEMBERSHIP,</span>
-
-    /** The merge queue entry. */
-<span class="fc" id="L103">    MERGE_QUEUE_ENTRY,</span>
+<span class="fc" id="L103">    MEMBERSHIP,</span>
 
     /** The merge group entry. */
 <span class="fc" id="L106">    MERGE_GROUP,</span>
 
+    /** The merge queue entry. */
+<span class="fc" id="L109">    MERGE_QUEUE_ENTRY,</span>
+
     /** The meta. */
-<span class="fc" id="L109">    META,</span>
+<span class="fc" id="L112">    META,</span>
 
     /** The milestone. */
-<span class="fc" id="L112">    MILESTONE,</span>
+<span class="fc" id="L115">    MILESTONE,</span>
 
     /** The organization. */
-<span class="fc" id="L115">    ORGANIZATION,</span>
+<span class="fc" id="L118">    ORGANIZATION,</span>
 
     /** The org block. */
-<span class="fc" id="L118">    ORG_BLOCK,</span>
+<span class="fc" id="L121">    ORG_BLOCK,</span>
 
     /** The package. */
-<span class="fc" id="L121">    PACKAGE,</span>
+<span class="fc" id="L124">    PACKAGE,</span>
 
     /** The page build. */
-<span class="fc" id="L124">    PAGE_BUILD,</span>
+<span class="fc" id="L127">    PAGE_BUILD,</span>
 
-    /** The project card. */
-<span class="fc" id="L127">    PROJECT_CARD,</span>
-
-    /** The project column. */
-<span class="fc" id="L130">    PROJECT_COLUMN,</span>
+    /** The ping. */
+<span class="fc" id="L130">    PING,</span>
 
     /** The project. */
 <span class="fc" id="L133">    PROJECT,</span>
 
-    /** The ping. */
-<span class="fc" id="L136">    PING,</span>
+    /** The project card. */
+<span class="fc" id="L136">    PROJECT_CARD,</span>
+
+    /** The project column. */
+<span class="fc" id="L139">    PROJECT_COLUMN,</span>
 
     /** The public. */
-<span class="fc" id="L139">    PUBLIC,</span>
+<span class="fc" id="L142">    PUBLIC,</span>
 
     /** The pull request. */
-<span class="fc" id="L142">    PULL_REQUEST,</span>
+<span class="fc" id="L145">    PULL_REQUEST,</span>
 
     /** The pull request review. */
-<span class="fc" id="L145">    PULL_REQUEST_REVIEW,</span>
+<span class="fc" id="L148">    PULL_REQUEST_REVIEW,</span>
 
     /** The pull request review comment. */
-<span class="fc" id="L148">    PULL_REQUEST_REVIEW_COMMENT,</span>
+<span class="fc" id="L151">    PULL_REQUEST_REVIEW_COMMENT,</span>
 
     /** The pull request review thread. */
-<span class="fc" id="L151">    PULL_REQUEST_REVIEW_THREAD,</span>
+<span class="fc" id="L154">    PULL_REQUEST_REVIEW_THREAD,</span>
 
     /** The push. */
-<span class="fc" id="L154">    PUSH,</span>
+<span class="fc" id="L157">    PUSH,</span>
 
     /** The registry package. */
-<span class="fc" id="L157">    REGISTRY_PACKAGE,</span>
+<span class="fc" id="L160">    REGISTRY_PACKAGE,</span>
 
     /** The release. */
-<span class="fc" id="L160">    RELEASE,</span>
-
-    /** The repository dispatch. */
-<span class="fc" id="L163">    REPOSITORY_DISPATCH,</span>
+<span class="fc" id="L163">    RELEASE,</span>
     /** The repository. */
     // only valid for org hooks
 <span class="fc" id="L166">    REPOSITORY,</span>
 
+    /** The repository dispatch. */
+<span class="fc" id="L169">    REPOSITORY_DISPATCH,</span>
+
     /** The repository import. */
-<span class="fc" id="L169">    REPOSITORY_IMPORT,</span>
+<span class="fc" id="L172">    REPOSITORY_IMPORT,</span>
 
     /** The repository vulnerability alert. */
-<span class="fc" id="L172">    REPOSITORY_VULNERABILITY_ALERT,</span>
+<span class="fc" id="L175">    REPOSITORY_VULNERABILITY_ALERT,</span>
 
     /** The schedule. */
-<span class="fc" id="L175">    SCHEDULE,</span>
+<span class="fc" id="L178">    SCHEDULE,</span>
 
     /** The security advisory. */
-<span class="fc" id="L178">    SECURITY_ADVISORY,</span>
+<span class="fc" id="L181">    SECURITY_ADVISORY,</span>
 
     /** The star. */
-<span class="fc" id="L181">    STAR,</span>
+<span class="fc" id="L184">    STAR,</span>
 
     /** The status. */
-<span class="fc" id="L184">    STATUS,</span>
+<span class="fc" id="L187">    STATUS,</span>
 
     /** The team. */
-<span class="fc" id="L187">    TEAM,</span>
+<span class="fc" id="L190">    TEAM,</span>
 
     /** The team add. */
-<span class="fc" id="L190">    TEAM_ADD,</span>
-
-    /** The watch. */
-<span class="fc" id="L193">    WATCH,</span>
-
-    /** The workflow job. */
-<span class="fc" id="L196">    WORKFLOW_JOB,</span>
-
-    /** The workflow dispatch. */
-<span class="fc" id="L199">    WORKFLOW_DISPATCH,</span>
-
-    /** The workflow run. */
-<span class="fc" id="L202">    WORKFLOW_RUN,</span>
+<span class="fc" id="L193">    TEAM_ADD,</span>
 
     /**
      * Special event type that means we haven't found an enum value corresponding to the event.
      */
-<span class="fc" id="L207">    UNKNOWN,</span>
+<span class="fc" id="L198">    UNKNOWN,</span>
 
-    /** Special event type that means &quot;every possible event&quot;. */
-<span class="fc" id="L210">    ALL;</span>
+    /** The watch. */
+<span class="fc" id="L201">    WATCH,</span>
+
+    /** The workflow dispatch. */
+<span class="fc" id="L204">    WORKFLOW_DISPATCH,</span>
+
+    /** The workflow job. */
+<span class="fc" id="L207">    WORKFLOW_JOB,</span>
+
+    /** The workflow run. */
+<span class="fc" id="L210">    WORKFLOW_RUN;</span>
 
     /**
      * Returns GitHub's internal representation of this event.

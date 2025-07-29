@@ -25,6 +25,35 @@ import static java.net.HttpURLConnection.HTTP_FORBIDDEN;
 public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErrorHandler {
 
     /**
+     * Fail immediately.
+     */
+<span class="fc" id="L30">    public static final GitHubRateLimitHandler FAIL = new GitHubRateLimitHandler() {</span>
+        @Override
+        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
+<span class="fc" id="L33">            throw new HttpException(&quot;API rate limit reached&quot;,</span>
+<span class="fc" id="L34">                    connectorResponse.statusCode(),</span>
+<span class="fc" id="L35">                    connectorResponse.header(&quot;Status&quot;),</span>
+<span class="fc" id="L36">                    connectorResponse.request().url().toString())</span>
+<span class="fc" id="L37">                    .withResponseHeaderFields(connectorResponse.allHeaders());</span>
+
+        }
+    };
+
+    /**
+     * Wait until the API abuse &quot;wait time&quot; is passed.
+     */
+<span class="fc" id="L45">    public static final GitHubRateLimitHandler WAIT = new GitHubRateLimitHandler() {</span>
+        @Override
+        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
+            try {
+<span class="fc" id="L49">                Thread.sleep(parseWaitTime(connectorResponse));</span>
+<span class="nc" id="L50">            } catch (InterruptedException ex) {</span>
+<span class="nc" id="L51">                throw (InterruptedIOException) new InterruptedIOException().initCause(ex);</span>
+<span class="fc" id="L52">            }</span>
+<span class="fc" id="L53">        }</span>
+    };
+
+    /**
      * On a wait, even if the response suggests a very short wait, wait for a minimum duration.
      */
     private static final int MINIMUM_RATE_LIMIT_RETRY_MILLIS = 1000;
@@ -32,23 +61,8 @@ public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErro
     /**
      * Create default GitHubRateLimitHandler instance
      */
-<span class="fc" id="L35">    public GitHubRateLimitHandler() {</span>
-<span class="fc" id="L36">    }</span>
-
-    /**
-     * Checks if is error.
-     *
-     * @param connectorResponse
-     *            the connector response
-     * @return true, if is error
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Override
-    boolean isError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
-<span class="fc bfc" id="L49" title="All 2 branches covered.">        return connectorResponse.statusCode() == HTTP_FORBIDDEN</span>
-<span class="fc bfc" id="L50" title="All 2 branches covered.">                &amp;&amp; &quot;0&quot;.equals(connectorResponse.header(&quot;X-RateLimit-Remaining&quot;));</span>
-    }
+<span class="fc" id="L64">    public GitHubRateLimitHandler() {</span>
+<span class="fc" id="L65">    }</span>
 
     /**
      * Called when the library encounters HTTP error indicating that the API rate limit has been exceeded.
@@ -68,55 +82,41 @@ public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErro
     public abstract void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
 
     /**
-     * Wait until the API abuse &quot;wait time&quot; is passed.
+     * Checks if is error.
+     *
+     * @param connectorResponse
+     *            the connector response
+     * @return true, if is error
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
-<span class="fc" id="L73">    public static final GitHubRateLimitHandler WAIT = new GitHubRateLimitHandler() {</span>
-        @Override
-        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
-            try {
-<span class="fc" id="L77">                Thread.sleep(parseWaitTime(connectorResponse));</span>
-<span class="nc" id="L78">            } catch (InterruptedException ex) {</span>
-<span class="nc" id="L79">                throw (InterruptedIOException) new InterruptedIOException().initCause(ex);</span>
-<span class="fc" id="L80">            }</span>
-<span class="fc" id="L81">        }</span>
-    };
+    @Override
+    boolean isError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        return connectorResponse.statusCode() == HTTP_FORBIDDEN</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">                &amp;&amp; &quot;0&quot;.equals(connectorResponse.header(&quot;X-RateLimit-Remaining&quot;));</span>
+    }
 
     /*
      * Exposed for testability. Given an http response, find the rate limit reset header field and parse it. If no
      * header is found, wait for a reasonably amount of time.
      */
     long parseWaitTime(GitHubConnectorResponse connectorResponse) {
-<span class="fc" id="L89">        String v = connectorResponse.header(&quot;X-RateLimit-Reset&quot;);</span>
-<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        if (v == null)</span>
-<span class="nc" id="L91">            return Duration.ofMinutes(1).toMillis(); // can't tell, return 1 min</span>
+<span class="fc" id="L104">        String v = connectorResponse.header(&quot;X-RateLimit-Reset&quot;);</span>
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        if (v == null)</span>
+<span class="nc" id="L106">            return Duration.ofMinutes(1).toMillis(); // can't tell, return 1 min</span>
 
         // Don't use ZonedDateTime.now(), because the local and remote server times may not be in sync
         // Instead, we can take advantage of the Date field in the response to see what time the remote server
         // thinks it is
-<span class="fc" id="L96">        String dateField = connectorResponse.header(&quot;Date&quot;);</span>
+<span class="fc" id="L111">        String dateField = connectorResponse.header(&quot;Date&quot;);</span>
         ZonedDateTime now;
-<span class="fc bfc" id="L98" title="All 2 branches covered.">        if (dateField != null) {</span>
-<span class="fc" id="L99">            now = ZonedDateTime.parse(dateField, DateTimeFormatter.RFC_1123_DATE_TIME);</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        if (dateField != null) {</span>
+<span class="fc" id="L114">            now = ZonedDateTime.parse(dateField, DateTimeFormatter.RFC_1123_DATE_TIME);</span>
         } else {
-<span class="fc" id="L101">            now = ZonedDateTime.now();</span>
+<span class="fc" id="L116">            now = ZonedDateTime.now();</span>
         }
-<span class="fc" id="L103">        return Math.max(MINIMUM_RATE_LIMIT_RETRY_MILLIS, (Long.parseLong(v) - now.toInstant().getEpochSecond()) * 1000);</span>
+<span class="fc" id="L118">        return Math.max(MINIMUM_RATE_LIMIT_RETRY_MILLIS, (Long.parseLong(v) - now.toInstant().getEpochSecond()) * 1000);</span>
     }
-
-    /**
-     * Fail immediately.
-     */
-<span class="fc" id="L109">    public static final GitHubRateLimitHandler FAIL = new GitHubRateLimitHandler() {</span>
-        @Override
-        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
-<span class="fc" id="L112">            throw new HttpException(&quot;API rate limit reached&quot;,</span>
-<span class="fc" id="L113">                    connectorResponse.statusCode(),</span>
-<span class="fc" id="L114">                    connectorResponse.header(&quot;Status&quot;),</span>
-<span class="fc" id="L115">                    connectorResponse.request().url().toString())</span>
-<span class="fc" id="L116">                    .withResponseHeaderFields(connectorResponse.allHeaders());</span>
-
-        }
-    };
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

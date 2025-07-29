@@ -12,11 +12,11 @@
  */
 public class GHCommitStatus extends GHObject {
 
-    /**
-     * Create default GHCommitStatus instance
-     */
-<span class="fc" id="L18">    public GHCommitStatus() {</span>
-<span class="fc" id="L19">    }</span>
+    /** The context. */
+    String context;
+
+    /** The creator. */
+    GHUser creator;
 
     /** The state. */
     String state;
@@ -24,11 +24,38 @@ public class GHCommitStatus extends GHObject {
     /** The description. */
     String targetUrl, description;
 
-    /** The context. */
-    String context;
+    /**
+     * Create default GHCommitStatus instance
+     */
+<span class="fc" id="L30">    public GHCommitStatus() {</span>
+<span class="fc" id="L31">    }</span>
 
-    /** The creator. */
-    GHUser creator;
+    /**
+     * Gets context.
+     *
+     * @return the context
+     */
+    public String getContext() {
+<span class="fc" id="L39">        return context;</span>
+    }
+
+    /**
+     * Gets creator.
+     *
+     * @return the creator
+     */
+    public GHUser getCreator() {
+<span class="fc" id="L48">        return root().intern(creator);</span>
+    }
+
+    /**
+     * Gets description.
+     *
+     * @return the description
+     */
+    public String getDescription() {
+<span class="fc" id="L57">        return description;</span>
+    }
 
     /**
      * Gets state.
@@ -36,11 +63,11 @@ public class GHCommitStatus extends GHObject {
      * @return the state
      */
     public GHCommitState getState() {
-<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        for (GHCommitState s : GHCommitState.values()) {</span>
-<span class="fc bfc" id="L40" title="All 2 branches covered.">            if (s.name().equalsIgnoreCase(state))</span>
-<span class="fc" id="L41">                return s;</span>
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        for (GHCommitState s : GHCommitState.values()) {</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">            if (s.name().equalsIgnoreCase(state))</span>
+<span class="fc" id="L68">                return s;</span>
         }
-<span class="nc" id="L43">        throw new IllegalStateException(&quot;Unexpected state: &quot; + state);</span>
+<span class="nc" id="L70">        throw new IllegalStateException(&quot;Unexpected state: &quot; + state);</span>
     }
 
     /**
@@ -51,34 +78,7 @@ public class GHCommitStatus extends GHObject {
      * @return the target url
      */
     public String getTargetUrl() {
-<span class="fc" id="L54">        return targetUrl;</span>
-    }
-
-    /**
-     * Gets description.
-     *
-     * @return the description
-     */
-    public String getDescription() {
-<span class="fc" id="L63">        return description;</span>
-    }
-
-    /**
-     * Gets creator.
-     *
-     * @return the creator
-     */
-    public GHUser getCreator() {
-<span class="fc" id="L72">        return root().intern(creator);</span>
-    }
-
-    /**
-     * Gets context.
-     *
-     * @return the context
-     */
-    public String getContext() {
-<span class="fc" id="L81">        return context;</span>
+<span class="fc" id="L81">        return targetUrl;</span>
     }
 
 }

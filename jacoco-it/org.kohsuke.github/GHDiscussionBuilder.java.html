@@ -44,20 +44,6 @@ class GHDiscussionBuilder&lt;S&gt; extends AbstractBuilder&lt;GHDiscussion, S&gt
 <span class="fc" id="L44">    }</span>
 
     /**
-     * Title for this discussion.
-     *
-     * @param value
-     *            title of discussion
-     * @return either a continuing builder or an updated {@link GHDiscussion}
-     * @throws IOException
-     *             if there is an I/O Exception
-     */
-    @Nonnull
-    public S title(String value) throws IOException {
-<span class="fc" id="L57">        return with(&quot;title&quot;, value);</span>
-    }
-
-    /**
      * Body content for this discussion.
      *
      * @param value
@@ -68,7 +54,7 @@ class GHDiscussionBuilder&lt;S&gt; extends AbstractBuilder&lt;GHDiscussion, S&gt
      */
     @Nonnull
     public S body(String value) throws IOException {
-<span class="fc" id="L71">        return with(&quot;body&quot;, value);</span>
+<span class="fc" id="L57">        return with(&quot;body&quot;, value);</span>
     }
 
     /**
@@ -77,7 +63,21 @@ class GHDiscussionBuilder&lt;S&gt; extends AbstractBuilder&lt;GHDiscussion, S&gt
     @Nonnull
     @Override
     public GHDiscussion done() throws IOException {
-<span class="fc" id="L80">        return super.done().wrapUp(team);</span>
+<span class="fc" id="L66">        return super.done().wrapUp(team);</span>
+    }
+
+    /**
+     * Title for this discussion.
+     *
+     * @param value
+     *            title of discussion
+     * @return either a continuing builder or an updated {@link GHDiscussion}
+     * @throws IOException
+     *             if there is an I/O Exception
+     */
+    @Nonnull
+    public S title(String value) throws IOException {
+<span class="fc" id="L80">        return with(&quot;title&quot;, value);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -13,78 +13,46 @@ import javax.annotation.Nonnull;
 public class GHRepositoryVariable extends GitHubInteractiveObject {
 
     /**
-     * Create default GHRepositoryVariable instance
+     * A {@link GHRepositoryVariableBuilder} that creates a new {@link GHRepositoryVariable}
+     * &lt;p&gt;
+     * Consumer must call {@link #done()} to create the new instance.
      */
-<span class="fc" id="L18">    public GHRepositoryVariable() {</span>
-<span class="fc" id="L19">    }</span>
+    @BetaApi
+    public static class Creator extends GHRepositoryVariableBuilder&lt;Creator&gt; {
+        private Creator(@Nonnull GHRepository repository) {
+<span class="fc" id="L23">            super(GHRepositoryVariable.Creator.class, repository.root(), null);</span>
+<span class="fc" id="L24">            requester.method(&quot;POST&quot;).withUrlPath(repository.getApiTailUrl(VARIABLE_NAMESPACE));</span>
+<span class="fc" id="L25">        }</span>
+    }
+
+    /**
+     * A {@link GHRepositoryVariableBuilder} that updates a single property per request
+     * &lt;p&gt;
+     * {@link #done()} is called automatically after the property is set.
+     */
+    @BetaApi
+    public static class Setter extends GHRepositoryVariableBuilder&lt;GHRepositoryVariable&gt; {
+        private Setter(@Nonnull GHRepositoryVariable base) {
+<span class="fc" id="L36">            super(GHRepositoryVariable.class, base.getApiRoot(), base);</span>
+<span class="fc" id="L37">            requester.method(&quot;PATCH&quot;).withUrlPath(base.getUrl().concat(SLASH).concat(base.getName()));</span>
+<span class="fc" id="L38">        }</span>
+    }
 
     private static final String SLASH = &quot;/&quot;;
 
     private static final String VARIABLE_NAMESPACE = &quot;actions/variables&quot;;
-
-    private String name;
-    private String value;
-
-    private String url;
-    private String createdAt;
-    private String updatedAt;
-
     /**
-     * Gets url.
+     * Begins the creation of a new instance.
+     * &lt;p&gt;
+     * Consumer must call {@link GHRepositoryVariable.Creator#done()} to commit changes.
      *
-     * @return the url
+     * @param repository
+     *            the repository in which the variable will be created.
+     * @return a {@link GHRepositoryVariable.Creator}
      */
-    @Nonnull
-    public String getUrl() {
-<span class="fc" id="L39">        return url;</span>
-    }
-
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String getName() {
-<span class="fc" id="L48">        return name;</span>
-    }
-
-    /**
-     * Sets name.
-     *
-     * @param name
-     *            the name
-     */
-    public void setName(String name) {
-<span class="nc" id="L58">        this.name = name;</span>
-<span class="nc" id="L59">    }</span>
-
-    /**
-     * Gets value.
-     *
-     * @return the value
-     */
-    public String getValue() {
-<span class="fc" id="L67">        return value;</span>
-    }
-
-    /**
-     * Sets value.
-     *
-     * @param value
-     *            the value
-     */
-    public void setValue(String value) {
-<span class="nc" id="L77">        this.value = value;</span>
-<span class="nc" id="L78">    }</span>
-
-    /**
-     * Gets the api root.
-     *
-     * @return the api root
-     */
-    @Nonnull
-    GitHub getApiRoot() {
-<span class="fc" id="L87">        return Objects.requireNonNull(root());</span>
+    @BetaApi
+    static GHRepositoryVariable.Creator create(GHRepository repository) {
+<span class="fc" id="L55">        return new GHRepositoryVariable.Creator(repository);</span>
     }
 
     /**
@@ -99,27 +67,27 @@ public class GHRepositoryVariable extends GitHubInteractiveObject {
      *             the io exception
      */
     static GHRepositoryVariable read(@Nonnull GHRepository repository, @Nonnull String name) throws IOException {
-<span class="fc" id="L102">        GHRepositoryVariable variable = repository.root()</span>
-<span class="fc" id="L103">                .createRequest()</span>
-<span class="fc" id="L104">                .withUrlPath(repository.getApiTailUrl(VARIABLE_NAMESPACE), name)</span>
-<span class="fc" id="L105">                .fetch(GHRepositoryVariable.class);</span>
-<span class="fc" id="L106">        variable.url = repository.getApiTailUrl(&quot;actions/variables&quot;);</span>
-<span class="fc" id="L107">        return variable;</span>
+<span class="fc" id="L70">        GHRepositoryVariable variable = repository.root()</span>
+<span class="fc" id="L71">                .createRequest()</span>
+<span class="fc" id="L72">                .withUrlPath(repository.getApiTailUrl(VARIABLE_NAMESPACE), name)</span>
+<span class="fc" id="L73">                .fetch(GHRepositoryVariable.class);</span>
+<span class="fc" id="L74">        variable.url = repository.getApiTailUrl(&quot;actions/variables&quot;);</span>
+<span class="fc" id="L75">        return variable;</span>
     }
+    private String createdAt;
+    private String name;
+
+    private String updatedAt;
+
+    private String url;
+
+    private String value;
 
     /**
-     * Begins the creation of a new instance.
-     * &lt;p&gt;
-     * Consumer must call {@link GHRepositoryVariable.Creator#done()} to commit changes.
-     *
-     * @param repository
-     *            the repository in which the variable will be created.
-     * @return a {@link GHRepositoryVariable.Creator}
+     * Create default GHRepositoryVariable instance
      */
-    @BetaApi
-    static GHRepositoryVariable.Creator create(GHRepository repository) {
-<span class="fc" id="L121">        return new GHRepositoryVariable.Creator(repository);</span>
-    }
+<span class="fc" id="L89">    public GHRepositoryVariable() {</span>
+<span class="fc" id="L90">    }</span>
 
     /**
      * Delete this variable from the repository.
@@ -128,8 +96,36 @@ public class GHRepositoryVariable extends GitHubInteractiveObject {
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L131">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getUrl().concat(SLASH).concat(name)).send();</span>
-<span class="fc" id="L132">    }</span>
+<span class="fc" id="L99">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getUrl().concat(SLASH).concat(name)).send();</span>
+<span class="fc" id="L100">    }</span>
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+<span class="fc" id="L108">        return name;</span>
+    }
+
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
+    @Nonnull
+    public String getUrl() {
+<span class="fc" id="L118">        return url;</span>
+    }
+
+    /**
+     * Gets value.
+     *
+     * @return the value
+     */
+    public String getValue() {
+<span class="fc" id="L127">        return value;</span>
+    }
 
     /**
      * Begins a single property update.
@@ -138,33 +134,37 @@ public class GHRepositoryVariable extends GitHubInteractiveObject {
      */
     @BetaApi
     public GHRepositoryVariable.Setter set() {
-<span class="fc" id="L141">        return new GHRepositoryVariable.Setter(this);</span>
+<span class="fc" id="L137">        return new GHRepositoryVariable.Setter(this);</span>
     }
 
     /**
-     * A {@link GHRepositoryVariableBuilder} that updates a single property per request
-     * &lt;p&gt;
-     * {@link #done()} is called automatically after the property is set.
+     * Sets name.
+     *
+     * @param name
+     *            the name
      */
-    @BetaApi
-    public static class Setter extends GHRepositoryVariableBuilder&lt;GHRepositoryVariable&gt; {
-        private Setter(@Nonnull GHRepositoryVariable base) {
-<span class="fc" id="L152">            super(GHRepositoryVariable.class, base.getApiRoot(), base);</span>
-<span class="fc" id="L153">            requester.method(&quot;PATCH&quot;).withUrlPath(base.getUrl().concat(SLASH).concat(base.getName()));</span>
-<span class="fc" id="L154">        }</span>
-    }
+    public void setName(String name) {
+<span class="nc" id="L147">        this.name = name;</span>
+<span class="nc" id="L148">    }</span>
 
     /**
-     * A {@link GHRepositoryVariableBuilder} that creates a new {@link GHRepositoryVariable}
-     * &lt;p&gt;
-     * Consumer must call {@link #done()} to create the new instance.
+     * Sets value.
+     *
+     * @param value
+     *            the value
      */
-    @BetaApi
-    public static class Creator extends GHRepositoryVariableBuilder&lt;Creator&gt; {
-        private Creator(@Nonnull GHRepository repository) {
-<span class="fc" id="L165">            super(GHRepositoryVariable.Creator.class, repository.root(), null);</span>
-<span class="fc" id="L166">            requester.method(&quot;POST&quot;).withUrlPath(repository.getApiTailUrl(VARIABLE_NAMESPACE));</span>
-<span class="fc" id="L167">        }</span>
+    public void setValue(String value) {
+<span class="nc" id="L157">        this.value = value;</span>
+<span class="nc" id="L158">    }</span>
+
+    /**
+     * Gets the api root.
+     *
+     * @return the api root
+     */
+    @Nonnull
+    GitHub getApiRoot() {
+<span class="fc" id="L167">        return Objects.requireNonNull(root());</span>
     }
 
 }

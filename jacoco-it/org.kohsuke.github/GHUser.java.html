@@ -37,27 +37,32 @@ import java.util.*;
  */
 public class GHUser extends GHPerson {
 
-    /**
-     * Create default GHUser instance
-     */
-<span class="fc" id="L43">    public GHUser() {</span>
-<span class="fc" id="L44">    }</span>
+    /** The suspendedAt */
+    private String suspendedAt;
 
     /** The ldap dn. */
     protected String ldapDn;
 
-    /** The suspendedAt */
-    private String suspendedAt;
+    /**
+     * Create default GHUser instance
+     */
+<span class="fc" id="L49">    public GHUser() {</span>
+<span class="fc" id="L50">    }</span>
 
     /**
-     * Gets keys.
+     * Equals.
      *
-     * @return the keys
-     * @throws IOException
-     *             the io exception
+     * @param obj
+     *            the obj
+     * @return true, if successful
      */
-    public List&lt;GHKey&gt; getKeys() throws IOException {
-<span class="fc" id="L60">        return root().createRequest().withUrlPath(getApiTailUrl(&quot;keys&quot;)).toIterable(GHKey[].class, null).toList();</span>
+    @Override
+    public boolean equals(Object obj) {
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        if (obj instanceof GHUser) {</span>
+<span class="fc" id="L62">            GHUser that = (GHUser) obj;</span>
+<span class="fc" id="L63">            return this.login.equals(that.login);</span>
+        }
+<span class="nc" id="L65">        return false;</span>
     }
 
     /**
@@ -67,37 +72,16 @@ public class GHUser extends GHPerson {
      *             the io exception
      */
     public void follow() throws IOException {
-<span class="nc" id="L70">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(&quot;/user/following/&quot; + login).send();</span>
-<span class="nc" id="L71">    }</span>
+<span class="nc" id="L75">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(&quot;/user/following/&quot; + login).send();</span>
+<span class="nc" id="L76">    }</span>
 
     /**
-     * Unfollow this user.
+     * Gets the bio.
      *
-     * @throws IOException
-     *             the io exception
+     * @return the bio
      */
-    public void unfollow() throws IOException {
-<span class="nc" id="L80">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(&quot;/user/following/&quot; + login).send();</span>
-<span class="nc" id="L81">    }</span>
-
-    /**
-     * Lists the users that this user is following.
-     *
-     * @return the follows
-     * @throws IOException
-     *             the io exception
-     */
-    public GHPersonSet&lt;GHUser&gt; getFollows() throws IOException {
-<span class="nc" id="L91">        return new GHPersonSet&lt;GHUser&gt;(listFollows().toList());</span>
-    }
-
-    /**
-     * Lists the users that this user is following.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;GHUser&gt; listFollows() {
-<span class="fc" id="L100">        return listUser(&quot;following&quot;);</span>
+    public String getBio() {
+<span class="fc" id="L84">        return bio;</span>
     }
 
     /**
@@ -108,150 +92,29 @@ public class GHUser extends GHPerson {
      *             the io exception
      */
     public GHPersonSet&lt;GHUser&gt; getFollowers() throws IOException {
-<span class="nc" id="L111">        return new GHPersonSet&lt;GHUser&gt;(listFollowers().toList());</span>
+<span class="nc" id="L95">        return new GHPersonSet&lt;GHUser&gt;(listFollowers().toList());</span>
     }
 
     /**
-     * Lists the users who are following this user.
+     * Lists the users that this user is following.
      *
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;GHUser&gt; listFollowers() {
-<span class="fc" id="L120">        return listUser(&quot;followers&quot;);</span>
-    }
-
-    private PagedIterable&lt;GHUser&gt; listUser(final String suffix) {
-<span class="fc" id="L124">        return root().createRequest().withUrlPath(getApiTailUrl(suffix)).toIterable(GHUser[].class, null);</span>
-    }
-
-    /**
-     * Lists all the subscribed (aka watched) repositories.
-     * &lt;p&gt;
-     * https://developer.github.com/v3/activity/watching/
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;GHRepository&gt; listSubscriptions() {
-<span class="nc" id="L135">        return listRepositories(&quot;subscriptions&quot;);</span>
-    }
-
-    /**
-     * Lists all the repositories that this user has starred.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;GHRepository&gt; listStarredRepositories() {
-<span class="nc" id="L144">        return listRepositories(&quot;starred&quot;);</span>
-    }
-
-    /**
-     * Lists all the projects.
-     * &lt;p&gt;
-     * https://docs.github.com/en/rest/reference/projects#list-user-projects
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;GHProject&gt; listProjects() {
-<span class="fc" id="L155">        return root().createRequest().withUrlPath(getApiTailUrl(&quot;projects&quot;)).toIterable(GHProject[].class, null);</span>
-    }
-
-    private PagedIterable&lt;GHRepository&gt; listRepositories(final String suffix) {
-<span class="nc" id="L159">        return root().createRequest().withUrlPath(getApiTailUrl(suffix)).toIterable(GHRepository[].class, null);</span>
-    }
-
-    /**
-     * Returns true if this user belongs to the specified organization.
-     *
-     * @param org
-     *            the org
-     * @return the boolean
-     */
-    public boolean isMemberOf(GHOrganization org) {
-<span class="fc" id="L170">        return org.hasMember(this);</span>
-    }
-
-    /**
-     * Returns true if this user belongs to the specified team.
-     *
-     * @param team
-     *            the team
-     * @return the boolean
-     */
-    public boolean isMemberOf(GHTeam team) {
-<span class="fc" id="L181">        return team.hasMember(this);</span>
-    }
-
-    /**
-     * Returns true if this user belongs to the specified organization as a public member.
-     *
-     * @param org
-     *            the org
-     * @return the boolean
-     */
-    public boolean isPublicMemberOf(GHOrganization org) {
-<span class="fc" id="L192">        return org.hasPublicMember(this);</span>
-    }
-
-    /**
-     * Returns true if this user is marked as hireable, false otherwise.
-     *
-     * @return if the user is marked as hireable
-     */
-    public boolean isHireable() {
-<span class="fc" id="L201">        return hireable;</span>
-    }
-
-    /**
-     * Gets the bio.
-     *
-     * @return the bio
-     */
-    public String getBio() {
-<span class="fc" id="L210">        return bio;</span>
-    }
-
-    /**
-     * Gets the organization that this user belongs to publicly.
-     *
-     * @return the organizations
+     * @return the follows
      * @throws IOException
      *             the io exception
      */
-    public GHPersonSet&lt;GHOrganization&gt; getOrganizations() throws IOException {
-<span class="fc" id="L221">        GHPersonSet&lt;GHOrganization&gt; orgs = new GHPersonSet&lt;GHOrganization&gt;();</span>
-<span class="fc" id="L222">        Set&lt;String&gt; names = new HashSet&lt;String&gt;();</span>
-<span class="fc" id="L223">        for (GHOrganization o : root().createRequest()</span>
-<span class="fc" id="L224">                .withUrlPath(&quot;/users/&quot; + login + &quot;/orgs&quot;)</span>
-<span class="fc" id="L225">                .toIterable(GHOrganization[].class, null)</span>
-<span class="fc bfc" id="L226" title="All 2 branches covered.">                .toArray()) {</span>
-<span class="pc bpc" id="L227" title="1 of 2 branches missed.">            if (names.add(o.getLogin())) // I've seen some duplicates in the data</span>
-<span class="fc" id="L228">                orgs.add(root().getOrganization(o.getLogin()));</span>
-        }
-<span class="fc" id="L230">        return orgs;</span>
+    public GHPersonSet&lt;GHUser&gt; getFollows() throws IOException {
+<span class="nc" id="L106">        return new GHPersonSet&lt;GHUser&gt;(listFollows().toList());</span>
     }
 
     /**
-     * Lists events performed by a user (this includes private events if the caller is authenticated.
+     * Gets keys.
      *
-     * @return the paged iterable
+     * @return the keys
      * @throws IOException
-     *             Signals that an I/O exception has occurred.
+     *             the io exception
      */
-    public PagedIterable&lt;GHEventInfo&gt; listEvents() throws IOException {
-<span class="nc" id="L241">        return root().createRequest()</span>
-<span class="nc" id="L242">                .withUrlPath(String.format(&quot;/users/%s/events&quot;, login))</span>
-<span class="nc" id="L243">                .toIterable(GHEventInfo[].class, null);</span>
-    }
-
-    /**
-     * Lists Gists created by this user.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;GHGist&gt; listGists() {
-<span class="nc" id="L252">        return root().createRequest()</span>
-<span class="nc" id="L253">                .withUrlPath(String.format(&quot;/users/%s/gists&quot;, login))</span>
-<span class="nc" id="L254">                .toIterable(GHGist[].class, null);</span>
+    public List&lt;GHKey&gt; getKeys() throws IOException {
+<span class="fc" id="L117">        return root().createRequest().withUrlPath(getApiTailUrl(&quot;keys&quot;)).toIterable(GHKey[].class, null).toList();</span>
     }
 
     /**
@@ -265,8 +128,28 @@ public class GHUser extends GHPerson {
      *      LDAP&lt;/a&gt;
      */
     public Optional&lt;String&gt; getLdapDn() throws IOException {
-<span class="fc" id="L268">        super.populate();</span>
-<span class="fc" id="L269">        return Optional.ofNullable(ldapDn);</span>
+<span class="fc" id="L131">        super.populate();</span>
+<span class="fc" id="L132">        return Optional.ofNullable(ldapDn);</span>
+    }
+
+    /**
+     * Gets the organization that this user belongs to publicly.
+     *
+     * @return the organizations
+     * @throws IOException
+     *             the io exception
+     */
+    public GHPersonSet&lt;GHOrganization&gt; getOrganizations() throws IOException {
+<span class="fc" id="L143">        GHPersonSet&lt;GHOrganization&gt; orgs = new GHPersonSet&lt;GHOrganization&gt;();</span>
+<span class="fc" id="L144">        Set&lt;String&gt; names = new HashSet&lt;String&gt;();</span>
+<span class="fc" id="L145">        for (GHOrganization o : root().createRequest()</span>
+<span class="fc" id="L146">                .withUrlPath(&quot;/users/&quot; + login + &quot;/orgs&quot;)</span>
+<span class="fc" id="L147">                .toIterable(GHOrganization[].class, null)</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">                .toArray()) {</span>
+<span class="pc bpc" id="L149" title="1 of 2 branches missed.">            if (names.add(o.getLogin())) // I've seen some duplicates in the data</span>
+<span class="fc" id="L150">                orgs.add(root().getOrganization(o.getLogin()));</span>
+        }
+<span class="fc" id="L152">        return orgs;</span>
     }
 
     /**
@@ -278,8 +161,8 @@ public class GHUser extends GHPerson {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
     public Instant getSuspendedAt() throws IOException {
-<span class="fc" id="L281">        super.populate();</span>
-<span class="fc" id="L282">        return GitHubClient.parseInstant(suspendedAt);</span>
+<span class="fc" id="L164">        super.populate();</span>
+<span class="fc" id="L165">        return GitHubClient.parseInstant(suspendedAt);</span>
     }
 
     /**
@@ -289,23 +172,140 @@ public class GHUser extends GHPerson {
      */
     @Override
     public int hashCode() {
-<span class="fc" id="L292">        return login.hashCode();</span>
+<span class="fc" id="L175">        return login.hashCode();</span>
     }
 
     /**
-     * Equals.
+     * Returns true if this user is marked as hireable, false otherwise.
      *
-     * @param obj
-     *            the obj
-     * @return true, if successful
+     * @return if the user is marked as hireable
      */
-    @Override
-    public boolean equals(Object obj) {
-<span class="pc bpc" id="L304" title="1 of 2 branches missed.">        if (obj instanceof GHUser) {</span>
-<span class="fc" id="L305">            GHUser that = (GHUser) obj;</span>
-<span class="fc" id="L306">            return this.login.equals(that.login);</span>
-        }
-<span class="nc" id="L308">        return false;</span>
+    public boolean isHireable() {
+<span class="fc" id="L184">        return hireable;</span>
+    }
+
+    /**
+     * Returns true if this user belongs to the specified organization.
+     *
+     * @param org
+     *            the org
+     * @return the boolean
+     */
+    public boolean isMemberOf(GHOrganization org) {
+<span class="fc" id="L195">        return org.hasMember(this);</span>
+    }
+
+    /**
+     * Returns true if this user belongs to the specified team.
+     *
+     * @param team
+     *            the team
+     * @return the boolean
+     */
+    public boolean isMemberOf(GHTeam team) {
+<span class="fc" id="L206">        return team.hasMember(this);</span>
+    }
+
+    /**
+     * Returns true if this user belongs to the specified organization as a public member.
+     *
+     * @param org
+     *            the org
+     * @return the boolean
+     */
+    public boolean isPublicMemberOf(GHOrganization org) {
+<span class="fc" id="L217">        return org.hasPublicMember(this);</span>
+    }
+
+    /**
+     * Lists events performed by a user (this includes private events if the caller is authenticated.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    public PagedIterable&lt;GHEventInfo&gt; listEvents() throws IOException {
+<span class="nc" id="L228">        return root().createRequest()</span>
+<span class="nc" id="L229">                .withUrlPath(String.format(&quot;/users/%s/events&quot;, login))</span>
+<span class="nc" id="L230">                .toIterable(GHEventInfo[].class, null);</span>
+    }
+
+    /**
+     * Lists the users who are following this user.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHUser&gt; listFollowers() {
+<span class="fc" id="L239">        return listUser(&quot;followers&quot;);</span>
+    }
+
+    /**
+     * Lists the users that this user is following.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHUser&gt; listFollows() {
+<span class="fc" id="L248">        return listUser(&quot;following&quot;);</span>
+    }
+
+    /**
+     * Lists Gists created by this user.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHGist&gt; listGists() {
+<span class="nc" id="L257">        return root().createRequest()</span>
+<span class="nc" id="L258">                .withUrlPath(String.format(&quot;/users/%s/gists&quot;, login))</span>
+<span class="nc" id="L259">                .toIterable(GHGist[].class, null);</span>
+    }
+
+    /**
+     * Lists all the projects.
+     * &lt;p&gt;
+     * https://docs.github.com/en/rest/reference/projects#list-user-projects
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHProject&gt; listProjects() {
+<span class="fc" id="L270">        return root().createRequest().withUrlPath(getApiTailUrl(&quot;projects&quot;)).toIterable(GHProject[].class, null);</span>
+    }
+
+    /**
+     * Lists all the repositories that this user has starred.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHRepository&gt; listStarredRepositories() {
+<span class="nc" id="L279">        return listRepositories(&quot;starred&quot;);</span>
+    }
+
+    /**
+     * Lists all the subscribed (aka watched) repositories.
+     * &lt;p&gt;
+     * https://developer.github.com/v3/activity/watching/
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHRepository&gt; listSubscriptions() {
+<span class="nc" id="L290">        return listRepositories(&quot;subscriptions&quot;);</span>
+    }
+
+    /**
+     * Unfollow this user.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void unfollow() throws IOException {
+<span class="nc" id="L300">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(&quot;/user/following/&quot; + login).send();</span>
+<span class="nc" id="L301">    }</span>
+
+    private PagedIterable&lt;GHRepository&gt; listRepositories(final String suffix) {
+<span class="nc" id="L304">        return root().createRequest().withUrlPath(getApiTailUrl(suffix)).toIterable(GHRepository[].class, null);</span>
+    }
+
+    private PagedIterable&lt;GHUser&gt; listUser(final String suffix) {
+<span class="fc" id="L308">        return root().createRequest().withUrlPath(getApiTailUrl(suffix)).toIterable(GHUser[].class, null);</span>
     }
 
     /**

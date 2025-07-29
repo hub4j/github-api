@@ -21,8 +21,8 @@ import java.util.Date;
  * @see &lt;a href=&quot;https://docs.github.com/en/rest/issues/comments#list-issue-comments&quot;&gt;List issue comments&lt;/a&gt;
  */
 public class GHIssueCommentQueryBuilder {
-    private final Requester req;
     private final GHIssue issue;
+    private final Requester req;
 
     /**
      * Instantiates a new GH issue comment query builder.
@@ -36,6 +36,15 @@ public class GHIssueCommentQueryBuilder {
 <span class="fc" id="L36">    }</span>
 
     /**
+     * Lists up the comments with the criteria added so far.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHIssueComment&gt; list() {
+<span class="fc" id="L44">        return req.toIterable(GHIssueComment[].class, item -&gt; item.wrapUp(issue));</span>
+    }
+
+    /**
      * Only comments created/updated after this date will be returned.
      *
      * @param date
@@ -45,7 +54,7 @@ public class GHIssueCommentQueryBuilder {
      */
     @Deprecated
     public GHIssueCommentQueryBuilder since(Date date) {
-<span class="fc" id="L48">        return since(GitHubClient.toInstantOrNull(date));</span>
+<span class="fc" id="L57">        return since(GitHubClient.toInstantOrNull(date));</span>
     }
 
     /**
@@ -56,8 +65,8 @@ public class GHIssueCommentQueryBuilder {
      * @return the query builder
      */
     public GHIssueCommentQueryBuilder since(Instant date) {
-<span class="fc" id="L59">        req.with(&quot;since&quot;, GitHubClient.printInstant(date));</span>
-<span class="fc" id="L60">        return this;</span>
+<span class="fc" id="L68">        req.with(&quot;since&quot;, GitHubClient.printInstant(date));</span>
+<span class="fc" id="L69">        return this;</span>
     }
 
     /**
@@ -68,16 +77,7 @@ public class GHIssueCommentQueryBuilder {
      * @return the query builder
      */
     public GHIssueCommentQueryBuilder since(long timestamp) {
-<span class="fc" id="L71">        return since(Instant.ofEpochMilli(timestamp));</span>
-    }
-
-    /**
-     * Lists up the comments with the criteria added so far.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;GHIssueComment&gt; list() {
-<span class="fc" id="L80">        return req.toIterable(GHIssueComment[].class, item -&gt; item.wrapUp(issue));</span>
+<span class="fc" id="L80">        return since(Instant.ofEpochMilli(timestamp));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

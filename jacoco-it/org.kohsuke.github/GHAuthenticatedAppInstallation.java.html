@@ -10,6 +10,15 @@ import javax.annotation.Nonnull;
  */
 public class GHAuthenticatedAppInstallation extends GitHubInteractiveObject {
 
+    private static class GHAuthenticatedAppInstallationRepositoryResult extends SearchResult&lt;GHRepository&gt; {
+        private GHRepository[] repositories;
+
+        @Override
+        GHRepository[] getItems(GitHub root) {
+<span class="fc" id="L18">            return repositories;</span>
+        }
+    }
+
     /**
      * Instantiates a new GH authenticated app installation.
      *
@@ -17,8 +26,8 @@ public class GHAuthenticatedAppInstallation extends GitHubInteractiveObject {
      *            the root
      */
     protected GHAuthenticatedAppInstallation(@Nonnull GitHub root) {
-<span class="fc" id="L20">        super(root);</span>
-<span class="fc" id="L21">    }</span>
+<span class="fc" id="L29">        super(root);</span>
+<span class="fc" id="L30">    }</span>
 
     /**
      * List repositories that this app installation can access.
@@ -28,18 +37,9 @@ public class GHAuthenticatedAppInstallation extends GitHubInteractiveObject {
     public PagedSearchIterable&lt;GHRepository&gt; listRepositories() {
         GitHubRequest request;
 
-<span class="fc" id="L31">        request = root().createRequest().withUrlPath(&quot;/installation/repositories&quot;).build();</span>
+<span class="fc" id="L40">        request = root().createRequest().withUrlPath(&quot;/installation/repositories&quot;).build();</span>
 
-<span class="fc" id="L33">        return new PagedSearchIterable&lt;&gt;(root(), request, GHAuthenticatedAppInstallationRepositoryResult.class);</span>
-    }
-
-    private static class GHAuthenticatedAppInstallationRepositoryResult extends SearchResult&lt;GHRepository&gt; {
-        private GHRepository[] repositories;
-
-        @Override
-        GHRepository[] getItems(GitHub root) {
-<span class="fc" id="L41">            return repositories;</span>
-        }
+<span class="fc" id="L42">        return new PagedSearchIterable&lt;&gt;(root(), request, GHAuthenticatedAppInstallationRepositoryResult.class);</span>
     }
 
 }

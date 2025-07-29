@@ -20,96 +20,56 @@ import javax.annotation.Nonnull;
 public class GHDiscussion extends GHObject {
 
     /**
-     * Create default GHDiscussion instance
-     */
-<span class="fc" id="L25">    public GHDiscussion() {</span>
-<span class="fc" id="L26">    }</span>
-
-    private GHTeam team;
-    private long number;
-    private String body, title, htmlUrl;
-
-    @JsonProperty(value = &quot;private&quot;)
-    private boolean isPrivate;
-
-    /**
-     * Gets the html url.
+     * A {@link GHLabelBuilder} that creates a new {@link GHLabel}
      *
-     * @return the html url
+     * Consumer must call {@link Creator#done()} to create the new instance.
      */
-    public URL getHtmlUrl() {
-<span class="nc" id="L41">        return GitHubClient.parseURL(htmlUrl);</span>
+    public static class Creator extends GHDiscussionBuilder&lt;Creator&gt; {
+
+        private Creator(@Nonnull GHTeam team) {
+<span class="fc" id="L30">            super(GHDiscussion.Creator.class, team, null);</span>
+<span class="fc" id="L31">            requester.method(&quot;POST&quot;).setRawUrlPath(getRawUrlPath(team, null));</span>
+<span class="fc" id="L32">        }</span>
+
+        /**
+         * Sets whether this discussion is private to this team.
+         *
+         * @param value
+         *            privacy of this discussion
+         * @return either a continuing builder or an updated {@link GHDiscussion}
+         * @throws IOException
+         *             if there is an I/O Exception
+         */
+        @Nonnull
+        public Creator private_(boolean value) throws IOException {
+<span class="fc" id="L45">            return with(&quot;private&quot;, value);</span>
+        }
     }
 
     /**
-     * Wrap up.
+     * A {@link GHLabelBuilder} that updates a single property per request
      *
-     * @param team
-     *            the team
-     * @return the GH discussion
+     * {@link GitHubRequestBuilderDone#done()} is called automatically after the property is set.
      */
-    GHDiscussion wrapUp(GHTeam team) {
-<span class="fc" id="L52">        this.team = team;</span>
-<span class="fc" id="L53">        return this;</span>
+    public static class Setter extends GHDiscussionBuilder&lt;GHDiscussion&gt; {
+        private Setter(@Nonnull GHDiscussion base) {
+<span class="fc" id="L56">            super(GHDiscussion.class, base.team, base);</span>
+<span class="fc" id="L57">            requester.method(&quot;PATCH&quot;).setRawUrlPath(base.getUrl().toString());</span>
+<span class="fc" id="L58">        }</span>
     }
-
     /**
-     * Get the team to which this discussion belongs.
+     * A {@link GHLabelBuilder} that allows multiple properties to be updated per request.
      *
-     * @return the team for this discussion
+     * Consumer must call {@link Updater#done()} to commit changes.
      */
-    @Nonnull
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHTeam getTeam() {
-<span class="fc" id="L64">        return team;</span>
+    public static class Updater extends GHDiscussionBuilder&lt;Updater&gt; {
+        private Updater(@Nonnull GHDiscussion base) {
+<span class="fc" id="L67">            super(GHDiscussion.Updater.class, base.team, base);</span>
+<span class="fc" id="L68">            requester.method(&quot;PATCH&quot;).setRawUrlPath(base.getUrl().toString());</span>
+<span class="fc" id="L69">        }</span>
     }
-
-    /**
-     * Get the title of the discussion.
-     *
-     * @return the title
-     */
-    public String getTitle() {
-<span class="fc" id="L73">        return title;</span>
-    }
-
-    /**
-     * The description of this discussion.
-     *
-     * @return the body
-     */
-    public String getBody() {
-<span class="fc" id="L82">        return body;</span>
-    }
-
-    /**
-     * The number of this discussion.
-     *
-     * @return the number
-     */
-    public long getNumber() {
-<span class="fc" id="L91">        return number;</span>
-    }
-
-    /**
-     * The id number of this discussion. GitHub discussions have &quot;number&quot; instead of &quot;id&quot;. This is provided for
-     * convenience.
-     *
-     * @return the id number for this discussion
-     * @see #getNumber()
-     */
-    @Override
-    public long getId() {
-<span class="fc" id="L103">        return getNumber();</span>
-    }
-
-    /**
-     * Whether the discussion is private to the team.
-     *
-     * @return {@code true} if discussion is private.
-     */
-    public boolean isPrivate() {
-<span class="fc" id="L112">        return isPrivate;</span>
+    private static String getRawUrlPath(@Nonnull GHTeam team, @CheckForNull Long discussionNumber) {
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        return team.getUrl().toString() + &quot;/discussions&quot; + (discussionNumber == null ? &quot;&quot; : &quot;/&quot; + discussionNumber);</span>
     }
 
     /**
@@ -122,7 +82,7 @@ public class GHDiscussion extends GHObject {
      * @return a {@link GHLabel.Creator}
      */
     static GHDiscussion.Creator create(GHTeam team) {
-<span class="fc" id="L125">        return new GHDiscussion.Creator(team);</span>
+<span class="fc" id="L85">        return new GHDiscussion.Creator(team);</span>
     }
 
     /**
@@ -137,11 +97,11 @@ public class GHDiscussion extends GHObject {
      *             Signals that an I/O exception has occurred.
      */
     static GHDiscussion read(GHTeam team, long discussionNumber) throws IOException {
-<span class="fc" id="L140">        return team.root()</span>
-<span class="fc" id="L141">                .createRequest()</span>
-<span class="fc" id="L142">                .setRawUrlPath(getRawUrlPath(team, discussionNumber))</span>
-<span class="fc" id="L143">                .fetch(GHDiscussion.class)</span>
-<span class="fc" id="L144">                .wrapUp(team);</span>
+<span class="fc" id="L100">        return team.root()</span>
+<span class="fc" id="L101">                .createRequest()</span>
+<span class="fc" id="L102">                .setRawUrlPath(getRawUrlPath(team, discussionNumber))</span>
+<span class="fc" id="L103">                .fetch(GHDiscussion.class)</span>
+<span class="fc" id="L104">                .wrapUp(team);</span>
     }
 
     /**
@@ -152,31 +112,26 @@ public class GHDiscussion extends GHObject {
      * @return the paged iterable
      */
     static PagedIterable&lt;GHDiscussion&gt; readAll(GHTeam team) {
-<span class="fc" id="L155">        return team.root()</span>
-<span class="fc" id="L156">                .createRequest()</span>
-<span class="fc" id="L157">                .setRawUrlPath(getRawUrlPath(team, null))</span>
-<span class="fc" id="L158">                .toIterable(GHDiscussion[].class, item -&gt; item.wrapUp(team));</span>
+<span class="fc" id="L115">        return team.root()</span>
+<span class="fc" id="L116">                .createRequest()</span>
+<span class="fc" id="L117">                .setRawUrlPath(getRawUrlPath(team, null))</span>
+<span class="fc" id="L118">                .toIterable(GHDiscussion[].class, item -&gt; item.wrapUp(team));</span>
     }
 
-    /**
-     * Begins a batch update
-     *
-     * Consumer must call {@link GHDiscussion.Updater#done()} to commit changes.
-     *
-     * @return a {@link GHDiscussion.Updater}
-     */
-    public GHDiscussion.Updater update() {
-<span class="fc" id="L169">        return new GHDiscussion.Updater(this);</span>
-    }
+    private String body, title, htmlUrl;
+
+    @JsonProperty(value = &quot;private&quot;)
+    private boolean isPrivate;
+
+    private long number;
+
+    private GHTeam team;
 
     /**
-     * Begins a single property update.
-     *
-     * @return a {@link GHDiscussion.Setter}
+     * Create default GHDiscussion instance
      */
-    public GHDiscussion.Setter set() {
-<span class="fc" id="L178">        return new GHDiscussion.Setter(this);</span>
-    }
+<span class="fc" id="L133">    public GHDiscussion() {</span>
+<span class="fc" id="L134">    }</span>
 
     /**
      * Delete the discussion.
@@ -185,63 +140,8 @@ public class GHDiscussion extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L188">        team.root().createRequest().method(&quot;DELETE&quot;).setRawUrlPath(getRawUrlPath(team, number)).send();</span>
-<span class="fc" id="L189">    }</span>
-
-    private static String getRawUrlPath(@Nonnull GHTeam team, @CheckForNull Long discussionNumber) {
-<span class="fc bfc" id="L192" title="All 2 branches covered.">        return team.getUrl().toString() + &quot;/discussions&quot; + (discussionNumber == null ? &quot;&quot; : &quot;/&quot; + discussionNumber);</span>
-    }
-
-    /**
-     * A {@link GHLabelBuilder} that updates a single property per request
-     *
-     * {@link GitHubRequestBuilderDone#done()} is called automatically after the property is set.
-     */
-    public static class Setter extends GHDiscussionBuilder&lt;GHDiscussion&gt; {
-        private Setter(@Nonnull GHDiscussion base) {
-<span class="fc" id="L202">            super(GHDiscussion.class, base.team, base);</span>
-<span class="fc" id="L203">            requester.method(&quot;PATCH&quot;).setRawUrlPath(base.getUrl().toString());</span>
-<span class="fc" id="L204">        }</span>
-    }
-
-    /**
-     * A {@link GHLabelBuilder} that allows multiple properties to be updated per request.
-     *
-     * Consumer must call {@link Updater#done()} to commit changes.
-     */
-    public static class Updater extends GHDiscussionBuilder&lt;Updater&gt; {
-        private Updater(@Nonnull GHDiscussion base) {
-<span class="fc" id="L214">            super(GHDiscussion.Updater.class, base.team, base);</span>
-<span class="fc" id="L215">            requester.method(&quot;PATCH&quot;).setRawUrlPath(base.getUrl().toString());</span>
-<span class="fc" id="L216">        }</span>
-    }
-
-    /**
-     * A {@link GHLabelBuilder} that creates a new {@link GHLabel}
-     *
-     * Consumer must call {@link Creator#done()} to create the new instance.
-     */
-    public static class Creator extends GHDiscussionBuilder&lt;Creator&gt; {
-
-        private Creator(@Nonnull GHTeam team) {
-<span class="fc" id="L227">            super(GHDiscussion.Creator.class, team, null);</span>
-<span class="fc" id="L228">            requester.method(&quot;POST&quot;).setRawUrlPath(getRawUrlPath(team, null));</span>
-<span class="fc" id="L229">        }</span>
-
-        /**
-         * Sets whether this discussion is private to this team.
-         *
-         * @param value
-         *            privacy of this discussion
-         * @return either a continuing builder or an updated {@link GHDiscussion}
-         * @throws IOException
-         *             if there is an I/O Exception
-         */
-        @Nonnull
-        public Creator private_(boolean value) throws IOException {
-<span class="fc" id="L242">            return with(&quot;private&quot;, value);</span>
-        }
-    }
+<span class="fc" id="L143">        team.root().createRequest().method(&quot;DELETE&quot;).setRawUrlPath(getRawUrlPath(team, number)).send();</span>
+<span class="fc" id="L144">    }</span>
 
     /**
      * Equals.
@@ -252,15 +152,74 @@ public class GHDiscussion extends GHObject {
      */
     @Override
     public boolean equals(Object o) {
-<span class="pc bpc" id="L255" title="1 of 2 branches missed.">        if (this == o) {</span>
-<span class="nc" id="L256">            return true;</span>
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">        if (this == o) {</span>
+<span class="nc" id="L156">            return true;</span>
         }
-<span class="pc bpc" id="L258" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
-<span class="nc" id="L259">            return false;</span>
+<span class="pc bpc" id="L158" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L159">            return false;</span>
         }
-<span class="fc" id="L261">        GHDiscussion that = (GHDiscussion) o;</span>
-<span class="pc bpc" id="L262" title="3 of 6 branches missed.">        return number == that.number &amp;&amp; Objects.equals(getUrl(), that.getUrl()) &amp;&amp; Objects.equals(team, that.team)</span>
-<span class="pc bpc" id="L263" title="2 of 4 branches missed.">                &amp;&amp; Objects.equals(body, that.body) &amp;&amp; Objects.equals(title, that.title);</span>
+<span class="fc" id="L161">        GHDiscussion that = (GHDiscussion) o;</span>
+<span class="pc bpc" id="L162" title="3 of 6 branches missed.">        return number == that.number &amp;&amp; Objects.equals(getUrl(), that.getUrl()) &amp;&amp; Objects.equals(team, that.team)</span>
+<span class="pc bpc" id="L163" title="2 of 4 branches missed.">                &amp;&amp; Objects.equals(body, that.body) &amp;&amp; Objects.equals(title, that.title);</span>
+    }
+
+    /**
+     * The description of this discussion.
+     *
+     * @return the body
+     */
+    public String getBody() {
+<span class="fc" id="L172">        return body;</span>
+    }
+
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
+    public URL getHtmlUrl() {
+<span class="nc" id="L181">        return GitHubClient.parseURL(htmlUrl);</span>
+    }
+
+    /**
+     * The id number of this discussion. GitHub discussions have &quot;number&quot; instead of &quot;id&quot;. This is provided for
+     * convenience.
+     *
+     * @return the id number for this discussion
+     * @see #getNumber()
+     */
+    @Override
+    public long getId() {
+<span class="fc" id="L193">        return getNumber();</span>
+    }
+
+    /**
+     * The number of this discussion.
+     *
+     * @return the number
+     */
+    public long getNumber() {
+<span class="fc" id="L202">        return number;</span>
+    }
+
+    /**
+     * Get the team to which this discussion belongs.
+     *
+     * @return the team for this discussion
+     */
+    @Nonnull
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHTeam getTeam() {
+<span class="fc" id="L213">        return team;</span>
+    }
+
+    /**
+     * Get the title of the discussion.
+     *
+     * @return the title
+     */
+    public String getTitle() {
+<span class="fc" id="L222">        return title;</span>
     }
 
     /**
@@ -270,7 +229,48 @@ public class GHDiscussion extends GHObject {
      */
     @Override
     public int hashCode() {
-<span class="fc" id="L273">        return Objects.hash(team, number, body, title);</span>
+<span class="fc" id="L232">        return Objects.hash(team, number, body, title);</span>
+    }
+
+    /**
+     * Whether the discussion is private to the team.
+     *
+     * @return {@code true} if discussion is private.
+     */
+    public boolean isPrivate() {
+<span class="fc" id="L241">        return isPrivate;</span>
+    }
+
+    /**
+     * Begins a single property update.
+     *
+     * @return a {@link GHDiscussion.Setter}
+     */
+    public GHDiscussion.Setter set() {
+<span class="fc" id="L250">        return new GHDiscussion.Setter(this);</span>
+    }
+
+    /**
+     * Begins a batch update
+     *
+     * Consumer must call {@link GHDiscussion.Updater#done()} to commit changes.
+     *
+     * @return a {@link GHDiscussion.Updater}
+     */
+    public GHDiscussion.Updater update() {
+<span class="fc" id="L261">        return new GHDiscussion.Updater(this);</span>
+    }
+
+    /**
+     * Wrap up.
+     *
+     * @param team
+     *            the team
+     * @return the GH discussion
+     */
+    GHDiscussion wrapUp(GHTeam team) {
+<span class="fc" id="L272">        this.team = team;</span>
+<span class="fc" id="L273">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

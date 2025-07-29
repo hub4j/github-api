@@ -18,13 +18,13 @@ import javax.annotation.Nonnull;
  */
 public abstract class GHSearchBuilder&lt;T&gt; extends GHQueryBuilder&lt;T&gt; {
 
-    /** The terms. */
-<span class="fc" id="L22">    protected final List&lt;String&gt; terms = new ArrayList&lt;String&gt;();</span>
-
     /**
      * Data transfer object that receives the result of search.
      */
     private final Class&lt;? extends SearchResult&lt;T&gt;&gt; receiverType;
+
+    /** The terms. */
+<span class="fc" id="L27">    protected final List&lt;String&gt; terms = new ArrayList&lt;String&gt;();</span>
 
     /**
      * Instantiates a new GH search builder.
@@ -42,6 +42,18 @@ public abstract class GHSearchBuilder&lt;T&gt; extends GHQueryBuilder&lt;T&gt; {
 <span class="fc" id="L42">    }</span>
 
     /**
+     * Performs the search.
+     *
+     * @return the paged search iterable
+     */
+    @Override
+    public PagedSearchIterable&lt;T&gt; list() {
+
+<span class="fc" id="L52">        req.set(&quot;q&quot;, StringUtils.join(terms, &quot; &quot;));</span>
+<span class="fc" id="L53">        return new PagedSearchIterable&lt;&gt;(root(), req.build(), receiverType);</span>
+    }
+
+    /**
      * Search terms.
      *
      * @param term
@@ -49,9 +61,16 @@ public abstract class GHSearchBuilder&lt;T&gt; extends GHQueryBuilder&lt;T&gt; {
      * @return the gh query builder
      */
     public GHQueryBuilder&lt;T&gt; q(String term) {
-<span class="fc" id="L52">        terms.add(term);</span>
-<span class="fc" id="L53">        return this;</span>
+<span class="fc" id="L64">        terms.add(term);</span>
+<span class="fc" id="L65">        return this;</span>
     }
+
+    /**
+     * Gets api url.
+     *
+     * @return the api url
+     */
+    protected abstract String getApiUrl();
 
     /**
      * Add a search term with qualifier.
@@ -65,35 +84,16 @@ public abstract class GHSearchBuilder&lt;T&gt; extends GHQueryBuilder&lt;T&gt; {
      * @return the gh query builder
      */
     GHQueryBuilder&lt;T&gt; q(@Nonnull final String qualifier, @CheckForNull final String value) {
-<span class="fc bfc" id="L68" title="All 2 branches covered.">        if (StringUtils.isEmpty(qualifier)) {</span>
-<span class="fc" id="L69">            throw new IllegalArgumentException(&quot;qualifier cannot be null or empty&quot;);</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        if (StringUtils.isEmpty(qualifier)) {</span>
+<span class="fc" id="L88">            throw new IllegalArgumentException(&quot;qualifier cannot be null or empty&quot;);</span>
         }
-<span class="fc bfc" id="L71" title="All 2 branches covered.">        if (StringUtils.isEmpty(value)) {</span>
-<span class="fc" id="L72">            final String removeQualifier = qualifier + &quot;:&quot;;</span>
-<span class="fc" id="L73">            terms.removeIf(term -&gt; term.startsWith(removeQualifier));</span>
-<span class="fc" id="L74">        } else {</span>
-<span class="fc" id="L75">            terms.add(qualifier + &quot;:&quot; + value);</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        if (StringUtils.isEmpty(value)) {</span>
+<span class="fc" id="L91">            final String removeQualifier = qualifier + &quot;:&quot;;</span>
+<span class="fc" id="L92">            terms.removeIf(term -&gt; term.startsWith(removeQualifier));</span>
+<span class="fc" id="L93">        } else {</span>
+<span class="fc" id="L94">            terms.add(qualifier + &quot;:&quot; + value);</span>
         }
-<span class="fc" id="L77">        return this;</span>
+<span class="fc" id="L96">        return this;</span>
     }
-
-    /**
-     * Performs the search.
-     *
-     * @return the paged search iterable
-     */
-    @Override
-    public PagedSearchIterable&lt;T&gt; list() {
-
-<span class="fc" id="L88">        req.set(&quot;q&quot;, StringUtils.join(terms, &quot; &quot;));</span>
-<span class="fc" id="L89">        return new PagedSearchIterable&lt;&gt;(root(), req.build(), receiverType);</span>
-    }
-
-    /**
-     * Gets api url.
-     *
-     * @return the api url
-     */
-    protected abstract String getApiUrl();
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -24,36 +24,75 @@ import javax.annotation.CheckForNull;
 @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
         justification = &quot;JSON API&quot;)
 public abstract class GHObject extends GitHubInteractiveObject {
+<span class="fc" id="L27">    private static final ToStringStyle TOSTRING_STYLE = new ToStringStyle() {</span>
+        {
+<span class="fc" id="L29">            this.setUseShortClassName(true);</span>
+<span class="fc" id="L30">        }</span>
+
+        @Override
+        public void append(StringBuffer buffer, String fieldName, Object value, Boolean fullDetail) {
+            // skip unimportant properties. '_' is a heuristics as important properties tend to have short names
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">            if (fieldName.contains(&quot;_&quot;))</span>
+<span class="nc" id="L36">                return;</span>
+            // avoid recursing other GHObject
+<span class="pc bpc" id="L38" title="1 of 2 branches missed.">            if (value instanceof GHObject)</span>
+<span class="nc" id="L39">                return;</span>
+            // likewise no point in showing root
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">            if (value instanceof GitHub)</span>
+<span class="nc" id="L42">                return;</span>
+
+<span class="fc" id="L44">            super.append(buffer, fieldName, value, fullDetail);</span>
+<span class="fc" id="L45">        }</span>
+    };
+
+    private String createdAt;
+
+    private long id;
+    private String nodeId;
+    private String updatedAt;
+    private String url;
+
     /**
      * Capture response HTTP headers on the state object.
      */
     protected transient Map&lt;String, List&lt;String&gt;&gt; responseHeaderFields;
 
-    private String url;
-
-    private long id;
-    private String nodeId;
-    private String createdAt;
-    private String updatedAt;
-
     /**
      * Instantiates a new GH object.
      */
-<span class="fc" id="L42">    GHObject() {</span>
-<span class="fc" id="L43">    }</span>
+<span class="fc" id="L63">    GHObject() {</span>
+<span class="fc" id="L64">    }</span>
 
     /**
-     * Called by Jackson.
+     * When was this resource created?.
      *
-     * @param connectorResponse
-     *            the {@link GitHubConnectorResponse} to get headers from.
+     * @return date created
+     * @throws IOException
+     *             on error
      */
-    @JacksonInject
-    protected void setResponseHeaderFields(@CheckForNull GitHubConnectorResponse connectorResponse) {
-<span class="fc bfc" id="L53" title="All 2 branches covered.">        if (connectorResponse != null) {</span>
-<span class="fc" id="L54">            responseHeaderFields = connectorResponse.allHeaders();</span>
-        }
-<span class="fc" id="L56">    }</span>
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getCreatedAt() throws IOException {
+<span class="fc" id="L75">        return GitHubClient.parseInstant(createdAt);</span>
+    }
+
+    /**
+     * Gets id.
+     *
+     * @return Unique ID number of this resource.
+     */
+    public long getId() {
+<span class="fc" id="L84">        return id;</span>
+    }
+
+    /**
+     * Get Global node_id from Github object.
+     *
+     * @return Global Node ID.
+     * @see &lt;a href=&quot;https://developer.github.com/v4/guides/using-global-node-ids/&quot;&gt;Using Global Node IDs&lt;/a&gt;
+     */
+    public String getNodeId() {
+<span class="fc" id="L94">        return nodeId;</span>
+    }
 
     /**
      * Returns the HTTP response headers given along with the state of this object.
@@ -70,28 +109,7 @@ public abstract class GHObject extends GitHubInteractiveObject {
     @CheckForNull
     @Deprecated
     public Map&lt;String, List&lt;String&gt;&gt; getResponseHeaderFields() {
-<span class="fc" id="L73">        return GitHubClient.unmodifiableMapOrNull(responseHeaderFields);</span>
-    }
-
-    /**
-     * When was this resource created?.
-     *
-     * @return date created
-     * @throws IOException
-     *             on error
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
-    public Instant getCreatedAt() throws IOException {
-<span class="fc" id="L85">        return GitHubClient.parseInstant(createdAt);</span>
-    }
-
-    /**
-     * Gets url.
-     *
-     * @return API URL of this object.
-     */
-    public URL getUrl() {
-<span class="fc" id="L94">        return GitHubClient.parseURL(url);</span>
+<span class="fc" id="L112">        return GitHubClient.unmodifiableMapOrNull(responseHeaderFields);</span>
     }
 
     /**
@@ -103,26 +121,16 @@ public abstract class GHObject extends GitHubInteractiveObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
     public Instant getUpdatedAt() throws IOException {
-<span class="fc" id="L106">        return GitHubClient.parseInstant(updatedAt);</span>
+<span class="fc" id="L124">        return GitHubClient.parseInstant(updatedAt);</span>
     }
 
     /**
-     * Get Global node_id from Github object.
+     * Gets url.
      *
-     * @return Global Node ID.
-     * @see &lt;a href=&quot;https://developer.github.com/v4/guides/using-global-node-ids/&quot;&gt;Using Global Node IDs&lt;/a&gt;
+     * @return API URL of this object.
      */
-    public String getNodeId() {
-<span class="fc" id="L116">        return nodeId;</span>
-    }
-
-    /**
-     * Gets id.
-     *
-     * @return Unique ID number of this resource.
-     */
-    public long getId() {
-<span class="fc" id="L125">        return id;</span>
+    public URL getUrl() {
+<span class="fc" id="L133">        return GitHubClient.parseURL(url);</span>
     }
 
     /**
@@ -133,33 +141,25 @@ public abstract class GHObject extends GitHubInteractiveObject {
      */
     @Override
     public String toString() {
-<span class="fc" id="L136">        return new ReflectionToStringBuilder(this, TOSTRING_STYLE, null, null, false, false) {</span>
+<span class="fc" id="L144">        return new ReflectionToStringBuilder(this, TOSTRING_STYLE, null, null, false, false) {</span>
             @Override
             protected boolean accept(Field field) {
-<span class="pc bpc" id="L139" title="1 of 4 branches missed.">                return super.accept(field) &amp;&amp; !field.isAnnotationPresent(SkipFromToString.class);</span>
+<span class="pc bpc" id="L147" title="1 of 4 branches missed.">                return super.accept(field) &amp;&amp; !field.isAnnotationPresent(SkipFromToString.class);</span>
             }
-<span class="fc" id="L141">        }.toString();</span>
+<span class="fc" id="L149">        }.toString();</span>
     }
 
-<span class="fc" id="L144">    private static final ToStringStyle TOSTRING_STYLE = new ToStringStyle() {</span>
-        {
-<span class="fc" id="L146">            this.setUseShortClassName(true);</span>
-<span class="fc" id="L147">        }</span>
-
-        @Override
-        public void append(StringBuffer buffer, String fieldName, Object value, Boolean fullDetail) {
-            // skip unimportant properties. '_' is a heuristics as important properties tend to have short names
-<span class="pc bpc" id="L152" title="1 of 2 branches missed.">            if (fieldName.contains(&quot;_&quot;))</span>
-<span class="nc" id="L153">                return;</span>
-            // avoid recursing other GHObject
-<span class="pc bpc" id="L155" title="1 of 2 branches missed.">            if (value instanceof GHObject)</span>
-<span class="nc" id="L156">                return;</span>
-            // likewise no point in showing root
-<span class="pc bpc" id="L158" title="1 of 2 branches missed.">            if (value instanceof GitHub)</span>
-<span class="nc" id="L159">                return;</span>
-
-<span class="fc" id="L161">            super.append(buffer, fieldName, value, fullDetail);</span>
-<span class="fc" id="L162">        }</span>
-    };
+    /**
+     * Called by Jackson.
+     *
+     * @param connectorResponse
+     *            the {@link GitHubConnectorResponse} to get headers from.
+     */
+    @JacksonInject
+    protected void setResponseHeaderFields(@CheckForNull GitHubConnectorResponse connectorResponse) {
+<span class="fc bfc" id="L160" title="All 2 branches covered.">        if (connectorResponse != null) {</span>
+<span class="fc" id="L161">            responseHeaderFields = connectorResponse.allHeaders();</span>
+        }
+<span class="fc" id="L163">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -19,31 +19,41 @@ import java.util.Map;
         justification = &quot;JSON API&quot;)
 public abstract class GHHook extends GHObject {
 
-    /**
-     * Create default GHHook instance
-     */
-<span class="fc" id="L25">    public GHHook() {</span>
-<span class="fc" id="L26">    }</span>
-
-    /** The name. */
-    String name;
-
-    /** The events. */
-    List&lt;String&gt; events;
-
     /** The active. */
     boolean active;
 
     /** The config. */
     Map&lt;String, String&gt; config;
 
+    /** The events. */
+    List&lt;String&gt; events;
+
+    /** The name. */
+    String name;
+
     /**
-     * Gets name.
-     *
-     * @return the name
+     * Create default GHHook instance
      */
-    public String getName() {
-<span class="fc" id="L46">        return name;</span>
+<span class="fc" id="L37">    public GHHook() {</span>
+<span class="fc" id="L38">    }</span>
+
+    /**
+     * Deletes this hook.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+<span class="fc" id="L47">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L48">    }</span>
+
+    /**
+     * Gets config.
+     *
+     * @return the config
+     */
+    public Map&lt;String, String&gt; getConfig() {
+<span class="fc" id="L56">        return Collections.unmodifiableMap(config);</span>
     }
 
     /**
@@ -52,11 +62,20 @@ public abstract class GHHook extends GHObject {
      * @return the events
      */
     public EnumSet&lt;GHEvent&gt; getEvents() {
-<span class="fc" id="L55">        EnumSet&lt;GHEvent&gt; s = EnumSet.noneOf(GHEvent.class);</span>
-<span class="fc bfc" id="L56" title="All 2 branches covered.">        for (String e : events) {</span>
-<span class="pc bpc" id="L57" title="1 of 2 branches missed.">            s.add(e.equals(&quot;*&quot;) ? GHEvent.ALL : EnumUtils.getEnumOrDefault(GHEvent.class, e, GHEvent.UNKNOWN));</span>
-<span class="fc" id="L58">        }</span>
-<span class="fc" id="L59">        return s;</span>
+<span class="fc" id="L65">        EnumSet&lt;GHEvent&gt; s = EnumSet.noneOf(GHEvent.class);</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        for (String e : events) {</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">            s.add(e.equals(&quot;*&quot;) ? GHEvent.ALL : EnumUtils.getEnumOrDefault(GHEvent.class, e, GHEvent.UNKNOWN));</span>
+<span class="fc" id="L68">        }</span>
+<span class="fc" id="L69">        return s;</span>
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+<span class="fc" id="L78">        return name;</span>
     }
 
     /**
@@ -65,16 +84,7 @@ public abstract class GHHook extends GHObject {
      * @return the boolean
      */
     public boolean isActive() {
-<span class="fc" id="L68">        return active;</span>
-    }
-
-    /**
-     * Gets config.
-     *
-     * @return the config
-     */
-    public Map&lt;String, String&gt; getConfig() {
-<span class="fc" id="L77">        return Collections.unmodifiableMap(config);</span>
+<span class="fc" id="L87">        return active;</span>
     }
 
     /**
@@ -85,25 +95,8 @@ public abstract class GHHook extends GHObject {
      * @see &lt;a href=&quot;https://developer.github.com/v3/repos/hooks/#ping-a-hook&quot;&gt;Ping hook&lt;/a&gt;
      */
     public void ping() throws IOException {
-<span class="fc" id="L88">        root().createRequest().method(&quot;POST&quot;).withUrlPath(getApiRoute() + &quot;/pings&quot;).send();</span>
-<span class="fc" id="L89">    }</span>
-
-    /**
-     * Deletes this hook.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void delete() throws IOException {
-<span class="fc" id="L98">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L98">        root().createRequest().method(&quot;POST&quot;).withUrlPath(getApiRoute() + &quot;/pings&quot;).send();</span>
 <span class="fc" id="L99">    }</span>
-
-    /**
-     * Root.
-     *
-     * @return the git hub
-     */
-    abstract GitHub root();
 
     /**
      * Gets the api route.
@@ -111,5 +104,12 @@ public abstract class GHHook extends GHObject {
      * @return the api route
      */
     abstract String getApiRoute();
+
+    /**
+     * Root.
+     *
+     * @return the git hub
+     */
+    abstract GitHub root();
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

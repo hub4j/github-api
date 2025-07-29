@@ -23,11 +23,21 @@ import java.util.Set;
                 &quot;URF_UNREAD_FIELD&quot; },
         justification = &quot;JSON API&quot;)
 public class GHBranchProtectionBuilder {
-    private final GHBranch branch;
+<span class="nc" id="L26">    private static class Restrictions {</span>
+<span class="nc" id="L27">        private Set&lt;String&gt; teams = new HashSet&lt;String&gt;();</span>
+<span class="nc" id="L28">        private Set&lt;String&gt; users = new HashSet&lt;String&gt;();</span>
+    }
 
-<span class="fc" id="L28">    private Map&lt;String, Object&gt; fields = new HashMap&lt;String, Object&gt;();</span>
+<span class="fc" id="L31">    private static class StatusChecks {</span>
+<span class="fc" id="L32">        final List&lt;GHBranchProtection.Check&gt; checks = new ArrayList&lt;&gt;();</span>
+        boolean strict;
+    }
+    private final GHBranch branch;
+<span class="fc" id="L36">    private Map&lt;String, Object&gt; fields = new HashMap&lt;String, Object&gt;();</span>
     private Map&lt;String, Object&gt; prReviews;
+
     private Restrictions restrictions;
+
     private StatusChecks statusChecks;
 
     /**
@@ -36,22 +46,10 @@ public class GHBranchProtectionBuilder {
      * @param branch
      *            the branch
      */
-<span class="fc" id="L39">    GHBranchProtectionBuilder(GHBranch branch) {</span>
-<span class="fc" id="L40">        this.branch = branch;</span>
-<span class="fc" id="L41">        includeAdmins(false);</span>
-<span class="fc" id="L42">    }</span>
-
-    /**
-     * Add required checks gh branch protection builder.
-     *
-     * @param checks
-     *            the checks
-     * @return the gh branch protection builder
-     */
-    public GHBranchProtectionBuilder addRequiredStatusChecks(Collection&lt;GHBranchProtection.Check&gt; checks) {
-<span class="fc" id="L52">        getStatusChecks().checks.addAll(checks);</span>
-<span class="fc" id="L53">        return this;</span>
-    }
+<span class="fc" id="L49">    GHBranchProtectionBuilder(GHBranch branch) {</span>
+<span class="fc" id="L50">        this.branch = branch;</span>
+<span class="fc" id="L51">        includeAdmins(false);</span>
+<span class="fc" id="L52">    }</span>
 
     /**
      * Add required checks gh branch protection builder.
@@ -61,8 +59,20 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder addRequiredChecks(GHBranchProtection.Check... checks) {
-<span class="fc" id="L64">        addRequiredStatusChecks(Arrays.asList(checks));</span>
-<span class="fc" id="L65">        return this;</span>
+<span class="fc" id="L62">        addRequiredStatusChecks(Arrays.asList(checks));</span>
+<span class="fc" id="L63">        return this;</span>
+    }
+
+    /**
+     * Add required checks gh branch protection builder.
+     *
+     * @param checks
+     *            the checks
+     * @return the gh branch protection builder
+     */
+    public GHBranchProtectionBuilder addRequiredStatusChecks(Collection&lt;GHBranchProtection.Check&gt; checks) {
+<span class="fc" id="L74">        getStatusChecks().checks.addAll(checks);</span>
+<span class="fc" id="L75">        return this;</span>
     }
 
     /**
@@ -71,7 +81,7 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder allowDeletions() {
-<span class="fc" id="L74">        return allowDeletions(true);</span>
+<span class="fc" id="L84">        return allowDeletions(true);</span>
     }
 
     /**
@@ -83,8 +93,8 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder allowDeletions(boolean v) {
-<span class="fc" id="L86">        fields.put(&quot;allow_deletions&quot;, v);</span>
-<span class="fc" id="L87">        return this;</span>
+<span class="fc" id="L96">        fields.put(&quot;allow_deletions&quot;, v);</span>
+<span class="fc" id="L97">        return this;</span>
     }
 
     /**
@@ -93,7 +103,7 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder allowForcePushes() {
-<span class="fc" id="L96">        return allowForcePushes(true);</span>
+<span class="fc" id="L106">        return allowForcePushes(true);</span>
     }
 
     /**
@@ -105,8 +115,8 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder allowForcePushes(boolean v) {
-<span class="fc" id="L108">        fields.put(&quot;allow_force_pushes&quot;, v);</span>
-<span class="fc" id="L109">        return this;</span>
+<span class="fc" id="L118">        fields.put(&quot;allow_force_pushes&quot;, v);</span>
+<span class="fc" id="L119">        return this;</span>
     }
 
     /**
@@ -115,7 +125,7 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder allowForkSyncing() {
-<span class="fc" id="L118">        return allowForkSyncing(true);</span>
+<span class="fc" id="L128">        return allowForkSyncing(true);</span>
     }
 
     /**
@@ -127,8 +137,8 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder allowForkSyncing(boolean v) {
-<span class="fc" id="L130">        fields.put(&quot;allow_fork_syncing&quot;, v);</span>
-<span class="fc" id="L131">        return this;</span>
+<span class="fc" id="L140">        fields.put(&quot;allow_fork_syncing&quot;, v);</span>
+<span class="fc" id="L141">        return this;</span>
     }
 
     /**
@@ -137,7 +147,7 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder blockCreations() {
-<span class="fc" id="L140">        return blockCreations(true);</span>
+<span class="fc" id="L150">        return blockCreations(true);</span>
     }
 
     /**
@@ -150,8 +160,8 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder blockCreations(boolean v) {
-<span class="fc" id="L153">        fields.put(&quot;block_creations&quot;, v);</span>
-<span class="fc" id="L154">        return this;</span>
+<span class="fc" id="L163">        fields.put(&quot;block_creations&quot;, v);</span>
+<span class="fc" id="L164">        return this;</span>
     }
 
     /**
@@ -160,7 +170,7 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder dismissStaleReviews() {
-<span class="fc" id="L163">        return dismissStaleReviews(true);</span>
+<span class="fc" id="L173">        return dismissStaleReviews(true);</span>
     }
 
     /**
@@ -171,8 +181,8 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder dismissStaleReviews(boolean v) {
-<span class="fc" id="L174">        getPrReviews().put(&quot;dismiss_stale_reviews&quot;, v);</span>
-<span class="fc" id="L175">        return this;</span>
+<span class="fc" id="L184">        getPrReviews().put(&quot;dismiss_stale_reviews&quot;, v);</span>
+<span class="fc" id="L185">        return this;</span>
     }
 
     /**
@@ -183,13 +193,13 @@ public class GHBranchProtectionBuilder {
      *             the io exception
      */
     public GHBranchProtection enable() throws IOException {
-<span class="fc" id="L186">        return requester().method(&quot;PUT&quot;)</span>
-<span class="fc" id="L187">                .with(fields)</span>
-<span class="fc" id="L188">                .withNullable(&quot;required_status_checks&quot;, statusChecks)</span>
-<span class="fc" id="L189">                .withNullable(&quot;required_pull_request_reviews&quot;, prReviews)</span>
-<span class="fc" id="L190">                .withNullable(&quot;restrictions&quot;, restrictions)</span>
-<span class="fc" id="L191">                .withUrlPath(branch.getProtectionUrl().toString())</span>
-<span class="fc" id="L192">                .fetch(GHBranchProtection.class);</span>
+<span class="fc" id="L196">        return requester().method(&quot;PUT&quot;)</span>
+<span class="fc" id="L197">                .with(fields)</span>
+<span class="fc" id="L198">                .withNullable(&quot;required_status_checks&quot;, statusChecks)</span>
+<span class="fc" id="L199">                .withNullable(&quot;required_pull_request_reviews&quot;, prReviews)</span>
+<span class="fc" id="L200">                .withNullable(&quot;restrictions&quot;, restrictions)</span>
+<span class="fc" id="L201">                .withUrlPath(branch.getProtectionUrl().toString())</span>
+<span class="fc" id="L202">                .fetch(GHBranchProtection.class);</span>
     }
 
     /**
@@ -198,7 +208,7 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder includeAdmins() {
-<span class="fc" id="L201">        return includeAdmins(true);</span>
+<span class="fc" id="L211">        return includeAdmins(true);</span>
     }
 
     /**
@@ -209,8 +219,8 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder includeAdmins(boolean v) {
-<span class="fc" id="L212">        fields.put(&quot;enforce_admins&quot;, v);</span>
-<span class="fc" id="L213">        return this;</span>
+<span class="fc" id="L222">        fields.put(&quot;enforce_admins&quot;, v);</span>
+<span class="fc" id="L223">        return this;</span>
     }
 
     /**
@@ -219,7 +229,7 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder lockBranch() {
-<span class="fc" id="L222">        return lockBranch(true);</span>
+<span class="fc" id="L232">        return lockBranch(true);</span>
     }
 
     /**
@@ -231,20 +241,8 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder lockBranch(boolean v) {
-<span class="fc" id="L234">        fields.put(&quot;lock_branch&quot;, v);</span>
-<span class="fc" id="L235">        return this;</span>
-    }
-
-    /**
-     * Required reviewers gh branch protection builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh branch protection builder
-     */
-    public GHBranchProtectionBuilder requiredReviewers(int v) {
-<span class="fc" id="L246">        getPrReviews().put(&quot;required_approving_review_count&quot;, v);</span>
-<span class="fc" id="L247">        return this;</span>
+<span class="fc" id="L244">        fields.put(&quot;lock_branch&quot;, v);</span>
+<span class="fc" id="L245">        return this;</span>
     }
 
     /**
@@ -253,7 +251,7 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder requireBranchIsUpToDate() {
-<span class="fc" id="L256">        return requireBranchIsUpToDate(true);</span>
+<span class="fc" id="L254">        return requireBranchIsUpToDate(true);</span>
     }
 
     /**
@@ -264,8 +262,8 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder requireBranchIsUpToDate(boolean v) {
-<span class="fc" id="L267">        getStatusChecks().strict = v;</span>
-<span class="fc" id="L268">        return this;</span>
+<span class="fc" id="L265">        getStatusChecks().strict = v;</span>
+<span class="fc" id="L266">        return this;</span>
     }
 
     /**
@@ -274,7 +272,7 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder requireCodeOwnReviews() {
-<span class="fc" id="L277">        return requireCodeOwnReviews(true);</span>
+<span class="fc" id="L275">        return requireCodeOwnReviews(true);</span>
     }
 
     /**
@@ -285,8 +283,8 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder requireCodeOwnReviews(boolean v) {
-<span class="fc" id="L288">        getPrReviews().put(&quot;require_code_owner_reviews&quot;, v);</span>
-<span class="fc" id="L289">        return this;</span>
+<span class="fc" id="L286">        getPrReviews().put(&quot;require_code_owner_reviews&quot;, v);</span>
+<span class="fc" id="L287">        return this;</span>
     }
 
     /**
@@ -295,7 +293,7 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder requireLastPushApproval() {
-<span class="fc" id="L298">        return requireLastPushApproval(true);</span>
+<span class="fc" id="L296">        return requireLastPushApproval(true);</span>
     }
 
     /**
@@ -306,8 +304,18 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder requireLastPushApproval(boolean v) {
-<span class="fc" id="L309">        getPrReviews().put(&quot;require_last_push_approval&quot;, v);</span>
-<span class="fc" id="L310">        return this;</span>
+<span class="fc" id="L307">        getPrReviews().put(&quot;require_last_push_approval&quot;, v);</span>
+<span class="fc" id="L308">        return this;</span>
+    }
+
+    /**
+     * Require reviews gh branch protection builder.
+     *
+     * @return the gh branch protection builder
+     */
+    public GHBranchProtectionBuilder requireReviews() {
+<span class="fc" id="L317">        getPrReviews();</span>
+<span class="fc" id="L318">        return this;</span>
     }
 
     /**
@@ -317,7 +325,7 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder requiredConversationResolution() {
-<span class="fc" id="L320">        return requiredConversationResolution(true);</span>
+<span class="fc" id="L328">        return requiredConversationResolution(true);</span>
     }
 
     /**
@@ -329,8 +337,8 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder requiredConversationResolution(boolean v) {
-<span class="fc" id="L332">        fields.put(&quot;required_conversation_resolution&quot;, v);</span>
-<span class="fc" id="L333">        return this;</span>
+<span class="fc" id="L340">        fields.put(&quot;required_conversation_resolution&quot;, v);</span>
+<span class="fc" id="L341">        return this;</span>
     }
 
     /**
@@ -339,7 +347,7 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder requiredLinearHistory() {
-<span class="fc" id="L342">        return requiredLinearHistory(true);</span>
+<span class="fc" id="L350">        return requiredLinearHistory(true);</span>
     }
 
     /**
@@ -352,33 +360,20 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder requiredLinearHistory(boolean v) {
-<span class="fc" id="L355">        fields.put(&quot;required_linear_history&quot;, v);</span>
-<span class="fc" id="L356">        return this;</span>
+<span class="fc" id="L363">        fields.put(&quot;required_linear_history&quot;, v);</span>
+<span class="fc" id="L364">        return this;</span>
     }
 
     /**
-     * Require reviews gh branch protection builder.
+     * Required reviewers gh branch protection builder.
      *
+     * @param v
+     *            the v
      * @return the gh branch protection builder
      */
-    public GHBranchProtectionBuilder requireReviews() {
-<span class="fc" id="L365">        getPrReviews();</span>
-<span class="fc" id="L366">        return this;</span>
-    }
-
-    /**
-     * Restrict review dismissals gh branch protection builder.
-     *
-     * @return the gh branch protection builder
-     */
-    public GHBranchProtectionBuilder restrictReviewDismissals() {
-<span class="nc" id="L375">        getPrReviews();</span>
-
-<span class="nc bnc" id="L377" title="All 2 branches missed.">        if (!prReviews.containsKey(&quot;dismissal_restrictions&quot;)) {</span>
-<span class="nc" id="L378">            prReviews.put(&quot;dismissal_restrictions&quot;, new Restrictions());</span>
-        }
-
-<span class="nc" id="L381">        return this;</span>
+    public GHBranchProtectionBuilder requiredReviewers(int v) {
+<span class="fc" id="L375">        getPrReviews().put(&quot;required_approving_review_count&quot;, v);</span>
+<span class="fc" id="L376">        return this;</span>
     }
 
     /**
@@ -387,8 +382,23 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder restrictPushAccess() {
-<span class="nc" id="L390">        getRestrictions();</span>
-<span class="nc" id="L391">        return this;</span>
+<span class="nc" id="L385">        getRestrictions();</span>
+<span class="nc" id="L386">        return this;</span>
+    }
+
+    /**
+     * Restrict review dismissals gh branch protection builder.
+     *
+     * @return the gh branch protection builder
+     */
+    public GHBranchProtectionBuilder restrictReviewDismissals() {
+<span class="nc" id="L395">        getPrReviews();</span>
+
+<span class="nc bnc" id="L397" title="All 2 branches missed.">        if (!prReviews.containsKey(&quot;dismissal_restrictions&quot;)) {</span>
+<span class="nc" id="L398">            prReviews.put(&quot;dismissal_restrictions&quot;, new Restrictions());</span>
+        }
+
+<span class="nc" id="L401">        return this;</span>
     }
 
     /**
@@ -399,10 +409,10 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder teamPushAccess(Collection&lt;GHTeam&gt; teams) {
-<span class="nc bnc" id="L402" title="All 2 branches missed.">        for (GHTeam team : teams) {</span>
-<span class="nc" id="L403">            teamPushAccess(team);</span>
-<span class="nc" id="L404">        }</span>
-<span class="nc" id="L405">        return this;</span>
+<span class="nc bnc" id="L412" title="All 2 branches missed.">        for (GHTeam team : teams) {</span>
+<span class="nc" id="L413">            teamPushAccess(team);</span>
+<span class="nc" id="L414">        }</span>
+<span class="nc" id="L415">        return this;</span>
     }
 
     /**
@@ -413,10 +423,10 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder teamPushAccess(GHTeam... teams) {
-<span class="nc bnc" id="L416" title="All 2 branches missed.">        for (GHTeam team : teams) {</span>
-<span class="nc" id="L417">            getRestrictions().teams.add(team.getSlug());</span>
+<span class="nc bnc" id="L426" title="All 2 branches missed.">        for (GHTeam team : teams) {</span>
+<span class="nc" id="L427">            getRestrictions().teams.add(team.getSlug());</span>
         }
-<span class="nc" id="L419">        return this;</span>
+<span class="nc" id="L429">        return this;</span>
     }
 
     /**
@@ -427,10 +437,10 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder teamReviewDismissals(Collection&lt;GHTeam&gt; teams) {
-<span class="nc bnc" id="L430" title="All 2 branches missed.">        for (GHTeam team : teams) {</span>
-<span class="nc" id="L431">            teamReviewDismissals(team);</span>
-<span class="nc" id="L432">        }</span>
-<span class="nc" id="L433">        return this;</span>
+<span class="nc bnc" id="L440" title="All 2 branches missed.">        for (GHTeam team : teams) {</span>
+<span class="nc" id="L441">            teamReviewDismissals(team);</span>
+<span class="nc" id="L442">        }</span>
+<span class="nc" id="L443">        return this;</span>
     }
 
     /**
@@ -441,10 +451,10 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder teamReviewDismissals(GHTeam... teams) {
-<span class="nc bnc" id="L444" title="All 2 branches missed.">        for (GHTeam team : teams) {</span>
-<span class="nc" id="L445">            addReviewRestriction(team.getSlug(), true);</span>
+<span class="nc bnc" id="L454" title="All 2 branches missed.">        for (GHTeam team : teams) {</span>
+<span class="nc" id="L455">            addReviewRestriction(team.getSlug(), true);</span>
         }
-<span class="nc" id="L447">        return this;</span>
+<span class="nc" id="L457">        return this;</span>
     }
 
     /**
@@ -455,10 +465,10 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder userPushAccess(Collection&lt;GHUser&gt; users) {
-<span class="nc bnc" id="L458" title="All 2 branches missed.">        for (GHUser user : users) {</span>
-<span class="nc" id="L459">            userPushAccess(user);</span>
-<span class="nc" id="L460">        }</span>
-<span class="nc" id="L461">        return this;</span>
+<span class="nc bnc" id="L468" title="All 2 branches missed.">        for (GHUser user : users) {</span>
+<span class="nc" id="L469">            userPushAccess(user);</span>
+<span class="nc" id="L470">        }</span>
+<span class="nc" id="L471">        return this;</span>
     }
 
     /**
@@ -469,10 +479,10 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder userPushAccess(GHUser... users) {
-<span class="nc bnc" id="L472" title="All 2 branches missed.">        for (GHUser user : users) {</span>
-<span class="nc" id="L473">            getRestrictions().users.add(user.getLogin());</span>
+<span class="nc bnc" id="L482" title="All 2 branches missed.">        for (GHUser user : users) {</span>
+<span class="nc" id="L483">            getRestrictions().users.add(user.getLogin());</span>
         }
-<span class="nc" id="L475">        return this;</span>
+<span class="nc" id="L485">        return this;</span>
     }
 
     /**
@@ -483,10 +493,10 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder userReviewDismissals(Collection&lt;GHUser&gt; users) {
-<span class="nc bnc" id="L486" title="All 2 branches missed.">        for (GHUser team : users) {</span>
-<span class="nc" id="L487">            userReviewDismissals(team);</span>
-<span class="nc" id="L488">        }</span>
-<span class="nc" id="L489">        return this;</span>
+<span class="nc bnc" id="L496" title="All 2 branches missed.">        for (GHUser team : users) {</span>
+<span class="nc" id="L497">            userReviewDismissals(team);</span>
+<span class="nc" id="L498">        }</span>
+<span class="nc" id="L499">        return this;</span>
     }
 
     /**
@@ -497,56 +507,46 @@ public class GHBranchProtectionBuilder {
      * @return the gh branch protection builder
      */
     public GHBranchProtectionBuilder userReviewDismissals(GHUser... users) {
-<span class="nc bnc" id="L500" title="All 2 branches missed.">        for (GHUser user : users) {</span>
-<span class="nc" id="L501">            addReviewRestriction(user.getLogin(), false);</span>
+<span class="nc bnc" id="L510" title="All 2 branches missed.">        for (GHUser user : users) {</span>
+<span class="nc" id="L511">            addReviewRestriction(user.getLogin(), false);</span>
         }
-<span class="nc" id="L503">        return this;</span>
+<span class="nc" id="L513">        return this;</span>
     }
 
     private void addReviewRestriction(String restriction, boolean isTeam) {
-<span class="nc" id="L507">        restrictReviewDismissals();</span>
-<span class="nc" id="L508">        Restrictions restrictions = (Restrictions) prReviews.get(&quot;dismissal_restrictions&quot;);</span>
+<span class="nc" id="L517">        restrictReviewDismissals();</span>
+<span class="nc" id="L518">        Restrictions restrictions = (Restrictions) prReviews.get(&quot;dismissal_restrictions&quot;);</span>
 
-<span class="nc bnc" id="L510" title="All 2 branches missed.">        if (isTeam) {</span>
-<span class="nc" id="L511">            restrictions.teams.add(restriction);</span>
+<span class="nc bnc" id="L520" title="All 2 branches missed.">        if (isTeam) {</span>
+<span class="nc" id="L521">            restrictions.teams.add(restriction);</span>
         } else {
-<span class="nc" id="L513">            restrictions.users.add(restriction);</span>
+<span class="nc" id="L523">            restrictions.users.add(restriction);</span>
         }
-<span class="nc" id="L515">    }</span>
+<span class="nc" id="L525">    }</span>
 
     private Map&lt;String, Object&gt; getPrReviews() {
-<span class="fc bfc" id="L518" title="All 2 branches covered.">        if (prReviews == null) {</span>
-<span class="fc" id="L519">            prReviews = new HashMap&lt;String, Object&gt;();</span>
+<span class="fc bfc" id="L528" title="All 2 branches covered.">        if (prReviews == null) {</span>
+<span class="fc" id="L529">            prReviews = new HashMap&lt;String, Object&gt;();</span>
         }
-<span class="fc" id="L521">        return prReviews;</span>
+<span class="fc" id="L531">        return prReviews;</span>
     }
 
     private Restrictions getRestrictions() {
-<span class="nc bnc" id="L525" title="All 2 branches missed.">        if (restrictions == null) {</span>
-<span class="nc" id="L526">            restrictions = new Restrictions();</span>
+<span class="nc bnc" id="L535" title="All 2 branches missed.">        if (restrictions == null) {</span>
+<span class="nc" id="L536">            restrictions = new Restrictions();</span>
         }
-<span class="nc" id="L528">        return restrictions;</span>
+<span class="nc" id="L538">        return restrictions;</span>
     }
 
     private StatusChecks getStatusChecks() {
-<span class="fc bfc" id="L532" title="All 2 branches covered.">        if (statusChecks == null) {</span>
-<span class="fc" id="L533">            statusChecks = new StatusChecks();</span>
+<span class="fc bfc" id="L542" title="All 2 branches covered.">        if (statusChecks == null) {</span>
+<span class="fc" id="L543">            statusChecks = new StatusChecks();</span>
         }
-<span class="fc" id="L535">        return statusChecks;</span>
+<span class="fc" id="L545">        return statusChecks;</span>
     }
 
     private Requester requester() {
-<span class="fc" id="L539">        return branch.root().createRequest();</span>
-    }
-
-<span class="nc" id="L542">    private static class Restrictions {</span>
-<span class="nc" id="L543">        private Set&lt;String&gt; teams = new HashSet&lt;String&gt;();</span>
-<span class="nc" id="L544">        private Set&lt;String&gt; users = new HashSet&lt;String&gt;();</span>
-    }
-
-<span class="fc" id="L547">    private static class StatusChecks {</span>
-<span class="fc" id="L548">        final List&lt;GHBranchProtection.Check&gt; checks = new ArrayList&lt;&gt;();</span>
-        boolean strict;
+<span class="fc" id="L549">        return branch.root().createRequest();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

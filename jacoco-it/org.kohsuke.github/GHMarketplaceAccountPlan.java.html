@@ -11,16 +11,16 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class GHMarketplaceAccountPlan extends GHMarketplaceAccount {
 
+    @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Field comes from JSON deserialization&quot;)
+    private GHMarketplacePendingChange marketplacePendingChange;
+
+    @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Field comes from JSON deserialization&quot;)
+    private GHMarketplacePurchase marketplacePurchase;
     /**
      * Create default GHMarketplaceAccountPlan instance
      */
-<span class="fc" id="L17">    public GHMarketplaceAccountPlan() {</span>
-<span class="fc" id="L18">    }</span>
-
-    @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Field comes from JSON deserialization&quot;)
-    private GHMarketplacePendingChange marketplacePendingChange;
-    @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Field comes from JSON deserialization&quot;)
-    private GHMarketplacePurchase marketplacePurchase;
+<span class="fc" id="L22">    public GHMarketplaceAccountPlan() {</span>
+<span class="fc" id="L23">    }</span>
 
     /**
      * Gets marketplace pending change.

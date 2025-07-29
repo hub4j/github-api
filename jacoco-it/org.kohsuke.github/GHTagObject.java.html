@@ -12,32 +12,38 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
         justification = &quot;JSON API&quot;)
 public class GHTagObject extends GitHubInteractiveObject {
 
+    private String message;
+
+    private GHRef.GHObject object;
+
+    private GHRepository owner;
+    private String sha;
+    private String tag;
+    private GitUser tagger;
+    private String url;
+    private GHVerification verification;
     /**
      * Create default GHTagObject instance
      */
-<span class="fc" id="L18">    public GHTagObject() {</span>
-<span class="fc" id="L19">    }</span>
-
-    private GHRepository owner;
-
-    private String tag;
-    private String sha;
-    private String url;
-    private String message;
-    private GitUser tagger;
-    private GHRef.GHObject object;
-    private GHVerification verification;
+<span class="fc" id="L28">    public GHTagObject() {</span>
+<span class="fc" id="L29">    }</span>
 
     /**
-     * Wrap.
+     * Gets message.
      *
-     * @param owner
-     *            the owner
-     * @return the GH tag object
+     * @return the message
      */
-    GHTagObject wrap(GHRepository owner) {
-<span class="fc" id="L39">        this.owner = owner;</span>
-<span class="fc" id="L40">        return this;</span>
+    public String getMessage() {
+<span class="fc" id="L37">        return message;</span>
+    }
+
+    /**
+     * Gets object.
+     *
+     * @return the object
+     */
+    public GHRef.GHObject getObject() {
+<span class="fc" id="L46">        return object;</span>
     }
 
     /**
@@ -47,16 +53,7 @@ public class GHTagObject extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getOwner() {
-<span class="fc" id="L50">        return owner;</span>
-    }
-
-    /**
-     * Gets tag.
-     *
-     * @return the tag
-     */
-    public String getTag() {
-<span class="fc" id="L59">        return tag;</span>
+<span class="fc" id="L56">        return owner;</span>
     }
 
     /**
@@ -65,25 +62,16 @@ public class GHTagObject extends GitHubInteractiveObject {
      * @return the sha
      */
     public String getSha() {
-<span class="fc" id="L68">        return sha;</span>
+<span class="fc" id="L65">        return sha;</span>
     }
 
     /**
-     * Gets url.
+     * Gets tag.
      *
-     * @return the url
+     * @return the tag
      */
-    public String getUrl() {
-<span class="fc" id="L77">        return url;</span>
-    }
-
-    /**
-     * Gets message.
-     *
-     * @return the message
-     */
-    public String getMessage() {
-<span class="fc" id="L86">        return message;</span>
+    public String getTag() {
+<span class="fc" id="L74">        return tag;</span>
     }
 
     /**
@@ -92,16 +80,16 @@ public class GHTagObject extends GitHubInteractiveObject {
      * @return the tagger
      */
     public GitUser getTagger() {
-<span class="fc" id="L95">        return tagger;</span>
+<span class="fc" id="L83">        return tagger;</span>
     }
 
     /**
-     * Gets object.
+     * Gets url.
      *
-     * @return the object
+     * @return the url
      */
-    public GHRef.GHObject getObject() {
-<span class="fc" id="L104">        return object;</span>
+    public String getUrl() {
+<span class="fc" id="L92">        return url;</span>
     }
 
     /**
@@ -110,7 +98,19 @@ public class GHTagObject extends GitHubInteractiveObject {
      * @return the Verification status
      */
     public GHVerification getVerification() {
-<span class="fc" id="L113">        return verification;</span>
+<span class="fc" id="L101">        return verification;</span>
+    }
+
+    /**
+     * Wrap.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH tag object
+     */
+    GHTagObject wrap(GHRepository owner) {
+<span class="fc" id="L112">        this.owner = owner;</span>
+<span class="fc" id="L113">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

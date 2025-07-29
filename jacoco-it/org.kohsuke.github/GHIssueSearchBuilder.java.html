@@ -12,111 +12,16 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 public class GHIssueSearchBuilder extends GHSearchBuilder&lt;GHIssue&gt; {
 
     /**
-     * Instantiates a new GH issue search builder.
-     *
-     * @param root
-     *            the root
-     */
-    GHIssueSearchBuilder(GitHub root) {
-<span class="fc" id="L21">        super(root, IssueSearchResult.class);</span>
-<span class="fc" id="L22">    }</span>
-
-    /**
-     * Search terms.
-     *
-     * @param term
-     *            the term
-     * @return the GH issue search builder
-     */
-    public GHIssueSearchBuilder q(String term) {
-<span class="fc" id="L32">        super.q(term);</span>
-<span class="fc" id="L33">        return this;</span>
-    }
-
-    /**
-     * Mentions gh issue search builder.
-     *
-     * @param u
-     *            the u
-     * @return the gh issue search builder
-     */
-    public GHIssueSearchBuilder mentions(GHUser u) {
-<span class="nc" id="L44">        return mentions(u.getLogin());</span>
-    }
-
-    /**
-     * Mentions gh issue search builder.
-     *
-     * @param login
-     *            the login
-     * @return the gh issue search builder
-     */
-    public GHIssueSearchBuilder mentions(String login) {
-<span class="fc" id="L55">        return q(&quot;mentions:&quot; + login);</span>
-    }
-
-    /**
-     * Is open gh issue search builder.
-     *
-     * @return the gh issue search builder
-     */
-    public GHIssueSearchBuilder isOpen() {
-<span class="fc" id="L64">        return q(&quot;is:open&quot;);</span>
-    }
-
-    /**
-     * Is closed gh issue search builder.
-     *
-     * @return the gh issue search builder
-     */
-    public GHIssueSearchBuilder isClosed() {
-<span class="nc" id="L73">        return q(&quot;is:closed&quot;);</span>
-    }
-
-    /**
-     * Is merged gh issue search builder.
-     *
-     * @return the gh issue search builder
-     */
-    public GHIssueSearchBuilder isMerged() {
-<span class="nc" id="L82">        return q(&quot;is:merged&quot;);</span>
-    }
-
-    /**
-     * Order gh issue search builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh issue search builder
-     */
-    public GHIssueSearchBuilder order(GHDirection v) {
-<span class="nc" id="L93">        req.with(&quot;order&quot;, v);</span>
-<span class="nc" id="L94">        return this;</span>
-    }
-
-    /**
-     * Sort gh issue search builder.
-     *
-     * @param sort
-     *            the sort
-     * @return the gh issue search builder
-     */
-    public GHIssueSearchBuilder sort(Sort sort) {
-<span class="fc" id="L105">        req.with(&quot;sort&quot;, sort);</span>
-<span class="fc" id="L106">        return this;</span>
-    }
-
-    /**
      * The enum Sort.
      */
-<span class="fc" id="L112">    public enum Sort {</span>
+<span class="fc" id="L17">    public enum Sort {</span>
 
         /** The comments. */
-<span class="fc" id="L115">        COMMENTS,</span>
+<span class="fc" id="L20">        COMMENTS,</span>
         /** The created. */
-<span class="fc" id="L117">        CREATED,</span>
+<span class="fc" id="L22">        CREATED,</span>
         /** The updated. */
-<span class="fc" id="L119">        UPDATED</span>
+<span class="fc" id="L24">        UPDATED</span>
     }
 
     @SuppressFBWarnings(
@@ -127,10 +32,105 @@ public class GHIssueSearchBuilder extends GHSearchBuilder&lt;GHIssue&gt; {
 
         @Override
         GHIssue[] getItems(GitHub root) {
-<span class="fc bfc" id="L130" title="All 2 branches covered.">            for (GHIssue i : items) {</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">            for (GHIssue i : items) {</span>
             }
-<span class="fc" id="L132">            return items;</span>
+<span class="fc" id="L37">            return items;</span>
         }
+    }
+
+    /**
+     * Instantiates a new GH issue search builder.
+     *
+     * @param root
+     *            the root
+     */
+    GHIssueSearchBuilder(GitHub root) {
+<span class="fc" id="L48">        super(root, IssueSearchResult.class);</span>
+<span class="fc" id="L49">    }</span>
+
+    /**
+     * Is closed gh issue search builder.
+     *
+     * @return the gh issue search builder
+     */
+    public GHIssueSearchBuilder isClosed() {
+<span class="nc" id="L57">        return q(&quot;is:closed&quot;);</span>
+    }
+
+    /**
+     * Is merged gh issue search builder.
+     *
+     * @return the gh issue search builder
+     */
+    public GHIssueSearchBuilder isMerged() {
+<span class="nc" id="L66">        return q(&quot;is:merged&quot;);</span>
+    }
+
+    /**
+     * Is open gh issue search builder.
+     *
+     * @return the gh issue search builder
+     */
+    public GHIssueSearchBuilder isOpen() {
+<span class="fc" id="L75">        return q(&quot;is:open&quot;);</span>
+    }
+
+    /**
+     * Mentions gh issue search builder.
+     *
+     * @param u
+     *            the u
+     * @return the gh issue search builder
+     */
+    public GHIssueSearchBuilder mentions(GHUser u) {
+<span class="nc" id="L86">        return mentions(u.getLogin());</span>
+    }
+
+    /**
+     * Mentions gh issue search builder.
+     *
+     * @param login
+     *            the login
+     * @return the gh issue search builder
+     */
+    public GHIssueSearchBuilder mentions(String login) {
+<span class="fc" id="L97">        return q(&quot;mentions:&quot; + login);</span>
+    }
+
+    /**
+     * Order gh issue search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh issue search builder
+     */
+    public GHIssueSearchBuilder order(GHDirection v) {
+<span class="nc" id="L108">        req.with(&quot;order&quot;, v);</span>
+<span class="nc" id="L109">        return this;</span>
+    }
+
+    /**
+     * Search terms.
+     *
+     * @param term
+     *            the term
+     * @return the GH issue search builder
+     */
+    public GHIssueSearchBuilder q(String term) {
+<span class="fc" id="L120">        super.q(term);</span>
+<span class="fc" id="L121">        return this;</span>
+    }
+
+    /**
+     * Sort gh issue search builder.
+     *
+     * @param sort
+     *            the sort
+     * @return the gh issue search builder
+     */
+    public GHIssueSearchBuilder sort(Sort sort) {
+<span class="fc" id="L132">        req.with(&quot;sort&quot;, sort);</span>
+<span class="fc" id="L133">        return this;</span>
     }
 
     /**

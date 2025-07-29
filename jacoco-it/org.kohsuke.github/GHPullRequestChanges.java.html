@@ -12,57 +12,20 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 public class GHPullRequestChanges {
 
     /**
-     * Create default GHPullRequestChanges instance
-     */
-<span class="fc" id="L17">    public GHPullRequestChanges() {</span>
-<span class="fc" id="L18">    }</span>
-
-    private GHCommitPointer base;
-    private GHFrom title;
-    private GHFrom body;
-
-    /**
-     * Old target branch for pull request.
-     *
-     * @return old target branch info (or null if not changed)
-     */
-    public GHCommitPointer getBase() {
-<span class="fc" id="L30">        return base;</span>
-    }
-
-    /**
-     * Old pull request title.
-     *
-     * @return old pull request title (or null if not changed)
-     */
-    public GHFrom getTitle() {
-<span class="fc" id="L39">        return title;</span>
-    }
-
-    /**
-     * Old pull request body.
-     *
-     * @return old pull request body (or null if not changed)
-     */
-    public GHFrom getBody() {
-<span class="fc" id="L48">        return body;</span>
-    }
-
-    /**
      * The Class GHCommitPointer.
      *
      * @see org.kohsuke.github.GHCommitPointer
      */
     public static class GHCommitPointer {
 
+        private GHFrom ref;
+
+        private GHFrom sha;
         /**
          * Create default GHCommitPointer instance
          */
-<span class="fc" id="L61">        public GHCommitPointer() {</span>
-<span class="fc" id="L62">        }</span>
-
-        private GHFrom ref;
-        private GHFrom sha;
+<span class="fc" id="L27">        public GHCommitPointer() {</span>
+<span class="fc" id="L28">        }</span>
 
         /**
          * Named ref to the commit. This (from value) appears to be a &quot;short ref&quot; that doesn't include &quot;refs/heads/&quot;
@@ -71,7 +34,7 @@ public class GHPullRequestChanges {
          * @return the ref
          */
         public GHFrom getRef() {
-<span class="fc" id="L74">            return ref;</span>
+<span class="fc" id="L37">            return ref;</span>
         }
 
         /**
@@ -80,7 +43,7 @@ public class GHPullRequestChanges {
          * @return sha
          */
         public GHFrom getSha() {
-<span class="fc" id="L83">            return sha;</span>
+<span class="fc" id="L46">            return sha;</span>
         }
     }
 
@@ -89,13 +52,13 @@ public class GHPullRequestChanges {
      */
     public static class GHFrom {
 
+        private String from;
+
         /**
          * Create default GHFrom instance
          */
-<span class="fc" id="L95">        public GHFrom() {</span>
-<span class="fc" id="L96">        }</span>
-
-        private String from;
+<span class="fc" id="L60">        public GHFrom() {</span>
+<span class="fc" id="L61">        }</span>
 
         /**
          * Previous value that was changed.
@@ -103,8 +66,45 @@ public class GHPullRequestChanges {
          * @return previous value
          */
         public String getFrom() {
-<span class="fc" id="L106">            return from;</span>
+<span class="fc" id="L69">            return from;</span>
         }
+    }
+    private GHCommitPointer base;
+    private GHFrom body;
+
+    private GHFrom title;
+
+    /**
+     * Create default GHPullRequestChanges instance
+     */
+<span class="fc" id="L80">    public GHPullRequestChanges() {</span>
+<span class="fc" id="L81">    }</span>
+
+    /**
+     * Old target branch for pull request.
+     *
+     * @return old target branch info (or null if not changed)
+     */
+    public GHCommitPointer getBase() {
+<span class="fc" id="L89">        return base;</span>
+    }
+
+    /**
+     * Old pull request body.
+     *
+     * @return old pull request body (or null if not changed)
+     */
+    public GHFrom getBody() {
+<span class="fc" id="L98">        return body;</span>
+    }
+
+    /**
+     * Old pull request title.
+     *
+     * @return old pull request title (or null if not changed)
+     */
+    public GHFrom getTitle() {
+<span class="fc" id="L107">        return title;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

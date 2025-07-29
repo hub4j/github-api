@@ -14,9 +14,6 @@ import org.kohsuke.github.extras.okhttp3.OkHttpGitHubConnector;
  */
 public final class DefaultGitHubConnector {
 
-    private DefaultGitHubConnector() {
-    }
-
     /**
      * Creates a {@link GitHubConnector} that will be used as the default connector.
      *
@@ -30,22 +27,25 @@ public final class DefaultGitHubConnector {
      * @return a GitHubConnector
      */
     public static GitHubConnector create() {
-<span class="fc" id="L33">        String defaultConnectorProperty = System.getProperty(&quot;test.github.connector&quot;, &quot;default&quot;);</span>
-<span class="fc" id="L34">        return create(defaultConnectorProperty);</span>
+<span class="fc" id="L30">        String defaultConnectorProperty = System.getProperty(&quot;test.github.connector&quot;, &quot;default&quot;);</span>
+<span class="fc" id="L31">        return create(defaultConnectorProperty);</span>
     }
 
     static GitHubConnector create(String defaultConnectorProperty) {
 
-<span class="fc bfc" id="L39" title="All 2 branches covered.">        if (defaultConnectorProperty.equalsIgnoreCase(&quot;okhttp&quot;)) {</span>
-<span class="fc" id="L40">            return new OkHttpGitHubConnector(new OkHttpClient.Builder().build());</span>
-<span class="fc bfc" id="L41" title="All 2 branches covered.">        } else if (defaultConnectorProperty.equalsIgnoreCase(&quot;httpclient&quot;)) {</span>
-<span class="fc" id="L42">            return new HttpClientGitHubConnector();</span>
-<span class="fc bfc" id="L43" title="All 2 branches covered.">        } else if (defaultConnectorProperty.equalsIgnoreCase(&quot;default&quot;)) {</span>
-<span class="fc" id="L44">            return new HttpClientGitHubConnector();</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (defaultConnectorProperty.equalsIgnoreCase(&quot;okhttp&quot;)) {</span>
+<span class="fc" id="L37">            return new OkHttpGitHubConnector(new OkHttpClient.Builder().build());</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        } else if (defaultConnectorProperty.equalsIgnoreCase(&quot;httpclient&quot;)) {</span>
+<span class="fc" id="L39">            return new HttpClientGitHubConnector();</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        } else if (defaultConnectorProperty.equalsIgnoreCase(&quot;default&quot;)) {</span>
+<span class="fc" id="L41">            return new HttpClientGitHubConnector();</span>
         } else {
-<span class="fc" id="L46">            throw new IllegalStateException(</span>
+<span class="fc" id="L43">            throw new IllegalStateException(</span>
                     &quot;Property 'test.github.connector' must reference a valid built-in connector - okhttp, httpclient, or default.&quot;);
         }
+    }
+
+    private DefaultGitHubConnector() {
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

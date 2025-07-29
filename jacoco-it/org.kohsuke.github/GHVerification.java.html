@@ -18,22 +18,86 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 public class GHVerification {
 
     /**
-     * Create default GHVerification instance
+     * The possible values for reason in verification object from github.
+     *
+     * @author Sourabh Sarvotham Parkala
+     * @see &lt;a href=&quot;https://docs.github.com/en/graphql/reference/enums#gitsignaturestate&quot;&gt;List of possible reason
+     *      values. Note graphQL documentation has currently the most updated values.&lt;/a&gt;
      */
-<span class="fc" id="L23">    public GHVerification() {</span>
-<span class="fc" id="L24">    }</span>
+<span class="fc" id="L27">    public enum Reason {</span>
 
+        /** The signing certificate or its chain could not be verified. */
+<span class="fc" id="L30">        BAD_CERT,</span>
+
+        /** Invalid email used for signing. */
+<span class="fc" id="L33">        BAD_EMAIL,</span>
+
+        /** Signing key expired. */
+<span class="fc" id="L36">        EXPIRED_KEY,</span>
+
+        /** The GPG verification service misbehaved. */
+<span class="fc" id="L39">        GPGVERIFY_ERROR,</span>
+
+        /** The GPG verification service is unavailable at the moment. */
+<span class="fc" id="L42">        GPGVERIFY_UNAVAILABLE,</span>
+
+        /** Invalid signature. */
+<span class="fc" id="L45">        INVALID,</span>
+
+        /** Malformed signature. (Returned by graphQL) */
+<span class="fc" id="L48">        MALFORMED_SIG,</span>
+
+        /** Malformed signature. */
+<span class="fc" id="L51">        MALFORMED_SIGNATURE,</span>
+
+        /** The usage flags for the key that signed this don't allow signing. */
+<span class="fc" id="L54">        NOT_SIGNING_KEY,</span>
+
+        /** Email used for signing not known to GitHub. */
+<span class="fc" id="L57">        NO_USER,</span>
+
+        /** Valid signature, though certificate revocation check failed. */
+<span class="fc" id="L60">        OCSP_ERROR,</span>
+
+        /** Valid signature, pending certificate revocation checking. */
+<span class="fc" id="L63">        OCSP_PENDING,</span>
+
+        /** One or more certificates in chain has been revoked. */
+<span class="fc" id="L66">        OCSP_REVOKED,</span>
+
+        /** Key used for signing not known to GitHub. */
+<span class="fc" id="L69">        UNKNOWN_KEY,</span>
+
+        /** Unknown signature type. */
+<span class="fc" id="L72">        UNKNOWN_SIGNATURE_TYPE,</span>
+
+        /** Unsigned. */
+<span class="fc" id="L75">        UNSIGNED,</span>
+
+        /** Email used for signing unverified on GitHub. */
+<span class="fc" id="L78">        UNVERIFIED_EMAIL,</span>
+
+        /** Valid signature and verified by GitHub. */
+<span class="fc" id="L81">        VALID</span>
+    }
+
+    private Reason reason;
     private String signature, payload;
     private boolean verified;
-    private Reason reason;
 
     /**
-     * Indicates whether GitHub considers the signature in this commit to be verified.
-     *
-     * @return true if the signature is valid else returns false.
+     * Create default GHVerification instance
      */
-    public boolean isVerified() {
-<span class="fc" id="L36">        return verified;</span>
+<span class="fc" id="L91">    public GHVerification() {</span>
+<span class="fc" id="L92">    }</span>
+
+    /**
+     * Gets the payload that was signed.
+     *
+     * @return null if not signed else encoded signature.
+     */
+    public String getPayload() {
+<span class="fc" id="L100">        return payload;</span>
     }
 
     /**
@@ -43,7 +107,7 @@ public class GHVerification {
      *         {@link Reason}}
      */
     public Reason getReason() {
-<span class="fc" id="L46">        return reason;</span>
+<span class="fc" id="L110">        return reason;</span>
     }
 
     /**
@@ -52,80 +116,16 @@ public class GHVerification {
      * @return null if not signed else encoded signature.
      */
     public String getSignature() {
-<span class="fc" id="L55">        return signature;</span>
+<span class="fc" id="L119">        return signature;</span>
     }
 
     /**
-     * Gets the payload that was signed.
+     * Indicates whether GitHub considers the signature in this commit to be verified.
      *
-     * @return null if not signed else encoded signature.
+     * @return true if the signature is valid else returns false.
      */
-    public String getPayload() {
-<span class="fc" id="L64">        return payload;</span>
-    }
-
-    /**
-     * The possible values for reason in verification object from github.
-     *
-     * @author Sourabh Sarvotham Parkala
-     * @see &lt;a href=&quot;https://docs.github.com/en/graphql/reference/enums#gitsignaturestate&quot;&gt;List of possible reason
-     *      values. Note graphQL documentation has currently the most updated values.&lt;/a&gt;
-     */
-<span class="fc" id="L74">    public enum Reason {</span>
-
-        /** Signing key expired. */
-<span class="fc" id="L77">        EXPIRED_KEY,</span>
-
-        /** The usage flags for the key that signed this don't allow signing. */
-<span class="fc" id="L80">        NOT_SIGNING_KEY,</span>
-
-        /** The GPG verification service misbehaved. */
-<span class="fc" id="L83">        GPGVERIFY_ERROR,</span>
-
-        /** The GPG verification service is unavailable at the moment. */
-<span class="fc" id="L86">        GPGVERIFY_UNAVAILABLE,</span>
-
-        /** Unsigned. */
-<span class="fc" id="L89">        UNSIGNED,</span>
-
-        /** Unknown signature type. */
-<span class="fc" id="L92">        UNKNOWN_SIGNATURE_TYPE,</span>
-
-        /** Email used for signing not known to GitHub. */
-<span class="fc" id="L95">        NO_USER,</span>
-
-        /** Email used for signing unverified on GitHub. */
-<span class="fc" id="L98">        UNVERIFIED_EMAIL,</span>
-
-        /** Invalid email used for signing. */
-<span class="fc" id="L101">        BAD_EMAIL,</span>
-
-        /** Key used for signing not known to GitHub. */
-<span class="fc" id="L104">        UNKNOWN_KEY,</span>
-
-        /** Malformed signature. */
-<span class="fc" id="L107">        MALFORMED_SIGNATURE,</span>
-
-        /** Invalid signature. */
-<span class="fc" id="L110">        INVALID,</span>
-
-        /** Valid signature and verified by GitHub. */
-<span class="fc" id="L113">        VALID,</span>
-
-        /** The signing certificate or its chain could not be verified. */
-<span class="fc" id="L116">        BAD_CERT,</span>
-
-        /** Malformed signature. (Returned by graphQL) */
-<span class="fc" id="L119">        MALFORMED_SIG,</span>
-
-        /** Valid signature, though certificate revocation check failed. */
-<span class="fc" id="L122">        OCSP_ERROR,</span>
-
-        /** Valid signature, pending certificate revocation checking. */
-<span class="fc" id="L125">        OCSP_PENDING,</span>
-
-        /** One or more certificates in chain has been revoked. */
-<span class="fc" id="L128">        OCSP_REVOKED</span>
+    public boolean isVerified() {
+<span class="fc" id="L128">        return verified;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -11,15 +11,13 @@
     transient GHRepository repository;
 
     /**
-     * Wrap.
+     * Gets the api route.
      *
-     * @param owner
-     *            the owner
-     * @return the GH repo hook
+     * @return the api route
      */
-    GHRepoHook wrap(GHRepository owner) {
-<span class="fc" id="L21">        this.repository = owner;</span>
-<span class="fc" id="L22">        return this;</span>
+    @Override
+    String getApiRoute() {
+<span class="fc" id="L20">        return String.format(&quot;/repos/%s/%s/hooks/%d&quot;, repository.getOwnerName(), repository.getName(), getId());</span>
     }
 
     /**
@@ -29,17 +27,19 @@
      */
     @Override
     GitHub root() {
-<span class="fc" id="L32">        return repository.root();</span>
+<span class="fc" id="L30">        return repository.root();</span>
     }
 
     /**
-     * Gets the api route.
+     * Wrap.
      *
-     * @return the api route
+     * @param owner
+     *            the owner
+     * @return the GH repo hook
      */
-    @Override
-    String getApiRoute() {
-<span class="fc" id="L42">        return String.format(&quot;/repos/%s/%s/hooks/%d&quot;, repository.getOwnerName(), repository.getName(), getId());</span>
+    GHRepoHook wrap(GHRepository owner) {
+<span class="fc" id="L41">        this.repository = owner;</span>
+<span class="fc" id="L42">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

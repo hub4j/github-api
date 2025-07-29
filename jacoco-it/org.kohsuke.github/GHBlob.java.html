@@ -17,40 +17,22 @@ import java.util.Base64;
  */
 public class GHBlob {
 
+    private String content, encoding, url, sha;
+
+    private long size;
     /**
      * Create default GHBlob instance
      */
-<span class="fc" id="L23">    public GHBlob() {</span>
-<span class="fc" id="L24">    }</span>
-
-    private String content, encoding, url, sha;
-    private long size;
+<span class="fc" id="L26">    public GHBlob() {</span>
+<span class="fc" id="L27">    }</span>
 
     /**
-     * Gets url.
+     * Gets content.
      *
-     * @return API URL of this blob.
+     * @return Encoded content. You probably want {@link #read()}
      */
-    public URL getUrl() {
-<span class="fc" id="L35">        return GitHubClient.parseURL(url);</span>
-    }
-
-    /**
-     * Gets sha.
-     *
-     * @return the sha
-     */
-    public String getSha() {
-<span class="fc" id="L44">        return sha;</span>
-    }
-
-    /**
-     * Gets size.
-     *
-     * @return Number of bytes in this blob.
-     */
-    public long getSize() {
-<span class="fc" id="L53">        return size;</span>
+    public String getContent() {
+<span class="nc" id="L35">        return content;</span>
     }
 
     /**
@@ -59,16 +41,34 @@ public class GHBlob {
      * @return the encoding
      */
     public String getEncoding() {
-<span class="nc" id="L62">        return encoding;</span>
+<span class="nc" id="L44">        return encoding;</span>
     }
 
     /**
-     * Gets content.
+     * Gets sha.
      *
-     * @return Encoded content. You probably want {@link #read()}
+     * @return the sha
      */
-    public String getContent() {
-<span class="nc" id="L71">        return content;</span>
+    public String getSha() {
+<span class="fc" id="L53">        return sha;</span>
+    }
+
+    /**
+     * Gets size.
+     *
+     * @return Number of bytes in this blob.
+     */
+    public long getSize() {
+<span class="fc" id="L62">        return size;</span>
+    }
+
+    /**
+     * Gets url.
+     *
+     * @return API URL of this blob.
+     */
+    public URL getUrl() {
+<span class="fc" id="L71">        return GitHubClient.parseURL(url);</span>
     }
 
     /**

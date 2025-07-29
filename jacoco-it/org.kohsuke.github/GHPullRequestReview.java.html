@@ -43,43 +43,49 @@ import javax.annotation.CheckForNull;
 @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_FIELD&quot; }, justification = &quot;JSON API&quot;)
 public class GHPullRequestReview extends GHObject {
 
+    private String body;
+
+    private String commitId;
+
+    private String htmlUrl;
+    private GHPullRequestReviewState state;
+    private String submittedAt;
+    private GHUser user;
+    /** The owner. */
+    GHPullRequest owner;
     /**
      * Create default GHPullRequestReview instance
      */
-<span class="fc" id="L49">    public GHPullRequestReview() {</span>
-<span class="fc" id="L50">    }</span>
-
-    /** The owner. */
-    GHPullRequest owner;
-
-    private String body;
-    private GHUser user;
-    private String commitId;
-    private GHPullRequestReviewState state;
-    private String submittedAt;
-    private String htmlUrl;
+<span class="fc" id="L59">    public GHPullRequestReview() {</span>
+<span class="fc" id="L60">    }</span>
 
     /**
-     * Wrap up.
+     * Deletes this review.
      *
-     * @param owner
-     *            the owner
-     * @return the GH pull request review
+     * @throws IOException
+     *             the io exception
      */
-    GHPullRequestReview wrapUp(GHPullRequest owner) {
-<span class="fc" id="L70">        this.owner = owner;</span>
-<span class="fc" id="L71">        return this;</span>
-    }
+    public void delete() throws IOException {
+<span class="fc" id="L69">        owner.root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L70">    }</span>
 
     /**
-     * Gets the pull request to which this review is associated.
+     * Dismisses this review.
      *
-     * @return the parent
+     * @param message
+     *            the message
+     * @throws IOException
+     *             the io exception
      */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHPullRequest getParent() {
-<span class="fc" id="L81">        return owner;</span>
-    }
+    public void dismiss(String message) throws IOException {
+<span class="nc" id="L81">        owner.root()</span>
+<span class="nc" id="L82">                .createRequest()</span>
+<span class="nc" id="L83">                .method(&quot;PUT&quot;)</span>
+<span class="nc" id="L84">                .with(&quot;message&quot;, message)</span>
+<span class="nc" id="L85">                .withUrlPath(getApiRoute() + &quot;/dismissals&quot;)</span>
+<span class="nc" id="L86">                .send();</span>
+<span class="nc" id="L87">        state = GHPullRequestReviewState.DISMISSED;</span>
+<span class="nc" id="L88">    }</span>
 
     /**
      * The comment itself.
@@ -87,21 +93,7 @@ public class GHPullRequestReview extends GHObject {
      * @return the body
      */
     public String getBody() {
-<span class="fc" id="L90">        return body;</span>
-    }
-
-    /**
-     * Gets the user who posted this review.
-     *
-     * @return the user
-     * @throws IOException
-     *             the io exception
-     */
-    public GHUser getUser() throws IOException {
-<span class="fc bfc" id="L101" title="All 2 branches covered.">        if (user != null) {</span>
-<span class="fc" id="L102">            return owner.root().getUser(user.getLogin());</span>
-        }
-<span class="fc" id="L104">        return null;</span>
+<span class="fc" id="L96">        return body;</span>
     }
 
     /**
@@ -110,45 +102,7 @@ public class GHPullRequestReview extends GHObject {
      * @return the commit id
      */
     public String getCommitId() {
-<span class="fc" id="L113">        return commitId;</span>
-    }
-
-    /**
-     * Gets state.
-     *
-     * @return the state
-     */
-    @CheckForNull
-    public GHPullRequestReviewState getState() {
-<span class="fc" id="L123">        return state;</span>
-    }
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     */
-    public URL getHtmlUrl() {
-<span class="fc" id="L132">        return GitHubClient.parseURL(htmlUrl);</span>
-    }
-
-    /**
-     * Gets api route.
-     *
-     * @return the api route
-     */
-    protected String getApiRoute() {
-<span class="fc" id="L141">        return owner.getApiRoute() + &quot;/reviews/&quot; + getId();</span>
-    }
-
-    /**
-     * When was this resource created?.
-     *
-     * @return the submitted at
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
-    public Instant getSubmittedAt() {
-<span class="fc" id="L151">        return GitHubClient.parseInstant(submittedAt);</span>
+<span class="fc" id="L105">        return commitId;</span>
     }
 
     /**
@@ -161,7 +115,72 @@ public class GHPullRequestReview extends GHObject {
     @Override
     @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
     public Instant getCreatedAt() throws IOException {
-<span class="fc" id="L164">        return getSubmittedAt();</span>
+<span class="fc" id="L118">        return getSubmittedAt();</span>
+    }
+
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
+    public URL getHtmlUrl() {
+<span class="fc" id="L127">        return GitHubClient.parseURL(htmlUrl);</span>
+    }
+
+    /**
+     * Gets the pull request to which this review is associated.
+     *
+     * @return the parent
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHPullRequest getParent() {
+<span class="fc" id="L137">        return owner;</span>
+    }
+
+    /**
+     * Gets state.
+     *
+     * @return the state
+     */
+    @CheckForNull
+    public GHPullRequestReviewState getState() {
+<span class="fc" id="L147">        return state;</span>
+    }
+
+    /**
+     * When was this resource created?.
+     *
+     * @return the submitted at
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getSubmittedAt() {
+<span class="fc" id="L157">        return GitHubClient.parseInstant(submittedAt);</span>
+    }
+
+    /**
+     * Gets the user who posted this review.
+     *
+     * @return the user
+     * @throws IOException
+     *             the io exception
+     */
+    public GHUser getUser() throws IOException {
+<span class="fc bfc" id="L168" title="All 2 branches covered.">        if (user != null) {</span>
+<span class="fc" id="L169">            return owner.root().getUser(user.getLogin());</span>
+        }
+<span class="fc" id="L171">        return null;</span>
+    }
+
+    /**
+     * Obtains all the review comments associated with this pull request review.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHPullRequestReviewComment&gt; listReviewComments() {
+<span class="fc" id="L180">        return owner.root()</span>
+<span class="fc" id="L181">                .createRequest()</span>
+<span class="fc" id="L182">                .withUrlPath(getApiRoute() + &quot;/comments&quot;)</span>
+<span class="fc" id="L183">                .toIterable(GHPullRequestReviewComment[].class, item -&gt; item.wrapUp(owner));</span>
     }
 
     /**
@@ -175,55 +194,36 @@ public class GHPullRequestReview extends GHObject {
      *             the io exception
      */
     public void submit(String body, GHPullRequestReviewEvent event) throws IOException {
-<span class="fc" id="L178">        owner.root()</span>
-<span class="fc" id="L179">                .createRequest()</span>
-<span class="fc" id="L180">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L181">                .with(&quot;body&quot;, body)</span>
-<span class="fc" id="L182">                .with(&quot;event&quot;, event.action())</span>
-<span class="fc" id="L183">                .withUrlPath(getApiRoute() + &quot;/events&quot;)</span>
-<span class="fc" id="L184">                .fetchInto(this);</span>
-<span class="fc" id="L185">        this.body = body;</span>
-<span class="fc" id="L186">        this.state = event.toState();</span>
-<span class="fc" id="L187">    }</span>
+<span class="fc" id="L197">        owner.root()</span>
+<span class="fc" id="L198">                .createRequest()</span>
+<span class="fc" id="L199">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L200">                .with(&quot;body&quot;, body)</span>
+<span class="fc" id="L201">                .with(&quot;event&quot;, event.action())</span>
+<span class="fc" id="L202">                .withUrlPath(getApiRoute() + &quot;/events&quot;)</span>
+<span class="fc" id="L203">                .fetchInto(this);</span>
+<span class="fc" id="L204">        this.body = body;</span>
+<span class="fc" id="L205">        this.state = event.toState();</span>
+<span class="fc" id="L206">    }</span>
 
     /**
-     * Deletes this review.
+     * Gets api route.
      *
-     * @throws IOException
-     *             the io exception
+     * @return the api route
      */
-    public void delete() throws IOException {
-<span class="fc" id="L196">        owner.root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L197">    }</span>
+    protected String getApiRoute() {
+<span class="fc" id="L214">        return owner.getApiRoute() + &quot;/reviews/&quot; + getId();</span>
+    }
 
     /**
-     * Dismisses this review.
+     * Wrap up.
      *
-     * @param message
-     *            the message
-     * @throws IOException
-     *             the io exception
+     * @param owner
+     *            the owner
+     * @return the GH pull request review
      */
-    public void dismiss(String message) throws IOException {
-<span class="nc" id="L208">        owner.root()</span>
-<span class="nc" id="L209">                .createRequest()</span>
-<span class="nc" id="L210">                .method(&quot;PUT&quot;)</span>
-<span class="nc" id="L211">                .with(&quot;message&quot;, message)</span>
-<span class="nc" id="L212">                .withUrlPath(getApiRoute() + &quot;/dismissals&quot;)</span>
-<span class="nc" id="L213">                .send();</span>
-<span class="nc" id="L214">        state = GHPullRequestReviewState.DISMISSED;</span>
-<span class="nc" id="L215">    }</span>
-
-    /**
-     * Obtains all the review comments associated with this pull request review.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;GHPullRequestReviewComment&gt; listReviewComments() {
-<span class="fc" id="L223">        return owner.root()</span>
-<span class="fc" id="L224">                .createRequest()</span>
-<span class="fc" id="L225">                .withUrlPath(getApiRoute() + &quot;/comments&quot;)</span>
-<span class="fc" id="L226">                .toIterable(GHPullRequestReviewComment[].class, item -&gt; item.wrapUp(owner));</span>
+    GHPullRequestReview wrapUp(GHPullRequest owner) {
+<span class="fc" id="L225">        this.owner = owner;</span>
+<span class="fc" id="L226">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

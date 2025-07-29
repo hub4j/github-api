@@ -10,22 +10,9 @@ import java.util.function.Function;
  */
 <span class="fc" id="L11">class GitHubSanityCachedValue&lt;T&gt; {</span>
 
-<span class="fc" id="L13">    private final Object lock = new Object();</span>
-<span class="fc" id="L14">    private long lastQueriedAtEpochSeconds = 0;</span>
-<span class="fc" id="L15">    private T lastResult = null;</span>
-
-    /**
-     * Gets the value from the cache or calls the supplier if the cache is empty or out of date.
-     *
-     * @param query
-     *            a supplier the returns an updated value. Only called if the cache is empty or out of date.
-     * @return the value from the cache or the value returned from the supplier.
-     * @throws E
-     *             the exception thrown by the supplier if it fails.
-     */
-    &lt;E extends Throwable&gt; T get(SupplierThrows&lt;T, E&gt; query) throws E {
-<span class="pc" id="L27">        return get((value) -&gt; Boolean.FALSE, query);</span>
-    }
+<span class="fc" id="L13">    private long lastQueriedAtEpochSeconds = 0;</span>
+<span class="fc" id="L14">    private T lastResult = null;</span>
+<span class="fc" id="L15">    private final Object lock = new Object();</span>
 
     /**
      * Gets the value from the cache or calls the supplier if the cache is empty or out of date.
@@ -39,13 +26,26 @@ import java.util.function.Function;
      *             the exception thrown by the supplier if it fails.
      */
     &lt;E extends Throwable&gt; T get(Function&lt;T, Boolean&gt; isExpired, SupplierThrows&lt;T, E&gt; query) throws E {
-<span class="fc" id="L42">        synchronized (lock) {</span>
-<span class="pc bpc" id="L43" title="3 of 4 branches missed.">            if (Instant.now().getEpochSecond() &gt; lastQueriedAtEpochSeconds || isExpired.apply(lastResult)) {</span>
-<span class="fc" id="L44">                lastResult = query.get();</span>
-<span class="fc" id="L45">                lastQueriedAtEpochSeconds = Instant.now().getEpochSecond();</span>
+<span class="fc" id="L29">        synchronized (lock) {</span>
+<span class="pc bpc" id="L30" title="3 of 4 branches missed.">            if (Instant.now().getEpochSecond() &gt; lastQueriedAtEpochSeconds || isExpired.apply(lastResult)) {</span>
+<span class="fc" id="L31">                lastResult = query.get();</span>
+<span class="fc" id="L32">                lastQueriedAtEpochSeconds = Instant.now().getEpochSecond();</span>
             }
-<span class="fc" id="L47">        }</span>
-<span class="fc" id="L48">        return lastResult;</span>
+<span class="fc" id="L34">        }</span>
+<span class="fc" id="L35">        return lastResult;</span>
+    }
+
+    /**
+     * Gets the value from the cache or calls the supplier if the cache is empty or out of date.
+     *
+     * @param query
+     *            a supplier the returns an updated value. Only called if the cache is empty or out of date.
+     * @return the value from the cache or the value returned from the supplier.
+     * @throws E
+     *             the exception thrown by the supplier if it fails.
+     */
+    &lt;E extends Throwable&gt; T get(SupplierThrows&lt;T, E&gt; query) throws E {
+<span class="pc" id="L48">        return get((value) -&gt; Boolean.FALSE, query);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

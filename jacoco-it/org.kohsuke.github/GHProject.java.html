@@ -40,243 +40,45 @@ import java.util.Locale;
 public class GHProject extends GHObject {
 
     /**
-     * Create default GHProject instance
-     */
-<span class="fc" id="L45">    public GHProject() {</span>
-<span class="fc" id="L46">    }</span>
-
-    /** The owner. */
-    protected GHObject owner;
-
-    private String ownerUrl;
-    private String htmlUrl;
-    private String name;
-    private String body;
-    private int number;
-    private String state;
-    private GHUser creator;
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     */
-    public URL getHtmlUrl() {
-<span class="fc" id="L65">        return GitHubClient.parseURL(htmlUrl);</span>
-    }
-
-    /**
-     * Gets owner.
-     *
-     * @return the owner
-     * @throws IOException
-     *             the io exception
-     */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHObject getOwner() throws IOException {
-<span class="nc bnc" id="L77" title="All 2 branches missed.">        if (owner == null) {</span>
-            try {
-<span class="nc bnc" id="L79" title="All 2 branches missed.">                if (ownerUrl.contains(&quot;/orgs/&quot;)) {</span>
-<span class="nc" id="L80">                    owner = root().createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHOrganization.class);</span>
-<span class="nc bnc" id="L81" title="All 2 branches missed.">                } else if (ownerUrl.contains(&quot;/users/&quot;)) {</span>
-<span class="nc" id="L82">                    owner = root().createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHUser.class);</span>
-<span class="nc bnc" id="L83" title="All 2 branches missed.">                } else if (ownerUrl.contains(&quot;/repos/&quot;)) {</span>
-<span class="nc" id="L84">                    String[] pathElements = getOwnerUrl().getPath().split(&quot;/&quot;);</span>
-<span class="nc" id="L85">                    owner = GHRepository.read(root(), pathElements[1], pathElements[2]);</span>
-                }
-<span class="nc" id="L87">            } catch (FileNotFoundException e) {</span>
-<span class="nc" id="L88">                return null;</span>
-<span class="nc" id="L89">            }</span>
-        }
-<span class="nc" id="L91">        return owner;</span>
-    }
-
-    /**
-     * Gets owner url.
-     *
-     * @return the owner url
-     */
-    public URL getOwnerUrl() {
-<span class="fc" id="L100">        return GitHubClient.parseURL(ownerUrl);</span>
-    }
-
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String getName() {
-<span class="fc" id="L109">        return name;</span>
-    }
-
-    /**
-     * Gets body.
-     *
-     * @return the body
-     */
-    public String getBody() {
-<span class="fc" id="L118">        return body;</span>
-    }
-
-    /**
-     * Gets number.
-     *
-     * @return the number
-     */
-    public int getNumber() {
-<span class="nc" id="L127">        return number;</span>
-    }
-
-    /**
-     * Gets state.
-     *
-     * @return the state
-     */
-    public ProjectState getState() {
-<span class="fc" id="L136">        return Enum.valueOf(ProjectState.class, state.toUpperCase(Locale.ENGLISH));</span>
-    }
-
-    /**
-     * Gets creator.
-     *
-     * @return the creator
-     */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHUser getCreator() {
-<span class="nc" id="L146">        return creator;</span>
-    }
-
-    /**
-     * Wrap gh project.
-     *
-     * @param repo
-     *            the repo
-     * @return the gh project
-     */
-    GHProject lateBind(GHRepository repo) {
-<span class="nc" id="L157">        this.owner = repo;</span>
-<span class="nc" id="L158">        return this;</span>
-    }
-
-    private void edit(String key, Object value) throws IOException {
-<span class="fc" id="L162">        root().createRequest().method(&quot;PATCH&quot;).with(key, value).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L163">    }</span>
-
-    /**
-     * Gets api route.
-     *
-     * @return the api route
-     */
-    protected String getApiRoute() {
-<span class="fc" id="L171">        return &quot;/projects/&quot; + getId();</span>
-    }
-
-    /**
-     * Sets name.
-     *
-     * @param name
-     *            the name
-     * @throws IOException
-     *             the io exception
-     */
-    public void setName(String name) throws IOException {
-<span class="fc" id="L183">        edit(&quot;name&quot;, name);</span>
-<span class="fc" id="L184">    }</span>
-
-    /**
-     * Sets body.
-     *
-     * @param body
-     *            the body
-     * @throws IOException
-     *             the io exception
-     */
-    public void setBody(String body) throws IOException {
-<span class="fc" id="L195">        edit(&quot;body&quot;, body);</span>
-<span class="fc" id="L196">    }</span>
-
-    /**
      * The enum ProjectState.
      */
-<span class="fc" id="L201">    public enum ProjectState {</span>
+<span class="fc" id="L45">    public enum ProjectState {</span>
 
-        /** The open. */
-<span class="fc" id="L204">        OPEN,</span>
         /** The closed. */
-<span class="fc" id="L206">        CLOSED</span>
+<span class="fc" id="L48">        CLOSED,</span>
+        /** The open. */
+<span class="fc" id="L50">        OPEN</span>
     }
-
-    /**
-     * Sets state.
-     *
-     * @param state
-     *            the state
-     * @throws IOException
-     *             the io exception
-     */
-    public void setState(ProjectState state) throws IOException {
-<span class="fc" id="L218">        edit(&quot;state&quot;, state.toString().toLowerCase());</span>
-<span class="fc" id="L219">    }</span>
 
     /**
      * The enum ProjectStateFilter.
      */
-<span class="fc" id="L224">    public static enum ProjectStateFilter {</span>
+<span class="fc" id="L56">    public static enum ProjectStateFilter {</span>
 
         /** The all. */
-<span class="fc" id="L227">        ALL,</span>
-        /** The open. */
-<span class="fc" id="L229">        OPEN,</span>
+<span class="fc" id="L59">        ALL,</span>
         /** The closed. */
-<span class="fc" id="L231">        CLOSED</span>
+<span class="fc" id="L61">        CLOSED,</span>
+        /** The open. */
+<span class="fc" id="L63">        OPEN</span>
     }
 
-    /**
-     * Set the permission level that all members of the project's organization will have on this project. Only
-     * applicable for organization-owned projects.
-     *
-     * @param permission
-     *            the permission
-     * @throws IOException
-     *             the io exception
-     */
-    public void setOrganizationPermission(GHPermissionType permission) throws IOException {
-<span class="nc" id="L244">        edit(&quot;organization_permission&quot;, permission.toString().toLowerCase());</span>
-<span class="nc" id="L245">    }</span>
+    private String body;
+    private GHUser creator;
+    private String htmlUrl;
+    private String name;
+    private int number;
+    private String ownerUrl;
+    private String state;
+
+    /** The owner. */
+    protected GHObject owner;
 
     /**
-     * Sets visibility of the project within the organization. Only applicable for organization-owned projects.
-     *
-     * @param isPublic
-     *            the is public
-     * @throws IOException
-     *             the io exception
+     * Create default GHProject instance
      */
-    public void setPublic(boolean isPublic) throws IOException {
-<span class="nc" id="L256">        edit(&quot;public&quot;, isPublic);</span>
-<span class="nc" id="L257">    }</span>
-
-    /**
-     * Delete.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void delete() throws IOException {
-<span class="fc" id="L266">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L267">    }</span>
-
-    /**
-     * List columns paged iterable.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;GHProjectColumn&gt; listColumns() {
-<span class="nc" id="L275">        final GHProject project = this;</span>
-<span class="nc" id="L276">        return root().createRequest()</span>
-<span class="nc" id="L277">                .withUrlPath(String.format(&quot;/projects/%d/columns&quot;, getId()))</span>
-<span class="nc" id="L278">                .toIterable(GHProjectColumn[].class, item -&gt; item.lateBind(project));</span>
-    }
+<span class="fc" id="L80">    public GHProject() {</span>
+<span class="fc" id="L81">    }</span>
 
     /**
      * Create column gh project column.
@@ -288,12 +90,210 @@ public class GHProject extends GHObject {
      *             the io exception
      */
     public GHProjectColumn createColumn(String name) throws IOException {
-<span class="fc" id="L291">        return root().createRequest()</span>
-<span class="fc" id="L292">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L293">                .with(&quot;name&quot;, name)</span>
-<span class="fc" id="L294">                .withUrlPath(String.format(&quot;/projects/%d/columns&quot;, getId()))</span>
-<span class="fc" id="L295">                .fetch(GHProjectColumn.class)</span>
-<span class="fc" id="L296">                .lateBind(this);</span>
+<span class="fc" id="L93">        return root().createRequest()</span>
+<span class="fc" id="L94">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L95">                .with(&quot;name&quot;, name)</span>
+<span class="fc" id="L96">                .withUrlPath(String.format(&quot;/projects/%d/columns&quot;, getId()))</span>
+<span class="fc" id="L97">                .fetch(GHProjectColumn.class)</span>
+<span class="fc" id="L98">                .lateBind(this);</span>
+    }
+
+    /**
+     * Delete.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+<span class="fc" id="L108">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L109">    }</span>
+
+    /**
+     * Gets body.
+     *
+     * @return the body
+     */
+    public String getBody() {
+<span class="fc" id="L117">        return body;</span>
+    }
+
+    /**
+     * Gets creator.
+     *
+     * @return the creator
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHUser getCreator() {
+<span class="nc" id="L127">        return creator;</span>
+    }
+
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
+    public URL getHtmlUrl() {
+<span class="fc" id="L136">        return GitHubClient.parseURL(htmlUrl);</span>
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+<span class="fc" id="L145">        return name;</span>
+    }
+
+    /**
+     * Gets number.
+     *
+     * @return the number
+     */
+    public int getNumber() {
+<span class="nc" id="L154">        return number;</span>
+    }
+
+    /**
+     * Gets owner.
+     *
+     * @return the owner
+     * @throws IOException
+     *             the io exception
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHObject getOwner() throws IOException {
+<span class="nc bnc" id="L166" title="All 2 branches missed.">        if (owner == null) {</span>
+            try {
+<span class="nc bnc" id="L168" title="All 2 branches missed.">                if (ownerUrl.contains(&quot;/orgs/&quot;)) {</span>
+<span class="nc" id="L169">                    owner = root().createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHOrganization.class);</span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">                } else if (ownerUrl.contains(&quot;/users/&quot;)) {</span>
+<span class="nc" id="L171">                    owner = root().createRequest().withUrlPath(getOwnerUrl().getPath()).fetch(GHUser.class);</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">                } else if (ownerUrl.contains(&quot;/repos/&quot;)) {</span>
+<span class="nc" id="L173">                    String[] pathElements = getOwnerUrl().getPath().split(&quot;/&quot;);</span>
+<span class="nc" id="L174">                    owner = GHRepository.read(root(), pathElements[1], pathElements[2]);</span>
+                }
+<span class="nc" id="L176">            } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L177">                return null;</span>
+<span class="nc" id="L178">            }</span>
+        }
+<span class="nc" id="L180">        return owner;</span>
+    }
+
+    /**
+     * Gets owner url.
+     *
+     * @return the owner url
+     */
+    public URL getOwnerUrl() {
+<span class="fc" id="L189">        return GitHubClient.parseURL(ownerUrl);</span>
+    }
+
+    /**
+     * Gets state.
+     *
+     * @return the state
+     */
+    public ProjectState getState() {
+<span class="fc" id="L198">        return Enum.valueOf(ProjectState.class, state.toUpperCase(Locale.ENGLISH));</span>
+    }
+
+    /**
+     * List columns paged iterable.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHProjectColumn&gt; listColumns() {
+<span class="nc" id="L207">        final GHProject project = this;</span>
+<span class="nc" id="L208">        return root().createRequest()</span>
+<span class="nc" id="L209">                .withUrlPath(String.format(&quot;/projects/%d/columns&quot;, getId()))</span>
+<span class="nc" id="L210">                .toIterable(GHProjectColumn[].class, item -&gt; item.lateBind(project));</span>
+    }
+
+    /**
+     * Sets body.
+     *
+     * @param body
+     *            the body
+     * @throws IOException
+     *             the io exception
+     */
+    public void setBody(String body) throws IOException {
+<span class="fc" id="L222">        edit(&quot;body&quot;, body);</span>
+<span class="fc" id="L223">    }</span>
+
+    /**
+     * Sets name.
+     *
+     * @param name
+     *            the name
+     * @throws IOException
+     *             the io exception
+     */
+    public void setName(String name) throws IOException {
+<span class="fc" id="L234">        edit(&quot;name&quot;, name);</span>
+<span class="fc" id="L235">    }</span>
+
+    /**
+     * Set the permission level that all members of the project's organization will have on this project. Only
+     * applicable for organization-owned projects.
+     *
+     * @param permission
+     *            the permission
+     * @throws IOException
+     *             the io exception
+     */
+    public void setOrganizationPermission(GHPermissionType permission) throws IOException {
+<span class="nc" id="L247">        edit(&quot;organization_permission&quot;, permission.toString().toLowerCase());</span>
+<span class="nc" id="L248">    }</span>
+
+    /**
+     * Sets visibility of the project within the organization. Only applicable for organization-owned projects.
+     *
+     * @param isPublic
+     *            the is public
+     * @throws IOException
+     *             the io exception
+     */
+    public void setPublic(boolean isPublic) throws IOException {
+<span class="nc" id="L259">        edit(&quot;public&quot;, isPublic);</span>
+<span class="nc" id="L260">    }</span>
+
+    /**
+     * Sets state.
+     *
+     * @param state
+     *            the state
+     * @throws IOException
+     *             the io exception
+     */
+    public void setState(ProjectState state) throws IOException {
+<span class="fc" id="L271">        edit(&quot;state&quot;, state.toString().toLowerCase());</span>
+<span class="fc" id="L272">    }</span>
+
+    private void edit(String key, Object value) throws IOException {
+<span class="fc" id="L275">        root().createRequest().method(&quot;PATCH&quot;).with(key, value).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L276">    }</span>
+
+    /**
+     * Gets api route.
+     *
+     * @return the api route
+     */
+    protected String getApiRoute() {
+<span class="fc" id="L284">        return &quot;/projects/&quot; + getId();</span>
+    }
+
+    /**
+     * Wrap gh project.
+     *
+     * @param repo
+     *            the repo
+     * @return the gh project
+     */
+    GHProject lateBind(GHRepository repo) {
+<span class="nc" id="L295">        this.owner = repo;</span>
+<span class="nc" id="L296">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

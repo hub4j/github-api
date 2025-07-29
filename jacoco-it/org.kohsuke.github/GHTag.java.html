@@ -12,29 +12,34 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
         justification = &quot;JSON API&quot;)
 public class GHTag extends GitHubInteractiveObject {
 
+    private GHCommit commit;
+
+    private String name;
+
+    private GHRepository owner;
     /**
      * Create default GHTag instance
      */
-<span class="fc" id="L18">    public GHTag() {</span>
-<span class="fc" id="L19">    }</span>
-
-    private GHRepository owner;
-
-    private String name;
-    private GHCommit commit;
+<span class="fc" id="L23">    public GHTag() {</span>
+<span class="fc" id="L24">    }</span>
 
     /**
-     * Wrap.
+     * Gets commit.
      *
-     * @param owner
-     *            the owner
-     * @return the GH tag
+     * @return the commit
      */
-    GHTag wrap(GHRepository owner) {
-<span class="fc" id="L34">        this.owner = owner;</span>
-<span class="pc bpc" id="L35" title="1 of 2 branches missed.">        if (commit != null)</span>
-<span class="fc" id="L36">            commit.wrapUp(owner);</span>
-<span class="fc" id="L37">        return this;</span>
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHCommit getCommit() {
+<span class="fc" id="L33">        return commit;</span>
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+<span class="nc" id="L42">        return name;</span>
     }
 
     /**
@@ -44,26 +49,21 @@ public class GHTag extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getOwner() {
-<span class="nc" id="L47">        return owner;</span>
+<span class="nc" id="L52">        return owner;</span>
     }
 
     /**
-     * Gets name.
+     * Wrap.
      *
-     * @return the name
+     * @param owner
+     *            the owner
+     * @return the GH tag
      */
-    public String getName() {
-<span class="nc" id="L56">        return name;</span>
-    }
-
-    /**
-     * Gets commit.
-     *
-     * @return the commit
-     */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHCommit getCommit() {
-<span class="fc" id="L66">        return commit;</span>
+    GHTag wrap(GHRepository owner) {
+<span class="fc" id="L63">        this.owner = owner;</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        if (commit != null)</span>
+<span class="fc" id="L65">            commit.wrapUp(owner);</span>
+<span class="fc" id="L66">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

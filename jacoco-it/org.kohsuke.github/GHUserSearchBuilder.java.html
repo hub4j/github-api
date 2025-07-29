@@ -10,81 +10,36 @@
 public class GHUserSearchBuilder extends GHSearchBuilder&lt;GHUser&gt; {
 
     /**
+     * The enum Sort.
+     */
+<span class="fc" id="L15">    public enum Sort {</span>
+
+        /** The followers. */
+<span class="fc" id="L18">        FOLLOWERS,</span>
+        /** The joined. */
+<span class="fc" id="L20">        JOINED,</span>
+        /** The repositories. */
+<span class="fc" id="L22">        REPOSITORIES</span>
+    }
+
+    private static class UserSearchResult extends SearchResult&lt;GHUser&gt; {
+        private GHUser[] items;
+
+        @Override
+        GHUser[] getItems(GitHub root) {
+<span class="fc" id="L30">            return items;</span>
+        }
+    }
+
+    /**
      * Instantiates a new GH user search builder.
      *
      * @param root
      *            the root
      */
     GHUserSearchBuilder(GitHub root) {
-<span class="fc" id="L19">        super(root, UserSearchResult.class);</span>
-<span class="fc" id="L20">    }</span>
-
-    /**
-     * Search terms.
-     *
-     * @param term
-     *            the term
-     * @return the GH user search builder
-     */
-    public GHUserSearchBuilder q(String term) {
-<span class="fc" id="L30">        super.q(term);</span>
-<span class="fc" id="L31">        return this;</span>
-    }
-
-    /**
-     * Type gh user search builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh user search builder
-     */
-    public GHUserSearchBuilder type(String v) {
-<span class="nc" id="L42">        return q(&quot;type:&quot; + v);</span>
-    }
-
-    /**
-     * In gh user search builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh user search builder
-     */
-    public GHUserSearchBuilder in(String v) {
-<span class="nc" id="L53">        return q(&quot;in:&quot; + v);</span>
-    }
-
-    /**
-     * Repos gh user search builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh user search builder
-     */
-    public GHUserSearchBuilder repos(String v) {
-<span class="fc" id="L64">        return q(&quot;repos:&quot; + v);</span>
-    }
-
-    /**
-     * Location gh user search builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh user search builder
-     */
-    public GHUserSearchBuilder location(String v) {
-<span class="nc" id="L75">        return q(&quot;location:&quot; + v);</span>
-    }
-
-    /**
-     * Language gh user search builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh user search builder
-     */
-    public GHUserSearchBuilder language(String v) {
-<span class="nc" id="L86">        return q(&quot;language:&quot; + v);</span>
-    }
+<span class="fc" id="L41">        super(root, UserSearchResult.class);</span>
+<span class="fc" id="L42">    }</span>
 
     /**
      * Created gh user search builder.
@@ -94,7 +49,7 @@ public class GHUserSearchBuilder extends GHSearchBuilder&lt;GHUser&gt; {
      * @return the gh user search builder
      */
     public GHUserSearchBuilder created(String v) {
-<span class="nc" id="L97">        return q(&quot;created:&quot; + v);</span>
+<span class="nc" id="L52">        return q(&quot;created:&quot; + v);</span>
     }
 
     /**
@@ -105,7 +60,40 @@ public class GHUserSearchBuilder extends GHSearchBuilder&lt;GHUser&gt; {
      * @return the gh user search builder
      */
     public GHUserSearchBuilder followers(String v) {
-<span class="fc" id="L108">        return q(&quot;followers:&quot; + v);</span>
+<span class="fc" id="L63">        return q(&quot;followers:&quot; + v);</span>
+    }
+
+    /**
+     * In gh user search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh user search builder
+     */
+    public GHUserSearchBuilder in(String v) {
+<span class="nc" id="L74">        return q(&quot;in:&quot; + v);</span>
+    }
+
+    /**
+     * Language gh user search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh user search builder
+     */
+    public GHUserSearchBuilder language(String v) {
+<span class="nc" id="L85">        return q(&quot;language:&quot; + v);</span>
+    }
+
+    /**
+     * Location gh user search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh user search builder
+     */
+    public GHUserSearchBuilder location(String v) {
+<span class="nc" id="L96">        return q(&quot;location:&quot; + v);</span>
     }
 
     /**
@@ -116,8 +104,31 @@ public class GHUserSearchBuilder extends GHSearchBuilder&lt;GHUser&gt; {
      * @return the gh user search builder
      */
     public GHUserSearchBuilder order(GHDirection v) {
-<span class="nc" id="L119">        req.with(&quot;order&quot;, v);</span>
-<span class="nc" id="L120">        return this;</span>
+<span class="nc" id="L107">        req.with(&quot;order&quot;, v);</span>
+<span class="nc" id="L108">        return this;</span>
+    }
+
+    /**
+     * Search terms.
+     *
+     * @param term
+     *            the term
+     * @return the GH user search builder
+     */
+    public GHUserSearchBuilder q(String term) {
+<span class="fc" id="L119">        super.q(term);</span>
+<span class="fc" id="L120">        return this;</span>
+    }
+
+    /**
+     * Repos gh user search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh user search builder
+     */
+    public GHUserSearchBuilder repos(String v) {
+<span class="fc" id="L131">        return q(&quot;repos:&quot; + v);</span>
     }
 
     /**
@@ -128,30 +139,19 @@ public class GHUserSearchBuilder extends GHSearchBuilder&lt;GHUser&gt; {
      * @return the gh user search builder
      */
     public GHUserSearchBuilder sort(Sort sort) {
-<span class="nc" id="L131">        req.with(&quot;sort&quot;, sort);</span>
-<span class="nc" id="L132">        return this;</span>
+<span class="nc" id="L142">        req.with(&quot;sort&quot;, sort);</span>
+<span class="nc" id="L143">        return this;</span>
     }
 
     /**
-     * The enum Sort.
+     * Type gh user search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh user search builder
      */
-<span class="fc" id="L138">    public enum Sort {</span>
-
-        /** The followers. */
-<span class="fc" id="L141">        FOLLOWERS,</span>
-        /** The repositories. */
-<span class="fc" id="L143">        REPOSITORIES,</span>
-        /** The joined. */
-<span class="fc" id="L145">        JOINED</span>
-    }
-
-    private static class UserSearchResult extends SearchResult&lt;GHUser&gt; {
-        private GHUser[] items;
-
-        @Override
-        GHUser[] getItems(GitHub root) {
-<span class="fc" id="L153">            return items;</span>
-        }
+    public GHUserSearchBuilder type(String v) {
+<span class="nc" id="L154">        return q(&quot;type:&quot; + v);</span>
     }
 
     /**

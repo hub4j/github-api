@@ -20,36 +20,18 @@ import java.util.List;
         justification = &quot;JSON API&quot;)
 public class GHTree {
 
+    private String sha, url;
+
+    private GHTreeEntry[] tree;
+
+    private boolean truncated;
+    /** The repo. */
+    /* package almost final */GHRepository repo;
     /**
      * Create default GHTree instance
      */
-<span class="fc" id="L26">    public GHTree() {</span>
-<span class="fc" id="L27">    }</span>
-
-    /** The repo. */
-    /* package almost final */GHRepository repo;
-
-    private boolean truncated;
-    private String sha, url;
-    private GHTreeEntry[] tree;
-
-    /**
-     * The SHA for this trees.
-     *
-     * @return the sha
-     */
-    public String getSha() {
-<span class="fc" id="L42">        return sha;</span>
-    }
-
-    /**
-     * Return an array of entries of the trees.
-     *
-     * @return the tree
-     */
-    public List&lt;GHTreeEntry&gt; getTree() {
-<span class="fc" id="L51">        return Collections.unmodifiableList(Arrays.asList(tree));</span>
-    }
+<span class="fc" id="L33">    public GHTree() {</span>
+<span class="fc" id="L34">    }</span>
 
     /**
      * Finds a tree entry by its name.
@@ -61,20 +43,29 @@ public class GHTree {
      * @return the entry
      */
     public GHTreeEntry getEntry(String path) {
-<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        for (GHTreeEntry e : tree) {</span>
-<span class="fc bfc" id="L65" title="All 2 branches covered.">            if (e.getPath().equals(path))</span>
-<span class="fc" id="L66">                return e;</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        for (GHTreeEntry e : tree) {</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">            if (e.getPath().equals(path))</span>
+<span class="fc" id="L48">                return e;</span>
         }
-<span class="nc" id="L68">        return null;</span>
+<span class="nc" id="L50">        return null;</span>
     }
 
     /**
-     * Returns true if the number of items in the tree array exceeded the GitHub maximum limit.
+     * The SHA for this trees.
      *
-     * @return true if the number of items in the tree array exceeded the GitHub maximum limit otherwise false.
+     * @return the sha
      */
-    public boolean isTruncated() {
-<span class="nc" id="L77">        return truncated;</span>
+    public String getSha() {
+<span class="fc" id="L59">        return sha;</span>
+    }
+
+    /**
+     * Return an array of entries of the trees.
+     *
+     * @return the tree
+     */
+    public List&lt;GHTreeEntry&gt; getTree() {
+<span class="fc" id="L68">        return Collections.unmodifiableList(Arrays.asList(tree));</span>
     }
 
     /**
@@ -84,7 +75,16 @@ public class GHTree {
      * @return the url
      */
     public URL getUrl() {
-<span class="fc" id="L87">        return GitHubClient.parseURL(url);</span>
+<span class="fc" id="L78">        return GitHubClient.parseURL(url);</span>
+    }
+
+    /**
+     * Returns true if the number of items in the tree array exceeded the GitHub maximum limit.
+     *
+     * @return true if the number of items in the tree array exceeded the GitHub maximum limit otherwise false.
+     */
+    public boolean isTruncated() {
+<span class="nc" id="L87">        return truncated;</span>
     }
 
     /**

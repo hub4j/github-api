@@ -34,16 +34,55 @@ import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
      */
     public static final int TOO_MANY_REQUESTS = 429;
 
-    /**
-     * Called to detect an error handled by this handler.
-     *
-     * @param connectorResponse
-     *            the connector response
-     * @return {@code true} if there is an error and {@link #onError(GitHubConnectorResponse)} should be called
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    abstract boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
+    /** The status http bad request or greater. */
+<span class="fc" id="L38">    static GitHubConnectorResponseErrorHandler STATUS_HTTP_BAD_REQUEST_OR_GREATER = new GitHubConnectorResponseErrorHandler() {</span>
+        private static final String CONTENT_TYPE = &quot;Content-type&quot;;
+        private static final String TEXT_HTML = &quot;text/html&quot;;
+        private static final String UNICORN_TITLE = &quot;&lt;title&gt;Unicorn!&quot;;
+
+        @Override
+        public boolean isError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
+<span class="fc bfc" id="L45" title="All 2 branches covered.">            return connectorResponse.statusCode() &gt;= HTTP_BAD_REQUEST;</span>
+        }
+
+        @Override
+        public void onError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
+<span class="fc bfc" id="L50" title="All 2 branches covered.">            if (connectorResponse.statusCode() == HTTP_NOT_FOUND) {</span>
+<span class="fc" id="L51">                throw new FileNotFoundException(connectorResponse.request().url().toString());</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">            } else if (isServiceDown(connectorResponse)) {</span>
+<span class="fc" id="L53">                throw new ServiceDownException(connectorResponse);</span>
+            } else {
+<span class="fc" id="L55">                throw new HttpException(connectorResponse);</span>
+            }
+        }
+
+        private boolean isServiceDown(GitHubConnectorResponse connectorResponse) throws IOException {
+<span class="fc bfc" id="L60" title="All 2 branches covered.">            if (connectorResponse.statusCode() &lt; HTTP_INTERNAL_ERROR) {</span>
+<span class="fc" id="L61">                return false;</span>
+            }
+
+<span class="fc" id="L64">            String contentTypeHeader = connectorResponse.header(CONTENT_TYPE);</span>
+<span class="pc bpc" id="L65" title="2 of 4 branches missed.">            if (contentTypeHeader != null &amp;&amp; contentTypeHeader.contains(TEXT_HTML)) {</span>
+<span class="fc" id="L66">                try (BufferedReader bufReader = new BufferedReader(</span>
+<span class="fc" id="L67">                        new InputStreamReader(connectorResponse.bodyStream(), StandardCharsets.UTF_8))) {</span>
+                    String line;
+<span class="fc" id="L69">                    int hardLineCap = 25;</span>
+                    // &lt;title&gt; node is expected in the beginning anyway.
+                    // This way we do not load the raw long images' Strings, which are later in the HTML code
+                    // Regex or .contains would result in iterating the whole HTML document, if it didn't match
+                    // UNICORN_TITLE
+<span class="pc bpc" id="L74" title="2 of 4 branches missed.">                    while (hardLineCap &gt; 0 &amp;&amp; (line = bufReader.readLine()) != null) {</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">                        if (line.trim().startsWith(UNICORN_TITLE)) {</span>
+<span class="fc" id="L76">                            return true;</span>
+                        }
+<span class="fc" id="L78">                        hardLineCap--;</span>
+                    }
+<span class="fc" id="L80">                }</span>
+            }
+
+<span class="nc" id="L83">            return false;</span>
+        }
+    };
 
     /**
      * Called when the library encounters HTTP error matching {@link #isError(GitHubConnectorResponse)}
@@ -62,54 +101,15 @@ import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
      */
     public abstract void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
 
-    /** The status http bad request or greater. */
-<span class="fc" id="L66">    static GitHubConnectorResponseErrorHandler STATUS_HTTP_BAD_REQUEST_OR_GREATER = new GitHubConnectorResponseErrorHandler() {</span>
-        private static final String CONTENT_TYPE = &quot;Content-type&quot;;
-        private static final String TEXT_HTML = &quot;text/html&quot;;
-        private static final String UNICORN_TITLE = &quot;&lt;title&gt;Unicorn!&quot;;
-
-        @Override
-        public boolean isError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
-<span class="fc bfc" id="L73" title="All 2 branches covered.">            return connectorResponse.statusCode() &gt;= HTTP_BAD_REQUEST;</span>
-        }
-
-        @Override
-        public void onError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
-<span class="fc bfc" id="L78" title="All 2 branches covered.">            if (connectorResponse.statusCode() == HTTP_NOT_FOUND) {</span>
-<span class="fc" id="L79">                throw new FileNotFoundException(connectorResponse.request().url().toString());</span>
-<span class="fc bfc" id="L80" title="All 2 branches covered.">            } else if (isServiceDown(connectorResponse)) {</span>
-<span class="fc" id="L81">                throw new ServiceDownException(connectorResponse);</span>
-            } else {
-<span class="fc" id="L83">                throw new HttpException(connectorResponse);</span>
-            }
-        }
-
-        private boolean isServiceDown(GitHubConnectorResponse connectorResponse) throws IOException {
-<span class="fc bfc" id="L88" title="All 2 branches covered.">            if (connectorResponse.statusCode() &lt; HTTP_INTERNAL_ERROR) {</span>
-<span class="fc" id="L89">                return false;</span>
-            }
-
-<span class="fc" id="L92">            String contentTypeHeader = connectorResponse.header(CONTENT_TYPE);</span>
-<span class="pc bpc" id="L93" title="2 of 4 branches missed.">            if (contentTypeHeader != null &amp;&amp; contentTypeHeader.contains(TEXT_HTML)) {</span>
-<span class="fc" id="L94">                try (BufferedReader bufReader = new BufferedReader(</span>
-<span class="fc" id="L95">                        new InputStreamReader(connectorResponse.bodyStream(), StandardCharsets.UTF_8))) {</span>
-                    String line;
-<span class="fc" id="L97">                    int hardLineCap = 25;</span>
-                    // &lt;title&gt; node is expected in the beginning anyway.
-                    // This way we do not load the raw long images' Strings, which are later in the HTML code
-                    // Regex or .contains would result in iterating the whole HTML document, if it didn't match
-                    // UNICORN_TITLE
-<span class="pc bpc" id="L102" title="2 of 4 branches missed.">                    while (hardLineCap &gt; 0 &amp;&amp; (line = bufReader.readLine()) != null) {</span>
-<span class="fc bfc" id="L103" title="All 2 branches covered.">                        if (line.trim().startsWith(UNICORN_TITLE)) {</span>
-<span class="fc" id="L104">                            return true;</span>
-                        }
-<span class="fc" id="L106">                        hardLineCap--;</span>
-                    }
-<span class="fc" id="L108">                }</span>
-            }
-
-<span class="nc" id="L111">            return false;</span>
-        }
-    };
+    /**
+     * Called to detect an error handled by this handler.
+     *
+     * @param connectorResponse
+     *            the connector response
+     * @return {@code true} if there is an error and {@link #onError(GitHubConnectorResponse)} should be called
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    abstract boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -43,294 +43,15 @@ import javax.annotation.CheckForNull;
 public class GHPullRequestReviewComment extends GHObject implements Reactable {
 
     /**
-     * Create default GHPullRequestReviewComment instance
-     */
-<span class="fc" id="L48">    public GHPullRequestReviewComment() {</span>
-<span class="fc" id="L49">    }</span>
-
-    /** The owner. */
-    GHPullRequest owner;
-
-<span class="fc" id="L54">    private Long pullRequestReviewId = -1L;</span>
-    private String body;
-    private GHUser user;
-    private String path;
-    private String htmlUrl;
-    private String pullRequestUrl;
-<span class="fc" id="L60">    private int position = -1;</span>
-<span class="fc" id="L61">    private int originalPosition = -1;</span>
-<span class="fc" id="L62">    private long inReplyToId = -1L;</span>
-<span class="fc" id="L63">    private Integer startLine = -1;</span>
-<span class="fc" id="L64">    private Integer originalStartLine = -1;</span>
-    private String startSide;
-<span class="fc" id="L66">    private int line = -1;</span>
-<span class="fc" id="L67">    private int originalLine = -1;</span>
-    private String side;
-    private String diffHunk;
-    private String commitId;
-    private String originalCommitId;
-    private String bodyHtml;
-    private String bodyText;
-    private GHPullRequestReviewCommentReactions reactions;
-    private GHCommentAuthorAssociation authorAssociation;
-
-    /**
-     * Wrap up.
-     *
-     * @param owner
-     *            the owner
-     * @return the GH pull request review comment
-     */
-    GHPullRequestReviewComment wrapUp(GHPullRequest owner) {
-<span class="fc" id="L85">        this.owner = owner;</span>
-<span class="fc" id="L86">        return this;</span>
-    }
-
-    /**
-     * Gets the pull request to which this review comment is associated.
-     *
-     * @return the parent
-     */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHPullRequest getParent() {
-<span class="fc" id="L96">        return owner;</span>
-    }
-
-    /**
-     * The comment itself.
-     *
-     * @return the body
-     */
-    public String getBody() {
-<span class="fc" id="L105">        return body;</span>
-    }
-
-    /**
-     * Gets the user who posted this comment.
-     *
-     * @return the user
-     * @throws IOException
-     *             the io exception
-     */
-    public GHUser getUser() throws IOException {
-<span class="fc" id="L116">        return owner.root().getUser(user.getLogin());</span>
-    }
-
-    /**
-     * Gets path.
-     *
-     * @return the path
-     */
-    public String getPath() {
-<span class="fc" id="L125">        return path;</span>
-    }
-
-    /**
-     * Gets position.
-     *
-     * @return the position
-     */
-    @CheckForNull
-    public int getPosition() {
-<span class="fc" id="L135">        return position;</span>
-    }
-
-    /**
-     * Gets original position.
-     *
-     * @return the original position
-     */
-    public int getOriginalPosition() {
-<span class="nc" id="L144">        return originalPosition;</span>
-    }
-
-    /**
-     * Gets diff hunk.
-     *
-     * @return the diff hunk
-     */
-    public String getDiffHunk() {
-<span class="fc" id="L153">        return diffHunk;</span>
-    }
-
-    /**
-     * Gets commit id.
-     *
-     * @return the commit id
-     */
-    public String getCommitId() {
-<span class="fc" id="L162">        return commitId;</span>
-    }
-
-    /**
-     * Gets commit id.
-     *
-     * @return the commit id
-     */
-    public String getOriginalCommitId() {
-<span class="fc" id="L171">        return originalCommitId;</span>
-    }
-
-    /**
-     * Gets the author association to the project.
-     *
-     * @return the author association to the project
-     */
-    public GHCommentAuthorAssociation getAuthorAssociation() {
-<span class="fc" id="L180">        return authorAssociation;</span>
-    }
-
-    /**
-     * Gets in reply to id.
-     *
-     * @return the in reply to id
-     */
-    @CheckForNull
-    public long getInReplyToId() {
-<span class="fc" id="L190">        return inReplyToId;</span>
-    }
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     */
-    public URL getHtmlUrl() {
-<span class="fc" id="L199">        return GitHubClient.parseURL(htmlUrl);</span>
-    }
-
-    /**
-     * Gets api route.
-     *
-     * @return the api route
-     */
-    protected String getApiRoute() {
-<span class="fc" id="L208">        return getApiRoute(false);</span>
-    }
-
-    /**
-     * Gets api route.
-     *
-     * @param includePullNumber
-     *            if true, includes the owning pull request's number in the route.
-     *
-     * @return the api route
-     */
-    protected String getApiRoute(boolean includePullNumber) {
-<span class="fc" id="L220">        return &quot;/repos/&quot; + owner.getRepository().getFullName() + &quot;/pulls&quot;</span>
-<span class="fc bfc" id="L221" title="All 2 branches covered.">                + (includePullNumber ? &quot;/&quot; + owner.getNumber() : &quot;&quot;) + &quot;/comments/&quot; + getId();</span>
-    }
-
-    /**
-     * Gets The first line of the range for a multi-line comment.
-     *
-     * @return the start line
-     */
-    public int getStartLine() {
-<span class="fc bfc" id="L230" title="All 2 branches covered.">        return startLine != null ? startLine : -1;</span>
-    }
-
-    /**
-     * Gets The first line of the range for a multi-line comment.
-     *
-     * @return the original start line
-     */
-    public int getOriginalStartLine() {
-<span class="pc bpc" id="L239" title="1 of 2 branches missed.">        return originalStartLine != null ? originalStartLine : -1;</span>
-    }
-
-    /**
-     * Gets The side of the first line of the range for a multi-line comment.
-     *
-     * @return {@link Side} the side of the first line
-     */
-    public Side getStartSide() {
-<span class="fc" id="L248">        return Side.from(startSide);</span>
-    }
-
-    /**
-     * Gets The line of the blob to which the comment applies. The last line of the range for a multi-line comment.
-     *
-     * @return the line to which the comment applies
-     */
-    public int getLine() {
-<span class="fc" id="L257">        return line;</span>
-    }
-
-    /**
-     * Gets The line of the blob to which the comment applies. The last line of the range for a multi-line comment.
-     *
-     * @return the line to which the comment applies
-     */
-    public int getOriginalLine() {
-<span class="fc" id="L266">        return originalLine;</span>
-    }
-
-    /**
-     * Gets The side of the diff to which the comment applies. The side of the last line of the range for a multi-line
-     * comment
-     *
-     * @return {@link Side} the side if the diff to which the comment applies
-     */
-    public Side getSide() {
-<span class="fc" id="L276">        return Side.from(side);</span>
-    }
-
-    /**
-     * Gets The ID of the pull request review to which the comment belongs.
-     *
-     * @return {@link Long} the ID of the pull request review
-     */
-    public Long getPullRequestReviewId() {
-<span class="nc bnc" id="L285" title="All 2 branches missed.">        return pullRequestReviewId != null ? pullRequestReviewId : -1;</span>
-    }
-
-    /**
-     * Gets URL for the pull request that the review comment belongs to.
-     *
-     * @return {@link URL} the URL of the pull request
-     */
-    public URL getPullRequestUrl() {
-<span class="fc" id="L294">        return GitHubClient.parseURL(pullRequestUrl);</span>
-    }
-
-    /**
-     * Gets The body in html format.
-     *
-     * @return {@link String} the body in html format
-     */
-    public String getBodyHtml() {
-<span class="fc" id="L303">        return bodyHtml;</span>
-    }
-
-    /**
-     * Gets The body text.
-     *
-     * @return {@link String} the body text
-     */
-    public String getBodyText() {
-<span class="fc" id="L312">        return bodyText;</span>
-    }
-
-    /**
-     * Gets the Reaction Rollup
-     *
-     * @return {@link GHPullRequestReviewCommentReactions} the reaction rollup
-     */
-    public GHPullRequestReviewCommentReactions getReactions() {
-<span class="fc" id="L321">        return reactions;</span>
-    }
-
-    /**
      * The side of the diff to which the comment applies
      */
-<span class="fc" id="L327">    public static enum Side {</span>
-        /** Right side */
-<span class="fc" id="L329">        RIGHT,</span>
+<span class="fc" id="L48">    public static enum Side {</span>
         /** Left side */
-<span class="fc" id="L331">        LEFT,</span>
+<span class="fc" id="L50">        LEFT,</span>
+        /** Right side */
+<span class="fc" id="L52">        RIGHT,</span>
         /** Unknown side */
-<span class="fc" id="L333">        UNKNOWN;</span>
+<span class="fc" id="L54">        UNKNOWN;</span>
 
         /**
          * From.
@@ -340,52 +61,42 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
          * @return the status
          */
         public static Side from(String value) {
-<span class="fc" id="L343">            return EnumUtils.getEnumOrDefault(Side.class, value, Side.UNKNOWN);</span>
+<span class="fc" id="L64">            return EnumUtils.getEnumOrDefault(Side.class, value, Side.UNKNOWN);</span>
         }
 
     }
 
-    /**
-     * Updates the comment.
-     *
-     * @param body
-     *            the body
-     * @throws IOException
-     *             the io exception
-     */
-    public void update(String body) throws IOException {
-<span class="fc" id="L357">        owner.root().createRequest().method(&quot;PATCH&quot;).with(&quot;body&quot;, body).withUrlPath(getApiRoute()).fetchInto(this);</span>
-<span class="fc" id="L358">        this.body = body;</span>
-<span class="fc" id="L359">    }</span>
+    private GHCommentAuthorAssociation authorAssociation;
+
+    private String body;
+    private String bodyHtml;
+    private String bodyText;
+    private String commitId;
+    private String diffHunk;
+    private String htmlUrl;
+<span class="fc" id="L77">    private long inReplyToId = -1L;</span>
+<span class="fc" id="L78">    private int line = -1;</span>
+    private String originalCommitId;
+<span class="fc" id="L80">    private int originalLine = -1;</span>
+<span class="fc" id="L81">    private int originalPosition = -1;</span>
+<span class="fc" id="L82">    private Integer originalStartLine = -1;</span>
+    private String path;
+<span class="fc" id="L84">    private int position = -1;</span>
+<span class="fc" id="L85">    private Long pullRequestReviewId = -1L;</span>
+    private String pullRequestUrl;
+    private GHPullRequestReviewCommentReactions reactions;
+    private String side;
+<span class="fc" id="L89">    private Integer startLine = -1;</span>
+    private String startSide;
+    private GHUser user;
+    /** The owner. */
+    GHPullRequest owner;
 
     /**
-     * Deletes this review comment.
-     *
-     * @throws IOException
-     *             the io exception
+     * Create default GHPullRequestReviewComment instance
      */
-    public void delete() throws IOException {
-<span class="fc" id="L368">        owner.root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L369">    }</span>
-
-    /**
-     * Create a new comment that replies to this comment.
-     *
-     * @param body
-     *            the body
-     * @return the gh pull request review comment
-     * @throws IOException
-     *             the io exception
-     */
-    public GHPullRequestReviewComment reply(String body) throws IOException {
-<span class="fc" id="L381">        return owner.root()</span>
-<span class="fc" id="L382">                .createRequest()</span>
-<span class="fc" id="L383">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L384">                .with(&quot;body&quot;, body)</span>
-<span class="fc" id="L385">                .withUrlPath(getApiRoute(true) + &quot;/replies&quot;)</span>
-<span class="fc" id="L386">                .fetch(GHPullRequestReviewComment.class)</span>
-<span class="fc" id="L387">                .wrapUp(owner);</span>
-    }
+<span class="fc" id="L98">    public GHPullRequestReviewComment() {</span>
+<span class="fc" id="L99">    }</span>
 
     /**
      * Creates the reaction.
@@ -397,13 +108,23 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      *             Signals that an I/O exception has occurred.
      */
     public GHReaction createReaction(ReactionContent content) throws IOException {
-<span class="fc" id="L400">        return owner.root()</span>
-<span class="fc" id="L401">                .createRequest()</span>
-<span class="fc" id="L402">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L403">                .with(&quot;content&quot;, content.getContent())</span>
-<span class="fc" id="L404">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
-<span class="fc" id="L405">                .fetch(GHReaction.class);</span>
+<span class="fc" id="L111">        return owner.root()</span>
+<span class="fc" id="L112">                .createRequest()</span>
+<span class="fc" id="L113">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L114">                .with(&quot;content&quot;, content.getContent())</span>
+<span class="fc" id="L115">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L116">                .fetch(GHReaction.class);</span>
     }
+
+    /**
+     * Deletes this review comment.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+<span class="fc" id="L126">        owner.root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L127">    }</span>
 
     /**
      * Delete reaction.
@@ -414,12 +135,225 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      *             Signals that an I/O exception has occurred.
      */
     public void deleteReaction(GHReaction reaction) throws IOException {
-<span class="fc" id="L417">        owner.root()</span>
-<span class="fc" id="L418">                .createRequest()</span>
-<span class="fc" id="L419">                .method(&quot;DELETE&quot;)</span>
-<span class="fc" id="L420">                .withUrlPath(getApiRoute(), &quot;reactions&quot;, String.valueOf(reaction.getId()))</span>
-<span class="fc" id="L421">                .send();</span>
-<span class="fc" id="L422">    }</span>
+<span class="fc" id="L138">        owner.root()</span>
+<span class="fc" id="L139">                .createRequest()</span>
+<span class="fc" id="L140">                .method(&quot;DELETE&quot;)</span>
+<span class="fc" id="L141">                .withUrlPath(getApiRoute(), &quot;reactions&quot;, String.valueOf(reaction.getId()))</span>
+<span class="fc" id="L142">                .send();</span>
+<span class="fc" id="L143">    }</span>
+
+    /**
+     * Gets the author association to the project.
+     *
+     * @return the author association to the project
+     */
+    public GHCommentAuthorAssociation getAuthorAssociation() {
+<span class="fc" id="L151">        return authorAssociation;</span>
+    }
+
+    /**
+     * The comment itself.
+     *
+     * @return the body
+     */
+    public String getBody() {
+<span class="fc" id="L160">        return body;</span>
+    }
+
+    /**
+     * Gets The body in html format.
+     *
+     * @return {@link String} the body in html format
+     */
+    public String getBodyHtml() {
+<span class="fc" id="L169">        return bodyHtml;</span>
+    }
+
+    /**
+     * Gets The body text.
+     *
+     * @return {@link String} the body text
+     */
+    public String getBodyText() {
+<span class="fc" id="L178">        return bodyText;</span>
+    }
+
+    /**
+     * Gets commit id.
+     *
+     * @return the commit id
+     */
+    public String getCommitId() {
+<span class="fc" id="L187">        return commitId;</span>
+    }
+
+    /**
+     * Gets diff hunk.
+     *
+     * @return the diff hunk
+     */
+    public String getDiffHunk() {
+<span class="fc" id="L196">        return diffHunk;</span>
+    }
+
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
+    public URL getHtmlUrl() {
+<span class="fc" id="L205">        return GitHubClient.parseURL(htmlUrl);</span>
+    }
+
+    /**
+     * Gets in reply to id.
+     *
+     * @return the in reply to id
+     */
+    @CheckForNull
+    public long getInReplyToId() {
+<span class="fc" id="L215">        return inReplyToId;</span>
+    }
+
+    /**
+     * Gets The line of the blob to which the comment applies. The last line of the range for a multi-line comment.
+     *
+     * @return the line to which the comment applies
+     */
+    public int getLine() {
+<span class="fc" id="L224">        return line;</span>
+    }
+
+    /**
+     * Gets commit id.
+     *
+     * @return the commit id
+     */
+    public String getOriginalCommitId() {
+<span class="fc" id="L233">        return originalCommitId;</span>
+    }
+
+    /**
+     * Gets The line of the blob to which the comment applies. The last line of the range for a multi-line comment.
+     *
+     * @return the line to which the comment applies
+     */
+    public int getOriginalLine() {
+<span class="fc" id="L242">        return originalLine;</span>
+    }
+
+    /**
+     * Gets original position.
+     *
+     * @return the original position
+     */
+    public int getOriginalPosition() {
+<span class="nc" id="L251">        return originalPosition;</span>
+    }
+
+    /**
+     * Gets The first line of the range for a multi-line comment.
+     *
+     * @return the original start line
+     */
+    public int getOriginalStartLine() {
+<span class="pc bpc" id="L260" title="1 of 2 branches missed.">        return originalStartLine != null ? originalStartLine : -1;</span>
+    }
+
+    /**
+     * Gets the pull request to which this review comment is associated.
+     *
+     * @return the parent
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHPullRequest getParent() {
+<span class="fc" id="L270">        return owner;</span>
+    }
+
+    /**
+     * Gets path.
+     *
+     * @return the path
+     */
+    public String getPath() {
+<span class="fc" id="L279">        return path;</span>
+    }
+
+    /**
+     * Gets position.
+     *
+     * @return the position
+     */
+    @CheckForNull
+    public int getPosition() {
+<span class="fc" id="L289">        return position;</span>
+    }
+
+    /**
+     * Gets The ID of the pull request review to which the comment belongs.
+     *
+     * @return {@link Long} the ID of the pull request review
+     */
+    public Long getPullRequestReviewId() {
+<span class="nc bnc" id="L298" title="All 2 branches missed.">        return pullRequestReviewId != null ? pullRequestReviewId : -1;</span>
+    }
+
+    /**
+     * Gets URL for the pull request that the review comment belongs to.
+     *
+     * @return {@link URL} the URL of the pull request
+     */
+    public URL getPullRequestUrl() {
+<span class="fc" id="L307">        return GitHubClient.parseURL(pullRequestUrl);</span>
+    }
+
+    /**
+     * Gets the Reaction Rollup
+     *
+     * @return {@link GHPullRequestReviewCommentReactions} the reaction rollup
+     */
+    public GHPullRequestReviewCommentReactions getReactions() {
+<span class="fc" id="L316">        return reactions;</span>
+    }
+
+    /**
+     * Gets The side of the diff to which the comment applies. The side of the last line of the range for a multi-line
+     * comment
+     *
+     * @return {@link Side} the side if the diff to which the comment applies
+     */
+    public Side getSide() {
+<span class="fc" id="L326">        return Side.from(side);</span>
+    }
+
+    /**
+     * Gets The first line of the range for a multi-line comment.
+     *
+     * @return the start line
+     */
+    public int getStartLine() {
+<span class="fc bfc" id="L335" title="All 2 branches covered.">        return startLine != null ? startLine : -1;</span>
+    }
+
+    /**
+     * Gets The side of the first line of the range for a multi-line comment.
+     *
+     * @return {@link Side} the side of the first line
+     */
+    public Side getStartSide() {
+<span class="fc" id="L344">        return Side.from(startSide);</span>
+    }
+
+    /**
+     * Gets the user who posted this comment.
+     *
+     * @return the user
+     * @throws IOException
+     *             the io exception
+     */
+    public GHUser getUser() throws IOException {
+<span class="fc" id="L355">        return owner.root().getUser(user.getLogin());</span>
+    }
 
     /**
      * List reactions.
@@ -427,10 +361,76 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHReaction&gt; listReactions() {
-<span class="fc" id="L430">        return owner.root()</span>
-<span class="fc" id="L431">                .createRequest()</span>
-<span class="fc" id="L432">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
-<span class="fc" id="L433">                .toIterable(GHReaction[].class, item -&gt; owner.root());</span>
+<span class="fc" id="L364">        return owner.root()</span>
+<span class="fc" id="L365">                .createRequest()</span>
+<span class="fc" id="L366">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L367">                .toIterable(GHReaction[].class, item -&gt; owner.root());</span>
+    }
+
+    /**
+     * Create a new comment that replies to this comment.
+     *
+     * @param body
+     *            the body
+     * @return the gh pull request review comment
+     * @throws IOException
+     *             the io exception
+     */
+    public GHPullRequestReviewComment reply(String body) throws IOException {
+<span class="fc" id="L380">        return owner.root()</span>
+<span class="fc" id="L381">                .createRequest()</span>
+<span class="fc" id="L382">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L383">                .with(&quot;body&quot;, body)</span>
+<span class="fc" id="L384">                .withUrlPath(getApiRoute(true) + &quot;/replies&quot;)</span>
+<span class="fc" id="L385">                .fetch(GHPullRequestReviewComment.class)</span>
+<span class="fc" id="L386">                .wrapUp(owner);</span>
+    }
+
+    /**
+     * Updates the comment.
+     *
+     * @param body
+     *            the body
+     * @throws IOException
+     *             the io exception
+     */
+    public void update(String body) throws IOException {
+<span class="fc" id="L398">        owner.root().createRequest().method(&quot;PATCH&quot;).with(&quot;body&quot;, body).withUrlPath(getApiRoute()).fetchInto(this);</span>
+<span class="fc" id="L399">        this.body = body;</span>
+<span class="fc" id="L400">    }</span>
+
+    /**
+     * Gets api route.
+     *
+     * @return the api route
+     */
+    protected String getApiRoute() {
+<span class="fc" id="L408">        return getApiRoute(false);</span>
+    }
+
+    /**
+     * Gets api route.
+     *
+     * @param includePullNumber
+     *            if true, includes the owning pull request's number in the route.
+     *
+     * @return the api route
+     */
+    protected String getApiRoute(boolean includePullNumber) {
+<span class="fc" id="L420">        return &quot;/repos/&quot; + owner.getRepository().getFullName() + &quot;/pulls&quot;</span>
+<span class="fc bfc" id="L421" title="All 2 branches covered.">                + (includePullNumber ? &quot;/&quot; + owner.getNumber() : &quot;&quot;) + &quot;/comments/&quot; + getId();</span>
+    }
+
+    /**
+     * Wrap up.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH pull request review comment
+     */
+    GHPullRequestReviewComment wrapUp(GHPullRequest owner) {
+<span class="fc" id="L432">        this.owner = owner;</span>
+<span class="fc" id="L433">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

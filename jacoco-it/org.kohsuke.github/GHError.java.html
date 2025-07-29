@@ -14,21 +14,9 @@ import java.net.URL;
 public class GHError implements Serializable {
 
     /**
-     * Create default GHError instance
-     */
-<span class="fc" id="L19">    public GHError() {</span>
-<span class="fc" id="L20">    }</span>
-
-    /**
      * The serial version UID of the error
      */
     private static final long serialVersionUID = 2008071901;
-
-    /**
-     * The error message.
-     */
-    @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Field comes from JSON deserialization&quot;)
-    private String message;
 
     /**
      * The URL to the documentation for the error.
@@ -38,13 +26,16 @@ public class GHError implements Serializable {
     private String documentation;
 
     /**
-     * Get the error message.
-     *
-     * @return the message
+     * The error message.
      */
-    public String getMessage() {
-<span class="fc" id="L46">        return message;</span>
-    }
+    @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Field comes from JSON deserialization&quot;)
+    private String message;
+
+    /**
+     * Create default GHError instance
+     */
+<span class="fc" id="L37">    public GHError() {</span>
+<span class="fc" id="L38">    }</span>
 
     /**
      * Get the URL to the documentation for the error.
@@ -52,7 +43,16 @@ public class GHError implements Serializable {
      * @return the url
      */
     public URL getDocumentationUrl() {
-<span class="fc" id="L55">        return GitHubClient.parseURL(documentation);</span>
+<span class="fc" id="L46">        return GitHubClient.parseURL(documentation);</span>
+    }
+
+    /**
+     * Get the error message.
+     *
+     * @return the message
+     */
+    public String getMessage() {
+<span class="fc" id="L55">        return message;</span>
     }
 
 }

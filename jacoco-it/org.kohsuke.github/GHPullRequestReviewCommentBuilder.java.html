@@ -10,8 +10,8 @@ import java.io.IOException;
  * @see GHPullRequest#createReviewComment()
  */
 public class GHPullRequestReviewCommentBuilder {
-    private final GHPullRequest pr;
     private final Requester builder;
+    private final GHPullRequest pr;
 
     /**
      * Instantiates a new GH pull request review comment builder.
@@ -25,6 +25,18 @@ public class GHPullRequestReviewCommentBuilder {
 <span class="fc" id="L25">    }</span>
 
     /**
+     * The text of the pull request review comment.
+     *
+     * @param body
+     *            the body
+     * @return the gh pull request review comment builder
+     */
+    public GHPullRequestReviewCommentBuilder body(String body) {
+<span class="fc" id="L35">        builder.with(&quot;body&quot;, body);</span>
+<span class="fc" id="L36">        return this;</span>
+    }
+
+    /**
      * The SHA of the commit that needs a review. Not using the latest commit SHA may render your review comment
      * outdated if a subsequent commit modifies the line you specify as the position. Defaults to the most recent commit
      * in the pull request when you do not specify a value.
@@ -34,46 +46,22 @@ public class GHPullRequestReviewCommentBuilder {
      * @return the gh pull request review comment builder
      */
     public GHPullRequestReviewCommentBuilder commitId(String commitId) {
-<span class="fc" id="L37">        builder.with(&quot;commit_id&quot;, commitId);</span>
-<span class="fc" id="L38">        return this;</span>
-    }
-
-    /**
-     * The text of the pull request review comment.
-     *
-     * @param body
-     *            the body
-     * @return the gh pull request review comment builder
-     */
-    public GHPullRequestReviewCommentBuilder body(String body) {
-<span class="fc" id="L49">        builder.with(&quot;body&quot;, body);</span>
+<span class="fc" id="L49">        builder.with(&quot;commit_id&quot;, commitId);</span>
 <span class="fc" id="L50">        return this;</span>
     }
 
     /**
-     * The relative path to the file that necessitates a comment.
+     * Create gh pull request review comment.
      *
-     * @param path
-     *            the path
      * @return the gh pull request review comment builder
+     * @throws IOException
+     *             the io exception
      */
-    public GHPullRequestReviewCommentBuilder path(String path) {
-<span class="fc" id="L61">        builder.with(&quot;path&quot;, path);</span>
-<span class="fc" id="L62">        return this;</span>
-    }
-
-    /**
-     * The position in the diff where you want to add a review comment.
-     *
-     * @param position
-     *            the position
-     * @return the gh pull request review comment builder
-     * @implNote As position is deprecated in GitHub API, only keep this for internal usage (for retro-compatibility
-     *           with {@link GHPullRequest#createReviewComment(String, String, String, int)}).
-     */
-    GHPullRequestReviewCommentBuilder position(int position) {
-<span class="fc" id="L75">        builder.with(&quot;position&quot;, position);</span>
-<span class="fc" id="L76">        return this;</span>
+    public GHPullRequestReviewComment create() throws IOException {
+<span class="fc" id="L61">        return builder.method(&quot;POST&quot;)</span>
+<span class="fc" id="L62">                .withUrlPath(pr.getApiRoute() + &quot;/comments&quot;)</span>
+<span class="fc" id="L63">                .fetch(GHPullRequestReviewComment.class)</span>
+<span class="fc" id="L64">                .wrapUp(pr);</span>
     }
 
     /**
@@ -87,9 +75,9 @@ public class GHPullRequestReviewCommentBuilder {
      * @return the gh pull request review comment builder
      */
     public GHPullRequestReviewCommentBuilder line(int line) {
-<span class="fc" id="L90">        builder.with(&quot;line&quot;, line);</span>
-<span class="fc" id="L91">        builder.remove(&quot;start_line&quot;);</span>
-<span class="fc" id="L92">        return this;</span>
+<span class="fc" id="L78">        builder.with(&quot;line&quot;, line);</span>
+<span class="fc" id="L79">        builder.remove(&quot;start_line&quot;);</span>
+<span class="fc" id="L80">        return this;</span>
     }
 
     /**
@@ -105,8 +93,20 @@ public class GHPullRequestReviewCommentBuilder {
      * @return the gh pull request review comment builder
      */
     public GHPullRequestReviewCommentBuilder lines(int startLine, int endLine) {
-<span class="fc" id="L108">        builder.with(&quot;start_line&quot;, startLine);</span>
-<span class="fc" id="L109">        builder.with(&quot;line&quot;, endLine);</span>
+<span class="fc" id="L96">        builder.with(&quot;start_line&quot;, startLine);</span>
+<span class="fc" id="L97">        builder.with(&quot;line&quot;, endLine);</span>
+<span class="fc" id="L98">        return this;</span>
+    }
+
+    /**
+     * The relative path to the file that necessitates a comment.
+     *
+     * @param path
+     *            the path
+     * @return the gh pull request review comment builder
+     */
+    public GHPullRequestReviewCommentBuilder path(String path) {
+<span class="fc" id="L109">        builder.with(&quot;path&quot;, path);</span>
 <span class="fc" id="L110">        return this;</span>
     }
 
@@ -148,17 +148,17 @@ public class GHPullRequestReviewCommentBuilder {
     }
 
     /**
-     * Create gh pull request review comment.
+     * The position in the diff where you want to add a review comment.
      *
+     * @param position
+     *            the position
      * @return the gh pull request review comment builder
-     * @throws IOException
-     *             the io exception
+     * @implNote As position is deprecated in GitHub API, only keep this for internal usage (for retro-compatibility
+     *           with {@link GHPullRequest#createReviewComment(String, String, String, int)}).
      */
-    public GHPullRequestReviewComment create() throws IOException {
-<span class="fc" id="L158">        return builder.method(&quot;POST&quot;)</span>
-<span class="fc" id="L159">                .withUrlPath(pr.getApiRoute() + &quot;/comments&quot;)</span>
-<span class="fc" id="L160">                .fetch(GHPullRequestReviewComment.class)</span>
-<span class="fc" id="L161">                .wrapUp(pr);</span>
+    GHPullRequestReviewCommentBuilder position(int position) {
+<span class="fc" id="L160">        builder.with(&quot;position&quot;, position);</span>
+<span class="fc" id="L161">        return this;</span>
     }
 
 }

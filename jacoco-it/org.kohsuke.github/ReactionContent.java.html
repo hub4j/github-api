@@ -13,51 +13,29 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 <span class="fc" id="L14">public enum ReactionContent {</span>
 
-    /** The plus one. */
-<span class="fc" id="L17">    PLUS_ONE(&quot;+1&quot;),</span>
-
-    /** The minus one. */
-<span class="fc" id="L20">    MINUS_ONE(&quot;-1&quot;),</span>
-
-    /** The laugh. */
-<span class="fc" id="L23">    LAUGH(&quot;laugh&quot;),</span>
-
     /** The confused. */
-<span class="fc" id="L26">    CONFUSED(&quot;confused&quot;),</span>
-
-    /** The heart. */
-<span class="fc" id="L29">    HEART(&quot;heart&quot;),</span>
-
-    /** The hooray. */
-<span class="fc" id="L32">    HOORAY(&quot;hooray&quot;),</span>
-
-    /** The rocket. */
-<span class="fc" id="L35">    ROCKET(&quot;rocket&quot;),</span>
+<span class="fc" id="L17">    CONFUSED(&quot;confused&quot;),</span>
 
     /** The eyes. */
-<span class="fc" id="L38">    EYES(&quot;eyes&quot;);</span>
+<span class="fc" id="L20">    EYES(&quot;eyes&quot;),</span>
 
-    private final String content;
+    /** The heart. */
+<span class="fc" id="L23">    HEART(&quot;heart&quot;),</span>
 
-    /**
-     * Instantiates a new reaction content.
-     *
-     * @param content
-     *            the content
-     */
-<span class="fc" id="L48">    ReactionContent(String content) {</span>
-<span class="fc" id="L49">        this.content = content;</span>
-<span class="fc" id="L50">    }</span>
+    /** The hooray. */
+<span class="fc" id="L26">    HOORAY(&quot;hooray&quot;),</span>
 
-    /**
-     * Gets content.
-     *
-     * @return the content
-     */
-    @JsonValue
-    public String getContent() {
-<span class="fc" id="L59">        return content;</span>
-    }
+    /** The laugh. */
+<span class="fc" id="L29">    LAUGH(&quot;laugh&quot;),</span>
+
+    /** The minus one. */
+<span class="fc" id="L32">    MINUS_ONE(&quot;-1&quot;),</span>
+
+    /** The plus one. */
+<span class="fc" id="L35">    PLUS_ONE(&quot;+1&quot;),</span>
+
+    /** The rocket. */
+<span class="fc" id="L38">    ROCKET(&quot;rocket&quot;);</span>
 
     /**
      * For content reaction content.
@@ -68,11 +46,33 @@ import com.fasterxml.jackson.annotation.JsonValue;
      */
     @JsonCreator
     public static ReactionContent forContent(String content) {
-<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        for (ReactionContent c : ReactionContent.values()) {</span>
-<span class="fc bfc" id="L72" title="All 2 branches covered.">            if (c.getContent().equals(content))</span>
-<span class="fc" id="L73">                return c;</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        for (ReactionContent c : ReactionContent.values()) {</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">            if (c.getContent().equals(content))</span>
+<span class="fc" id="L51">                return c;</span>
         }
-<span class="nc" id="L75">        return null;</span>
+<span class="nc" id="L53">        return null;</span>
+    }
+
+    private final String content;
+
+    /**
+     * Instantiates a new reaction content.
+     *
+     * @param content
+     *            the content
+     */
+<span class="fc" id="L64">    ReactionContent(String content) {</span>
+<span class="fc" id="L65">        this.content = content;</span>
+<span class="fc" id="L66">    }</span>
+
+    /**
+     * Gets content.
+     *
+     * @return the content
+     */
+    @JsonValue
+    public String getContent() {
+<span class="fc" id="L75">        return content;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -15,46 +15,19 @@ import java.util.Date;
  */
 public class GHMarketplacePendingChange extends GitHubInteractiveObject {
 
-    /**
-     * Create default GHMarketplacePendingChange instance
-     */
-<span class="fc" id="L21">    public GHMarketplacePendingChange() {</span>
-<span class="fc" id="L22">    }</span>
-
-    private long id;
-    @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Field comes from JSON deserialization&quot;)
-    private Long unitCount;
-    @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Field comes from JSON deserialization&quot;)
-    private GHMarketplacePlan plan;
     @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Field comes from JSON deserialization&quot;)
     private String effectiveDate;
 
+    private long id;
+    @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Field comes from JSON deserialization&quot;)
+    private GHMarketplacePlan plan;
+    @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Field comes from JSON deserialization&quot;)
+    private Long unitCount;
     /**
-     * Gets id.
-     *
-     * @return the id
+     * Create default GHMarketplacePendingChange instance
      */
-    public long getId() {
-<span class="fc" id="L38">        return id;</span>
-    }
-
-    /**
-     * Gets unit count.
-     *
-     * @return the unit count
-     */
-    public Long getUnitCount() {
-<span class="fc" id="L47">        return unitCount;</span>
-    }
-
-    /**
-     * Gets plan.
-     *
-     * @return the plan
-     */
-    public GHMarketplacePlan getPlan() {
-<span class="fc" id="L56">        return plan;</span>
-    }
+<span class="fc" id="L29">    public GHMarketplacePendingChange() {</span>
+<span class="fc" id="L30">    }</span>
 
     /**
      * Gets effective date.
@@ -63,7 +36,34 @@ public class GHMarketplacePendingChange extends GitHubInteractiveObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
     public Instant getEffectiveDate() {
-<span class="fc" id="L66">        return GitHubClient.parseInstant(effectiveDate);</span>
+<span class="fc" id="L39">        return GitHubClient.parseInstant(effectiveDate);</span>
+    }
+
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
+    public long getId() {
+<span class="fc" id="L48">        return id;</span>
+    }
+
+    /**
+     * Gets plan.
+     *
+     * @return the plan
+     */
+    public GHMarketplacePlan getPlan() {
+<span class="fc" id="L57">        return plan;</span>
+    }
+
+    /**
+     * Gets unit count.
+     *
+     * @return the unit count
+     */
+    public Long getUnitCount() {
+<span class="fc" id="L66">        return unitCount;</span>
     }
 
 }

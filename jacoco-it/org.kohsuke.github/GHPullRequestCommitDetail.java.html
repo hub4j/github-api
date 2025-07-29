@@ -41,72 +41,15 @@ import java.net.URL;
 public class GHPullRequestCommitDetail {
 
     /**
-     * Create default GHPullRequestCommitDetail instance
-     */
-<span class="fc" id="L46">    public GHPullRequestCommitDetail() {</span>
-<span class="fc" id="L47">    }</span>
-
-    private GHPullRequest owner;
-
-    /**
-     * Wrap up.
-     *
-     * @param owner
-     *            the owner
-     */
-    void wrapUp(GHPullRequest owner) {
-<span class="fc" id="L58">        this.owner = owner;</span>
-<span class="fc" id="L59">    }</span>
-
-    /**
-     * The type Tree.
-     */
-    public static class Tree {
-
-        /**
-         * Create default Tree instance
-         */
-<span class="fc" id="L69">        public Tree() {</span>
-<span class="fc" id="L70">        }</span>
-
-        /** The sha. */
-        String sha;
-
-        /** The url. */
-        String url;
-
-        /**
-         * Gets sha.
-         *
-         * @return the sha
-         */
-        public String getSha() {
-<span class="fc" id="L84">            return sha;</span>
-        }
-
-        /**
-         * Gets url.
-         *
-         * @return the url
-         */
-        public URL getUrl() {
-<span class="fc" id="L93">            return GitHubClient.parseURL(url);</span>
-        }
-    }
-
-    /**
      * The type Commit.
      */
     public static class Commit {
 
-        /**
-         * Create default Commit instance
-         */
-<span class="fc" id="L105">        public Commit() {</span>
-<span class="fc" id="L106">        }</span>
-
         /** The author. */
         GitUser author;
+
+        /** The comment count. */
+        Integer commentCount;
 
         /** The committer. */
         GitUser committer;
@@ -120,8 +63,11 @@ public class GHPullRequestCommitDetail {
         /** The url. */
         String url;
 
-        /** The comment count. */
-        Integer commentCount;
+        /**
+         * Create default Commit instance
+         */
+<span class="fc" id="L69">        public Commit() {</span>
+<span class="fc" id="L70">        }</span>
 
         /**
          * Gets author.
@@ -129,34 +75,16 @@ public class GHPullRequestCommitDetail {
          * @return the author
          */
         public GitUser getAuthor() {
-<span class="fc" id="L132">            return author;</span>
+<span class="fc" id="L78">            return author;</span>
         }
 
         /**
-         * Gets committer.
+         * Gets comment count.
          *
-         * @return the committer
+         * @return the comment count
          */
-        public GitUser getCommitter() {
-<span class="fc" id="L141">            return committer;</span>
-        }
-
-        /**
-         * Gets message.
-         *
-         * @return the message
-         */
-        public String getMessage() {
-<span class="fc" id="L150">            return message;</span>
-        }
-
-        /**
-         * Gets url.
-         *
-         * @return the url
-         */
-        public URL getUrl() {
-<span class="fc" id="L159">            return GitHubClient.parseURL(url);</span>
+        public Integer getCommentCount() {
+<span class="fc" id="L87">            return commentCount;</span>
         }
 
         /**
@@ -167,16 +95,25 @@ public class GHPullRequestCommitDetail {
          */
         @Deprecated
         public int getComment_count() {
-<span class="fc" id="L170">            return getCommentCount();</span>
+<span class="fc" id="L98">            return getCommentCount();</span>
         }
 
         /**
-         * Gets comment count.
+         * Gets committer.
          *
-         * @return the comment count
+         * @return the committer
          */
-        public Integer getCommentCount() {
-<span class="fc" id="L179">            return commentCount;</span>
+        public GitUser getCommitter() {
+<span class="fc" id="L107">            return committer;</span>
+        }
+
+        /**
+         * Gets message.
+         *
+         * @return the message
+         */
+        public String getMessage() {
+<span class="fc" id="L116">            return message;</span>
         }
 
         /**
@@ -185,7 +122,16 @@ public class GHPullRequestCommitDetail {
          * @return the tree
          */
         public Tree getTree() {
-<span class="fc" id="L188">            return tree;</span>
+<span class="fc" id="L125">            return tree;</span>
+        }
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public URL getUrl() {
+<span class="fc" id="L134">            return GitHubClient.parseURL(url);</span>
         }
     }
 
@@ -194,11 +140,8 @@ public class GHPullRequestCommitDetail {
      */
     public static class CommitPointer {
 
-        /**
-         * Create default CommitPointer instance
-         */
-<span class="fc" id="L200">        public CommitPointer() {</span>
-<span class="fc" id="L201">        }</span>
+        /** The html url. */
+        String htmlUrl;
 
         /** The sha. */
         String sha;
@@ -206,17 +149,11 @@ public class GHPullRequestCommitDetail {
         /** The url. */
         String url;
 
-        /** The html url. */
-        String htmlUrl;
-
         /**
-         * Gets url.
-         *
-         * @return the url
+         * Create default CommitPointer instance
          */
-        public URL getUrl() {
-<span class="fc" id="L218">            return GitHubClient.parseURL(url);</span>
-        }
+<span class="fc" id="L155">        public CommitPointer() {</span>
+<span class="fc" id="L156">        }</span>
 
         /**
          * Gets html url.
@@ -224,7 +161,7 @@ public class GHPullRequestCommitDetail {
          * @return the html url
          */
         public URL getHtmlUrl() {
-<span class="fc" id="L227">            return GitHubClient.parseURL(htmlUrl);</span>
+<span class="fc" id="L164">            return GitHubClient.parseURL(htmlUrl);</span>
         }
 
         /**
@@ -235,7 +172,7 @@ public class GHPullRequestCommitDetail {
          */
         @Deprecated
         public URL getHtml_url() {
-<span class="fc" id="L238">            return getHtmlUrl();</span>
+<span class="fc" id="L175">            return getHtmlUrl();</span>
         }
 
         /**
@@ -244,45 +181,80 @@ public class GHPullRequestCommitDetail {
          * @return the sha
          */
         public String getSha() {
-<span class="fc" id="L247">            return sha;</span>
+<span class="fc" id="L184">            return sha;</span>
+        }
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public URL getUrl() {
+<span class="fc" id="L193">            return GitHubClient.parseURL(url);</span>
         }
     }
 
-    /** The sha. */
-    String sha;
+    /**
+     * The type Tree.
+     */
+    public static class Tree {
 
-    /** The commit. */
-    Commit commit;
+        /** The sha. */
+        String sha;
 
-    /** The url. */
-    String url;
+        /** The url. */
+        String url;
 
-    /** The html url. */
-    String htmlUrl;
+        /**
+         * Create default Tree instance
+         */
+<span class="fc" id="L211">        public Tree() {</span>
+<span class="fc" id="L212">        }</span>
+
+        /**
+         * Gets sha.
+         *
+         * @return the sha
+         */
+        public String getSha() {
+<span class="fc" id="L220">            return sha;</span>
+        }
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public URL getUrl() {
+<span class="fc" id="L229">            return GitHubClient.parseURL(url);</span>
+        }
+    }
+
+    private GHPullRequest owner;
 
     /** The comments url. */
     String commentsUrl;
 
+    /** The commit. */
+    Commit commit;
+
+    /** The html url. */
+    String htmlUrl;
+
     /** The parents. */
     CommitPointer[] parents;
 
-    /**
-     * Gets sha.
-     *
-     * @return the sha
-     */
-    public String getSha() {
-<span class="fc" id="L275">        return sha;</span>
-    }
+    /** The sha. */
+    String sha;
+
+    /** The url. */
+    String url;
 
     /**
-     * Gets commit.
-     *
-     * @return the commit
+     * Create default GHPullRequestCommitDetail instance
      */
-    public Commit getCommit() {
-<span class="fc" id="L284">        return commit;</span>
-    }
+<span class="fc" id="L256">    public GHPullRequestCommitDetail() {</span>
+<span class="fc" id="L257">    }</span>
 
     /**
      * Gets api url.
@@ -290,16 +262,7 @@ public class GHPullRequestCommitDetail {
      * @return the api url
      */
     public URL getApiUrl() {
-<span class="fc" id="L293">        return GitHubClient.parseURL(url);</span>
-    }
-
-    /**
-     * Gets url.
-     *
-     * @return the url
-     */
-    public URL getUrl() {
-<span class="fc" id="L302">        return GitHubClient.parseURL(htmlUrl);</span>
+<span class="fc" id="L265">        return GitHubClient.parseURL(url);</span>
     }
 
     /**
@@ -308,7 +271,16 @@ public class GHPullRequestCommitDetail {
      * @return the comments url
      */
     public URL getCommentsUrl() {
-<span class="fc" id="L311">        return GitHubClient.parseURL(commentsUrl);</span>
+<span class="fc" id="L274">        return GitHubClient.parseURL(commentsUrl);</span>
+    }
+
+    /**
+     * Gets commit.
+     *
+     * @return the commit
+     */
+    public Commit getCommit() {
+<span class="fc" id="L283">        return commit;</span>
     }
 
     /**
@@ -317,9 +289,37 @@ public class GHPullRequestCommitDetail {
      * @return the commit pointer [ ]
      */
     public CommitPointer[] getParents() {
-<span class="fc" id="L320">        CommitPointer[] newValue = new CommitPointer[parents.length];</span>
-<span class="fc" id="L321">        System.arraycopy(parents, 0, newValue, 0, parents.length);</span>
-<span class="fc" id="L322">        return newValue;</span>
+<span class="fc" id="L292">        CommitPointer[] newValue = new CommitPointer[parents.length];</span>
+<span class="fc" id="L293">        System.arraycopy(parents, 0, newValue, 0, parents.length);</span>
+<span class="fc" id="L294">        return newValue;</span>
     }
+
+    /**
+     * Gets sha.
+     *
+     * @return the sha
+     */
+    public String getSha() {
+<span class="fc" id="L303">        return sha;</span>
+    }
+
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
+    public URL getUrl() {
+<span class="fc" id="L312">        return GitHubClient.parseURL(htmlUrl);</span>
+    }
+
+    /**
+     * Wrap up.
+     *
+     * @param owner
+     *            the owner
+     */
+    void wrapUp(GHPullRequest owner) {
+<span class="fc" id="L322">        this.owner = owner;</span>
+<span class="fc" id="L323">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

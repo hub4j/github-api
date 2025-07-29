@@ -18,49 +18,6 @@ import javax.annotation.Nonnull;
  */
 public class AppInstallationAuthorizationProvider extends GitHub.DependentAuthorizationProvider {
 
-    private final AppInstallationProvider appInstallationProvider;
-
-    private String authorization;
-
-<span class="fc" id="L25">    @Nonnull</span>
-    private Instant validUntil = Instant.MIN;
-
-    /**
-     * Provides an AuthorizationProvider that performs automatic token refresh, based on an previously authenticated
-     * github client.
-     *
-     * @param appInstallationProvider
-     *            An AppInstallationProvider that the authorization provider will use to retrieve the App.
-     * @param authorizationProvider
-     *            A authorization provider that returns a JWT token that can be used to refresh the App Installation
-     *            token from GitHub.
-     */
-    @BetaApi
-    public AppInstallationAuthorizationProvider(AppInstallationProvider appInstallationProvider,
-            AuthorizationProvider authorizationProvider) {
-<span class="fc" id="L41">        super(authorizationProvider);</span>
-<span class="fc" id="L42">        this.appInstallationProvider = appInstallationProvider;</span>
-<span class="fc" id="L43">    }</span>
-
-    @Override
-    public String getEncodedAuthorization() throws IOException {
-<span class="fc" id="L47">        synchronized (this) {</span>
-<span class="pc bpc" id="L48" title="3 of 4 branches missed.">            if (authorization == null || Instant.now().isAfter(this.validUntil)) {</span>
-<span class="fc" id="L49">                String token = refreshToken();</span>
-<span class="fc" id="L50">                authorization = String.format(&quot;token %s&quot;, token);</span>
-            }
-<span class="fc" id="L52">            return authorization;</span>
-        }
-    }
-
-    private String refreshToken() throws IOException {
-<span class="fc" id="L57">        GitHub gitHub = this.gitHub();</span>
-<span class="fc" id="L58">        GHAppInstallation installationByOrganization = appInstallationProvider.getAppInstallation(gitHub.getApp());</span>
-<span class="fc" id="L59">        GHAppInstallationToken ghAppInstallationToken = installationByOrganization.createToken().create();</span>
-<span class="fc" id="L60">        this.validUntil = ghAppInstallationToken.getExpiresAt().minus(5, ChronoUnit.MINUTES);</span>
-<span class="fc" id="L61">        return Objects.requireNonNull(ghAppInstallationToken.getToken());</span>
-    }
-
     /**
      * Provides an interface that returns an app to be used by an AppInstallationAuthorizationProvider
      */
@@ -76,6 +33,49 @@ public class AppInstallationAuthorizationProvider extends GitHub.DependentAuthor
          *             on error
          */
         GHAppInstallation getAppInstallation(GHApp app) throws IOException;
+    }
+
+    private final AppInstallationProvider appInstallationProvider;
+
+    private String authorization;
+
+<span class="fc" id="L42">    @Nonnull</span>
+    private Instant validUntil = Instant.MIN;
+
+    /**
+     * Provides an AuthorizationProvider that performs automatic token refresh, based on an previously authenticated
+     * github client.
+     *
+     * @param appInstallationProvider
+     *            An AppInstallationProvider that the authorization provider will use to retrieve the App.
+     * @param authorizationProvider
+     *            A authorization provider that returns a JWT token that can be used to refresh the App Installation
+     *            token from GitHub.
+     */
+    @BetaApi
+    public AppInstallationAuthorizationProvider(AppInstallationProvider appInstallationProvider,
+            AuthorizationProvider authorizationProvider) {
+<span class="fc" id="L58">        super(authorizationProvider);</span>
+<span class="fc" id="L59">        this.appInstallationProvider = appInstallationProvider;</span>
+<span class="fc" id="L60">    }</span>
+
+    @Override
+    public String getEncodedAuthorization() throws IOException {
+<span class="fc" id="L64">        synchronized (this) {</span>
+<span class="pc bpc" id="L65" title="3 of 4 branches missed.">            if (authorization == null || Instant.now().isAfter(this.validUntil)) {</span>
+<span class="fc" id="L66">                String token = refreshToken();</span>
+<span class="fc" id="L67">                authorization = String.format(&quot;token %s&quot;, token);</span>
+            }
+<span class="fc" id="L69">            return authorization;</span>
+        }
+    }
+
+    private String refreshToken() throws IOException {
+<span class="fc" id="L74">        GitHub gitHub = this.gitHub();</span>
+<span class="fc" id="L75">        GHAppInstallation installationByOrganization = appInstallationProvider.getAppInstallation(gitHub.getApp());</span>
+<span class="fc" id="L76">        GHAppInstallationToken ghAppInstallationToken = installationByOrganization.createToken().create();</span>
+<span class="fc" id="L77">        this.validUntil = ghAppInstallationToken.getExpiresAt().minus(5, ChronoUnit.MINUTES);</span>
+<span class="fc" id="L78">        return Objects.requireNonNull(ghAppInstallationToken.getToken());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -8,16 +8,16 @@
  */
 public class GHAppFromManifest extends GHApp {
 
+    private String clientId;
+
+    private String clientSecret;
+    private String pem;
+    private String webhookSecret;
     /**
      * Create default GHAppFromManifest instance
      */
-<span class="fc" id="L14">    public GHAppFromManifest() {</span>
-<span class="fc" id="L15">    }</span>
-
-    private String clientId;
-    private String clientSecret;
-    private String webhookSecret;
-    private String pem;
+<span class="fc" id="L19">    public GHAppFromManifest() {</span>
+<span class="fc" id="L20">    }</span>
 
     /**
      * Gets the client id
@@ -38,21 +38,21 @@ public class GHAppFromManifest extends GHApp {
     }
 
     /**
-     * Gets the webhook secret
-     *
-     * @return the webhook secret
-     */
-    public String getWebhookSecret() {
-<span class="fc" id="L46">        return webhookSecret;</span>
-    }
-
-    /**
      * Gets the pem
      *
      * @return the pem
      */
     public String getPem() {
-<span class="fc" id="L55">        return pem;</span>
+<span class="fc" id="L46">        return pem;</span>
+    }
+
+    /**
+     * Gets the webhook secret
+     *
+     * @return the webhook secret
+     */
+    public String getWebhookSecret() {
+<span class="fc" id="L55">        return webhookSecret;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

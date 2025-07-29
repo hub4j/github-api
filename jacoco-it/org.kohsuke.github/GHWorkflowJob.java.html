@@ -28,199 +28,120 @@ import static java.util.Objects.requireNonNull;
 public class GHWorkflowJob extends GHObject {
 
     /**
-     * Create default GHWorkflowJob instance
+     * The Class Step.
      */
-<span class="fc" id="L33">    public GHWorkflowJob() {</span>
-<span class="fc" id="L34">    }</span>
+    public static class Step extends GitHubBridgeAdapterObject {
+
+        private String completedAt;
+
+        private String conclusion;
+        private String name;
+
+        private int number;
+        private String startedAt;
+
+        private String status;
+        /**
+         * Create default Step instance
+         */
+<span class="fc" id="L47">        public Step() {</span>
+<span class="fc" id="L48">        }</span>
+
+        /**
+         * When was this step completed?.
+         *
+         * @return completion date
+         */
+        @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+        public Instant getCompletedAt() {
+<span class="fc" id="L57">            return GitHubClient.parseInstant(completedAt);</span>
+        }
+
+        /**
+         * Gets the conclusion of the step.
+         * &lt;p&gt;
+         * Can be {@code UNKNOWN} if the value returned by GitHub is unknown from the API.
+         *
+         * @return conclusion of the step
+         */
+        public Conclusion getConclusion() {
+<span class="fc" id="L68">            return Conclusion.from(conclusion);</span>
+        }
+
+        /**
+         * Gets the name of the step.
+         *
+         * @return name
+         */
+        public String getName() {
+<span class="fc" id="L77">            return name;</span>
+        }
+
+        /**
+         * Gets the sequential number of the step.
+         *
+         * @return number
+         */
+        public int getNumber() {
+<span class="fc" id="L86">            return number;</span>
+        }
+
+        /**
+         * When was this step started?.
+         *
+         * @return start date
+         */
+        @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+        public Instant getStartedAt() {
+<span class="fc" id="L96">            return GitHubClient.parseInstant(startedAt);</span>
+        }
+
+        /**
+         * Gets status of the step.
+         * &lt;p&gt;
+         * Can be {@code UNKNOWN} if the value returned by GitHub is unknown from the API.
+         *
+         * @return status of the step
+         */
+        public Status getStatus() {
+<span class="fc" id="L107">            return Status.from(status);</span>
+        }
+    }
+
+    private String checkRunUrl;
+
+    private String completedAt;
+
+    private String conclusion;
+
+    private String headSha;
+    private String htmlUrl;
+
+<span class="fc" id="L120">    private List&lt;String&gt; labels = new ArrayList&lt;&gt;();</span>
+    private String name;
 
     // Not provided by the API.
     @JsonIgnore
     private GHRepository owner;
-
-    private String name;
-
-    private String headSha;
-
-    private String startedAt;
-    private String completedAt;
-
-    private String status;
-    private String conclusion;
-
-    private long runId;
     private int runAttempt;
 
-    private String htmlUrl;
-    private String checkRunUrl;
+    private long runId;
+    private int runnerGroupId;
 
+    private String runnerGroupName;
     private int runnerId;
     private String runnerName;
-    private int runnerGroupId;
-    private String runnerGroupName;
+    private String startedAt;
 
-<span class="fc" id="L61">    private List&lt;Step&gt; steps = new ArrayList&lt;&gt;();</span>
+    private String status;
 
-<span class="fc" id="L63">    private List&lt;String&gt; labels = new ArrayList&lt;&gt;();</span>
-
-    /**
-     * The name of the job.
-     *
-     * @return the name
-     */
-    public String getName() {
-<span class="fc" id="L71">        return name;</span>
-    }
+<span class="fc" id="L138">    private List&lt;Step&gt; steps = new ArrayList&lt;&gt;();</span>
 
     /**
-     * Gets the HEAD SHA.
-     *
-     * @return sha for the HEAD commit
+     * Create default GHWorkflowJob instance
      */
-    public String getHeadSha() {
-<span class="fc" id="L80">        return headSha;</span>
-    }
-
-    /**
-     * When was this job started?.
-     *
-     * @return start date
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
-    public Instant getStartedAt() {
-<span class="fc" id="L90">        return GitHubClient.parseInstant(startedAt);</span>
-    }
-
-    /**
-     * When was this job completed?.
-     *
-     * @return completion date
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
-    public Instant getCompletedAt() {
-<span class="fc" id="L100">        return GitHubClient.parseInstant(completedAt);</span>
-    }
-
-    /**
-     * Gets status of the job.
-     * &lt;p&gt;
-     * Can be {@code UNKNOWN} if the value returned by GitHub is unknown from the API.
-     *
-     * @return status of the job
-     */
-    public Status getStatus() {
-<span class="fc" id="L111">        return Status.from(status);</span>
-    }
-
-    /**
-     * Gets the conclusion of the job.
-     * &lt;p&gt;
-     * Can be {@code UNKNOWN} if the value returned by GitHub is unknown from the API.
-     *
-     * @return conclusion of the job
-     */
-    public Conclusion getConclusion() {
-<span class="fc" id="L122">        return Conclusion.from(conclusion);</span>
-    }
-
-    /**
-     * The run id.
-     *
-     * @return the run id
-     */
-    public long getRunId() {
-<span class="fc" id="L131">        return runId;</span>
-    }
-
-    /**
-     * Attempt number of the associated workflow run, 1 for first attempt and higher if the workflow was re-run.
-     *
-     * @return attempt number
-     */
-    public int getRunAttempt() {
-<span class="fc" id="L140">        return runAttempt;</span>
-    }
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     */
-    public URL getHtmlUrl() {
-<span class="fc" id="L149">        return GitHubClient.parseURL(htmlUrl);</span>
-    }
-
-    /**
-     * The check run URL.
-     *
-     * @return the check run url
-     */
-    public URL getCheckRunUrl() {
-<span class="fc" id="L158">        return GitHubClient.parseURL(checkRunUrl);</span>
-    }
-
-    /**
-     * Gets the execution steps of this job.
-     *
-     * @return the execution steps
-     */
-    public List&lt;Step&gt; getSteps() {
-<span class="fc" id="L167">        return Collections.unmodifiableList(steps);</span>
-    }
-
-    /**
-     * Gets the labels of the job.
-     *
-     * @return the labels
-     */
-    public List&lt;String&gt; getLabels() {
-<span class="fc" id="L176">        return Collections.unmodifiableList(labels);</span>
-    }
-
-    /**
-     * the runner id.
-     *
-     * @return runnerId
-     */
-    public int getRunnerId() {
-<span class="fc" id="L185">        return runnerId;</span>
-    }
-
-    /**
-     * the runner name.
-     *
-     * @return runnerName
-     */
-    public String getRunnerName() {
-<span class="fc" id="L194">        return runnerName;</span>
-    }
-
-    /**
-     * the runner group id.
-     *
-     * @return runnerGroupId
-     */
-    public int getRunnerGroupId() {
-<span class="fc" id="L203">        return runnerGroupId;</span>
-    }
-
-    /**
-     * the runner group name.
-     *
-     * @return runnerGroupName
-     */
-    public String getRunnerGroupName() {
-<span class="fc" id="L212">        return runnerGroupName;</span>
-    }
-
-    /**
-     * Repository to which the job belongs.
-     *
-     * @return the repository
-     */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHRepository getRepository() {
-<span class="fc" id="L222">        return owner;</span>
-    }
+<span class="fc" id="L143">    public GHWorkflowJob() {</span>
+<span class="fc" id="L144">    }</span>
 
     /**
      * Downloads the logs.
@@ -236,19 +157,179 @@ public class GHWorkflowJob extends GHObject {
      *             The IO exception.
      */
     public &lt;T&gt; T downloadLogs(InputStreamFunction&lt;T&gt; streamFunction) throws IOException {
-<span class="fc" id="L239">        requireNonNull(streamFunction, &quot;Stream function must not be null&quot;);</span>
+<span class="fc" id="L160">        requireNonNull(streamFunction, &quot;Stream function must not be null&quot;);</span>
 
-<span class="fc" id="L241">        return root().createRequest().method(&quot;GET&quot;).withUrlPath(getApiRoute(), &quot;logs&quot;).fetchStream(streamFunction);</span>
+<span class="fc" id="L162">        return root().createRequest().method(&quot;GET&quot;).withUrlPath(getApiRoute(), &quot;logs&quot;).fetchStream(streamFunction);</span>
+    }
+
+    /**
+     * The check run URL.
+     *
+     * @return the check run url
+     */
+    public URL getCheckRunUrl() {
+<span class="fc" id="L171">        return GitHubClient.parseURL(checkRunUrl);</span>
+    }
+
+    /**
+     * When was this job completed?.
+     *
+     * @return completion date
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getCompletedAt() {
+<span class="fc" id="L181">        return GitHubClient.parseInstant(completedAt);</span>
+    }
+
+    /**
+     * Gets the conclusion of the job.
+     * &lt;p&gt;
+     * Can be {@code UNKNOWN} if the value returned by GitHub is unknown from the API.
+     *
+     * @return conclusion of the job
+     */
+    public Conclusion getConclusion() {
+<span class="fc" id="L192">        return Conclusion.from(conclusion);</span>
+    }
+
+    /**
+     * Gets the HEAD SHA.
+     *
+     * @return sha for the HEAD commit
+     */
+    public String getHeadSha() {
+<span class="fc" id="L201">        return headSha;</span>
+    }
+
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
+    public URL getHtmlUrl() {
+<span class="fc" id="L210">        return GitHubClient.parseURL(htmlUrl);</span>
+    }
+
+    /**
+     * Gets the labels of the job.
+     *
+     * @return the labels
+     */
+    public List&lt;String&gt; getLabels() {
+<span class="fc" id="L219">        return Collections.unmodifiableList(labels);</span>
+    }
+
+    /**
+     * The name of the job.
+     *
+     * @return the name
+     */
+    public String getName() {
+<span class="fc" id="L228">        return name;</span>
+    }
+
+    /**
+     * Repository to which the job belongs.
+     *
+     * @return the repository
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHRepository getRepository() {
+<span class="fc" id="L238">        return owner;</span>
+    }
+
+    /**
+     * Attempt number of the associated workflow run, 1 for first attempt and higher if the workflow was re-run.
+     *
+     * @return attempt number
+     */
+    public int getRunAttempt() {
+<span class="fc" id="L247">        return runAttempt;</span>
+    }
+
+    /**
+     * The run id.
+     *
+     * @return the run id
+     */
+    public long getRunId() {
+<span class="fc" id="L256">        return runId;</span>
+    }
+
+    /**
+     * the runner group id.
+     *
+     * @return runnerGroupId
+     */
+    public int getRunnerGroupId() {
+<span class="fc" id="L265">        return runnerGroupId;</span>
+    }
+
+    /**
+     * the runner group name.
+     *
+     * @return runnerGroupName
+     */
+    public String getRunnerGroupName() {
+<span class="fc" id="L274">        return runnerGroupName;</span>
+    }
+
+    /**
+     * the runner id.
+     *
+     * @return runnerId
+     */
+    public int getRunnerId() {
+<span class="fc" id="L283">        return runnerId;</span>
+    }
+
+    /**
+     * the runner name.
+     *
+     * @return runnerName
+     */
+    public String getRunnerName() {
+<span class="fc" id="L292">        return runnerName;</span>
+    }
+
+    /**
+     * When was this job started?.
+     *
+     * @return start date
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getStartedAt() {
+<span class="fc" id="L302">        return GitHubClient.parseInstant(startedAt);</span>
+    }
+
+    /**
+     * Gets status of the job.
+     * &lt;p&gt;
+     * Can be {@code UNKNOWN} if the value returned by GitHub is unknown from the API.
+     *
+     * @return status of the job
+     */
+    public Status getStatus() {
+<span class="fc" id="L313">        return Status.from(status);</span>
+    }
+
+    /**
+     * Gets the execution steps of this job.
+     *
+     * @return the execution steps
+     */
+    public List&lt;Step&gt; getSteps() {
+<span class="fc" id="L322">        return Collections.unmodifiableList(steps);</span>
     }
 
     private String getApiRoute() {
-<span class="pc bpc" id="L245" title="1 of 2 branches missed.">        if (owner == null) {</span>
+<span class="pc bpc" id="L326" title="1 of 2 branches missed.">        if (owner == null) {</span>
             // Workflow runs returned from search to do not have an owner. Attempt to use url.
-<span class="nc" id="L247">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
-<span class="nc" id="L248">            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
+<span class="nc" id="L328">            final URL url = Objects.requireNonNull(getUrl(), &quot;Missing instance URL!&quot;);</span>
+<span class="nc" id="L329">            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), &quot;&quot;), &quot;/&quot;);</span>
 
         }
-<span class="fc" id="L251">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/actions/jobs/&quot; + getId();</span>
+<span class="fc" id="L332">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/actions/jobs/&quot; + getId();</span>
     }
 
     /**
@@ -259,89 +340,8 @@ public class GHWorkflowJob extends GHObject {
      * @return the GH workflow job
      */
     GHWorkflowJob wrapUp(GHRepository owner) {
-<span class="fc" id="L262">        this.owner = owner;</span>
-<span class="fc" id="L263">        return this;</span>
-    }
-
-    /**
-     * The Class Step.
-     */
-    public static class Step extends GitHubBridgeAdapterObject {
-
-        /**
-         * Create default Step instance
-         */
-<span class="fc" id="L274">        public Step() {</span>
-<span class="fc" id="L275">        }</span>
-
-        private String name;
-        private int number;
-
-        private String startedAt;
-        private String completedAt;
-
-        private String status;
-        private String conclusion;
-
-        /**
-         * Gets the name of the step.
-         *
-         * @return name
-         */
-        public String getName() {
-<span class="fc" id="L292">            return name;</span>
-        }
-
-        /**
-         * Gets the sequential number of the step.
-         *
-         * @return number
-         */
-        public int getNumber() {
-<span class="fc" id="L301">            return number;</span>
-        }
-
-        /**
-         * When was this step started?.
-         *
-         * @return start date
-         */
-        @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
-        public Instant getStartedAt() {
-<span class="fc" id="L311">            return GitHubClient.parseInstant(startedAt);</span>
-        }
-
-        /**
-         * When was this step completed?.
-         *
-         * @return completion date
-         */
-        @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
-        public Instant getCompletedAt() {
-<span class="fc" id="L321">            return GitHubClient.parseInstant(completedAt);</span>
-        }
-
-        /**
-         * Gets status of the step.
-         * &lt;p&gt;
-         * Can be {@code UNKNOWN} if the value returned by GitHub is unknown from the API.
-         *
-         * @return status of the step
-         */
-        public Status getStatus() {
-<span class="fc" id="L332">            return Status.from(status);</span>
-        }
-
-        /**
-         * Gets the conclusion of the step.
-         * &lt;p&gt;
-         * Can be {@code UNKNOWN} if the value returned by GitHub is unknown from the API.
-         *
-         * @return conclusion of the step
-         */
-        public Conclusion getConclusion() {
-<span class="fc" id="L343">            return Conclusion.from(conclusion);</span>
-        }
+<span class="fc" id="L343">        this.owner = owner;</span>
+<span class="fc" id="L344">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

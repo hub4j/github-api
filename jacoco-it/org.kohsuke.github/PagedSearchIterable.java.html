@@ -19,16 +19,16 @@ import javax.annotation.Nonnull;
                 &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot; },
         justification = &quot;Constructed by JSON API&quot;)
 public class PagedSearchIterable&lt;T&gt; extends PagedIterable&lt;T&gt; {
-    private final transient GitHub root;
+    private final Class&lt;? extends SearchResult&lt;T&gt;&gt; receiverType;
 
     private final GitHubRequest request;
-
-    private final Class&lt;? extends SearchResult&lt;T&gt;&gt; receiverType;
 
     /**
      * As soon as we have any result fetched, it's set here so that we can report the total count.
      */
     private SearchResult&lt;T&gt; result;
+
+    private final transient GitHub root;
 
     /**
      * Instantiates a new paged search iterable.
@@ -47,43 +47,6 @@ public class PagedSearchIterable&lt;T&gt; extends PagedIterable&lt;T&gt; {
 <span class="fc" id="L47">    }</span>
 
     /**
-     * With page size.
-     *
-     * @param size
-     *            the size
-     * @return the paged search iterable
-     */
-    @Override
-    public PagedSearchIterable&lt;T&gt; withPageSize(int size) {
-<span class="nc" id="L58">        return (PagedSearchIterable&lt;T&gt;) super.withPageSize(size);</span>
-    }
-
-    /**
-     * Returns the total number of hit, including the results that's not yet fetched.
-     *
-     * @return the total count
-     */
-    public int getTotalCount() {
-<span class="fc" id="L67">        populate();</span>
-<span class="fc" id="L68">        return result.totalCount;</span>
-    }
-
-    /**
-     * Is incomplete boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isIncomplete() {
-<span class="nc" id="L77">        populate();</span>
-<span class="nc" id="L78">        return result.incompleteResults;</span>
-    }
-
-    private void populate() {
-<span class="fc bfc" id="L82" title="All 2 branches covered.">        if (result == null)</span>
-<span class="fc" id="L83">            iterator().hasNext();</span>
-<span class="fc" id="L84">    }</span>
-
-    /**
      * Iterator.
      *
      * @param pageSize
@@ -93,10 +56,47 @@ public class PagedSearchIterable&lt;T&gt; extends PagedIterable&lt;T&gt; {
     @Nonnull
     @Override
     public PagedIterator&lt;T&gt; _iterator(int pageSize) {
-<span class="fc" id="L96">        final Iterator&lt;T[]&gt; adapter = adapt(</span>
-<span class="fc" id="L97">                GitHubPageIterator.create(root.getClient(), receiverType, request, pageSize));</span>
-<span class="fc" id="L98">        return new PagedIterator&lt;T&gt;(adapter, null);</span>
+<span class="fc" id="L59">        final Iterator&lt;T[]&gt; adapter = adapt(</span>
+<span class="fc" id="L60">                GitHubPageIterator.create(root.getClient(), receiverType, request, pageSize));</span>
+<span class="fc" id="L61">        return new PagedIterator&lt;T&gt;(adapter, null);</span>
     }
+
+    /**
+     * Returns the total number of hit, including the results that's not yet fetched.
+     *
+     * @return the total count
+     */
+    public int getTotalCount() {
+<span class="fc" id="L70">        populate();</span>
+<span class="fc" id="L71">        return result.totalCount;</span>
+    }
+
+    /**
+     * Is incomplete boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isIncomplete() {
+<span class="nc" id="L80">        populate();</span>
+<span class="nc" id="L81">        return result.incompleteResults;</span>
+    }
+
+    /**
+     * With page size.
+     *
+     * @param size
+     *            the size
+     * @return the paged search iterable
+     */
+    @Override
+    public PagedSearchIterable&lt;T&gt; withPageSize(int size) {
+<span class="nc" id="L93">        return (PagedSearchIterable&lt;T&gt;) super.withPageSize(size);</span>
+    }
+
+    private void populate() {
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        if (result == null)</span>
+<span class="fc" id="L98">            iterator().hasNext();</span>
+<span class="fc" id="L99">    }</span>
 
     /**
      * Adapts {@link Iterator}.

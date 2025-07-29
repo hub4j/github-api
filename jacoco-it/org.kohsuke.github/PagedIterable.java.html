@@ -33,31 +33,6 @@ public abstract class PagedIterable&lt;T&gt; implements Iterable&lt;T&gt; {
 <span class="fc" id="L33">    }</span>
 
     /**
-     * Sets the pagination size.
-     *
-     * &lt;p&gt;
-     * When set to non-zero, each API call will retrieve this many entries.
-     *
-     * @param size
-     *            the size
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;T&gt; withPageSize(int size) {
-<span class="fc" id="L46">        this.pageSize = size;</span>
-<span class="fc" id="L47">        return this;</span>
-    }
-
-    /**
-     * Returns an iterator over elements of type {@code T}.
-     *
-     * @return an Iterator.
-     */
-    @Nonnull
-    public final PagedIterator&lt;T&gt; iterator() {
-<span class="fc" id="L57">        return _iterator(pageSize);</span>
-    }
-
-    /**
      * Iterator over page items.
      *
      * @param pageSize
@@ -68,37 +43,13 @@ public abstract class PagedIterable&lt;T&gt; implements Iterable&lt;T&gt; {
     public abstract PagedIterator&lt;T&gt; _iterator(int pageSize);
 
     /**
-     * Eagerly walk {@link PagedIterator} and return the result in an array.
+     * Returns an iterator over elements of type {@code T}.
      *
-     * @param iterator
-     *            the {@link PagedIterator} to read
-     * @return an array of all elements from the {@link PagedIterator}
-     * @throws IOException
-     *             if an I/O exception occurs.
+     * @return an Iterator.
      */
-    protected T[] toArray(final PagedIterator&lt;T&gt; iterator) throws IOException {
-        try {
-<span class="fc" id="L81">            ArrayList&lt;T[]&gt; pages = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L82">            int totalSize = 0;</span>
-            T[] item;
-            do {
-<span class="fc" id="L85">                item = iterator.nextPageArray();</span>
-<span class="fc" id="L86">                totalSize += Array.getLength(item);</span>
-<span class="fc" id="L87">                pages.add(item);</span>
-<span class="fc bfc" id="L88" title="All 2 branches covered.">            } while (iterator.hasNext());</span>
-
-<span class="fc" id="L90">            Class&lt;T[]&gt; type = (Class&lt;T[]&gt;) item.getClass();</span>
-
-<span class="fc" id="L92">            return concatenatePages(type, pages, totalSize);</span>
-<span class="fc" id="L93">        } catch (GHException e) {</span>
-            // if there was an exception inside the iterator it is wrapped as a GHException
-            // if the wrapped exception is an IOException, throw that
-<span class="pc bpc" id="L96" title="1 of 2 branches missed.">            if (e.getCause() instanceof IOException) {</span>
-<span class="fc" id="L97">                throw (IOException) e.getCause();</span>
-            } else {
-<span class="nc" id="L99">                throw e;</span>
-            }
-        }
+    @Nonnull
+    public final PagedIterator&lt;T&gt; iterator() {
+<span class="fc" id="L52">        return _iterator(pageSize);</span>
     }
 
     /**
@@ -110,7 +61,7 @@ public abstract class PagedIterable&lt;T&gt; implements Iterable&lt;T&gt; {
      */
     @Nonnull
     public T[] toArray() throws IOException {
-<span class="fc" id="L113">        return toArray(iterator());</span>
+<span class="fc" id="L64">        return toArray(iterator());</span>
     }
 
     /**
@@ -122,7 +73,7 @@ public abstract class PagedIterable&lt;T&gt; implements Iterable&lt;T&gt; {
      */
     @Nonnull
     public List&lt;T&gt; toList() throws IOException {
-<span class="fc" id="L125">        return Collections.unmodifiableList(Arrays.asList(this.toArray()));</span>
+<span class="fc" id="L76">        return Collections.unmodifiableList(Arrays.asList(this.toArray()));</span>
     }
 
     /**
@@ -134,7 +85,22 @@ public abstract class PagedIterable&lt;T&gt; implements Iterable&lt;T&gt; {
      */
     @Nonnull
     public Set&lt;T&gt; toSet() throws IOException {
-<span class="fc" id="L137">        return Collections.unmodifiableSet(new LinkedHashSet&lt;&gt;(Arrays.asList(this.toArray())));</span>
+<span class="fc" id="L88">        return Collections.unmodifiableSet(new LinkedHashSet&lt;&gt;(Arrays.asList(this.toArray())));</span>
+    }
+
+    /**
+     * Sets the pagination size.
+     *
+     * &lt;p&gt;
+     * When set to non-zero, each API call will retrieve this many entries.
+     *
+     * @param size
+     *            the size
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;T&gt; withPageSize(int size) {
+<span class="fc" id="L102">        this.pageSize = size;</span>
+<span class="fc" id="L103">        return this;</span>
     }
 
     /**
@@ -151,15 +117,49 @@ public abstract class PagedIterable&lt;T&gt; implements Iterable&lt;T&gt; {
     @Nonnull
     private T[] concatenatePages(Class&lt;T[]&gt; type, List&lt;T[]&gt; pages, int totalLength) {
 
-<span class="fc" id="L154">        T[] result = type.cast(Array.newInstance(type.getComponentType(), totalLength));</span>
+<span class="fc" id="L120">        T[] result = type.cast(Array.newInstance(type.getComponentType(), totalLength));</span>
 
-<span class="fc" id="L156">        int position = 0;</span>
-<span class="fc bfc" id="L157" title="All 2 branches covered.">        for (T[] page : pages) {</span>
-<span class="fc" id="L158">            final int pageLength = Array.getLength(page);</span>
-<span class="fc" id="L159">            System.arraycopy(page, 0, result, position, pageLength);</span>
-<span class="fc" id="L160">            position += pageLength;</span>
-<span class="fc" id="L161">        }</span>
-<span class="fc" id="L162">        return result;</span>
+<span class="fc" id="L122">        int position = 0;</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">        for (T[] page : pages) {</span>
+<span class="fc" id="L124">            final int pageLength = Array.getLength(page);</span>
+<span class="fc" id="L125">            System.arraycopy(page, 0, result, position, pageLength);</span>
+<span class="fc" id="L126">            position += pageLength;</span>
+<span class="fc" id="L127">        }</span>
+<span class="fc" id="L128">        return result;</span>
+    }
+
+    /**
+     * Eagerly walk {@link PagedIterator} and return the result in an array.
+     *
+     * @param iterator
+     *            the {@link PagedIterator} to read
+     * @return an array of all elements from the {@link PagedIterator}
+     * @throws IOException
+     *             if an I/O exception occurs.
+     */
+    protected T[] toArray(final PagedIterator&lt;T&gt; iterator) throws IOException {
+        try {
+<span class="fc" id="L142">            ArrayList&lt;T[]&gt; pages = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L143">            int totalSize = 0;</span>
+            T[] item;
+            do {
+<span class="fc" id="L146">                item = iterator.nextPageArray();</span>
+<span class="fc" id="L147">                totalSize += Array.getLength(item);</span>
+<span class="fc" id="L148">                pages.add(item);</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">            } while (iterator.hasNext());</span>
+
+<span class="fc" id="L151">            Class&lt;T[]&gt; type = (Class&lt;T[]&gt;) item.getClass();</span>
+
+<span class="fc" id="L153">            return concatenatePages(type, pages, totalSize);</span>
+<span class="fc" id="L154">        } catch (GHException e) {</span>
+            // if there was an exception inside the iterator it is wrapped as a GHException
+            // if the wrapped exception is an IOException, throw that
+<span class="pc bpc" id="L157" title="1 of 2 branches missed.">            if (e.getCause() instanceof IOException) {</span>
+<span class="fc" id="L158">                throw (IOException) e.getCause();</span>
+            } else {
+<span class="nc" id="L160">                throw e;</span>
+            }
+        }
     }
 
 }

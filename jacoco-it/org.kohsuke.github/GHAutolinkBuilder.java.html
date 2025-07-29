@@ -11,11 +11,11 @@ import java.io.IOException;
  */
 public class GHAutolinkBuilder {
 
+    private Boolean isAlphanumeric;
+    private String keyPrefix;
     private final GHRepository repo;
     private final Requester req;
-    private String keyPrefix;
     private String urlTemplate;
-    private Boolean isAlphanumeric;
 
     /**
      * Instantiates a new Gh autolink builder.
@@ -29,27 +29,22 @@ public class GHAutolinkBuilder {
 <span class="fc" id="L29">    }</span>
 
     /**
-     * With key prefix gh autolink builder.
+     * Create gh autolink.
      *
-     * @param keyPrefix
-     *            the key prefix
-     * @return the gh autolink builder
+     * @return the gh autolink
+     * @throws IOException
+     *             the io exception
      */
-    public GHAutolinkBuilder withKeyPrefix(String keyPrefix) {
-<span class="fc" id="L39">        this.keyPrefix = keyPrefix;</span>
-<span class="fc" id="L40">        return this;</span>
-    }
+    public GHAutolink create() throws IOException {
+<span class="fc" id="L39">        GHAutolink autolink = req.method(&quot;POST&quot;)</span>
+<span class="fc" id="L40">                .with(&quot;key_prefix&quot;, keyPrefix)</span>
+<span class="fc" id="L41">                .with(&quot;url_template&quot;, urlTemplate)</span>
+<span class="fc" id="L42">                .with(&quot;is_alphanumeric&quot;, isAlphanumeric)</span>
+<span class="fc" id="L43">                .withHeader(&quot;Accept&quot;, &quot;application/vnd.github+json&quot;)</span>
+<span class="fc" id="L44">                .withUrlPath(getApiTail())</span>
+<span class="fc" id="L45">                .fetch(GHAutolink.class);</span>
 
-    /**
-     * With url template gh autolink builder.
-     *
-     * @param urlTemplate
-     *            the url template
-     * @return the gh autolink builder
-     */
-    public GHAutolinkBuilder withUrlTemplate(String urlTemplate) {
-<span class="fc" id="L51">        this.urlTemplate = urlTemplate;</span>
-<span class="fc" id="L52">        return this;</span>
+<span class="fc" id="L47">        return autolink.lateBind(repo);</span>
     }
 
     /**
@@ -60,31 +55,36 @@ public class GHAutolinkBuilder {
      * @return the gh autolink builder
      */
     public GHAutolinkBuilder withIsAlphanumeric(boolean isAlphanumeric) {
-<span class="fc" id="L63">        this.isAlphanumeric = isAlphanumeric;</span>
-<span class="fc" id="L64">        return this;</span>
-    }
-
-    private String getApiTail() {
-<span class="fc" id="L68">        return String.format(&quot;/repos/%s/%s/autolinks&quot;, repo.getOwnerName(), repo.getName());</span>
+<span class="fc" id="L58">        this.isAlphanumeric = isAlphanumeric;</span>
+<span class="fc" id="L59">        return this;</span>
     }
 
     /**
-     * Create gh autolink.
+     * With key prefix gh autolink builder.
      *
-     * @return the gh autolink
-     * @throws IOException
-     *             the io exception
+     * @param keyPrefix
+     *            the key prefix
+     * @return the gh autolink builder
      */
-    public GHAutolink create() throws IOException {
-<span class="fc" id="L79">        GHAutolink autolink = req.method(&quot;POST&quot;)</span>
-<span class="fc" id="L80">                .with(&quot;key_prefix&quot;, keyPrefix)</span>
-<span class="fc" id="L81">                .with(&quot;url_template&quot;, urlTemplate)</span>
-<span class="fc" id="L82">                .with(&quot;is_alphanumeric&quot;, isAlphanumeric)</span>
-<span class="fc" id="L83">                .withHeader(&quot;Accept&quot;, &quot;application/vnd.github+json&quot;)</span>
-<span class="fc" id="L84">                .withUrlPath(getApiTail())</span>
-<span class="fc" id="L85">                .fetch(GHAutolink.class);</span>
+    public GHAutolinkBuilder withKeyPrefix(String keyPrefix) {
+<span class="fc" id="L70">        this.keyPrefix = keyPrefix;</span>
+<span class="fc" id="L71">        return this;</span>
+    }
 
-<span class="fc" id="L87">        return autolink.lateBind(repo);</span>
+    /**
+     * With url template gh autolink builder.
+     *
+     * @param urlTemplate
+     *            the url template
+     * @return the gh autolink builder
+     */
+    public GHAutolinkBuilder withUrlTemplate(String urlTemplate) {
+<span class="fc" id="L82">        this.urlTemplate = urlTemplate;</span>
+<span class="fc" id="L83">        return this;</span>
+    }
+
+    private String getApiTail() {
+<span class="fc" id="L87">        return String.format(&quot;/repos/%s/%s/autolinks&quot;, repo.getOwnerName(), repo.getName());</span>
     }
 
 }

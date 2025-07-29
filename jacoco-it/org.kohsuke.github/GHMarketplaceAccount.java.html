@@ -13,26 +13,26 @@ import java.net.URL;
  */
 public class GHMarketplaceAccount extends GitHubInteractiveObject {
 
+    private String email;
+
+    private long id;
+    private String login;
+    private String organizationBillingEmail;
+    private GHMarketplaceAccountType type;
+    private String url;
     /**
      * Create default GHMarketplaceAccount instance
      */
-<span class="fc" id="L19">    public GHMarketplaceAccount() {</span>
-<span class="fc" id="L20">    }</span>
-
-    private String url;
-    private long id;
-    private String login;
-    private String email;
-    private String organizationBillingEmail;
-    private GHMarketplaceAccountType type;
+<span class="fc" id="L26">    public GHMarketplaceAccount() {</span>
+<span class="fc" id="L27">    }</span>
 
     /**
-     * Gets url.
+     * Gets email.
      *
-     * @return the url
+     * @return the email
      */
-    public URL getUrl() {
-<span class="fc" id="L35">        return GitHubClient.parseURL(url);</span>
+    public String getEmail() {
+<span class="nc" id="L35">        return email;</span>
     }
 
     /**
@@ -54,30 +54,12 @@ public class GHMarketplaceAccount extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets email.
-     *
-     * @return the email
-     */
-    public String getEmail() {
-<span class="nc" id="L62">        return email;</span>
-    }
-
-    /**
      * Gets organization billing email.
      *
      * @return the organization billing email
      */
     public String getOrganizationBillingEmail() {
-<span class="fc" id="L71">        return organizationBillingEmail;</span>
-    }
-
-    /**
-     * Gets type.
-     *
-     * @return the type
-     */
-    public GHMarketplaceAccountType getType() {
-<span class="fc" id="L80">        return type;</span>
+<span class="fc" id="L62">        return organizationBillingEmail;</span>
     }
 
     /**
@@ -98,7 +80,25 @@ public class GHMarketplaceAccount extends GitHubInteractiveObject {
      *      a subscription plan for an account&lt;/a&gt;
      */
     public GHMarketplaceAccountPlan getPlan() throws IOException {
-<span class="fc" id="L101">        return new GHMarketplacePlanForAccountBuilder(root(), this.id).createRequest();</span>
+<span class="fc" id="L83">        return new GHMarketplacePlanForAccountBuilder(root(), this.id).createRequest();</span>
+    }
+
+    /**
+     * Gets type.
+     *
+     * @return the type
+     */
+    public GHMarketplaceAccountType getType() {
+<span class="fc" id="L92">        return type;</span>
+    }
+
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
+    public URL getUrl() {
+<span class="fc" id="L101">        return GitHubClient.parseURL(url);</span>
     }
 
 }

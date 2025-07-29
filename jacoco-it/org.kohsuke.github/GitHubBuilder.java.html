@@ -28,67 +28,6 @@ public class GitHubBuilder implements Cloneable {
     // for testing
 <span class="fc" id="L29">    static File HOME_DIRECTORY = null;</span>
 
-    // default scoped so unit tests can read them.
-    /** The endpoint. */
-<span class="fc" id="L33">    /* private */ String endpoint = GitHubClient.GITHUB_URL;</span>
-
-    private GitHubConnector connector;
-
-<span class="fc" id="L37">    private GitHubRateLimitHandler rateLimitHandler = GitHubRateLimitHandler.WAIT;</span>
-<span class="fc" id="L38">    private GitHubAbuseLimitHandler abuseLimitHandler = GitHubAbuseLimitHandler.WAIT;</span>
-<span class="fc" id="L39">    private GitHubRateLimitChecker rateLimitChecker = new GitHubRateLimitChecker();</span>
-
-    /** The authorization provider. */
-<span class="fc" id="L42">    /* private */ AuthorizationProvider authorizationProvider = AuthorizationProvider.ANONYMOUS;</span>
-
-    /**
-     * Instantiates a new Git hub builder.
-     */
-<span class="fc" id="L47">    public GitHubBuilder() {</span>
-<span class="fc" id="L48">    }</span>
-
-    /**
-     * First check if the credentials are configured in the environment. We use environment first because users are not
-     * likely to give required (full) permissions to their default key.
-     *
-     * If no user is specified it means there is no configuration present, so try using the ~/.github properties file.
-     **
-     * If there is still no user it means there are no credentials defined and throw an IOException.
-     *
-     * @return the configured Builder from credentials defined on the system or in the environment. Otherwise returns
-     *         null.
-     *
-     * @throws IOException
-     *             If there are no credentials defined in the ~/.github properties file or the process environment.
-     */
-    static GitHubBuilder fromCredentials() throws IOException {
-<span class="fc" id="L65">        Exception cause = null;</span>
-<span class="fc" id="L66">        GitHubBuilder builder = null;</span>
-
-<span class="fc" id="L68">        builder = fromEnvironment();</span>
-
-<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        if (builder.authorizationProvider != AuthorizationProvider.ANONYMOUS)</span>
-<span class="nc" id="L71">            return builder;</span>
-
-        try {
-<span class="nc" id="L74">            builder = fromPropertyFile();</span>
-
-<span class="nc bnc" id="L76" title="All 2 branches missed.">            if (builder.authorizationProvider != AuthorizationProvider.ANONYMOUS)</span>
-<span class="nc" id="L77">                return builder;</span>
-<span class="fc" id="L78">        } catch (FileNotFoundException e) {</span>
-            // fall through
-<span class="fc" id="L80">            cause = e;</span>
-<span class="nc" id="L81">        }</span>
-<span class="fc" id="L82">        throw (IOException) new IOException(&quot;Failed to resolve credentials from ~/.github or the environment.&quot;)</span>
-<span class="fc" id="L83">                .initCause(cause);</span>
-    }
-
-    private static void loadIfSet(String envName, Properties p, String propName) {
-<span class="nc" id="L87">        String v = System.getenv(envName);</span>
-<span class="nc bnc" id="L88" title="All 2 branches missed.">        if (v != null)</span>
-<span class="nc" id="L89">            p.put(propName, v);</span>
-<span class="nc" id="L90">    }</span>
-
     /**
      * Creates {@link GitHubBuilder} by picking up coordinates from environment variables.
      *
@@ -108,49 +47,14 @@ public class GitHubBuilder implements Cloneable {
      * @return the GitHubBuilder
      */
     public static GitHubBuilder fromEnvironment() {
-<span class="fc" id="L111">        Properties props = new Properties();</span>
-<span class="fc bfc" id="L112" title="All 2 branches covered.">        for (Entry&lt;String, String&gt; e : System.getenv().entrySet()) {</span>
-<span class="fc" id="L113">            String name = e.getKey().toLowerCase(Locale.ENGLISH);</span>
-<span class="fc bfc" id="L114" title="All 2 branches covered.">            if (name.startsWith(&quot;github_&quot;))</span>
-<span class="fc" id="L115">                name = name.substring(7);</span>
-<span class="fc" id="L116">            props.put(name, e.getValue());</span>
-<span class="fc" id="L117">        }</span>
-<span class="fc" id="L118">        return fromProperties(props);</span>
-    }
-
-    /**
-     * From property file GitHubBuilder.
-     *
-     * @return the GitHubBuilder
-     * @throws IOException
-     *             the io exception
-     */
-    public static GitHubBuilder fromPropertyFile() throws IOException {
-<span class="pc bpc" id="L129" title="1 of 2 branches missed.">        File homeDir = HOME_DIRECTORY != null ? HOME_DIRECTORY : new File(System.getProperty(&quot;user.home&quot;));</span>
-<span class="fc" id="L130">        File propertyFile = new File(homeDir, &quot;.github&quot;);</span>
-<span class="nc" id="L131">        return fromPropertyFile(propertyFile.getPath());</span>
-    }
-
-    /**
-     * From property file GitHubBuilder.
-     *
-     * @param propertyFileName
-     *            the property file name
-     * @return the GitHubBuilder
-     * @throws IOException
-     *             the io exception
-     */
-    public static GitHubBuilder fromPropertyFile(String propertyFileName) throws IOException {
-<span class="fc" id="L144">        Properties props = new Properties();</span>
-<span class="fc" id="L145">        FileInputStream in = null;</span>
-        try {
-<span class="nc" id="L147">            in = new FileInputStream(propertyFileName);</span>
-<span class="nc" id="L148">            props.load(in);</span>
-        } finally {
-<span class="fc" id="L150">            IOUtils.closeQuietly(in);</span>
-        }
-
-<span class="nc" id="L153">        return fromProperties(props);</span>
+<span class="fc" id="L50">        Properties props = new Properties();</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        for (Entry&lt;String, String&gt; e : System.getenv().entrySet()) {</span>
+<span class="fc" id="L52">            String name = e.getKey().toLowerCase(Locale.ENGLISH);</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">            if (name.startsWith(&quot;github_&quot;))</span>
+<span class="fc" id="L54">                name = name.substring(7);</span>
+<span class="fc" id="L55">            props.put(name, e.getValue());</span>
+<span class="fc" id="L56">        }</span>
+<span class="fc" id="L57">        return fromProperties(props);</span>
     }
 
     /**
@@ -161,135 +65,145 @@ public class GitHubBuilder implements Cloneable {
      * @return the GitHubBuilder
      */
     public static GitHubBuilder fromProperties(Properties props) {
-<span class="fc" id="L164">        GitHubBuilder self = new GitHubBuilder();</span>
-<span class="fc" id="L165">        String oauth = props.getProperty(&quot;oauth&quot;);</span>
-<span class="fc" id="L166">        String jwt = props.getProperty(&quot;jwt&quot;);</span>
-<span class="fc" id="L167">        String login = props.getProperty(&quot;login&quot;);</span>
+<span class="fc" id="L68">        GitHubBuilder self = new GitHubBuilder();</span>
+<span class="fc" id="L69">        String oauth = props.getProperty(&quot;oauth&quot;);</span>
+<span class="fc" id="L70">        String jwt = props.getProperty(&quot;jwt&quot;);</span>
+<span class="fc" id="L71">        String login = props.getProperty(&quot;login&quot;);</span>
 
-<span class="pc bpc" id="L169" title="1 of 2 branches missed.">        if (oauth != null) {</span>
-<span class="nc" id="L170">            self.withOAuthToken(oauth, login);</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">        if (oauth != null) {</span>
+<span class="nc" id="L74">            self.withOAuthToken(oauth, login);</span>
         }
-<span class="pc bpc" id="L172" title="1 of 2 branches missed.">        if (jwt != null) {</span>
-<span class="nc" id="L173">            self.withJwtToken(jwt);</span>
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">        if (jwt != null) {</span>
+<span class="nc" id="L77">            self.withJwtToken(jwt);</span>
         }
-<span class="fc" id="L175">        self.withEndpoint(props.getProperty(&quot;endpoint&quot;, GitHubClient.GITHUB_URL));</span>
-<span class="fc" id="L176">        return self;</span>
+<span class="fc" id="L79">        self.withEndpoint(props.getProperty(&quot;endpoint&quot;, GitHubClient.GITHUB_URL));</span>
+<span class="fc" id="L80">        return self;</span>
     }
 
     /**
-     * With endpoint GitHubBuilder.
+     * From property file GitHubBuilder.
      *
-     * @param endpoint
-     *            The URL of GitHub (or GitHub enterprise) API endpoint, such as &quot;https://api.github.com&quot; or
-     *            &quot;https://ghe.acme.com/api/v3&quot;. Note that GitHub Enterprise has &lt;code&gt;/api/v3&lt;/code&gt; in the URL. For
-     *            historical reasons, this parameter still accepts the bare domain name, but that's considered
-     *            deprecated.
+     * @return the GitHubBuilder
+     * @throws IOException
+     *             the io exception
+     */
+    public static GitHubBuilder fromPropertyFile() throws IOException {
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">        File homeDir = HOME_DIRECTORY != null ? HOME_DIRECTORY : new File(System.getProperty(&quot;user.home&quot;));</span>
+<span class="fc" id="L92">        File propertyFile = new File(homeDir, &quot;.github&quot;);</span>
+<span class="nc" id="L93">        return fromPropertyFile(propertyFile.getPath());</span>
+    }
+    /**
+     * From property file GitHubBuilder.
+     *
+     * @param propertyFileName
+     *            the property file name
+     * @return the GitHubBuilder
+     * @throws IOException
+     *             the io exception
+     */
+    public static GitHubBuilder fromPropertyFile(String propertyFileName) throws IOException {
+<span class="fc" id="L105">        Properties props = new Properties();</span>
+<span class="fc" id="L106">        FileInputStream in = null;</span>
+        try {
+<span class="nc" id="L108">            in = new FileInputStream(propertyFileName);</span>
+<span class="nc" id="L109">            props.load(in);</span>
+        } finally {
+<span class="fc" id="L111">            IOUtils.closeQuietly(in);</span>
+        }
+
+<span class="nc" id="L114">        return fromProperties(props);</span>
+    }
+    private static void loadIfSet(String envName, Properties p, String propName) {
+<span class="nc" id="L117">        String v = System.getenv(envName);</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">        if (v != null)</span>
+<span class="nc" id="L119">            p.put(propName, v);</span>
+<span class="nc" id="L120">    }</span>
+
+    /**
+     * First check if the credentials are configured in the environment. We use environment first because users are not
+     * likely to give required (full) permissions to their default key.
+     *
+     * If no user is specified it means there is no configuration present, so try using the ~/.github properties file.
+     **
+     * If there is still no user it means there are no credentials defined and throw an IOException.
+     *
+     * @return the configured Builder from credentials defined on the system or in the environment. Otherwise returns
+     *         null.
+     *
+     * @throws IOException
+     *             If there are no credentials defined in the ~/.github properties file or the process environment.
+     */
+    static GitHubBuilder fromCredentials() throws IOException {
+<span class="fc" id="L137">        Exception cause = null;</span>
+<span class="fc" id="L138">        GitHubBuilder builder = null;</span>
+
+<span class="fc" id="L140">        builder = fromEnvironment();</span>
+
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">        if (builder.authorizationProvider != AuthorizationProvider.ANONYMOUS)</span>
+<span class="nc" id="L143">            return builder;</span>
+
+        try {
+<span class="nc" id="L146">            builder = fromPropertyFile();</span>
+
+<span class="nc bnc" id="L148" title="All 2 branches missed.">            if (builder.authorizationProvider != AuthorizationProvider.ANONYMOUS)</span>
+<span class="nc" id="L149">                return builder;</span>
+<span class="fc" id="L150">        } catch (FileNotFoundException e) {</span>
+            // fall through
+<span class="fc" id="L152">            cause = e;</span>
+<span class="nc" id="L153">        }</span>
+<span class="fc" id="L154">        throw (IOException) new IOException(&quot;Failed to resolve credentials from ~/.github or the environment.&quot;)</span>
+<span class="fc" id="L155">                .initCause(cause);</span>
+    }
+
+<span class="fc" id="L158">    private GitHubAbuseLimitHandler abuseLimitHandler = GitHubAbuseLimitHandler.WAIT;</span>
+
+    private GitHubConnector connector;
+
+<span class="fc" id="L162">    private GitHubRateLimitChecker rateLimitChecker = new GitHubRateLimitChecker();</span>
+
+<span class="fc" id="L164">    private GitHubRateLimitHandler rateLimitHandler = GitHubRateLimitHandler.WAIT;</span>
+
+    /** The authorization provider. */
+<span class="fc" id="L167">    /* private */ AuthorizationProvider authorizationProvider = AuthorizationProvider.ANONYMOUS;</span>
+
+    // default scoped so unit tests can read them.
+    /** The endpoint. */
+<span class="fc" id="L171">    /* private */ String endpoint = GitHubClient.GITHUB_URL;</span>
+
+    /**
+     * Instantiates a new Git hub builder.
+     */
+<span class="fc" id="L176">    public GitHubBuilder() {</span>
+<span class="fc" id="L177">    }</span>
+
+    /**
+     * Builds a {@link GitHub} instance.
+     *
+     * @return the github
+     * @throws IOException
+     *             the io exception
+     */
+    public GitHub build() throws IOException {
+<span class="fc" id="L187">        return new GitHub(endpoint,</span>
+                connector,
+                rateLimitHandler,
+                abuseLimitHandler,
+                rateLimitChecker,
+                authorizationProvider);
+    }
+
+    /**
+     * Clone.
+     *
      * @return the GitHubBuilder
      */
-    public GitHubBuilder withEndpoint(String endpoint) {
-<span class="fc" id="L190">        this.endpoint = endpoint;</span>
-<span class="fc" id="L191">        return this;</span>
-    }
-
-    /**
-     * With o auth token GitHubBuilder.
-     *
-     * @param oauthToken
-     *            the oauth token
-     * @return the GitHubBuilder
-     */
-    public GitHubBuilder withOAuthToken(String oauthToken) {
-<span class="nc" id="L202">        return withAuthorizationProvider(ImmutableAuthorizationProvider.fromOauthToken(oauthToken));</span>
-    }
-
-    /**
-     * With o auth token GitHubBuilder.
-     *
-     * @param oauthToken
-     *            the oauth token
-     * @param user
-     *            the user
-     * @return the GitHubBuilder
-     */
-    public GitHubBuilder withOAuthToken(String oauthToken, String user) {
-<span class="fc" id="L215">        return withAuthorizationProvider(ImmutableAuthorizationProvider.fromOauthToken(oauthToken, user));</span>
-    }
-
-    /**
-     * Configures a {@link AuthorizationProvider} for this builder
-     *
-     * There can be only one authorization provider per client instance.
-     *
-     * @param authorizationProvider
-     *            the authorization provider
-     * @return the GitHubBuilder
-     *
-     */
-    public GitHubBuilder withAuthorizationProvider(final AuthorizationProvider authorizationProvider) {
-<span class="fc" id="L229">        this.authorizationProvider = authorizationProvider;</span>
-<span class="fc" id="L230">        return this;</span>
-    }
-
-    /**
-     * Configures {@link GitHubBuilder} with Installation Token generated by the GitHub Application.
-     *
-     * @param appInstallationToken
-     *            A string containing the GitHub App installation token
-     * @return the configured Builder from given GitHub App installation token.
-     * @see GHAppInstallation#createToken() GHAppInstallation#createToken()
-     */
-    public GitHubBuilder withAppInstallationToken(String appInstallationToken) {
-<span class="fc" id="L242">        return withAuthorizationProvider(ImmutableAuthorizationProvider.fromAppInstallationToken(appInstallationToken));</span>
-    }
-
-    /**
-     * With jwt token GitHubBuilder.
-     *
-     * @param jwtToken
-     *            the jwt token
-     * @return the GitHubBuilder
-     */
-    public GitHubBuilder withJwtToken(String jwtToken) {
-<span class="fc" id="L253">        return withAuthorizationProvider(ImmutableAuthorizationProvider.fromJwtToken(jwtToken));</span>
-    }
-
-    /**
-     * With connector GitHubBuilder.
-     *
-     * @param connector
-     *            the connector
-     * @return the GitHubBuilder
-     */
-    public GitHubBuilder withConnector(GitHubConnector connector) {
-<span class="fc" id="L264">        this.connector = connector;</span>
-<span class="fc" id="L265">        return this;</span>
-    }
-
-    /**
-     * Adds a {@link GitHubRateLimitHandler} to this {@link GitHubBuilder}.
-     * &lt;p&gt;
-     * GitHub allots a certain number of requests to each user or application per period of time (usually per hour). The
-     * number of requests remaining is returned in the response header and can also be requested using
-     * {@link GitHub#getRateLimit()}. This requests per interval is referred to as the &quot;rate limit&quot;.
-     * &lt;/p&gt;
-     * &lt;p&gt;
-     * When the remaining number of requests reaches zero, the next request will return an error. If this happens,
-     * {@link GitHubRateLimitHandler#onError(GitHubConnectorResponse)} will be called.
-     * &lt;/p&gt;
-     * &lt;p&gt;
-     * NOTE: GitHub treats clients that exceed their rate limit very harshly. If possible, clients should avoid
-     * exceeding their rate limit. Consider adding a {@link RateLimitChecker} to automatically check the rate limit for
-     * each request and wait if needed.
-     * &lt;/p&gt;
-     *
-     * @param handler
-     *            the handler
-     * @return the GitHubBuilder
-     * @see #withRateLimitChecker(RateLimitChecker)
-     */
-    public GitHubBuilder withRateLimitHandler(GitHubRateLimitHandler handler) {
-<span class="fc" id="L291">        this.rateLimitHandler = handler;</span>
-<span class="fc" id="L292">        return this;</span>
+    @Override
+    public GitHubBuilder clone() {
+        try {
+<span class="fc" id="L203">            return (GitHubBuilder) super.clone();</span>
+<span class="nc" id="L204">        } catch (CloneNotSupportedException e) {</span>
+<span class="nc" id="L205">            throw new RuntimeException(&quot;Clone should be supported&quot;, e);</span>
+        }
     }
 
     /**
@@ -305,8 +219,97 @@ public class GitHubBuilder implements Cloneable {
      * @return the GitHubBuilder
      */
     public GitHubBuilder withAbuseLimitHandler(GitHubAbuseLimitHandler handler) {
-<span class="fc" id="L308">        this.abuseLimitHandler = handler;</span>
-<span class="fc" id="L309">        return this;</span>
+<span class="fc" id="L222">        this.abuseLimitHandler = handler;</span>
+<span class="fc" id="L223">        return this;</span>
+    }
+
+    /**
+     * Configures {@link GitHubBuilder} with Installation Token generated by the GitHub Application.
+     *
+     * @param appInstallationToken
+     *            A string containing the GitHub App installation token
+     * @return the configured Builder from given GitHub App installation token.
+     * @see GHAppInstallation#createToken() GHAppInstallation#createToken()
+     */
+    public GitHubBuilder withAppInstallationToken(String appInstallationToken) {
+<span class="fc" id="L235">        return withAuthorizationProvider(ImmutableAuthorizationProvider.fromAppInstallationToken(appInstallationToken));</span>
+    }
+
+    /**
+     * Configures a {@link AuthorizationProvider} for this builder
+     *
+     * There can be only one authorization provider per client instance.
+     *
+     * @param authorizationProvider
+     *            the authorization provider
+     * @return the GitHubBuilder
+     *
+     */
+    public GitHubBuilder withAuthorizationProvider(final AuthorizationProvider authorizationProvider) {
+<span class="fc" id="L249">        this.authorizationProvider = authorizationProvider;</span>
+<span class="fc" id="L250">        return this;</span>
+    }
+
+    /**
+     * With connector GitHubBuilder.
+     *
+     * @param connector
+     *            the connector
+     * @return the GitHubBuilder
+     */
+    public GitHubBuilder withConnector(GitHubConnector connector) {
+<span class="fc" id="L261">        this.connector = connector;</span>
+<span class="fc" id="L262">        return this;</span>
+    }
+
+    /**
+     * With endpoint GitHubBuilder.
+     *
+     * @param endpoint
+     *            The URL of GitHub (or GitHub enterprise) API endpoint, such as &quot;https://api.github.com&quot; or
+     *            &quot;https://ghe.acme.com/api/v3&quot;. Note that GitHub Enterprise has &lt;code&gt;/api/v3&lt;/code&gt; in the URL. For
+     *            historical reasons, this parameter still accepts the bare domain name, but that's considered
+     *            deprecated.
+     * @return the GitHubBuilder
+     */
+    public GitHubBuilder withEndpoint(String endpoint) {
+<span class="fc" id="L276">        this.endpoint = endpoint;</span>
+<span class="fc" id="L277">        return this;</span>
+    }
+
+    /**
+     * With jwt token GitHubBuilder.
+     *
+     * @param jwtToken
+     *            the jwt token
+     * @return the GitHubBuilder
+     */
+    public GitHubBuilder withJwtToken(String jwtToken) {
+<span class="fc" id="L288">        return withAuthorizationProvider(ImmutableAuthorizationProvider.fromJwtToken(jwtToken));</span>
+    }
+
+    /**
+     * With o auth token GitHubBuilder.
+     *
+     * @param oauthToken
+     *            the oauth token
+     * @return the GitHubBuilder
+     */
+    public GitHubBuilder withOAuthToken(String oauthToken) {
+<span class="nc" id="L299">        return withAuthorizationProvider(ImmutableAuthorizationProvider.fromOauthToken(oauthToken));</span>
+    }
+
+    /**
+     * With o auth token GitHubBuilder.
+     *
+     * @param oauthToken
+     *            the oauth token
+     * @param user
+     *            the user
+     * @return the GitHubBuilder
+     */
+    public GitHubBuilder withOAuthToken(String oauthToken, String user) {
+<span class="fc" id="L312">        return withAuthorizationProvider(ImmutableAuthorizationProvider.fromOauthToken(oauthToken, user));</span>
     }
 
     /**
@@ -318,7 +321,7 @@ public class GitHubBuilder implements Cloneable {
      * @see #withRateLimitChecker(RateLimitChecker, RateLimitTarget)
      */
     public GitHubBuilder withRateLimitChecker(@Nonnull RateLimitChecker coreRateLimitChecker) {
-<span class="fc" id="L321">        return withRateLimitChecker(coreRateLimitChecker, RateLimitTarget.CORE);</span>
+<span class="fc" id="L324">        return withRateLimitChecker(coreRateLimitChecker, RateLimitTarget.CORE);</span>
     }
 
     /**
@@ -347,38 +350,35 @@ public class GitHubBuilder implements Cloneable {
      */
     public GitHubBuilder withRateLimitChecker(@Nonnull RateLimitChecker rateLimitChecker,
             @Nonnull RateLimitTarget rateLimitTarget) {
-<span class="fc" id="L350">        this.rateLimitChecker = this.rateLimitChecker.with(rateLimitChecker, rateLimitTarget);</span>
-<span class="fc" id="L351">        return this;</span>
+<span class="fc" id="L353">        this.rateLimitChecker = this.rateLimitChecker.with(rateLimitChecker, rateLimitTarget);</span>
+<span class="fc" id="L354">        return this;</span>
     }
 
     /**
-     * Builds a {@link GitHub} instance.
+     * Adds a {@link GitHubRateLimitHandler} to this {@link GitHubBuilder}.
+     * &lt;p&gt;
+     * GitHub allots a certain number of requests to each user or application per period of time (usually per hour). The
+     * number of requests remaining is returned in the response header and can also be requested using
+     * {@link GitHub#getRateLimit()}. This requests per interval is referred to as the &quot;rate limit&quot;.
+     * &lt;/p&gt;
+     * &lt;p&gt;
+     * When the remaining number of requests reaches zero, the next request will return an error. If this happens,
+     * {@link GitHubRateLimitHandler#onError(GitHubConnectorResponse)} will be called.
+     * &lt;/p&gt;
+     * &lt;p&gt;
+     * NOTE: GitHub treats clients that exceed their rate limit very harshly. If possible, clients should avoid
+     * exceeding their rate limit. Consider adding a {@link RateLimitChecker} to automatically check the rate limit for
+     * each request and wait if needed.
+     * &lt;/p&gt;
      *
-     * @return the github
-     * @throws IOException
-     *             the io exception
-     */
-    public GitHub build() throws IOException {
-<span class="fc" id="L362">        return new GitHub(endpoint,</span>
-                connector,
-                rateLimitHandler,
-                abuseLimitHandler,
-                rateLimitChecker,
-                authorizationProvider);
-    }
-
-    /**
-     * Clone.
-     *
+     * @param handler
+     *            the handler
      * @return the GitHubBuilder
+     * @see #withRateLimitChecker(RateLimitChecker)
      */
-    @Override
-    public GitHubBuilder clone() {
-        try {
-<span class="fc" id="L378">            return (GitHubBuilder) super.clone();</span>
-<span class="nc" id="L379">        } catch (CloneNotSupportedException e) {</span>
-<span class="nc" id="L380">            throw new RuntimeException(&quot;Clone should be supported&quot;, e);</span>
-        }
+    public GitHubBuilder withRateLimitHandler(GitHubRateLimitHandler handler) {
+<span class="fc" id="L380">        this.rateLimitHandler = handler;</span>
+<span class="fc" id="L381">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -17,51 +17,42 @@ import java.util.Locale;
  */
 public class GHMilestone extends GHObject {
 
-    /**
-     * Create default GHMilestone instance
-     */
-<span class="fc" id="L23">    public GHMilestone() {</span>
-<span class="fc" id="L24">    }</span>
-
-    /** The owner. */
-    GHRepository owner;
-
-    /** The creator. */
-    GHUser creator;
-    private String state, dueOn, title, description, htmlUrl;
     private int closedIssues, openIssues, number;
+
+    private String state, dueOn, title, description, htmlUrl;
 
     /** The closed at. */
     protected String closedAt;
+    /** The creator. */
+    GHUser creator;
+    /** The owner. */
+    GHRepository owner;
 
     /**
-     * Gets owner.
-     *
-     * @return the owner
+     * Create default GHMilestone instance
      */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHRepository getOwner() {
-<span class="nc" id="L44">        return owner;</span>
-    }
+<span class="fc" id="L34">    public GHMilestone() {</span>
+<span class="fc" id="L35">    }</span>
 
     /**
-     * Gets creator.
+     * Closes this milestone.
      *
-     * @return the creator
+     * @throws IOException
+     *             the io exception
      */
-    public GHUser getCreator() {
-<span class="nc" id="L53">        return root().intern(creator);</span>
-    }
+    public void close() throws IOException {
+<span class="nc" id="L44">        edit(&quot;state&quot;, &quot;closed&quot;);</span>
+<span class="nc" id="L45">    }</span>
 
     /**
-     * Gets due on.
+     * Deletes this milestone.
      *
-     * @return the due on
+     * @throws IOException
+     *             the io exception
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
-    public Instant getDueOn() {
-<span class="fc" id="L63">        return GitHubClient.parseInstant(dueOn);</span>
-    }
+    public void delete() throws IOException {
+<span class="nc" id="L54">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="nc" id="L55">    }</span>
 
     /**
      * When was this milestone closed?.
@@ -70,16 +61,25 @@ public class GHMilestone extends GHObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
     public Instant getClosedAt() {
-<span class="fc" id="L73">        return GitHubClient.parseInstant(closedAt);</span>
+<span class="fc" id="L64">        return GitHubClient.parseInstant(closedAt);</span>
     }
 
     /**
-     * Gets title.
+     * Gets closed issues.
      *
-     * @return the title
+     * @return the closed issues
      */
-    public String getTitle() {
-<span class="fc" id="L82">        return title;</span>
+    public int getClosedIssues() {
+<span class="fc" id="L73">        return closedIssues;</span>
+    }
+
+    /**
+     * Gets creator.
+     *
+     * @return the creator
+     */
+    public GHUser getCreator() {
+<span class="nc" id="L82">        return root().intern(creator);</span>
     }
 
     /**
@@ -92,30 +92,13 @@ public class GHMilestone extends GHObject {
     }
 
     /**
-     * Gets closed issues.
+     * Gets due on.
      *
-     * @return the closed issues
+     * @return the due on
      */
-    public int getClosedIssues() {
-<span class="fc" id="L100">        return closedIssues;</span>
-    }
-
-    /**
-     * Gets open issues.
-     *
-     * @return the open issues
-     */
-    public int getOpenIssues() {
-<span class="fc" id="L109">        return openIssues;</span>
-    }
-
-    /**
-     * Gets number.
-     *
-     * @return the number
-     */
-    public int getNumber() {
-<span class="fc" id="L118">        return number;</span>
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getDueOn() {
+<span class="fc" id="L101">        return GitHubClient.parseInstant(dueOn);</span>
     }
 
     /**
@@ -124,7 +107,35 @@ public class GHMilestone extends GHObject {
      * @return the html url
      */
     public URL getHtmlUrl() {
-<span class="fc" id="L127">        return GitHubClient.parseURL(htmlUrl);</span>
+<span class="fc" id="L110">        return GitHubClient.parseURL(htmlUrl);</span>
+    }
+
+    /**
+     * Gets number.
+     *
+     * @return the number
+     */
+    public int getNumber() {
+<span class="fc" id="L119">        return number;</span>
+    }
+
+    /**
+     * Gets open issues.
+     *
+     * @return the open issues
+     */
+    public int getOpenIssues() {
+<span class="fc" id="L128">        return openIssues;</span>
+    }
+
+    /**
+     * Gets owner.
+     *
+     * @return the owner
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHRepository getOwner() {
+<span class="nc" id="L138">        return owner;</span>
     }
 
     /**
@@ -133,18 +144,17 @@ public class GHMilestone extends GHObject {
      * @return the state
      */
     public GHMilestoneState getState() {
-<span class="nc" id="L136">        return Enum.valueOf(GHMilestoneState.class, state.toUpperCase(Locale.ENGLISH));</span>
+<span class="nc" id="L147">        return Enum.valueOf(GHMilestoneState.class, state.toUpperCase(Locale.ENGLISH));</span>
     }
 
     /**
-     * Closes this milestone.
+     * Gets title.
      *
-     * @throws IOException
-     *             the io exception
+     * @return the title
      */
-    public void close() throws IOException {
-<span class="nc" id="L146">        edit(&quot;state&quot;, &quot;closed&quot;);</span>
-<span class="nc" id="L147">    }</span>
+    public String getTitle() {
+<span class="fc" id="L156">        return title;</span>
+    }
 
     /**
      * Reopens this milestone.
@@ -153,34 +163,8 @@ public class GHMilestone extends GHObject {
      *             the io exception
      */
     public void reopen() throws IOException {
-<span class="nc" id="L156">        edit(&quot;state&quot;, &quot;open&quot;);</span>
-<span class="nc" id="L157">    }</span>
-
-    /**
-     * Deletes this milestone.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void delete() throws IOException {
-<span class="nc" id="L166">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="nc" id="L166">        edit(&quot;state&quot;, &quot;open&quot;);</span>
 <span class="nc" id="L167">    }</span>
-
-    private void edit(String key, Object value) throws IOException {
-<span class="fc" id="L170">        root().createRequest().with(key, value).method(&quot;PATCH&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L171">    }</span>
-
-    /**
-     * Sets title.
-     *
-     * @param title
-     *            the title
-     * @throws IOException
-     *             the io exception
-     */
-    public void setTitle(String title) throws IOException {
-<span class="fc" id="L182">        edit(&quot;title&quot;, title);</span>
-<span class="fc" id="L183">    }</span>
 
     /**
      * Sets description.
@@ -191,8 +175,8 @@ public class GHMilestone extends GHObject {
      *             the io exception
      */
     public void setDescription(String description) throws IOException {
-<span class="fc" id="L194">        edit(&quot;description&quot;, description);</span>
-<span class="fc" id="L195">    }</span>
+<span class="fc" id="L178">        edit(&quot;description&quot;, description);</span>
+<span class="fc" id="L179">    }</span>
 
     /**
      * Sets due on.
@@ -205,8 +189,8 @@ public class GHMilestone extends GHObject {
      */
     @Deprecated
     public void setDueOn(Date dueOn) throws IOException {
-<span class="fc" id="L208">        setDueOn(GitHubClient.toInstantOrNull(dueOn));</span>
-<span class="fc" id="L209">    }</span>
+<span class="fc" id="L192">        setDueOn(GitHubClient.toInstantOrNull(dueOn));</span>
+<span class="fc" id="L193">    }</span>
 
     /**
      * Sets due on.
@@ -217,7 +201,23 @@ public class GHMilestone extends GHObject {
      *             the io exception
      */
     public void setDueOn(Instant dueOn) throws IOException {
-<span class="fc" id="L220">        edit(&quot;due_on&quot;, GitHubClient.printInstant(dueOn));</span>
+<span class="fc" id="L204">        edit(&quot;due_on&quot;, GitHubClient.printInstant(dueOn));</span>
+<span class="fc" id="L205">    }</span>
+
+    /**
+     * Sets title.
+     *
+     * @param title
+     *            the title
+     * @throws IOException
+     *             the io exception
+     */
+    public void setTitle(String title) throws IOException {
+<span class="fc" id="L216">        edit(&quot;title&quot;, title);</span>
+<span class="fc" id="L217">    }</span>
+
+    private void edit(String key, Object value) throws IOException {
+<span class="fc" id="L220">        root().createRequest().with(key, value).method(&quot;PATCH&quot;).withUrlPath(getApiRoute()).send();</span>
 <span class="fc" id="L221">    }</span>
 
     /**

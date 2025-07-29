@@ -14,8 +14,8 @@ import javax.annotation.Nonnull;
  * @see GitHub#createGist() GitHub#createGist()
  */
 public class GHGistBuilder {
+<span class="fc" id="L17">    private final LinkedHashMap&lt;String, Object&gt; files = new LinkedHashMap&lt;String, Object&gt;();</span>
     private final Requester req;
-<span class="fc" id="L18">    private final LinkedHashMap&lt;String, Object&gt; files = new LinkedHashMap&lt;String, Object&gt;();</span>
 
     /**
      * Instantiates a new Gh gist builder.
@@ -28,6 +28,18 @@ public class GHGistBuilder {
 <span class="fc" id="L28">    }</span>
 
     /**
+     * Creates a Gist based on the parameters specified thus far.
+     *
+     * @return created Gist
+     * @throws IOException
+     *             if Gist cannot be created.
+     */
+    public GHGist create() throws IOException {
+<span class="fc" id="L38">        req.with(&quot;files&quot;, files);</span>
+<span class="fc" id="L39">        return req.withUrlPath(&quot;/gists&quot;).fetch(GHGist.class);</span>
+    }
+
+    /**
      * Description gh gist builder.
      *
      * @param desc
@@ -35,19 +47,7 @@ public class GHGistBuilder {
      * @return the gh gist builder
      */
     public GHGistBuilder description(String desc) {
-<span class="fc" id="L38">        req.with(&quot;description&quot;, desc);</span>
-<span class="fc" id="L39">        return this;</span>
-    }
-
-    /**
-     * Public gh gist builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh gist builder
-     */
-    public GHGistBuilder public_(boolean v) {
-<span class="fc" id="L50">        req.with(&quot;public&quot;, v);</span>
+<span class="fc" id="L50">        req.with(&quot;description&quot;, desc);</span>
 <span class="fc" id="L51">        return this;</span>
     }
 
@@ -66,15 +66,15 @@ public class GHGistBuilder {
     }
 
     /**
-     * Creates a Gist based on the parameters specified thus far.
+     * Public gh gist builder.
      *
-     * @return created Gist
-     * @throws IOException
-     *             if Gist cannot be created.
+     * @param v
+     *            the v
+     * @return the gh gist builder
      */
-    public GHGist create() throws IOException {
-<span class="fc" id="L76">        req.with(&quot;files&quot;, files);</span>
-<span class="fc" id="L77">        return req.withUrlPath(&quot;/gists&quot;).fetch(GHGist.class);</span>
+    public GHGistBuilder public_(boolean v) {
+<span class="fc" id="L76">        req.with(&quot;public&quot;, v);</span>
+<span class="fc" id="L77">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

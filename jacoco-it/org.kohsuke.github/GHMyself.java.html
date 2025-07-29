@@ -18,86 +18,31 @@ import java.util.stream.Collectors;
 public class GHMyself extends GHUser {
 
     /**
-     * Create default GHMyself instance
-     */
-<span class="fc" id="L23">    public GHMyself() {</span>
-<span class="fc" id="L24">    }</span>
-
-    /**
      * Type of repositories returned during listing.
      */
-<span class="fc" id="L29">    public enum RepositoryListFilter {</span>
+<span class="fc" id="L23">    public enum RepositoryListFilter {</span>
 
         /** All public and private repositories that current user has access or collaborates to. */
-<span class="fc" id="L32">        ALL,</span>
-
-        /** Public and private repositories owned by current user. */
-<span class="fc" id="L35">        OWNER,</span>
-
-        /** Public repositories that current user has access or collaborates to. */
-<span class="fc" id="L38">        PUBLIC,</span>
-
-        /** Private repositories that current user has access or collaborates to. */
-<span class="fc" id="L41">        PRIVATE,</span>
+<span class="fc" id="L26">        ALL,</span>
 
         /** Public and private repositories that current user is a member. */
-<span class="fc" id="L44">        MEMBER;</span>
+<span class="fc" id="L29">        MEMBER,</span>
+
+        /** Public and private repositories owned by current user. */
+<span class="fc" id="L32">        OWNER,</span>
+
+        /** Private repositories that current user has access or collaborates to. */
+<span class="fc" id="L35">        PRIVATE,</span>
+
+        /** Public repositories that current user has access or collaborates to. */
+<span class="fc" id="L38">        PUBLIC;</span>
     }
 
     /**
-     * Gets emails.
-     *
-     * @return the emails
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@link #listEmails()}
+     * Create default GHMyself instance
      */
-    @Deprecated
-    public List&lt;String&gt; getEmails() throws IOException {
-<span class="fc" id="L57">        return getEmails2().stream().map(email -&gt; email.getEmail()).collect(Collectors.toList());</span>
-    }
-
-    /**
-     * Returns the read-only list of e-mail addresses configured for you.
-     * &lt;p&gt;
-     * This corresponds to the stuff you configure in https://github.com/settings/emails, and not to be confused with
-     * {@link #getEmail()} that shows your public e-mail address set in https://github.com/settings/profile
-     *
-     * @return Always non-null.
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@link #listEmails()}
-     */
-    @Deprecated
-    public List&lt;GHEmail&gt; getEmails2() throws IOException {
-<span class="fc" id="L73">        return listEmails().toList();</span>
-    }
-
-    /**
-     * Returns the read-only list of e-mail addresses configured for you.
-     * &lt;p&gt;
-     * This corresponds to the stuff you configure in https://github.com/settings/emails, and not to be confused with
-     * {@link #getEmail()} that shows your public e-mail address set in https://github.com/settings/profile
-     *
-     * @return Always non-null.
-     */
-    public PagedIterable&lt;GHEmail&gt; listEmails() {
-<span class="fc" id="L85">        return root().createRequest().withUrlPath(&quot;/user/emails&quot;).toIterable(GHEmail[].class, null);</span>
-    }
-
-    /**
-     * Returns the read-only list of all the public keys of the current user.
-     * &lt;p&gt;
-     * NOTE: When using OAuth authentication, the READ/WRITE User scope is required by the GitHub APIs, otherwise you
-     * will get a 404 NOT FOUND.
-     *
-     * @return Always non-null.
-     * @throws IOException
-     *             the io exception
-     */
-    public List&lt;GHKey&gt; getPublicKeys() throws IOException {
-<span class="nc" id="L99">        return root().createRequest().withUrlPath(&quot;/user/keys&quot;).toIterable(GHKey[].class, null).toList();</span>
-    }
+<span class="fc" id="L44">    public GHMyself() {</span>
+<span class="fc" id="L45">    }</span>
 
     /**
      * Add public SSH key for the user.
@@ -113,12 +58,118 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public GHKey addPublicKey(String title, String key) throws IOException {
-<span class="fc" id="L116">        return root().createRequest()</span>
-<span class="fc" id="L117">                .withUrlPath(&quot;/user/keys&quot;)</span>
-<span class="fc" id="L118">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L119">                .with(&quot;title&quot;, title)</span>
-<span class="fc" id="L120">                .with(&quot;key&quot;, key)</span>
-<span class="fc" id="L121">                .fetch(GHKey.class);</span>
+<span class="fc" id="L61">        return root().createRequest()</span>
+<span class="fc" id="L62">                .withUrlPath(&quot;/user/keys&quot;)</span>
+<span class="fc" id="L63">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L64">                .with(&quot;title&quot;, title)</span>
+<span class="fc" id="L65">                .with(&quot;key&quot;, key)</span>
+<span class="fc" id="L66">                .fetch(GHKey.class);</span>
+    }
+
+    /**
+     * Gets the organization that this user belongs to.
+     *
+     * @return the all organizations
+     * @throws IOException
+     *             the io exception
+     */
+    public GHPersonSet&lt;GHOrganization&gt; getAllOrganizations() throws IOException {
+<span class="nc" id="L77">        GHPersonSet&lt;GHOrganization&gt; orgs = new GHPersonSet&lt;GHOrganization&gt;();</span>
+<span class="nc" id="L78">        Set&lt;String&gt; names = new HashSet&lt;String&gt;();</span>
+<span class="nc" id="L79">        for (GHOrganization o : root().createRequest()</span>
+<span class="nc" id="L80">                .withUrlPath(&quot;/user/orgs&quot;)</span>
+<span class="nc" id="L81">                .toIterable(GHOrganization[].class, null)</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">                .toArray()) {</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">            if (names.add(o.getLogin())) // in case of rumoured duplicates in the data</span>
+<span class="nc" id="L84">                orgs.add(root().getOrganization(o.getLogin()));</span>
+        }
+<span class="nc" id="L86">        return orgs;</span>
+    }
+
+    /**
+     * Gets the all repositories this user owns (public and private).
+     *
+     * @return the all repositories
+     */
+    public synchronized Map&lt;String, GHRepository&gt; getAllRepositories() {
+<span class="nc" id="L95">        Map&lt;String, GHRepository&gt; repositories = new TreeMap&lt;String, GHRepository&gt;();</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        for (GHRepository r : listRepositories()) {</span>
+<span class="nc" id="L97">            repositories.put(r.getName(), r);</span>
+<span class="nc" id="L98">        }</span>
+<span class="nc" id="L99">        return Collections.unmodifiableMap(repositories);</span>
+    }
+
+    /**
+     * Lists installations of your GitHub App that the authenticated user has explicit permission to access. You must
+     * use a user-to-server OAuth access token, created for a user who has authorized your GitHub App, to access this
+     * endpoint.
+     *
+     * @return the paged iterable
+     * @see &lt;a href=
+     *      &quot;https://docs.github.com/en/rest/reference/apps#list-app-installations-accessible-to-the-user-access-token&quot;&gt;List
+     *      app installations accessible to the user access token&lt;/a&gt;
+     */
+    public PagedIterable&lt;GHAppInstallation&gt; getAppInstallations() {
+<span class="fc" id="L113">        return new GHAppInstallationsIterable(root());</span>
+    }
+
+    /**
+     * Gets emails.
+     *
+     * @return the emails
+     * @throws IOException
+     *             the io exception
+     * @deprecated Use {@link #listEmails()}
+     */
+    @Deprecated
+    public List&lt;String&gt; getEmails() throws IOException {
+<span class="fc" id="L126">        return getEmails2().stream().map(email -&gt; email.getEmail()).collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Returns the read-only list of e-mail addresses configured for you.
+     * &lt;p&gt;
+     * This corresponds to the stuff you configure in https://github.com/settings/emails, and not to be confused with
+     * {@link #getEmail()} that shows your public e-mail address set in https://github.com/settings/profile
+     *
+     * @return Always non-null.
+     * @throws IOException
+     *             the io exception
+     * @deprecated Use {@link #listEmails()}
+     */
+    @Deprecated
+    public List&lt;GHEmail&gt; getEmails2() throws IOException {
+<span class="fc" id="L142">        return listEmails().toList();</span>
+    }
+
+    /**
+     * Gets your membership in a specific organization.
+     *
+     * @param o
+     *            the o
+     * @return the membership
+     * @throws IOException
+     *             the io exception
+     */
+    public GHMembership getMembership(GHOrganization o) throws IOException {
+<span class="nc" id="L155">        return root().createRequest()</span>
+<span class="nc" id="L156">                .withUrlPath(&quot;/user/memberships/orgs/&quot; + o.getLogin())</span>
+<span class="nc" id="L157">                .fetch(GHMembership.class)</span>
+<span class="nc" id="L158">                .wrap(root());</span>
+    }
+
+    /**
+     * Returns the read-only list of all the public keys of the current user.
+     * &lt;p&gt;
+     * NOTE: When using OAuth authentication, the READ/WRITE User scope is required by the GitHub APIs, otherwise you
+     * will get a 404 NOT FOUND.
+     *
+     * @return Always non-null.
+     * @throws IOException
+     *             the io exception
+     */
+    public List&lt;GHKey&gt; getPublicKeys() throws IOException {
+<span class="nc" id="L172">        return root().createRequest().withUrlPath(&quot;/user/keys&quot;).toIterable(GHKey[].class, null).toList();</span>
     }
 
     /**
@@ -132,43 +183,45 @@ public class GHMyself extends GHUser {
      *             the io exception
      */
     public List&lt;GHVerifiedKey&gt; getPublicVerifiedKeys() throws IOException {
-<span class="nc" id="L135">        return root().createRequest()</span>
-<span class="nc" id="L136">                .withUrlPath(&quot;/users/&quot; + getLogin() + &quot;/keys&quot;)</span>
-<span class="nc" id="L137">                .toIterable(GHVerifiedKey[].class, null)</span>
-<span class="nc" id="L138">                .toList();</span>
+<span class="nc" id="L186">        return root().createRequest()</span>
+<span class="nc" id="L187">                .withUrlPath(&quot;/users/&quot; + getLogin() + &quot;/keys&quot;)</span>
+<span class="nc" id="L188">                .toIterable(GHVerifiedKey[].class, null)</span>
+<span class="nc" id="L189">                .toList();</span>
     }
 
     /**
-     * Gets the organization that this user belongs to.
+     * Returns the read-only list of e-mail addresses configured for you.
+     * &lt;p&gt;
+     * This corresponds to the stuff you configure in https://github.com/settings/emails, and not to be confused with
+     * {@link #getEmail()} that shows your public e-mail address set in https://github.com/settings/profile
      *
-     * @return the all organizations
-     * @throws IOException
-     *             the io exception
+     * @return Always non-null.
      */
-    public GHPersonSet&lt;GHOrganization&gt; getAllOrganizations() throws IOException {
-<span class="nc" id="L149">        GHPersonSet&lt;GHOrganization&gt; orgs = new GHPersonSet&lt;GHOrganization&gt;();</span>
-<span class="nc" id="L150">        Set&lt;String&gt; names = new HashSet&lt;String&gt;();</span>
-<span class="nc" id="L151">        for (GHOrganization o : root().createRequest()</span>
-<span class="nc" id="L152">                .withUrlPath(&quot;/user/orgs&quot;)</span>
-<span class="nc" id="L153">                .toIterable(GHOrganization[].class, null)</span>
-<span class="nc bnc" id="L154" title="All 2 branches missed.">                .toArray()) {</span>
-<span class="nc bnc" id="L155" title="All 2 branches missed.">            if (names.add(o.getLogin())) // in case of rumoured duplicates in the data</span>
-<span class="nc" id="L156">                orgs.add(root().getOrganization(o.getLogin()));</span>
-        }
-<span class="nc" id="L158">        return orgs;</span>
+    public PagedIterable&lt;GHEmail&gt; listEmails() {
+<span class="fc" id="L201">        return root().createRequest().withUrlPath(&quot;/user/emails&quot;).toIterable(GHEmail[].class, null);</span>
     }
 
     /**
-     * Gets the all repositories this user owns (public and private).
+     * List your organization memberships.
      *
-     * @return the all repositories
+     * @return the paged iterable
      */
-    public synchronized Map&lt;String, GHRepository&gt; getAllRepositories() {
-<span class="nc" id="L167">        Map&lt;String, GHRepository&gt; repositories = new TreeMap&lt;String, GHRepository&gt;();</span>
-<span class="nc bnc" id="L168" title="All 2 branches missed.">        for (GHRepository r : listRepositories()) {</span>
-<span class="nc" id="L169">            repositories.put(r.getName(), r);</span>
-<span class="nc" id="L170">        }</span>
-<span class="nc" id="L171">        return Collections.unmodifiableMap(repositories);</span>
+    public PagedIterable&lt;GHMembership&gt; listOrgMemberships() {
+<span class="fc" id="L210">        return listOrgMemberships(null);</span>
+    }
+
+    /**
+     * List your organization memberships.
+     *
+     * @param state
+     *            Filter by a specific state
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHMembership&gt; listOrgMemberships(final GHMembership.State state) {
+<span class="fc" id="L221">        return root().createRequest()</span>
+<span class="fc" id="L222">                .with(&quot;state&quot;, state)</span>
+<span class="fc" id="L223">                .withUrlPath(&quot;/user/memberships/orgs&quot;)</span>
+<span class="fc" id="L224">                .toIterable(GHMembership[].class, item -&gt; item.wrap(root()));</span>
     }
 
     /**
@@ -181,7 +234,7 @@ public class GHMyself extends GHUser {
      */
     @Override
     public PagedIterable&lt;GHRepository&gt; listRepositories() {
-<span class="fc" id="L184">        return listRepositories(30);</span>
+<span class="fc" id="L237">        return listRepositories(30);</span>
     }
 
     /**
@@ -199,8 +252,13 @@ public class GHMyself extends GHUser {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHRepository&gt; listRepositories(final int pageSize) {
-<span class="fc" id="L202">        return listRepositories(pageSize, RepositoryListFilter.ALL);</span>
+<span class="fc" id="L255">        return listRepositories(pageSize, RepositoryListFilter.ALL);</span>
     }
+
+    // public void addEmails(Collection&lt;String&gt; emails) throws IOException {
+    //// new Requester(root,ApiVersion.V3).withCredential().to(&quot;/user/emails&quot;);
+    // root.retrieveWithAuth3()
+    // }
 
     /**
      * List repositories of a certain type that are accessible by current authenticated user using the specified page
@@ -213,69 +271,11 @@ public class GHMyself extends GHUser {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHRepository&gt; listRepositories(final int pageSize, final RepositoryListFilter repoType) {
-<span class="fc" id="L216">        return root().createRequest()</span>
-<span class="fc" id="L217">                .with(&quot;type&quot;, repoType)</span>
-<span class="fc" id="L218">                .withUrlPath(&quot;/user/repos&quot;)</span>
-<span class="fc" id="L219">                .toIterable(GHRepository[].class, null)</span>
-<span class="fc" id="L220">                .withPageSize(pageSize);</span>
-    }
-
-    /**
-     * List your organization memberships.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;GHMembership&gt; listOrgMemberships() {
-<span class="fc" id="L229">        return listOrgMemberships(null);</span>
-    }
-
-    /**
-     * List your organization memberships.
-     *
-     * @param state
-     *            Filter by a specific state
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;GHMembership&gt; listOrgMemberships(final GHMembership.State state) {
-<span class="fc" id="L240">        return root().createRequest()</span>
-<span class="fc" id="L241">                .with(&quot;state&quot;, state)</span>
-<span class="fc" id="L242">                .withUrlPath(&quot;/user/memberships/orgs&quot;)</span>
-<span class="fc" id="L243">                .toIterable(GHMembership[].class, item -&gt; item.wrap(root()));</span>
-    }
-
-    /**
-     * Gets your membership in a specific organization.
-     *
-     * @param o
-     *            the o
-     * @return the membership
-     * @throws IOException
-     *             the io exception
-     */
-    public GHMembership getMembership(GHOrganization o) throws IOException {
-<span class="nc" id="L256">        return root().createRequest()</span>
-<span class="nc" id="L257">                .withUrlPath(&quot;/user/memberships/orgs/&quot; + o.getLogin())</span>
-<span class="nc" id="L258">                .fetch(GHMembership.class)</span>
-<span class="nc" id="L259">                .wrap(root());</span>
-    }
-
-    // public void addEmails(Collection&lt;String&gt; emails) throws IOException {
-    //// new Requester(root,ApiVersion.V3).withCredential().to(&quot;/user/emails&quot;);
-    // root.retrieveWithAuth3()
-    // }
-
-    /**
-     * Lists installations of your GitHub App that the authenticated user has explicit permission to access. You must
-     * use a user-to-server OAuth access token, created for a user who has authorized your GitHub App, to access this
-     * endpoint.
-     *
-     * @return the paged iterable
-     * @see &lt;a href=
-     *      &quot;https://docs.github.com/en/rest/reference/apps#list-app-installations-accessible-to-the-user-access-token&quot;&gt;List
-     *      app installations accessible to the user access token&lt;/a&gt;
-     */
-    public PagedIterable&lt;GHAppInstallation&gt; getAppInstallations() {
-<span class="fc" id="L278">        return new GHAppInstallationsIterable(root());</span>
+<span class="fc" id="L274">        return root().createRequest()</span>
+<span class="fc" id="L275">                .with(&quot;type&quot;, repoType)</span>
+<span class="fc" id="L276">                .withUrlPath(&quot;/user/repos&quot;)</span>
+<span class="fc" id="L277">                .toIterable(GHRepository[].class, null)</span>
+<span class="fc" id="L278">                .withPageSize(pageSize);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

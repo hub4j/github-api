@@ -20,25 +20,19 @@ import java.util.TreeMap;
  */
 public abstract class GHPerson extends GHObject {
 
-    /**
-     * Create default GHPerson instance
-     */
-<span class="fc" id="L26">    public GHPerson() {</span>
-<span class="fc" id="L27">    }</span>
+    /** The public gists. */
+    protected int followers, following, publicRepos, publicGists;
 
-    /** The avatar url. */
-    // core data fields that exist even for &quot;small&quot; user data (such as the user info in pull request)
-    protected String login, avatarUrl;
+    /** The html url. */
+    protected String htmlUrl;
 
     /** The twitter username. */
     // other fields (that only show up in full data)
     protected String location, blog, email, bio, name, company, type, twitterUsername;
 
-    /** The html url. */
-    protected String htmlUrl;
-
-    /** The public gists. */
-    protected int followers, following, publicRepos, publicGists;
+    /** The avatar url. */
+    // core data fields that exist even for &quot;small&quot; user data (such as the user info in pull request)
+    protected String login, avatarUrl;
 
     /** The hireable. */
     protected boolean siteAdmin, hireable;
@@ -48,25 +42,158 @@ public abstract class GHPerson extends GHObject {
     protected Integer totalPrivateRepos;
 
     /**
-     * Fully populate the data by retrieving missing data.
-     * &lt;p&gt;
-     * Depending on the original API call where this object is created, it may not contain everything.
+     * Create default GHPerson instance
+     */
+<span class="fc" id="L47">    public GHPerson() {</span>
+<span class="fc" id="L48">    }</span>
+
+    /**
+     * Returns a string of the avatar image URL.
      *
+     * @return the avatar url
+     */
+    public String getAvatarUrl() {
+<span class="fc" id="L56">        return avatarUrl;</span>
+    }
+
+    /**
+     * Gets the blog URL of this user.
+     *
+     * @return the blog
      * @throws IOException
      *             the io exception
      */
-    protected synchronized void populate() throws IOException {
-<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (super.getCreatedAt() != null) {</span>
-<span class="fc" id="L60">            return; // already populated</span>
-        }
-<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        if (isOffline()) {</span>
-<span class="nc" id="L63">            return; // cannot populate, will have to live with what we have</span>
-        }
-<span class="fc" id="L65">        URL url = getUrl();</span>
-<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        if (url != null) {</span>
-<span class="fc" id="L67">            root().createRequest().setRawUrlPath(url.toString()).fetchInto(this);</span>
-        }
-<span class="fc" id="L69">    }</span>
+    public String getBlog() throws IOException {
+<span class="fc" id="L67">        populate();</span>
+<span class="fc" id="L68">        return blog;</span>
+    }
+
+    /**
+     * Gets the company name of this user, like &quot;Sun Microsystems, Inc.&quot;
+     *
+     * @return the company
+     * @throws IOException
+     *             the io exception
+     */
+    public String getCompany() throws IOException {
+<span class="fc" id="L79">        populate();</span>
+<span class="fc" id="L80">        return company;</span>
+    }
+
+    /**
+     * Gets the created at.
+     *
+     * @return the created at
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getCreatedAt() throws IOException {
+<span class="fc" id="L92">        populate();</span>
+<span class="fc" id="L93">        return super.getCreatedAt();</span>
+    }
+
+    /**
+     * Gets the e-mail address of the user.
+     *
+     * @return the email
+     * @throws IOException
+     *             the io exception
+     */
+    public String getEmail() throws IOException {
+<span class="fc" id="L104">        populate();</span>
+<span class="fc" id="L105">        return email;</span>
+    }
+
+    /**
+     * Gets followers count.
+     *
+     * @return the followers count
+     * @throws IOException
+     *             the io exception
+     */
+    public int getFollowersCount() throws IOException {
+<span class="fc" id="L116">        populate();</span>
+<span class="fc" id="L117">        return followers;</span>
+    }
+
+    /**
+     * Gets following count.
+     *
+     * @return the following count
+     * @throws IOException
+     *             the io exception
+     */
+    public int getFollowingCount() throws IOException {
+<span class="fc" id="L128">        populate();</span>
+<span class="fc" id="L129">        return following;</span>
+    }
+
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
+    public URL getHtmlUrl() {
+<span class="fc" id="L138">        return GitHubClient.parseURL(htmlUrl);</span>
+    }
+
+    /**
+     * Gets the location of this user, like &quot;Santa Clara, California&quot;.
+     *
+     * @return the location
+     * @throws IOException
+     *             the io exception
+     */
+    public String getLocation() throws IOException {
+<span class="fc" id="L149">        populate();</span>
+<span class="fc" id="L150">        return location;</span>
+    }
+
+    /**
+     * Gets the login ID of this user, like 'kohsuke'.
+     *
+     * @return the login
+     */
+    public String getLogin() {
+<span class="fc" id="L159">        return login;</span>
+    }
+
+    /**
+     * Gets the human-readable name of the user, like &quot;Kohsuke Kawaguchi&quot;.
+     *
+     * @return the name
+     * @throws IOException
+     *             the io exception
+     */
+    public String getName() throws IOException {
+<span class="fc" id="L170">        populate();</span>
+<span class="fc" id="L171">        return name;</span>
+    }
+
+    /**
+     * Gets public gist count.
+     *
+     * @return the public gist count
+     * @throws IOException
+     *             the io exception
+     */
+    public int getPublicGistCount() throws IOException {
+<span class="fc" id="L182">        populate();</span>
+<span class="fc" id="L183">        return publicGists;</span>
+    }
+
+    /**
+     * Gets public repo count.
+     *
+     * @return the public repo count
+     * @throws IOException
+     *             the io exception
+     */
+    public int getPublicRepoCount() throws IOException {
+<span class="fc" id="L194">        populate();</span>
+<span class="fc" id="L195">        return publicRepos;</span>
+    }
 
     /**
      * Gets the public repositories this user owns.
@@ -77,39 +204,11 @@ public abstract class GHPerson extends GHObject {
      * @return the repositories
      */
     public synchronized Map&lt;String, GHRepository&gt; getRepositories() {
-<span class="fc" id="L80">        Map&lt;String, GHRepository&gt; repositories = new TreeMap&lt;String, GHRepository&gt;();</span>
-<span class="fc bfc" id="L81" title="All 2 branches covered.">        for (GHRepository r : listRepositories().withPageSize(100)) {</span>
-<span class="fc" id="L82">            repositories.put(r.getName(), r);</span>
-<span class="fc" id="L83">        }</span>
-<span class="fc" id="L84">        return Collections.unmodifiableMap(repositories);</span>
-    }
-
-    /**
-     * List all the repositories using a default of 30 items page size.
-     * &lt;p&gt;
-     * Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;GHRepository&gt; listRepositories() {
-<span class="fc" id="L95">        return root().createRequest()</span>
-<span class="fc" id="L96">                .withUrlPath(&quot;/users/&quot; + login + &quot;/repos&quot;)</span>
-<span class="fc" id="L97">                .toIterable(GHRepository[].class, null)</span>
-<span class="fc" id="L98">                .withPageSize(30);</span>
-    }
-
-    /**
-     * Lists up all the repositories using the specified page size.
-     *
-     * @param pageSize
-     *            size for each page of items returned by GitHub. Maximum page size is 100. Unlike
-     *            {@link #getRepositories()}, this does not wait until all the repositories are returned.
-     * @return the paged iterable
-     * @deprecated Use #listRepositories().withPageSize() instead.
-     */
-    @Deprecated
-    public PagedIterable&lt;GHRepository&gt; listRepositories(final int pageSize) {
-<span class="fc" id="L112">        return listRepositories().withPageSize(pageSize);</span>
+<span class="fc" id="L207">        Map&lt;String, GHRepository&gt; repositories = new TreeMap&lt;String, GHRepository&gt;();</span>
+<span class="fc bfc" id="L208" title="All 2 branches covered.">        for (GHRepository r : listRepositories().withPageSize(100)) {</span>
+<span class="fc" id="L209">            repositories.put(r.getName(), r);</span>
+<span class="fc" id="L210">        }</span>
+<span class="fc" id="L211">        return Collections.unmodifiableMap(repositories);</span>
     }
 
     /**
@@ -123,10 +222,73 @@ public abstract class GHPerson extends GHObject {
      */
     public GHRepository getRepository(String name) throws IOException {
         try {
-<span class="fc" id="L126">            return GHRepository.read(root(), login, name);</span>
-<span class="fc" id="L127">        } catch (FileNotFoundException e) {</span>
-<span class="fc" id="L128">            return null;</span>
+<span class="fc" id="L225">            return GHRepository.read(root(), login, name);</span>
+<span class="fc" id="L226">        } catch (FileNotFoundException e) {</span>
+<span class="fc" id="L227">            return null;</span>
         }
+    }
+
+    /**
+     * Gets total private repo count.
+     *
+     * @return the total private repo count
+     * @throws IOException
+     *             the io exception
+     */
+    public Optional&lt;Integer&gt; getTotalPrivateRepoCount() throws IOException {
+<span class="fc" id="L239">        populate();</span>
+<span class="fc" id="L240">        return Optional.ofNullable(totalPrivateRepos);</span>
+    }
+
+    /**
+     * Gets the Twitter Username of this user, like &quot;GitHub&quot;.
+     *
+     * @return the Twitter username
+     * @throws IOException
+     *             the io exception
+     */
+    public String getTwitterUsername() throws IOException {
+<span class="fc" id="L251">        populate();</span>
+<span class="fc" id="L252">        return twitterUsername;</span>
+    }
+
+    /**
+     * Gets the type. This is either &quot;User&quot; or &quot;Organization&quot;.
+     *
+     * @return the type
+     * @throws IOException
+     *             the io exception
+     */
+    public String getType() throws IOException {
+<span class="fc bfc" id="L263" title="All 2 branches covered.">        if (type == null) {</span>
+<span class="fc" id="L264">            populate();</span>
+        }
+<span class="fc" id="L266">        return type;</span>
+    }
+
+    /**
+     * Gets the updated at.
+     *
+     * @return the updated at
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getUpdatedAt() throws IOException {
+<span class="fc" id="L278">        populate();</span>
+<span class="fc" id="L279">        return super.getUpdatedAt();</span>
+    }
+
+    /**
+     * Gets the siteAdmin field.
+     *
+     * @return the siteAdmin field
+     * @throws IOException
+     *             the io exception
+     */
+    public boolean isSiteAdmin() throws IOException {
+<span class="fc" id="L290">        populate();</span>
+<span class="fc" id="L291">        return siteAdmin;</span>
     }
 
     /**
@@ -139,214 +301,52 @@ public abstract class GHPerson extends GHObject {
     public abstract PagedIterable&lt;GHEventInfo&gt; listEvents() throws IOException;
 
     /**
-     * Returns a string of the avatar image URL.
+     * List all the repositories using a default of 30 items page size.
+     * &lt;p&gt;
+     * Unlike {@link #getRepositories()}, this does not wait until all the repositories are returned.
      *
-     * @return the avatar url
+     * @return the paged iterable
      */
-    public String getAvatarUrl() {
-<span class="fc" id="L147">        return avatarUrl;</span>
+    public PagedIterable&lt;GHRepository&gt; listRepositories() {
+<span class="fc" id="L311">        return root().createRequest()</span>
+<span class="fc" id="L312">                .withUrlPath(&quot;/users/&quot; + login + &quot;/repos&quot;)</span>
+<span class="fc" id="L313">                .toIterable(GHRepository[].class, null)</span>
+<span class="fc" id="L314">                .withPageSize(30);</span>
     }
 
     /**
-     * Gets the login ID of this user, like 'kohsuke'.
+     * Lists up all the repositories using the specified page size.
      *
-     * @return the login
+     * @param pageSize
+     *            size for each page of items returned by GitHub. Maximum page size is 100. Unlike
+     *            {@link #getRepositories()}, this does not wait until all the repositories are returned.
+     * @return the paged iterable
+     * @deprecated Use #listRepositories().withPageSize() instead.
      */
-    public String getLogin() {
-<span class="fc" id="L156">        return login;</span>
+    @Deprecated
+    public PagedIterable&lt;GHRepository&gt; listRepositories(final int pageSize) {
+<span class="fc" id="L328">        return listRepositories().withPageSize(pageSize);</span>
     }
 
     /**
-     * Gets the human-readable name of the user, like &quot;Kohsuke Kawaguchi&quot;.
+     * Fully populate the data by retrieving missing data.
+     * &lt;p&gt;
+     * Depending on the original API call where this object is created, it may not contain everything.
      *
-     * @return the name
      * @throws IOException
      *             the io exception
      */
-    public String getName() throws IOException {
-<span class="fc" id="L167">        populate();</span>
-<span class="fc" id="L168">        return name;</span>
-    }
-
-    /**
-     * Gets the company name of this user, like &quot;Sun Microsystems, Inc.&quot;
-     *
-     * @return the company
-     * @throws IOException
-     *             the io exception
-     */
-    public String getCompany() throws IOException {
-<span class="fc" id="L179">        populate();</span>
-<span class="fc" id="L180">        return company;</span>
-    }
-
-    /**
-     * Gets the location of this user, like &quot;Santa Clara, California&quot;.
-     *
-     * @return the location
-     * @throws IOException
-     *             the io exception
-     */
-    public String getLocation() throws IOException {
-<span class="fc" id="L191">        populate();</span>
-<span class="fc" id="L192">        return location;</span>
-    }
-
-    /**
-     * Gets the Twitter Username of this user, like &quot;GitHub&quot;.
-     *
-     * @return the Twitter username
-     * @throws IOException
-     *             the io exception
-     */
-    public String getTwitterUsername() throws IOException {
-<span class="fc" id="L203">        populate();</span>
-<span class="fc" id="L204">        return twitterUsername;</span>
-    }
-
-    /**
-     * Gets the created at.
-     *
-     * @return the created at
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
-    public Instant getCreatedAt() throws IOException {
-<span class="fc" id="L216">        populate();</span>
-<span class="fc" id="L217">        return super.getCreatedAt();</span>
-    }
-
-    /**
-     * Gets the updated at.
-     *
-     * @return the updated at
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
-    public Instant getUpdatedAt() throws IOException {
-<span class="fc" id="L229">        populate();</span>
-<span class="fc" id="L230">        return super.getUpdatedAt();</span>
-    }
-
-    /**
-     * Gets the blog URL of this user.
-     *
-     * @return the blog
-     * @throws IOException
-     *             the io exception
-     */
-    public String getBlog() throws IOException {
-<span class="fc" id="L241">        populate();</span>
-<span class="fc" id="L242">        return blog;</span>
-    }
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     */
-    public URL getHtmlUrl() {
-<span class="fc" id="L251">        return GitHubClient.parseURL(htmlUrl);</span>
-    }
-
-    /**
-     * Gets the e-mail address of the user.
-     *
-     * @return the email
-     * @throws IOException
-     *             the io exception
-     */
-    public String getEmail() throws IOException {
-<span class="fc" id="L262">        populate();</span>
-<span class="fc" id="L263">        return email;</span>
-    }
-
-    /**
-     * Gets public gist count.
-     *
-     * @return the public gist count
-     * @throws IOException
-     *             the io exception
-     */
-    public int getPublicGistCount() throws IOException {
-<span class="fc" id="L274">        populate();</span>
-<span class="fc" id="L275">        return publicGists;</span>
-    }
-
-    /**
-     * Gets public repo count.
-     *
-     * @return the public repo count
-     * @throws IOException
-     *             the io exception
-     */
-    public int getPublicRepoCount() throws IOException {
-<span class="fc" id="L286">        populate();</span>
-<span class="fc" id="L287">        return publicRepos;</span>
-    }
-
-    /**
-     * Gets following count.
-     *
-     * @return the following count
-     * @throws IOException
-     *             the io exception
-     */
-    public int getFollowingCount() throws IOException {
-<span class="fc" id="L298">        populate();</span>
-<span class="fc" id="L299">        return following;</span>
-    }
-
-    /**
-     * Gets followers count.
-     *
-     * @return the followers count
-     * @throws IOException
-     *             the io exception
-     */
-    public int getFollowersCount() throws IOException {
-<span class="fc" id="L310">        populate();</span>
-<span class="fc" id="L311">        return followers;</span>
-    }
-
-    /**
-     * Gets the type. This is either &quot;User&quot; or &quot;Organization&quot;.
-     *
-     * @return the type
-     * @throws IOException
-     *             the io exception
-     */
-    public String getType() throws IOException {
-<span class="fc bfc" id="L322" title="All 2 branches covered.">        if (type == null) {</span>
-<span class="fc" id="L323">            populate();</span>
+    protected synchronized void populate() throws IOException {
+<span class="fc bfc" id="L340" title="All 2 branches covered.">        if (super.getCreatedAt() != null) {</span>
+<span class="fc" id="L341">            return; // already populated</span>
         }
-<span class="fc" id="L325">        return type;</span>
-    }
-
-    /**
-     * Gets the siteAdmin field.
-     *
-     * @return the siteAdmin field
-     * @throws IOException
-     *             the io exception
-     */
-    public boolean isSiteAdmin() throws IOException {
-<span class="fc" id="L336">        populate();</span>
-<span class="fc" id="L337">        return siteAdmin;</span>
-    }
-
-    /**
-     * Gets total private repo count.
-     *
-     * @return the total private repo count
-     * @throws IOException
-     *             the io exception
-     */
-    public Optional&lt;Integer&gt; getTotalPrivateRepoCount() throws IOException {
-<span class="fc" id="L348">        populate();</span>
-<span class="fc" id="L349">        return Optional.ofNullable(totalPrivateRepos);</span>
-    }
+<span class="pc bpc" id="L343" title="1 of 2 branches missed.">        if (isOffline()) {</span>
+<span class="nc" id="L344">            return; // cannot populate, will have to live with what we have</span>
+        }
+<span class="fc" id="L346">        URL url = getUrl();</span>
+<span class="pc bpc" id="L347" title="1 of 2 branches missed.">        if (url != null) {</span>
+<span class="fc" id="L348">            root().createRequest().setRawUrlPath(url.toString()).fetchInto(this);</span>
+        }
+<span class="fc" id="L350">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

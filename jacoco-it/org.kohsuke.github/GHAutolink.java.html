@@ -15,10 +15,10 @@ import java.io.IOException;
 public class GHAutolink {
 
     private int id;
-    private String keyPrefix;
-    private String urlTemplate;
     private boolean isAlphanumeric;
+    private String keyPrefix;
     private GHRepository owner;
+    private String urlTemplate;
 
     /**
      * Instantiates a new Gh autolink.
@@ -27,12 +27,26 @@ public class GHAutolink {
 <span class="fc" id="L27">    }</span>
 
     /**
+     * Deletes this autolink
+     *
+     * @throws IOException
+     *             if the deletion fails
+     */
+    public void delete() throws IOException {
+<span class="fc" id="L36">        owner.root()</span>
+<span class="fc" id="L37">                .createRequest()</span>
+<span class="fc" id="L38">                .method(&quot;DELETE&quot;)</span>
+<span class="fc" id="L39">                .withUrlPath(String.format(&quot;/repos/%s/%s/autolinks/%d&quot;, owner.getOwnerName(), owner.getName(), getId()))</span>
+<span class="fc" id="L40">                .send();</span>
+<span class="fc" id="L41">    }</span>
+
+    /**
      * Gets the autolink ID
      *
      * @return the id
      */
     public int getId() {
-<span class="fc" id="L35">        return id;</span>
+<span class="fc" id="L49">        return id;</span>
     }
 
     /**
@@ -41,25 +55,7 @@ public class GHAutolink {
      * @return the key prefix string
      */
     public String getKeyPrefix() {
-<span class="fc" id="L44">        return keyPrefix;</span>
-    }
-
-    /**
-     * Gets the URL template that will be used for matching
-     *
-     * @return the URL template string
-     */
-    public String getUrlTemplate() {
-<span class="fc" id="L53">        return urlTemplate;</span>
-    }
-
-    /**
-     * Checks if the autolink uses alphanumeric values
-     *
-     * @return true if alphanumeric, false otherwise
-     */
-    public boolean isAlphanumeric() {
-<span class="fc" id="L62">        return isAlphanumeric;</span>
+<span class="fc" id="L58">        return keyPrefix;</span>
     }
 
     /**
@@ -69,22 +65,26 @@ public class GHAutolink {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getOwner() {
-<span class="fc" id="L72">        return owner;</span>
+<span class="fc" id="L68">        return owner;</span>
     }
 
     /**
-     * Deletes this autolink
+     * Gets the URL template that will be used for matching
      *
-     * @throws IOException
-     *             if the deletion fails
+     * @return the URL template string
      */
-    public void delete() throws IOException {
-<span class="fc" id="L82">        owner.root()</span>
-<span class="fc" id="L83">                .createRequest()</span>
-<span class="fc" id="L84">                .method(&quot;DELETE&quot;)</span>
-<span class="fc" id="L85">                .withUrlPath(String.format(&quot;/repos/%s/%s/autolinks/%d&quot;, owner.getOwnerName(), owner.getName(), getId()))</span>
-<span class="fc" id="L86">                .send();</span>
-<span class="fc" id="L87">    }</span>
+    public String getUrlTemplate() {
+<span class="fc" id="L77">        return urlTemplate;</span>
+    }
+
+    /**
+     * Checks if the autolink uses alphanumeric values
+     *
+     * @return true if alphanumeric, false otherwise
+     */
+    public boolean isAlphanumeric() {
+<span class="fc" id="L86">        return isAlphanumeric;</span>
+    }
 
     /**
      * Wraps this autolink with its owner repository.

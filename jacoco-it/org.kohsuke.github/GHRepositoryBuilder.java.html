@@ -29,18 +29,16 @@ abstract class GHRepositoryBuilder&lt;S&gt; extends AbstractBuilder&lt;GHReposit
 <span class="fc" id="L29">    }</span>
 
     /**
-     * Allow or disallow squash-merging pull requests.
+     * Allow or disallow private forks
      *
      * @param enabled
      *            true if enabled
-     *
      * @return a builder to continue with building
-     *
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public S allowSquashMerge(boolean enabled) throws IOException {
-<span class="fc" id="L43">        return with(&quot;allow_squash_merge&quot;, enabled);</span>
+    public S allowForking(boolean enabled) throws IOException {
+<span class="fc" id="L41">        return with(&quot;allow_forking&quot;, enabled);</span>
     }
 
     /**
@@ -55,7 +53,7 @@ abstract class GHRepositoryBuilder&lt;S&gt; extends AbstractBuilder&lt;GHReposit
      *             In case of any networking error or error from the server.
      */
     public S allowMergeCommit(boolean enabled) throws IOException {
-<span class="fc" id="L58">        return with(&quot;allow_merge_commit&quot;, enabled);</span>
+<span class="fc" id="L56">        return with(&quot;allow_merge_commit&quot;, enabled);</span>
     }
 
     /**
@@ -70,20 +68,35 @@ abstract class GHRepositoryBuilder&lt;S&gt; extends AbstractBuilder&lt;GHReposit
      *             In case of any networking error or error from the server.
      */
     public S allowRebaseMerge(boolean enabled) throws IOException {
-<span class="fc" id="L73">        return with(&quot;allow_rebase_merge&quot;, enabled);</span>
+<span class="fc" id="L71">        return with(&quot;allow_rebase_merge&quot;, enabled);</span>
     }
 
     /**
-     * Allow or disallow private forks
+     * Allow or disallow squash-merging pull requests.
      *
      * @param enabled
      *            true if enabled
+     *
+     * @return a builder to continue with building
+     *
+     * @throws IOException
+     *             In case of any networking error or error from the server.
+     */
+    public S allowSquashMerge(boolean enabled) throws IOException {
+<span class="fc" id="L86">        return with(&quot;allow_squash_merge&quot;, enabled);</span>
+    }
+
+    /**
+     * Default repository branch.
+     *
+     * @param branch
+     *            branch name
      * @return a builder to continue with building
      * @throws IOException
      *             In case of any networking error or error from the server.
      */
-    public S allowForking(boolean enabled) throws IOException {
-<span class="fc" id="L86">        return with(&quot;allow_forking&quot;, enabled);</span>
+    public S defaultBranch(String branch) throws IOException {
+<span class="nc" id="L99">        return with(&quot;default_branch&quot;, branch);</span>
     }
 
     /**
@@ -98,20 +111,7 @@ abstract class GHRepositoryBuilder&lt;S&gt; extends AbstractBuilder&lt;GHReposit
      *             In case of any networking error or error from the server.
      */
     public S deleteBranchOnMerge(boolean enabled) throws IOException {
-<span class="fc" id="L101">        return with(&quot;delete_branch_on_merge&quot;, enabled);</span>
-    }
-
-    /**
-     * Default repository branch.
-     *
-     * @param branch
-     *            branch name
-     * @return a builder to continue with building
-     * @throws IOException
-     *             In case of any networking error or error from the server.
-     */
-    public S defaultBranch(String branch) throws IOException {
-<span class="nc" id="L114">        return with(&quot;default_branch&quot;, branch);</span>
+<span class="fc" id="L114">        return with(&quot;delete_branch_on_merge&quot;, enabled);</span>
     }
 
     /**
@@ -128,94 +128,15 @@ abstract class GHRepositoryBuilder&lt;S&gt; extends AbstractBuilder&lt;GHReposit
     }
 
     /**
-     * Homepage for repository.
+     * Done.
      *
-     * @param homepage
-     *            homepage of repository
-     * @return a builder to continue with building
+     * @return the GH repository
      * @throws IOException
-     *             In case of any networking error or error from the server.
+     *             Signals that an I/O exception has occurred.
      */
-    public S homepage(URL homepage) throws IOException {
-<span class="nc" id="L140">        return homepage(homepage.toExternalForm());</span>
-    }
-
-    /**
-     * Homepage for repository.
-     *
-     * @param homepage
-     *            homepage of repository
-     * @return a builder to continue with building
-     * @throws IOException
-     *             In case of any networking error or error from the server.
-     */
-    public S homepage(String homepage) throws IOException {
-<span class="fc" id="L153">        return with(&quot;homepage&quot;, homepage);</span>
-    }
-
-    /**
-     * Sets the repository to private.
-     *
-     * @param enabled
-     *            private if true
-     * @return a builder to continue with building
-     * @throws IOException
-     *             In case of any networking error or error from the server.
-     */
-    public S private_(boolean enabled) throws IOException {
-<span class="fc" id="L166">        return with(&quot;private&quot;, enabled);</span>
-    }
-
-    /**
-     * Sets the repository visibility.
-     *
-     * @param visibility
-     *            visibility of repository
-     * @return a builder to continue with building
-     * @throws IOException
-     *             In case of any networking error or error from the server.
-     */
-    public S visibility(final Visibility visibility) throws IOException {
-<span class="fc" id="L179">        return with(&quot;visibility&quot;, visibility.toString());</span>
-    }
-
-    /**
-     * Enables issue tracker.
-     *
-     * @param enabled
-     *            true if enabled
-     * @return a builder to continue with building
-     * @throws IOException
-     *             In case of any networking error or error from the server.
-     */
-    public S issues(boolean enabled) throws IOException {
-<span class="fc" id="L192">        return with(&quot;has_issues&quot;, enabled);</span>
-    }
-
-    /**
-     * Enables projects.
-     *
-     * @param enabled
-     *            true if enabled
-     * @return a builder to continue with building
-     * @throws IOException
-     *             In case of any networking error or error from the server.
-     */
-    public S projects(boolean enabled) throws IOException {
-<span class="fc" id="L205">        return with(&quot;has_projects&quot;, enabled);</span>
-    }
-
-    /**
-     * Enables wiki.
-     *
-     * @param enabled
-     *            true if enabled
-     * @return a builder to continue with building
-     * @throws IOException
-     *             In case of any networking error or error from the server.
-     */
-    public S wiki(boolean enabled) throws IOException {
-<span class="fc" id="L218">        return with(&quot;has_wiki&quot;, enabled);</span>
+    @Override
+    public GHRepository done() throws IOException {
+<span class="fc" id="L139">        return super.done();</span>
     }
 
     /**
@@ -228,7 +149,33 @@ abstract class GHRepositoryBuilder&lt;S&gt; extends AbstractBuilder&lt;GHReposit
      *             In case of any networking error or error from the server.
      */
     public S downloads(boolean enabled) throws IOException {
-<span class="fc" id="L231">        return with(&quot;has_downloads&quot;, enabled);</span>
+<span class="fc" id="L152">        return with(&quot;has_downloads&quot;, enabled);</span>
+    }
+
+    /**
+     * Homepage for repository.
+     *
+     * @param homepage
+     *            homepage of repository
+     * @return a builder to continue with building
+     * @throws IOException
+     *             In case of any networking error or error from the server.
+     */
+    public S homepage(String homepage) throws IOException {
+<span class="fc" id="L165">        return with(&quot;homepage&quot;, homepage);</span>
+    }
+
+    /**
+     * Homepage for repository.
+     *
+     * @param homepage
+     *            homepage of repository
+     * @return a builder to continue with building
+     * @throws IOException
+     *             In case of any networking error or error from the server.
+     */
+    public S homepage(URL homepage) throws IOException {
+<span class="nc" id="L178">        return homepage(homepage.toExternalForm());</span>
     }
 
     /**
@@ -241,19 +188,72 @@ abstract class GHRepositoryBuilder&lt;S&gt; extends AbstractBuilder&lt;GHReposit
      *             In case of any networking error or error from the server.
      */
     public S isTemplate(boolean enabled) throws IOException {
-<span class="fc" id="L244">        return with(&quot;is_template&quot;, enabled);</span>
+<span class="fc" id="L191">        return with(&quot;is_template&quot;, enabled);</span>
     }
 
     /**
-     * Done.
+     * Enables issue tracker.
      *
-     * @return the GH repository
+     * @param enabled
+     *            true if enabled
+     * @return a builder to continue with building
      * @throws IOException
-     *             Signals that an I/O exception has occurred.
+     *             In case of any networking error or error from the server.
      */
-    @Override
-    public GHRepository done() throws IOException {
-<span class="fc" id="L256">        return super.done();</span>
+    public S issues(boolean enabled) throws IOException {
+<span class="fc" id="L204">        return with(&quot;has_issues&quot;, enabled);</span>
+    }
+
+    /**
+     * Sets the repository to private.
+     *
+     * @param enabled
+     *            private if true
+     * @return a builder to continue with building
+     * @throws IOException
+     *             In case of any networking error or error from the server.
+     */
+    public S private_(boolean enabled) throws IOException {
+<span class="fc" id="L217">        return with(&quot;private&quot;, enabled);</span>
+    }
+
+    /**
+     * Enables projects.
+     *
+     * @param enabled
+     *            true if enabled
+     * @return a builder to continue with building
+     * @throws IOException
+     *             In case of any networking error or error from the server.
+     */
+    public S projects(boolean enabled) throws IOException {
+<span class="fc" id="L230">        return with(&quot;has_projects&quot;, enabled);</span>
+    }
+
+    /**
+     * Sets the repository visibility.
+     *
+     * @param visibility
+     *            visibility of repository
+     * @return a builder to continue with building
+     * @throws IOException
+     *             In case of any networking error or error from the server.
+     */
+    public S visibility(final Visibility visibility) throws IOException {
+<span class="fc" id="L243">        return with(&quot;visibility&quot;, visibility.toString());</span>
+    }
+
+    /**
+     * Enables wiki.
+     *
+     * @param enabled
+     *            true if enabled
+     * @return a builder to continue with building
+     * @throws IOException
+     *             In case of any networking error or error from the server.
+     */
+    public S wiki(boolean enabled) throws IOException {
+<span class="fc" id="L256">        return with(&quot;has_wiki&quot;, enabled);</span>
     }
 
     /**

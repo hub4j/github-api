@@ -36,244 +36,6 @@ import static java.net.HttpURLConnection.HTTP_OK;
  */
 public abstract class GitHubConnectorResponse implements Closeable {
 
-<span class="fc" id="L39">    private static final Comparator&lt;String&gt; nullableCaseInsensitiveComparator = Comparator</span>
-<span class="fc" id="L40">            .nullsFirst(String.CASE_INSENSITIVE_ORDER);</span>
-
-    private final int statusCode;
-
-    @Nonnull
-    private final GitHubConnectorRequest request;
-    @Nonnull
-    private final Map&lt;String, List&lt;String&gt;&gt; headers;
-<span class="fc" id="L48">    private boolean bodyStreamCalled = false;</span>
-<span class="fc" id="L49">    private InputStream bodyStream = null;</span>
-<span class="fc" id="L50">    private byte[] bodyBytes = null;</span>
-<span class="fc" id="L51">    private boolean isClosed = false;</span>
-    private boolean isBodyStreamRereadable;
-
-    /**
-     * GitHubConnectorResponse constructor
-     *
-     * @param request
-     *            the request
-     * @param statusCode
-     *            the status code
-     * @param headers
-     *            the headers
-     */
-    protected GitHubConnectorResponse(@Nonnull GitHubConnectorRequest request,
-            int statusCode,
-<span class="fc" id="L66">            @Nonnull Map&lt;String, List&lt;String&gt;&gt; headers) {</span>
-<span class="fc" id="L67">        this.request = request;</span>
-<span class="fc" id="L68">        this.statusCode = statusCode;</span>
-
-        // Response header field names must be case-insensitive.
-<span class="fc" id="L71">        TreeMap&lt;String, List&lt;String&gt;&gt; caseInsensitiveMap = new TreeMap&lt;&gt;(nullableCaseInsensitiveComparator);</span>
-<span class="fc bfc" id="L72" title="All 2 branches covered.">        for (Map.Entry&lt;String, List&lt;String&gt;&gt; entry : headers.entrySet()) {</span>
-<span class="fc" id="L73">            caseInsensitiveMap.put(entry.getKey(), Collections.unmodifiableList(new ArrayList&lt;&gt;(entry.getValue())));</span>
-<span class="fc" id="L74">        }</span>
-<span class="fc" id="L75">        this.headers = Collections.unmodifiableMap(caseInsensitiveMap);</span>
-<span class="fc" id="L76">        this.isBodyStreamRereadable = false;</span>
-<span class="fc" id="L77">    }</span>
-
-    /**
-     * Gets the value of a header field for this response.
-     *
-     * @param name
-     *            the name of the header field.
-     * @return the value of the header field, or {@code null} if the header isn't set.
-     */
-    @CheckForNull
-    public String header(String name) {
-<span class="fc" id="L88">        String result = null;</span>
-<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (headers.containsKey(name)) {</span>
-<span class="fc" id="L90">            result = headers.get(name).get(0);</span>
-        }
-<span class="fc" id="L92">        return result;</span>
-    }
-
-    /**
-     * The response body as an {@link InputStream}.
-     *
-     * When {@link #isBodyStreamRereadable} is false, {@link #bodyStream()} can only be called once and the returned
-     * stream should be assumed to be read-once and not resetable. This is the default behavior for HTTP_OK responses
-     * and significantly reduces memory usage.
-     *
-     * When {@link #isBodyStreamRereadable} is true, {@link #bodyStream()} can be called be called multiple times. The
-     * full stream data is read into a byte array during the first call. Each call returns a new stream backed by the
-     * same byte array. This uses more memory, but is required to enable rereading the body stream during trace logging,
-     * debugging, and error responses.
-     *
-     * @return the response body
-     * @throws IOException
-     *             if response stream is null or an I/O Exception occurs.
-     */
-    @Nonnull
-    public InputStream bodyStream() throws IOException {
-<span class="fc" id="L113">        synchronized (this) {</span>
-<span class="fc bfc" id="L114" title="All 2 branches covered.">            if (isClosed) {</span>
-<span class="fc" id="L115">                throw new IOException(&quot;Response is closed&quot;);</span>
-            }
-
-<span class="fc bfc" id="L118" title="All 2 branches covered.">            if (bodyStreamCalled) {</span>
-<span class="fc bfc" id="L119" title="All 2 branches covered.">                if (!isBodyStreamRereadable()) {</span>
-<span class="fc" id="L120">                    throw new IOException(&quot;Response body not rereadable&quot;);</span>
-                }
-            } else {
-<span class="fc" id="L123">                bodyStream = wrapStream(rawBodyStream());</span>
-<span class="fc" id="L124">                bodyStreamCalled = true;</span>
-            }
-
-<span class="fc bfc" id="L127" title="All 2 branches covered.">            if (bodyStream == null) {</span>
-<span class="fc" id="L128">                throw new IOException(&quot;Response body missing, stream null&quot;);</span>
-<span class="fc bfc" id="L129" title="All 2 branches covered.">            } else if (!isBodyStreamRereadable()) {</span>
-<span class="fc" id="L130">                return bodyStream;</span>
-            }
-
-            // Load rereadable byte array
-<span class="fc bfc" id="L134" title="All 2 branches covered.">            if (bodyBytes == null) {</span>
-<span class="fc" id="L135">                bodyBytes = IOUtils.toByteArray(bodyStream);</span>
-                // Close the raw body stream after successfully reading
-<span class="fc" id="L137">                IOUtils.closeQuietly(bodyStream);</span>
-            }
-
-<span class="fc" id="L140">            return new ByteArrayInputStream(bodyBytes);</span>
-        }
-    }
-
-    /**
-     * Get the raw implementation specific body stream for this response.
-     *
-     * This method will only be called once to completion. If an exception is thrown by this method, it may be called
-     * multiple times.
-     *
-     * The stream returned from this method will be closed when the response is closed or sooner. Inheriting classes do
-     * not need to close it.
-     *
-     * @return the stream for the raw response
-     * @throws IOException
-     *             if an I/O Exception occurs.
-     */
-    @CheckForNull
-    protected abstract InputStream rawBodyStream() throws IOException;
-
-    /**
-     * Gets the {@link GitHubConnector} for this response.
-     *
-     * @return the {@link GitHubConnector} for this response.
-     */
-    @Nonnull
-    public GitHubConnectorRequest request() {
-<span class="fc" id="L167">        return request;</span>
-    }
-
-    /**
-     * The status code for this response.
-     *
-     * @return the status code for this response.
-     */
-    public int statusCode() {
-<span class="fc" id="L176">        return statusCode;</span>
-    }
-
-    /**
-     * The headers for this response.
-     *
-     * @return the headers for this response.
-     */
-    @Nonnull
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Unmodifiable map of unmodifiable lists&quot;)
-    public Map&lt;String, List&lt;String&gt;&gt; allHeaders() {
-<span class="fc" id="L187">        return headers;</span>
-    }
-
-    /**
-     * The body stream rereadable state.
-     *
-     * Body stream defaults to read once for HTTP_OK responses (to reduce memory usage). For non-HTTP_OK responses, body
-     * stream is switched to rereadable (in-memory byte array) for error processing.
-     *
-     * Calling {@link #setBodyStreamRereadable()} will force {@link #isBodyStreamRereadable} to be true for this
-     * response regardless of {@link #statusCode} value.
-     *
-     * @return true when body stream is rereadable.
-     */
-    public boolean isBodyStreamRereadable() {
-<span class="fc" id="L202">        synchronized (this) {</span>
-<span class="fc bfc" id="L203" title="All 4 branches covered.">            return isBodyStreamRereadable || statusCode != HTTP_OK;</span>
-        }
-    }
-
-    /**
-     * Force body stream to rereadable regardless of status code.
-     *
-     * Calling {@link #setBodyStreamRereadable()} will force {@link #isBodyStreamRereadable} to be true for this
-     * response regardless of {@link #statusCode} value.
-     *
-     * This is required to support body value logging during low-level tracing but should be avoided in general since it
-     * consumes significantly more memory.
-     *
-     * Will throw runtime exception if a non-rereadable body stream has already been returned from
-     * {@link #bodyStream()}.
-     */
-    public void setBodyStreamRereadable() {
-<span class="fc" id="L220">        synchronized (this) {</span>
-<span class="fc bfc" id="L221" title="All 4 branches covered.">            if (bodyStreamCalled &amp;&amp; !isBodyStreamRereadable()) {</span>
-<span class="fc" id="L222">                throw new RuntimeException(&quot;bodyStream() already called in read-once mode&quot;);</span>
-            }
-<span class="fc" id="L224">            isBodyStreamRereadable = true;</span>
-<span class="fc" id="L225">        }</span>
-<span class="fc" id="L226">    }</span>
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void close() throws IOException {
-<span class="fc" id="L233">        synchronized (this) {</span>
-<span class="fc" id="L234">            IOUtils.closeQuietly(bodyStream);</span>
-<span class="fc" id="L235">            isClosed = true;</span>
-<span class="fc" id="L236">            this.bodyBytes = null;</span>
-<span class="fc" id="L237">        }</span>
-<span class="fc" id="L238">    }</span>
-
-    /**
-     * Handles wrapping the body stream if indicated by the &quot;Content-Encoding&quot; header.
-     *
-     * @param stream
-     *            the stream to possibly wrap
-     * @return an input stream potentially wrapped to decode gzip input
-     * @throws IOException
-     *             if an I/O Exception occurs.
-     */
-    protected InputStream wrapStream(InputStream stream) throws IOException {
-<span class="fc" id="L250">        String encoding = header(&quot;Content-Encoding&quot;);</span>
-<span class="pc bpc" id="L251" title="1 of 4 branches missed.">        if (encoding == null || stream == null)</span>
-<span class="fc" id="L252">            return stream;</span>
-<span class="pc bpc" id="L253" title="1 of 2 branches missed.">        if (encoding.equals(&quot;gzip&quot;))</span>
-<span class="fc" id="L254">            return new GZIPInputStream(stream);</span>
-
-<span class="nc" id="L256">        throw new UnsupportedOperationException(&quot;Unexpected Content-Encoding: &quot; + encoding);</span>
-    }
-
-    /**
-     * Parse a header value as a signed decimal integer.
-     *
-     * @param name
-     *            the header field to parse
-     * @return integer value of the header field
-     * @throws NumberFormatException
-     *             if the header is missing or does not contain a parsable integer.
-     */
-    public final int parseInt(String name) throws NumberFormatException {
-        try {
-<span class="fc" id="L270">            String headerValue = header(name);</span>
-<span class="fc" id="L271">            return Integer.parseInt(headerValue);</span>
-<span class="fc" id="L272">        } catch (NumberFormatException e) {</span>
-<span class="fc" id="L273">            throw new NumberFormatException(name + &quot;: &quot; + e.getMessage());</span>
-        }
-    }
-
     /**
      * A ByteArrayResponse class
      *
@@ -295,8 +57,246 @@ public abstract class GitHubConnectorResponse implements Closeable {
         protected ByteArrayResponse(@Nonnull GitHubConnectorRequest request,
                 int statusCode,
                 @Nonnull Map&lt;String, List&lt;String&gt;&gt; headers) {
-<span class="fc" id="L298">            super(request, statusCode, headers);</span>
-<span class="fc" id="L299">        }</span>
+<span class="fc" id="L60">            super(request, statusCode, headers);</span>
+<span class="fc" id="L61">        }</span>
+    }
+
+<span class="fc" id="L64">    private static final Comparator&lt;String&gt; nullableCaseInsensitiveComparator = Comparator</span>
+<span class="fc" id="L65">            .nullsFirst(String.CASE_INSENSITIVE_ORDER);</span>
+
+<span class="fc" id="L67">    private byte[] bodyBytes = null;</span>
+<span class="fc" id="L68">    private InputStream bodyStream = null;</span>
+<span class="fc" id="L69">    private boolean bodyStreamCalled = false;</span>
+    @Nonnull
+    private final Map&lt;String, List&lt;String&gt;&gt; headers;
+    private boolean isBodyStreamRereadable;
+<span class="fc" id="L73">    private boolean isClosed = false;</span>
+    @Nonnull
+    private final GitHubConnectorRequest request;
+
+    private final int statusCode;
+
+    /**
+     * GitHubConnectorResponse constructor
+     *
+     * @param request
+     *            the request
+     * @param statusCode
+     *            the status code
+     * @param headers
+     *            the headers
+     */
+    protected GitHubConnectorResponse(@Nonnull GitHubConnectorRequest request,
+            int statusCode,
+<span class="fc" id="L91">            @Nonnull Map&lt;String, List&lt;String&gt;&gt; headers) {</span>
+<span class="fc" id="L92">        this.request = request;</span>
+<span class="fc" id="L93">        this.statusCode = statusCode;</span>
+
+        // Response header field names must be case-insensitive.
+<span class="fc" id="L96">        TreeMap&lt;String, List&lt;String&gt;&gt; caseInsensitiveMap = new TreeMap&lt;&gt;(nullableCaseInsensitiveComparator);</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        for (Map.Entry&lt;String, List&lt;String&gt;&gt; entry : headers.entrySet()) {</span>
+<span class="fc" id="L98">            caseInsensitiveMap.put(entry.getKey(), Collections.unmodifiableList(new ArrayList&lt;&gt;(entry.getValue())));</span>
+<span class="fc" id="L99">        }</span>
+<span class="fc" id="L100">        this.headers = Collections.unmodifiableMap(caseInsensitiveMap);</span>
+<span class="fc" id="L101">        this.isBodyStreamRereadable = false;</span>
+<span class="fc" id="L102">    }</span>
+
+    /**
+     * The headers for this response.
+     *
+     * @return the headers for this response.
+     */
+    @Nonnull
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Unmodifiable map of unmodifiable lists&quot;)
+    public Map&lt;String, List&lt;String&gt;&gt; allHeaders() {
+<span class="fc" id="L112">        return headers;</span>
+    }
+
+    /**
+     * The response body as an {@link InputStream}.
+     *
+     * When {@link #isBodyStreamRereadable} is false, {@link #bodyStream()} can only be called once and the returned
+     * stream should be assumed to be read-once and not resetable. This is the default behavior for HTTP_OK responses
+     * and significantly reduces memory usage.
+     *
+     * When {@link #isBodyStreamRereadable} is true, {@link #bodyStream()} can be called be called multiple times. The
+     * full stream data is read into a byte array during the first call. Each call returns a new stream backed by the
+     * same byte array. This uses more memory, but is required to enable rereading the body stream during trace logging,
+     * debugging, and error responses.
+     *
+     * @return the response body
+     * @throws IOException
+     *             if response stream is null or an I/O Exception occurs.
+     */
+    @Nonnull
+    public InputStream bodyStream() throws IOException {
+<span class="fc" id="L133">        synchronized (this) {</span>
+<span class="fc bfc" id="L134" title="All 2 branches covered.">            if (isClosed) {</span>
+<span class="fc" id="L135">                throw new IOException(&quot;Response is closed&quot;);</span>
+            }
+
+<span class="fc bfc" id="L138" title="All 2 branches covered.">            if (bodyStreamCalled) {</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">                if (!isBodyStreamRereadable()) {</span>
+<span class="fc" id="L140">                    throw new IOException(&quot;Response body not rereadable&quot;);</span>
+                }
+            } else {
+<span class="fc" id="L143">                bodyStream = wrapStream(rawBodyStream());</span>
+<span class="fc" id="L144">                bodyStreamCalled = true;</span>
+            }
+
+<span class="fc bfc" id="L147" title="All 2 branches covered.">            if (bodyStream == null) {</span>
+<span class="fc" id="L148">                throw new IOException(&quot;Response body missing, stream null&quot;);</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">            } else if (!isBodyStreamRereadable()) {</span>
+<span class="fc" id="L150">                return bodyStream;</span>
+            }
+
+            // Load rereadable byte array
+<span class="fc bfc" id="L154" title="All 2 branches covered.">            if (bodyBytes == null) {</span>
+<span class="fc" id="L155">                bodyBytes = IOUtils.toByteArray(bodyStream);</span>
+                // Close the raw body stream after successfully reading
+<span class="fc" id="L157">                IOUtils.closeQuietly(bodyStream);</span>
+            }
+
+<span class="fc" id="L160">            return new ByteArrayInputStream(bodyBytes);</span>
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void close() throws IOException {
+<span class="fc" id="L169">        synchronized (this) {</span>
+<span class="fc" id="L170">            IOUtils.closeQuietly(bodyStream);</span>
+<span class="fc" id="L171">            isClosed = true;</span>
+<span class="fc" id="L172">            this.bodyBytes = null;</span>
+<span class="fc" id="L173">        }</span>
+<span class="fc" id="L174">    }</span>
+
+    /**
+     * Gets the value of a header field for this response.
+     *
+     * @param name
+     *            the name of the header field.
+     * @return the value of the header field, or {@code null} if the header isn't set.
+     */
+    @CheckForNull
+    public String header(String name) {
+<span class="fc" id="L185">        String result = null;</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">        if (headers.containsKey(name)) {</span>
+<span class="fc" id="L187">            result = headers.get(name).get(0);</span>
+        }
+<span class="fc" id="L189">        return result;</span>
+    }
+
+    /**
+     * The body stream rereadable state.
+     *
+     * Body stream defaults to read once for HTTP_OK responses (to reduce memory usage). For non-HTTP_OK responses, body
+     * stream is switched to rereadable (in-memory byte array) for error processing.
+     *
+     * Calling {@link #setBodyStreamRereadable()} will force {@link #isBodyStreamRereadable} to be true for this
+     * response regardless of {@link #statusCode} value.
+     *
+     * @return true when body stream is rereadable.
+     */
+    public boolean isBodyStreamRereadable() {
+<span class="fc" id="L204">        synchronized (this) {</span>
+<span class="fc bfc" id="L205" title="All 4 branches covered.">            return isBodyStreamRereadable || statusCode != HTTP_OK;</span>
+        }
+    }
+
+    /**
+     * Parse a header value as a signed decimal integer.
+     *
+     * @param name
+     *            the header field to parse
+     * @return integer value of the header field
+     * @throws NumberFormatException
+     *             if the header is missing or does not contain a parsable integer.
+     */
+    public final int parseInt(String name) throws NumberFormatException {
+        try {
+<span class="fc" id="L220">            String headerValue = header(name);</span>
+<span class="fc" id="L221">            return Integer.parseInt(headerValue);</span>
+<span class="fc" id="L222">        } catch (NumberFormatException e) {</span>
+<span class="fc" id="L223">            throw new NumberFormatException(name + &quot;: &quot; + e.getMessage());</span>
+        }
+    }
+
+    /**
+     * Gets the {@link GitHubConnector} for this response.
+     *
+     * @return the {@link GitHubConnector} for this response.
+     */
+    @Nonnull
+    public GitHubConnectorRequest request() {
+<span class="fc" id="L234">        return request;</span>
+    }
+
+    /**
+     * Force body stream to rereadable regardless of status code.
+     *
+     * Calling {@link #setBodyStreamRereadable()} will force {@link #isBodyStreamRereadable} to be true for this
+     * response regardless of {@link #statusCode} value.
+     *
+     * This is required to support body value logging during low-level tracing but should be avoided in general since it
+     * consumes significantly more memory.
+     *
+     * Will throw runtime exception if a non-rereadable body stream has already been returned from
+     * {@link #bodyStream()}.
+     */
+    public void setBodyStreamRereadable() {
+<span class="fc" id="L250">        synchronized (this) {</span>
+<span class="fc bfc" id="L251" title="All 4 branches covered.">            if (bodyStreamCalled &amp;&amp; !isBodyStreamRereadable()) {</span>
+<span class="fc" id="L252">                throw new RuntimeException(&quot;bodyStream() already called in read-once mode&quot;);</span>
+            }
+<span class="fc" id="L254">            isBodyStreamRereadable = true;</span>
+<span class="fc" id="L255">        }</span>
+<span class="fc" id="L256">    }</span>
+
+    /**
+     * The status code for this response.
+     *
+     * @return the status code for this response.
+     */
+    public int statusCode() {
+<span class="fc" id="L264">        return statusCode;</span>
+    }
+
+    /**
+     * Get the raw implementation specific body stream for this response.
+     *
+     * This method will only be called once to completion. If an exception is thrown by this method, it may be called
+     * multiple times.
+     *
+     * The stream returned from this method will be closed when the response is closed or sooner. Inheriting classes do
+     * not need to close it.
+     *
+     * @return the stream for the raw response
+     * @throws IOException
+     *             if an I/O Exception occurs.
+     */
+    @CheckForNull
+    protected abstract InputStream rawBodyStream() throws IOException;
+
+    /**
+     * Handles wrapping the body stream if indicated by the &quot;Content-Encoding&quot; header.
+     *
+     * @param stream
+     *            the stream to possibly wrap
+     * @return an input stream potentially wrapped to decode gzip input
+     * @throws IOException
+     *             if an I/O Exception occurs.
+     */
+    protected InputStream wrapStream(InputStream stream) throws IOException {
+<span class="fc" id="L293">        String encoding = header(&quot;Content-Encoding&quot;);</span>
+<span class="pc bpc" id="L294" title="1 of 4 branches missed.">        if (encoding == null || stream == null)</span>
+<span class="fc" id="L295">            return stream;</span>
+<span class="pc bpc" id="L296" title="1 of 2 branches missed.">        if (encoding.equals(&quot;gzip&quot;))</span>
+<span class="fc" id="L297">            return new GZIPInputStream(stream);</span>
+
+<span class="nc" id="L299">        throw new UnsupportedOperationException(&quot;Unexpected Content-Encoding: &quot; + encoding);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

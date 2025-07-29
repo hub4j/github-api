@@ -15,87 +15,17 @@ import org.kohsuke.github.internal.EnumUtils;
 public class GHTeamChanges {
 
     /**
-     * Create default GHTeamChanges instance
-     */
-<span class="fc" id="L20">    public GHTeamChanges() {</span>
-<span class="fc" id="L21">    }</span>
-
-    private FromString description;
-    private FromString name;
-    private FromPrivacy privacy;
-    private FromRepository repository;
-
-    /**
-     * Gets changes to description.
-     *
-     * @return changes to description.
-     */
-    public FromString getDescription() {
-<span class="fc" id="L34">        return description;</span>
-    }
-
-    /**
-     * Gets changes to name.
-     *
-     * @return changes to name.
-     */
-    public FromString getName() {
-<span class="fc" id="L43">        return name;</span>
-    }
-
-    /**
-     * Gets changes to privacy.
-     *
-     * @return changes to privacy.
-     */
-    public FromPrivacy getPrivacy() {
-<span class="fc" id="L52">        return privacy;</span>
-    }
-
-    /**
-     * Gets changes for repository events.
-     *
-     * @return changes for repository events.
-     */
-    public FromRepository getRepository() {
-<span class="fc" id="L61">        return repository;</span>
-    }
-
-    /**
-     * Changes made to a string value.
-     */
-    public static class FromString {
-
-        /**
-         * Create default FromString instance
-         */
-<span class="fc" id="L72">        public FromString() {</span>
-<span class="fc" id="L73">        }</span>
-
-        private String from;
-
-        /**
-         * Gets the from.
-         *
-         * @return the from
-         */
-        public String getFrom() {
-<span class="fc" id="L83">            return from;</span>
-        }
-    }
-
-    /**
      * Changes made to privacy.
      */
     public static class FromPrivacy {
 
+        private String from;
+
         /**
          * Create default FromPrivacy instance
          */
-<span class="fc" id="L95">        public FromPrivacy() {</span>
-<span class="fc" id="L96">        }</span>
-
-        private String from;
+<span class="fc" id="L27">        public FromPrivacy() {</span>
+<span class="fc" id="L28">        }</span>
 
         /**
          * Gets the from.
@@ -103,7 +33,7 @@ public class GHTeamChanges {
          * @return the from
          */
         public Privacy getFrom() {
-<span class="fc" id="L106">            return EnumUtils.getNullableEnumOrDefault(Privacy.class, from, Privacy.UNKNOWN);</span>
+<span class="fc" id="L36">            return EnumUtils.getNullableEnumOrDefault(Privacy.class, from, Privacy.UNKNOWN);</span>
         }
     }
 
@@ -112,13 +42,13 @@ public class GHTeamChanges {
      */
     public static class FromRepository {
 
+        private FromRepositoryPermissions permissions;
+
         /**
          * Create default FromRepository instance
          */
-<span class="fc" id="L118">        public FromRepository() {</span>
-<span class="fc" id="L119">        }</span>
-
-        private FromRepositoryPermissions permissions;
+<span class="fc" id="L50">        public FromRepository() {</span>
+<span class="fc" id="L51">        }</span>
 
         /**
          * Gets the changes to permissions.
@@ -126,22 +56,30 @@ public class GHTeamChanges {
          * @return the changes to permissions
          */
         public FromRepositoryPermissions getPermissions() {
-<span class="fc" id="L129">            return permissions;</span>
+<span class="fc" id="L59">            return permissions;</span>
         }
     }
-
     /**
      * Changes made to permissions.
      */
     public static class FromRepositoryPermissions {
 
+        private GHRepoPermission from;
+
         /**
          * Create default FromRepositoryPermissions instance
          */
-<span class="fc" id="L141">        public FromRepositoryPermissions() {</span>
-<span class="fc" id="L142">        }</span>
+<span class="fc" id="L72">        public FromRepositoryPermissions() {</span>
+<span class="fc" id="L73">        }</span>
 
-        private GHRepoPermission from;
+        /**
+         * Has admin access boolean.
+         *
+         * @return the boolean
+         */
+        public boolean hadAdminAccess() {
+<span class="pc bpc" id="L81" title="2 of 4 branches missed.">            return from != null &amp;&amp; from.admin;</span>
+        }
 
         /**
          * Has pull access boolean.
@@ -149,7 +87,7 @@ public class GHTeamChanges {
          * @return the boolean
          */
         public boolean hadPullAccess() {
-<span class="pc bpc" id="L152" title="2 of 4 branches missed.">            return from != null &amp;&amp; from.pull;</span>
+<span class="pc bpc" id="L90" title="2 of 4 branches missed.">            return from != null &amp;&amp; from.pull;</span>
         }
 
         /**
@@ -158,17 +96,79 @@ public class GHTeamChanges {
          * @return the boolean
          */
         public boolean hadPushAccess() {
-<span class="pc bpc" id="L161" title="2 of 4 branches missed.">            return from != null &amp;&amp; from.push;</span>
+<span class="pc bpc" id="L99" title="2 of 4 branches missed.">            return from != null &amp;&amp; from.push;</span>
         }
+    }
+    /**
+     * Changes made to a string value.
+     */
+    public static class FromString {
+
+        private String from;
 
         /**
-         * Has admin access boolean.
-         *
-         * @return the boolean
+         * Create default FromString instance
          */
-        public boolean hadAdminAccess() {
-<span class="pc bpc" id="L170" title="2 of 4 branches missed.">            return from != null &amp;&amp; from.admin;</span>
+<span class="fc" id="L112">        public FromString() {</span>
+<span class="fc" id="L113">        }</span>
+
+        /**
+         * Gets the from.
+         *
+         * @return the from
+         */
+        public String getFrom() {
+<span class="fc" id="L121">            return from;</span>
         }
+    }
+    private FromString description;
+
+    private FromString name;
+
+    private FromPrivacy privacy;
+
+    private FromRepository repository;
+
+    /**
+     * Create default GHTeamChanges instance
+     */
+<span class="fc" id="L135">    public GHTeamChanges() {</span>
+<span class="fc" id="L136">    }</span>
+
+    /**
+     * Gets changes to description.
+     *
+     * @return changes to description.
+     */
+    public FromString getDescription() {
+<span class="fc" id="L144">        return description;</span>
+    }
+
+    /**
+     * Gets changes to name.
+     *
+     * @return changes to name.
+     */
+    public FromString getName() {
+<span class="fc" id="L153">        return name;</span>
+    }
+
+    /**
+     * Gets changes to privacy.
+     *
+     * @return changes to privacy.
+     */
+    public FromPrivacy getPrivacy() {
+<span class="fc" id="L162">        return privacy;</span>
+    }
+
+    /**
+     * Gets changes for repository events.
+     *
+     * @return changes for repository events.
+     */
+    public FromRepository getRepository() {
+<span class="fc" id="L171">        return repository;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

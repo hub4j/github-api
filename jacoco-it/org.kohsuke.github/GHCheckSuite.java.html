@@ -23,103 +23,137 @@ import java.util.List;
 public class GHCheckSuite extends GHObject {
 
     /**
-     * Create default GHCheckSuite instance
+     * The Class HeadCommit.
      */
-<span class="fc" id="L28">    public GHCheckSuite() {</span>
-<span class="fc" id="L29">    }</span>
+    public static class HeadCommit extends GitHubBridgeAdapterObject {
 
+        private GitUser author;
+
+        private GitUser committer;
+        private String id;
+        private String message;
+        private String timestamp;
+        private String treeId;
+        /**
+         * Create default HeadCommit instance
+         */
+<span class="fc" id="L40">        public HeadCommit() {</span>
+<span class="fc" id="L41">        }</span>
+
+        /**
+         * Gets author.
+         *
+         * @return the author
+         */
+        public GitUser getAuthor() {
+<span class="fc" id="L49">            return author;</span>
+        }
+
+        /**
+         * Gets committer.
+         *
+         * @return the committer
+         */
+        public GitUser getCommitter() {
+<span class="fc" id="L58">            return committer;</span>
+        }
+
+        /**
+         * Gets id of the commit, used by {@link GHCheckSuite} when a {@link GHEvent#CHECK_SUITE} comes.
+         *
+         * @return id of the commit
+         */
+        public String getId() {
+<span class="fc" id="L67">            return id;</span>
+        }
+
+        /**
+         * Gets message.
+         *
+         * @return commit message.
+         */
+        public String getMessage() {
+<span class="fc" id="L76">            return message;</span>
+        }
+
+        /**
+         * Gets timestamp of the commit.
+         *
+         * @return timestamp of the commit
+         */
+        @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+        public Instant getTimestamp() {
+<span class="fc" id="L86">            return GitHubClient.parseInstant(timestamp);</span>
+        }
+
+        /**
+         * Gets id of the tree.
+         *
+         * @return id of the tree
+         */
+        public String getTreeId() {
+<span class="fc" id="L95">            return treeId;</span>
+        }
+    }
+
+    private String after;
+
+    private GHApp app;
+    private String before;
+    private String checkRunsUrl;
+    private String conclusion;
+    private String headBranch;
+    private HeadCommit headCommit;
+    private String headSha;
+    private int latestCheckRunsCount;
+    private String nodeId;
+    private GHPullRequest[] pullRequests;
+    private String status;
     /** The owner. */
     @JsonProperty(&quot;repository&quot;)
     GHRepository owner;
 
-    private String nodeId;
-    private String headBranch;
-    private String headSha;
-    private String status;
-    private String conclusion;
-    private String before;
-    private String after;
-    private int latestCheckRunsCount;
-    private String checkRunsUrl;
-    private HeadCommit headCommit;
-    private GHApp app;
-    private GHPullRequest[] pullRequests;
+    /**
+     * Create default GHCheckSuite instance
+     */
+<span class="fc" id="L119">    public GHCheckSuite() {</span>
+<span class="fc" id="L120">    }</span>
 
     /**
-     * Wrap.
+     * The SHA of the most recent commit on ref after the push.
      *
-     * @param owner
-     *            the owner
-     * @return the GH check suite
+     * @return sha of a commit
      */
-    GHCheckSuite wrap(GHRepository owner) {
-<span class="fc" id="L56">        this.owner = owner;</span>
-<span class="fc" id="L57">        this.wrap(owner.root());</span>
-<span class="fc" id="L58">        return this;</span>
+    public String getAfter() {
+<span class="fc" id="L128">        return after;</span>
     }
 
     /**
-     * Wrap.
+     * Gets the GitHub app this check suite belongs to, included in response.
      *
-     * @param root
-     *            the root
-     * @return the GH check suite
+     * @return GitHub App
      */
-    GHCheckSuite wrap(GitHub root) {
-<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        if (owner != null) {</span>
-<span class="pc bpc" id="L70" title="1 of 4 branches missed.">            if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
-<span class="fc bfc" id="L71" title="All 2 branches covered.">                for (GHPullRequest singlePull : pullRequests) {</span>
-<span class="fc" id="L72">                    singlePull.wrap(owner);</span>
-                }
-            }
-        }
-<span class="fc" id="L76">        return this;</span>
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHApp getApp() {
+<span class="fc" id="L138">        return app;</span>
     }
 
     /**
-     * Wrap.
+     * The SHA of the most recent commit on ref before the push.
      *
-     * @return the GH pull request[]
+     * @return sha of a commit
      */
-    GHPullRequest[] wrap() {
-<span class="nc" id="L85">        return pullRequests;</span>
+    public String getBefore() {
+<span class="fc" id="L147">        return before;</span>
     }
 
     /**
-     * Gets the global node id to access most objects in GitHub.
+     * The url used to list all the check runs belonged to this suite.
      *
-     * @return global node id
-     * @see &lt;a href=&quot;https://developer.github.com/v4/guides/using-global-node-ids/&quot;&gt;documentation&lt;/a&gt;
+     * @return url containing all check runs
      */
-    public String getNodeId() {
-<span class="fc" id="L95">        return nodeId;</span>
-    }
-
-    /**
-     * The head branch name the changes are on.
-     *
-     * @return head branch name
-     */
-    public String getHeadBranch() {
-<span class="fc" id="L104">        return headBranch;</span>
-    }
-
-    /**
-     * Gets the HEAD SHA.
-     *
-     * @return sha for the HEAD commit
-     */
-    public String getHeadSha() {
-<span class="fc" id="L113">        return headSha;</span>
-    }
-
-    /**
-     * Gets status of the check suite. It can be one of request, in_progress, or completed.
-     *
-     * @return status of the check suite
-     */
-    public String getStatus() {
-<span class="fc" id="L122">        return status;</span>
+    public URL getCheckRunsUrl() {
+<span class="fc" id="L156">        return GitHubClient.parseURL(checkRunsUrl);</span>
     }
 
     /**
@@ -130,43 +164,16 @@ public class GHCheckSuite extends GHObject {
      * @return conclusion of the check suite
      */
     public String getConclusion() {
-<span class="fc" id="L133">        return conclusion;</span>
+<span class="fc" id="L167">        return conclusion;</span>
     }
 
     /**
-     * The SHA of the most recent commit on ref before the push.
+     * The head branch name the changes are on.
      *
-     * @return sha of a commit
+     * @return head branch name
      */
-    public String getBefore() {
-<span class="fc" id="L142">        return before;</span>
-    }
-
-    /**
-     * The SHA of the most recent commit on ref after the push.
-     *
-     * @return sha of a commit
-     */
-    public String getAfter() {
-<span class="fc" id="L151">        return after;</span>
-    }
-
-    /**
-     * The quantity of check runs that had run as part of the latest push.
-     *
-     * @return sha of the most recent commit
-     */
-    public int getLatestCheckRunsCount() {
-<span class="fc" id="L160">        return latestCheckRunsCount;</span>
-    }
-
-    /**
-     * The url used to list all the check runs belonged to this suite.
-     *
-     * @return url containing all check runs
-     */
-    public URL getCheckRunsUrl() {
-<span class="fc" id="L169">        return GitHubClient.parseURL(checkRunsUrl);</span>
+    public String getHeadBranch() {
+<span class="fc" id="L176">        return headBranch;</span>
     }
 
     /**
@@ -175,17 +182,35 @@ public class GHCheckSuite extends GHObject {
      * @return head commit
      */
     public HeadCommit getHeadCommit() {
-<span class="fc" id="L178">        return headCommit;</span>
+<span class="fc" id="L185">        return headCommit;</span>
     }
 
     /**
-     * Gets the GitHub app this check suite belongs to, included in response.
+     * Gets the HEAD SHA.
      *
-     * @return GitHub App
+     * @return sha for the HEAD commit
      */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHApp getApp() {
-<span class="fc" id="L188">        return app;</span>
+    public String getHeadSha() {
+<span class="fc" id="L194">        return headSha;</span>
+    }
+
+    /**
+     * The quantity of check runs that had run as part of the latest push.
+     *
+     * @return sha of the most recent commit
+     */
+    public int getLatestCheckRunsCount() {
+<span class="fc" id="L203">        return latestCheckRunsCount;</span>
+    }
+
+    /**
+     * Gets the global node id to access most objects in GitHub.
+     *
+     * @return global node id
+     * @see &lt;a href=&quot;https://developer.github.com/v4/guides/using-global-node-ids/&quot;&gt;documentation&lt;/a&gt;
+     */
+    public String getNodeId() {
+<span class="fc" id="L213">        return nodeId;</span>
     }
 
     /**
@@ -199,88 +224,63 @@ public class GHCheckSuite extends GHObject {
      *             the io exception
      */
     public List&lt;GHPullRequest&gt; getPullRequests() throws IOException {
-<span class="pc bpc" id="L202" title="2 of 4 branches missed.">        if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
-<span class="fc bfc" id="L203" title="All 2 branches covered.">            for (GHPullRequest singlePull : pullRequests) {</span>
+<span class="pc bpc" id="L227" title="2 of 4 branches missed.">        if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
+<span class="fc bfc" id="L228" title="All 2 branches covered.">            for (GHPullRequest singlePull : pullRequests) {</span>
                 // Only refresh if we haven't do so before
-<span class="fc" id="L205">                singlePull.refresh(singlePull.getTitle());</span>
+<span class="fc" id="L230">                singlePull.refresh(singlePull.getTitle());</span>
             }
-<span class="fc" id="L207">            return Collections.unmodifiableList(Arrays.asList(pullRequests));</span>
+<span class="fc" id="L232">            return Collections.unmodifiableList(Arrays.asList(pullRequests));</span>
         }
-<span class="nc" id="L209">        return Collections.emptyList();</span>
+<span class="nc" id="L234">        return Collections.emptyList();</span>
     }
 
     /**
-     * The Class HeadCommit.
+     * Gets status of the check suite. It can be one of request, in_progress, or completed.
+     *
+     * @return status of the check suite
      */
-    public static class HeadCommit extends GitHubBridgeAdapterObject {
+    public String getStatus() {
+<span class="fc" id="L243">        return status;</span>
+    }
 
-        /**
-         * Create default HeadCommit instance
-         */
-<span class="fc" id="L220">        public HeadCommit() {</span>
-<span class="fc" id="L221">        }</span>
+    /**
+     * Wrap.
+     *
+     * @return the GH pull request[]
+     */
+    GHPullRequest[] wrap() {
+<span class="nc" id="L252">        return pullRequests;</span>
+    }
 
-        private String id;
-        private String treeId;
-        private String message;
-        private String timestamp;
-        private GitUser author;
-        private GitUser committer;
+    /**
+     * Wrap.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH check suite
+     */
+    GHCheckSuite wrap(GHRepository owner) {
+<span class="fc" id="L263">        this.owner = owner;</span>
+<span class="fc" id="L264">        this.wrap(owner.root());</span>
+<span class="fc" id="L265">        return this;</span>
+    }
 
-        /**
-         * Gets id of the commit, used by {@link GHCheckSuite} when a {@link GHEvent#CHECK_SUITE} comes.
-         *
-         * @return id of the commit
-         */
-        public String getId() {
-<span class="fc" id="L236">            return id;</span>
+    /**
+     * Wrap.
+     *
+     * @param root
+     *            the root
+     * @return the GH check suite
+     */
+    GHCheckSuite wrap(GitHub root) {
+<span class="pc bpc" id="L276" title="1 of 2 branches missed.">        if (owner != null) {</span>
+<span class="pc bpc" id="L277" title="1 of 4 branches missed.">            if (pullRequests != null &amp;&amp; pullRequests.length != 0) {</span>
+<span class="fc bfc" id="L278" title="All 2 branches covered.">                for (GHPullRequest singlePull : pullRequests) {</span>
+<span class="fc" id="L279">                    singlePull.wrap(owner);</span>
+                }
+            }
         }
-
-        /**
-         * Gets id of the tree.
-         *
-         * @return id of the tree
-         */
-        public String getTreeId() {
-<span class="fc" id="L245">            return treeId;</span>
-        }
-
-        /**
-         * Gets message.
-         *
-         * @return commit message.
-         */
-        public String getMessage() {
-<span class="fc" id="L254">            return message;</span>
-        }
-
-        /**
-         * Gets timestamp of the commit.
-         *
-         * @return timestamp of the commit
-         */
-        @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
-        public Instant getTimestamp() {
-<span class="fc" id="L264">            return GitHubClient.parseInstant(timestamp);</span>
-        }
-
-        /**
-         * Gets author.
-         *
-         * @return the author
-         */
-        public GitUser getAuthor() {
-<span class="fc" id="L273">            return author;</span>
-        }
-
-        /**
-         * Gets committer.
-         *
-         * @return the committer
-         */
-        public GitUser getCommitter() {
-<span class="fc" id="L282">            return committer;</span>
-        }
+<span class="fc" id="L283">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

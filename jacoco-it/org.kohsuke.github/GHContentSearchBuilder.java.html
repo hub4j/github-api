@@ -10,53 +10,55 @@
 public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
 
     /**
+     * The enum Sort.
+     */
+<span class="fc" id="L15">    public enum Sort {</span>
+
+        /** The best match. */
+<span class="fc" id="L18">        BEST_MATCH,</span>
+        /** The indexed. */
+<span class="fc" id="L20">        INDEXED</span>
+    }
+
+    private static class ContentSearchResult extends SearchResult&lt;GHContent&gt; {
+        private GHContent[] items;
+
+        @Override
+        GHContent[] getItems(GitHub root) {
+<span class="fc" id="L28">            return items;</span>
+        }
+    }
+
+    /**
      * Instantiates a new GH content search builder.
      *
      * @param root
      *            the root
      */
     GHContentSearchBuilder(GitHub root) {
-<span class="fc" id="L19">        super(root, ContentSearchResult.class);</span>
-<span class="fc" id="L20">    }</span>
+<span class="fc" id="L39">        super(root, ContentSearchResult.class);</span>
+<span class="fc" id="L40">    }</span>
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public GHContentSearchBuilder q(String term) {
-<span class="fc" id="L27">        super.q(term);</span>
-<span class="fc" id="L28">        return this;</span>
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    GHContentSearchBuilder q(String qualifier, String value) {
-<span class="fc" id="L36">        super.q(qualifier, value);</span>
-<span class="fc" id="L37">        return this;</span>
-    }
-
-    /**
-     * In gh content search builder.
+     * Extension gh content search builder.
      *
      * @param v
      *            the v
      * @return the gh content search builder
      */
-    public GHContentSearchBuilder in(String v) {
-<span class="fc" id="L48">        return q(&quot;in:&quot; + v);</span>
+    public GHContentSearchBuilder extension(String v) {
+<span class="nc" id="L50">        return q(&quot;extension:&quot; + v);</span>
     }
 
     /**
-     * Language gh content search builder.
+     * Filename gh content search builder.
      *
      * @param v
      *            the v
      * @return the gh content search builder
      */
-    public GHContentSearchBuilder language(String v) {
-<span class="fc" id="L59">        return q(&quot;language:&quot; + v);</span>
+    public GHContentSearchBuilder filename(String v) {
+<span class="nc" id="L61">        return q(&quot;filename:&quot; + v);</span>
     }
 
     /**
@@ -72,73 +74,29 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      *      in forks&lt;/a&gt;
      */
     public GHContentSearchBuilder fork(GHFork fork) {
-<span class="fc" id="L75">        return q(&quot;fork&quot;, fork.toString());</span>
+<span class="fc" id="L77">        return q(&quot;fork&quot;, fork.toString());</span>
     }
 
     /**
-     * Size gh content search builder.
+     * In gh content search builder.
      *
      * @param v
      *            the v
      * @return the gh content search builder
      */
-    public GHContentSearchBuilder size(String v) {
-<span class="nc" id="L86">        return q(&quot;size:&quot; + v);</span>
+    public GHContentSearchBuilder in(String v) {
+<span class="fc" id="L88">        return q(&quot;in:&quot; + v);</span>
     }
 
     /**
-     * Path gh content search builder.
+     * Language gh content search builder.
      *
      * @param v
      *            the v
      * @return the gh content search builder
      */
-    public GHContentSearchBuilder path(String v) {
-<span class="nc" id="L97">        return q(&quot;path:&quot; + v);</span>
-    }
-
-    /**
-     * Filename gh content search builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh content search builder
-     */
-    public GHContentSearchBuilder filename(String v) {
-<span class="nc" id="L108">        return q(&quot;filename:&quot; + v);</span>
-    }
-
-    /**
-     * Extension gh content search builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh content search builder
-     */
-    public GHContentSearchBuilder extension(String v) {
-<span class="nc" id="L119">        return q(&quot;extension:&quot; + v);</span>
-    }
-
-    /**
-     * User gh content search builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh content search builder
-     */
-    public GHContentSearchBuilder user(String v) {
-<span class="nc" id="L130">        return q(&quot;user:&quot; + v);</span>
-    }
-
-    /**
-     * Repo gh content search builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh content search builder
-     */
-    public GHContentSearchBuilder repo(String v) {
-<span class="fc" id="L141">        return q(&quot;repo:&quot; + v);</span>
+    public GHContentSearchBuilder language(String v) {
+<span class="fc" id="L99">        return q(&quot;language:&quot; + v);</span>
     }
 
     /**
@@ -149,8 +107,50 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      * @return the gh content search builder
      */
     public GHContentSearchBuilder order(GHDirection v) {
-<span class="fc" id="L152">        req.with(&quot;order&quot;, v);</span>
-<span class="fc" id="L153">        return this;</span>
+<span class="fc" id="L110">        req.with(&quot;order&quot;, v);</span>
+<span class="fc" id="L111">        return this;</span>
+    }
+
+    /**
+     * Path gh content search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh content search builder
+     */
+    public GHContentSearchBuilder path(String v) {
+<span class="nc" id="L122">        return q(&quot;path:&quot; + v);</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GHContentSearchBuilder q(String term) {
+<span class="fc" id="L130">        super.q(term);</span>
+<span class="fc" id="L131">        return this;</span>
+    }
+
+    /**
+     * Repo gh content search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh content search builder
+     */
+    public GHContentSearchBuilder repo(String v) {
+<span class="fc" id="L142">        return q(&quot;repo:&quot; + v);</span>
+    }
+
+    /**
+     * Size gh content search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh content search builder
+     */
+    public GHContentSearchBuilder size(String v) {
+<span class="nc" id="L153">        return q(&quot;size:&quot; + v);</span>
     }
 
     /**
@@ -170,23 +170,14 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
     }
 
     /**
-     * The enum Sort.
+     * User gh content search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh content search builder
      */
-<span class="fc" id="L175">    public enum Sort {</span>
-
-        /** The best match. */
-<span class="fc" id="L178">        BEST_MATCH,</span>
-        /** The indexed. */
-<span class="fc" id="L180">        INDEXED</span>
-    }
-
-    private static class ContentSearchResult extends SearchResult&lt;GHContent&gt; {
-        private GHContent[] items;
-
-        @Override
-        GHContent[] getItems(GitHub root) {
-<span class="fc" id="L188">            return items;</span>
-        }
+    public GHContentSearchBuilder user(String v) {
+<span class="nc" id="L180">        return q(&quot;user:&quot; + v);</span>
     }
 
     /**
@@ -196,7 +187,16 @@ public class GHContentSearchBuilder extends GHSearchBuilder&lt;GHContent&gt; {
      */
     @Override
     protected String getApiUrl() {
-<span class="fc" id="L199">        return &quot;/search/code&quot;;</span>
+<span class="fc" id="L190">        return &quot;/search/code&quot;;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    GHContentSearchBuilder q(String qualifier, String value) {
+<span class="fc" id="L198">        super.q(qualifier, value);</span>
+<span class="fc" id="L199">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

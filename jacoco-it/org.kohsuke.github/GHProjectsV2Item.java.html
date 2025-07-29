@@ -25,53 +25,32 @@ import java.util.Date;
 public class GHProjectsV2Item extends GHObject {
 
     /**
-     * Create default GHProjectsV2Item instance
+     * The Enum ContentType.
      */
-<span class="fc" id="L30">    public GHProjectsV2Item() {</span>
-<span class="fc" id="L31">    }</span>
+<span class="fc" id="L30">    public enum ContentType {</span>
 
-    private String projectNodeId;
+        /** The draftissue. */
+<span class="fc" id="L33">        DRAFTISSUE,</span>
+        /** The issue. */
+<span class="fc" id="L35">        ISSUE,</span>
+        /** The pullrequest. */
+<span class="fc" id="L37">        PULLREQUEST,</span>
+        /** The unknown. */
+<span class="fc" id="L39">        UNKNOWN;</span>
+    }
+
+    private String archivedAt;
     private String contentNodeId;
     private String contentType;
 
     private GHUser creator;
-    private String archivedAt;
+    private String projectNodeId;
 
     /**
-     * Gets the project node id.
-     *
-     * @return the project node id
+     * Create default GHProjectsV2Item instance
      */
-    public String getProjectNodeId() {
-<span class="fc" id="L46">        return projectNodeId;</span>
-    }
-
-    /**
-     * Gets the content node id.
-     *
-     * @return the content node id
-     */
-    public String getContentNodeId() {
-<span class="fc" id="L55">        return contentNodeId;</span>
-    }
-
-    /**
-     * Gets the content type.
-     *
-     * @return the content type
-     */
-    public ContentType getContentType() {
-<span class="fc" id="L64">        return EnumUtils.getEnumOrDefault(ContentType.class, contentType, ContentType.UNKNOWN);</span>
-    }
-
-    /**
-     * Gets the creator.
-     *
-     * @return the creator
-     */
-    public GHUser getCreator() {
-<span class="fc" id="L73">        return root().intern(creator);</span>
-    }
+<span class="fc" id="L52">    public GHProjectsV2Item() {</span>
+<span class="fc" id="L53">    }</span>
 
     /**
      * Gets the archived at.
@@ -80,7 +59,34 @@ public class GHProjectsV2Item extends GHObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
     public Instant getArchivedAt() {
-<span class="fc" id="L83">        return GitHubClient.parseInstant(archivedAt);</span>
+<span class="fc" id="L62">        return GitHubClient.parseInstant(archivedAt);</span>
+    }
+
+    /**
+     * Gets the content node id.
+     *
+     * @return the content node id
+     */
+    public String getContentNodeId() {
+<span class="fc" id="L71">        return contentNodeId;</span>
+    }
+
+    /**
+     * Gets the content type.
+     *
+     * @return the content type
+     */
+    public ContentType getContentType() {
+<span class="fc" id="L80">        return EnumUtils.getEnumOrDefault(ContentType.class, contentType, ContentType.UNKNOWN);</span>
+    }
+
+    /**
+     * Gets the creator.
+     *
+     * @return the creator
+     */
+    public GHUser getCreator() {
+<span class="fc" id="L89">        return root().intern(creator);</span>
     }
 
     /**
@@ -89,22 +95,16 @@ public class GHProjectsV2Item extends GHObject {
      * @return the html url
      */
     public URL getHtmlUrl() {
-<span class="nc" id="L92">        throw new IllegalStateException(getClass().getName() + &quot; does not offer a HTML URL.&quot;);</span>
+<span class="nc" id="L98">        throw new IllegalStateException(getClass().getName() + &quot; does not offer a HTML URL.&quot;);</span>
     }
 
     /**
-     * The Enum ContentType.
+     * Gets the project node id.
+     *
+     * @return the project node id
      */
-<span class="fc" id="L98">    public enum ContentType {</span>
-
-        /** The issue. */
-<span class="fc" id="L101">        ISSUE,</span>
-        /** The draftissue. */
-<span class="fc" id="L103">        DRAFTISSUE,</span>
-        /** The pullrequest. */
-<span class="fc" id="L105">        PULLREQUEST,</span>
-        /** The unknown. */
-<span class="fc" id="L107">        UNKNOWN;</span>
+    public String getProjectNodeId() {
+<span class="fc" id="L107">        return projectNodeId;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

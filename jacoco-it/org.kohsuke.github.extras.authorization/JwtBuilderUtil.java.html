@@ -25,77 +25,6 @@ import java.util.logging.Logger;
  */
 <span class="nc" id="L26">final class JwtBuilderUtil {</span>
 
-<span class="fc" id="L28">    private static final Logger LOGGER = Logger.getLogger(JwtBuilderUtil.class.getName());</span>
-
-    private static IJwtBuilder builder;
-
-    /**
-     * Build a JWT.
-     *
-     * @param issuedAt
-     *            issued at
-     * @param expiration
-     *            expiration
-     * @param applicationId
-     *            application id
-     * @param privateKey
-     *            private key
-     * @return JWT
-     */
-    static String buildJwt(Instant issuedAt, Instant expiration, String applicationId, PrivateKey privateKey) {
-<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (builder == null) {</span>
-<span class="fc" id="L47">            createBuilderImpl(issuedAt, expiration, applicationId, privateKey);</span>
-        }
-<span class="fc" id="L49">        return builder.buildJwt(issuedAt, expiration, applicationId, privateKey);</span>
-    }
-
-    private static void createBuilderImpl(Instant issuedAt,
-            Instant expiration,
-            String applicationId,
-            PrivateKey privateKey) {
-        // Figure out which builder to use and cache it. We don't worry about thread safety here because we're fine if
-        // the builder is assigned multiple times. The end result will be the same.
-        try {
-<span class="fc" id="L59">            builder = new DefaultBuilderImpl();</span>
-<span class="fc" id="L60">        } catch (NoSuchMethodError | NoClassDefFoundError e) {</span>
-<span class="fc" id="L61">            LOGGER.warning(</span>
-                    &quot;You are using an outdated version of the io.jsonwebtoken:jjwt-* suite. v0.12.x or later is recommended.&quot;);
-
-            try {
-<span class="fc" id="L65">                ReflectionBuilderImpl reflectionBuider = new ReflectionBuilderImpl();</span>
-                // Build a JWT to eagerly check for any reflection errors.
-<span class="fc" id="L67">                reflectionBuider.buildJwtWithReflection(issuedAt, expiration, applicationId, privateKey);</span>
-
-<span class="fc" id="L69">                builder = reflectionBuider;</span>
-<span class="nc" id="L70">            } catch (ReflectiveOperationException re) {</span>
-<span class="nc" id="L71">                throw new GHException(</span>
-                        &quot;Could not build JWT using reflection on io.jsonwebtoken:jjwt-* suite.&quot;
-                                + &quot;The minimum supported version is v0.11.x, v0.12.x or later is recommended.&quot;,
-                        re);
-<span class="fc" id="L75">            }</span>
-<span class="fc" id="L76">        }</span>
-<span class="fc" id="L77">    }</span>
-
-    /**
-     * IJwtBuilder interface to isolate loading of JWT classes allowing us to catch and handle linkage errors.
-     */
-    interface IJwtBuilder {
-        /**
-         * Build a JWT.
-         *
-         * @param issuedAt
-         *            issued at
-         * @param expiration
-         *            expiration
-         * @param applicationId
-         *            application id
-         * @param privateKey
-         *            private key
-         * @return JWT
-         */
-        String buildJwt(Instant issuedAt, Instant expiration, String applicationId, PrivateKey privateKey);
-    }
-
     /**
      * A class to isolate loading of JWT classes allowing us to catch and handle linkage errors.
      *
@@ -120,17 +49,17 @@ import java.util.logging.Logger;
 
             // io.jsonwebtoken.security.SignatureAlgorithm is not present in v0.11.x and below.
             // Trying to call a method that uses it causes &quot;NoClassDefFoundError&quot; if v0.11.x is being used.
-<span class="fc" id="L123">            SignatureAlgorithm rs256 = Jwts.SIG.RS256;</span>
+<span class="fc" id="L52">            SignatureAlgorithm rs256 = Jwts.SIG.RS256;</span>
 
-<span class="fc" id="L125">            JwtBuilder jwtBuilder = Jwts.builder();</span>
+<span class="fc" id="L54">            JwtBuilder jwtBuilder = Jwts.builder();</span>
             // jjwt uses the legacy java date-time api
             // see https://github.com/jwtk/jjwt/issues/235 for future support for java 8 date-time api
-<span class="fc" id="L128">            jwtBuilder = jwtBuilder.issuedAt(Date.from(issuedAt))</span>
-<span class="fc" id="L129">                    .expiration(Date.from(expiration))</span>
-<span class="fc" id="L130">                    .issuer(applicationId)</span>
-<span class="fc" id="L131">                    .signWith(privateKey, rs256)</span>
-<span class="fc" id="L132">                    .json(new JacksonSerializer&lt;&gt;());</span>
-<span class="fc" id="L133">            return jwtBuilder.compact();</span>
+<span class="fc" id="L57">            jwtBuilder = jwtBuilder.issuedAt(Date.from(issuedAt))</span>
+<span class="fc" id="L58">                    .expiration(Date.from(expiration))</span>
+<span class="fc" id="L59">                    .issuer(applicationId)</span>
+<span class="fc" id="L60">                    .signWith(privateKey, rs256)</span>
+<span class="fc" id="L61">                    .json(new JacksonSerializer&lt;&gt;());</span>
+<span class="fc" id="L62">            return jwtBuilder.compact();</span>
         }
     }
 
@@ -139,29 +68,34 @@ import java.util.logging.Logger;
      */
     private static final class ReflectionBuilderImpl implements IJwtBuilder {
 
-        private Method setIssuedAtMethod;
-        private Method setExpirationMethod;
-        private Method setIssuerMethod;
+        @SuppressWarnings(&quot;unchecked&quot;)
+        private static &lt;T extends Enum&lt;T&gt;&gt; T createEnumInstance(Class&lt;?&gt; type, String name) {
+<span class="fc" id="L73">            return Enum.valueOf((Class&lt;T&gt;) type, name);</span>
+        }
         private Enum&lt;?&gt; rs256SignatureAlgorithm;
-        private Method signWithMethod;
         private Method serializeToJsonMethod;
+        private Method setExpirationMethod;
+        private Method setIssuedAtMethod;
+        private Method setIssuerMethod;
 
-<span class="fc" id="L149">        ReflectionBuilderImpl() throws ReflectiveOperationException {</span>
-<span class="fc" id="L150">            JwtBuilder jwtBuilder = Jwts.builder();</span>
-<span class="fc" id="L151">            Class&lt;?&gt; jwtReflectionClass = jwtBuilder.getClass();</span>
+        private Method signWithMethod;
+
+<span class="fc" id="L83">        ReflectionBuilderImpl() throws ReflectiveOperationException {</span>
+<span class="fc" id="L84">            JwtBuilder jwtBuilder = Jwts.builder();</span>
+<span class="fc" id="L85">            Class&lt;?&gt; jwtReflectionClass = jwtBuilder.getClass();</span>
 
             // jjwt uses the legacy java date-time api
             // see https://github.com/jwtk/jjwt/issues/235 for future support for java 8 date-time api
             // noinspection UseOfObsoleteDateTimeApi
-<span class="fc" id="L156">            setIssuedAtMethod = jwtReflectionClass.getMethod(&quot;setIssuedAt&quot;, Date.class);</span>
-<span class="fc" id="L157">            setIssuerMethod = jwtReflectionClass.getMethod(&quot;setIssuer&quot;, String.class);</span>
+<span class="fc" id="L90">            setIssuedAtMethod = jwtReflectionClass.getMethod(&quot;setIssuedAt&quot;, Date.class);</span>
+<span class="fc" id="L91">            setIssuerMethod = jwtReflectionClass.getMethod(&quot;setIssuer&quot;, String.class);</span>
             // noinspection UseOfObsoleteDateTimeApi
-<span class="fc" id="L159">            setExpirationMethod = jwtReflectionClass.getMethod(&quot;setExpiration&quot;, Date.class);</span>
-<span class="fc" id="L160">            Class&lt;?&gt; signatureAlgorithmClass = Class.forName(&quot;io.jsonwebtoken.SignatureAlgorithm&quot;);</span>
-<span class="fc" id="L161">            rs256SignatureAlgorithm = createEnumInstance(signatureAlgorithmClass, &quot;RS256&quot;);</span>
-<span class="fc" id="L162">            signWithMethod = jwtReflectionClass.getMethod(&quot;signWith&quot;, Key.class, signatureAlgorithmClass);</span>
-<span class="fc" id="L163">            serializeToJsonMethod = jwtReflectionClass.getMethod(&quot;serializeToJsonWith&quot;, Serializer.class);</span>
-<span class="fc" id="L164">        }</span>
+<span class="fc" id="L93">            setExpirationMethod = jwtReflectionClass.getMethod(&quot;setExpiration&quot;, Date.class);</span>
+<span class="fc" id="L94">            Class&lt;?&gt; signatureAlgorithmClass = Class.forName(&quot;io.jsonwebtoken.SignatureAlgorithm&quot;);</span>
+<span class="fc" id="L95">            rs256SignatureAlgorithm = createEnumInstance(signatureAlgorithmClass, &quot;RS256&quot;);</span>
+<span class="fc" id="L96">            signWithMethod = jwtReflectionClass.getMethod(&quot;signWith&quot;, Key.class, signatureAlgorithmClass);</span>
+<span class="fc" id="L97">            serializeToJsonMethod = jwtReflectionClass.getMethod(&quot;serializeToJsonWith&quot;, Serializer.class);</span>
+<span class="fc" id="L98">        }</span>
 
         /**
          * This method builds a JWT using older (pre 0.12.x) versions of jjwt library by leveraging reflection.
@@ -179,10 +113,10 @@ import java.util.logging.Logger;
         public String buildJwt(Instant issuedAt, Instant expiration, String applicationId, PrivateKey privateKey) {
 
             try {
-<span class="fc" id="L182">                return buildJwtWithReflection(issuedAt, expiration, applicationId, privateKey);</span>
-<span class="nc" id="L183">            } catch (ReflectiveOperationException e) {</span>
+<span class="fc" id="L116">                return buildJwtWithReflection(issuedAt, expiration, applicationId, privateKey);</span>
+<span class="nc" id="L117">            } catch (ReflectiveOperationException e) {</span>
                 // This should never happen. Reflection errors should have been caught during initialization.
-<span class="nc" id="L185">                throw new GHException(&quot;Reflection errors during JWT creation should have been checked already.&quot;, e);</span>
+<span class="nc" id="L119">                throw new GHException(&quot;Reflection errors during JWT creation should have been checked already.&quot;, e);</span>
             }
         }
 
@@ -190,22 +124,88 @@ import java.util.logging.Logger;
                 Instant expiration,
                 String applicationId,
                 PrivateKey privateKey) throws IllegalAccessException, InvocationTargetException {
-<span class="fc" id="L193">            JwtBuilder jwtBuilder = Jwts.builder();</span>
-<span class="fc" id="L194">            Object builderObj = jwtBuilder;</span>
+<span class="fc" id="L127">            JwtBuilder jwtBuilder = Jwts.builder();</span>
+<span class="fc" id="L128">            Object builderObj = jwtBuilder;</span>
             // jjwt uses the legacy java date-time api
             // see https://github.com/jwtk/jjwt/issues/235 for future support for java 8 date-time api
-<span class="fc" id="L197">            builderObj = setIssuedAtMethod.invoke(builderObj, Date.from(issuedAt));</span>
-<span class="fc" id="L198">            builderObj = setExpirationMethod.invoke(builderObj, Date.from(expiration));</span>
-<span class="fc" id="L199">            builderObj = setIssuerMethod.invoke(builderObj, applicationId);</span>
-<span class="fc" id="L200">            builderObj = signWithMethod.invoke(builderObj, privateKey, rs256SignatureAlgorithm);</span>
-<span class="fc" id="L201">            builderObj = serializeToJsonMethod.invoke(builderObj, new JacksonSerializer&lt;&gt;());</span>
-<span class="fc" id="L202">            return ((JwtBuilder) builderObj).compact();</span>
+<span class="fc" id="L131">            builderObj = setIssuedAtMethod.invoke(builderObj, Date.from(issuedAt));</span>
+<span class="fc" id="L132">            builderObj = setExpirationMethod.invoke(builderObj, Date.from(expiration));</span>
+<span class="fc" id="L133">            builderObj = setIssuerMethod.invoke(builderObj, applicationId);</span>
+<span class="fc" id="L134">            builderObj = signWithMethod.invoke(builderObj, privateKey, rs256SignatureAlgorithm);</span>
+<span class="fc" id="L135">            builderObj = serializeToJsonMethod.invoke(builderObj, new JacksonSerializer&lt;&gt;());</span>
+<span class="fc" id="L136">            return ((JwtBuilder) builderObj).compact();</span>
         }
+    }
 
-        @SuppressWarnings(&quot;unchecked&quot;)
-        private static &lt;T extends Enum&lt;T&gt;&gt; T createEnumInstance(Class&lt;?&gt; type, String name) {
-<span class="fc" id="L207">            return Enum.valueOf((Class&lt;T&gt;) type, name);</span>
+    /**
+     * IJwtBuilder interface to isolate loading of JWT classes allowing us to catch and handle linkage errors.
+     */
+    interface IJwtBuilder {
+        /**
+         * Build a JWT.
+         *
+         * @param issuedAt
+         *            issued at
+         * @param expiration
+         *            expiration
+         * @param applicationId
+         *            application id
+         * @param privateKey
+         *            private key
+         * @return JWT
+         */
+        String buildJwt(Instant issuedAt, Instant expiration, String applicationId, PrivateKey privateKey);
+    }
+
+<span class="fc" id="L160">    private static final Logger LOGGER = Logger.getLogger(JwtBuilderUtil.class.getName());</span>
+
+    private static IJwtBuilder builder;
+
+    private static void createBuilderImpl(Instant issuedAt,
+            Instant expiration,
+            String applicationId,
+            PrivateKey privateKey) {
+        // Figure out which builder to use and cache it. We don't worry about thread safety here because we're fine if
+        // the builder is assigned multiple times. The end result will be the same.
+        try {
+<span class="fc" id="L171">            builder = new DefaultBuilderImpl();</span>
+<span class="fc" id="L172">        } catch (NoSuchMethodError | NoClassDefFoundError e) {</span>
+<span class="fc" id="L173">            LOGGER.warning(</span>
+                    &quot;You are using an outdated version of the io.jsonwebtoken:jjwt-* suite. v0.12.x or later is recommended.&quot;);
+
+            try {
+<span class="fc" id="L177">                ReflectionBuilderImpl reflectionBuider = new ReflectionBuilderImpl();</span>
+                // Build a JWT to eagerly check for any reflection errors.
+<span class="fc" id="L179">                reflectionBuider.buildJwtWithReflection(issuedAt, expiration, applicationId, privateKey);</span>
+
+<span class="fc" id="L181">                builder = reflectionBuider;</span>
+<span class="nc" id="L182">            } catch (ReflectiveOperationException re) {</span>
+<span class="nc" id="L183">                throw new GHException(</span>
+                        &quot;Could not build JWT using reflection on io.jsonwebtoken:jjwt-* suite.&quot;
+                                + &quot;The minimum supported version is v0.11.x, v0.12.x or later is recommended.&quot;,
+                        re);
+<span class="fc" id="L187">            }</span>
+<span class="fc" id="L188">        }</span>
+<span class="fc" id="L189">    }</span>
+
+    /**
+     * Build a JWT.
+     *
+     * @param issuedAt
+     *            issued at
+     * @param expiration
+     *            expiration
+     * @param applicationId
+     *            application id
+     * @param privateKey
+     *            private key
+     * @return JWT
+     */
+    static String buildJwt(Instant issuedAt, Instant expiration, String applicationId, PrivateKey privateKey) {
+<span class="fc bfc" id="L205" title="All 2 branches covered.">        if (builder == null) {</span>
+<span class="fc" id="L206">            createBuilderImpl(issuedAt, expiration, applicationId, privateKey);</span>
         }
+<span class="fc" id="L208">        return builder.buildJwt(issuedAt, expiration, applicationId, privateKey);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

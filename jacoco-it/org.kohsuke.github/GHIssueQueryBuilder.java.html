@@ -10,137 +10,6 @@ import java.util.List;
  * The Class GHIssueQueryBuilder.
  */
 public abstract class GHIssueQueryBuilder extends GHQueryBuilder&lt;GHIssue&gt; {
-<span class="fc" id="L13">    private final List&lt;String&gt; labels = new ArrayList&lt;&gt;();</span>
-
-    /**
-     * Instantiates a new GH issue query builder.
-     *
-     * @param root
-     *            the root
-     */
-    GHIssueQueryBuilder(GitHub root) {
-<span class="fc" id="L22">        super(root);</span>
-<span class="fc" id="L23">    }</span>
-
-    /**
-     * State gh issue query builder.
-     *
-     * @param state
-     *            the state
-     * @return the gh issue query builder
-     */
-    public GHIssueQueryBuilder state(GHIssueState state) {
-<span class="fc" id="L33">        req.with(&quot;state&quot;, state);</span>
-<span class="fc" id="L34">        return this;</span>
-    }
-
-    /**
-     * Labels gh issue query builder.
-     *
-     * @param label
-     *            the labels
-     * @return the gh issue query builder
-     */
-    public GHIssueQueryBuilder label(String label) {
-<span class="fc bfc" id="L45" title="All 4 branches covered.">        if (label != null &amp;&amp; !label.trim().isEmpty()) {</span>
-<span class="fc" id="L46">            labels.add(label);</span>
-<span class="fc" id="L47">            req.with(&quot;labels&quot;, String.join(&quot;,&quot;, labels));</span>
-        }
-<span class="fc" id="L49">        return this;</span>
-    }
-
-    /**
-     * Sort gh issue query builder.
-     *
-     * @param sort
-     *            the sort
-     * @return the gh issue query builder
-     */
-    public GHIssueQueryBuilder sort(Sort sort) {
-<span class="fc" id="L60">        req.with(&quot;sort&quot;, sort);</span>
-<span class="fc" id="L61">        return this;</span>
-    }
-
-    /**
-     * Direction gh issue query builder.
-     *
-     * @param direction
-     *            the direction
-     * @return the gh issue query builder
-     */
-    public GHIssueQueryBuilder direction(GHDirection direction) {
-<span class="fc" id="L72">        req.with(&quot;direction&quot;, direction);</span>
-<span class="fc" id="L73">        return this;</span>
-    }
-
-    /**
-     * Only issues after this date will be returned.
-     *
-     * @param date
-     *            the date
-     * @return the gh issue query builder
-     * @deprecated Use {@link #since(Instant)}
-     */
-    @Deprecated
-    public GHIssueQueryBuilder since(Date date) {
-<span class="fc" id="L86">        return since(GitHubClient.toInstantOrNull(date));</span>
-    }
-
-    /**
-     * Only issues after this date will be returned.
-     *
-     * @param date
-     *            the date
-     * @return the gh issue query builder
-     */
-    public GHIssueQueryBuilder since(Instant date) {
-<span class="fc" id="L97">        req.with(&quot;since&quot;, GitHubClient.printInstant(date));</span>
-<span class="fc" id="L98">        return this;</span>
-    }
-
-    /**
-     * Only issues after this date will be returned.
-     *
-     * @param timestamp
-     *            the timestamp
-     * @return the gh issue query builder
-     */
-    public GHIssueQueryBuilder since(long timestamp) {
-<span class="fc" id="L109">        return since(new Date(timestamp));</span>
-    }
-
-    /**
-     * Page size gh issue query builder.
-     *
-     * @param pageSize
-     *            the page size
-     * @return the gh issue query builder
-     */
-    public GHIssueQueryBuilder pageSize(int pageSize) {
-<span class="fc" id="L120">        req.with(&quot;per_page&quot;, pageSize);</span>
-<span class="fc" id="L121">        return this;</span>
-    }
-
-    /**
-     * The enum Sort.
-     */
-<span class="fc" id="L127">    public enum Sort {</span>
-
-        /** The created. */
-<span class="fc" id="L130">        CREATED,</span>
-        /** The updated. */
-<span class="fc" id="L132">        UPDATED,</span>
-        /** The comments. */
-<span class="fc" id="L134">        COMMENTS</span>
-    }
-
-    /**
-     * Gets the api url.
-     *
-     * @return the api url
-     */
-    public abstract String getApiUrl();
-
     /**
      * The Class ForRepository.
      */
@@ -154,9 +23,65 @@ public abstract class GHIssueQueryBuilder extends GHQueryBuilder&lt;GHIssue&gt; 
          *            the repo
          */
         ForRepository(final GHRepository repo) {
-<span class="fc" id="L157">            super(repo.root());</span>
-<span class="fc" id="L158">            this.repo = repo;</span>
-<span class="fc" id="L159">        }</span>
+<span class="fc" id="L26">            super(repo.root());</span>
+<span class="fc" id="L27">            this.repo = repo;</span>
+<span class="fc" id="L28">        }</span>
+
+        /**
+         * Assignee gh issue query builder.
+         *
+         * @param assignee
+         *            the assignee
+         * @return the gh issue query builder
+         */
+        public ForRepository assignee(String assignee) {
+<span class="fc" id="L38">            req.with(&quot;assignee&quot;, assignee);</span>
+<span class="fc" id="L39">            return this;</span>
+        }
+
+        /**
+         * Creator gh issue query builder.
+         *
+         * @param creator
+         *            the creator
+         * @return the gh issue query builder
+         */
+        public ForRepository creator(String creator) {
+<span class="fc" id="L50">            req.with(&quot;creator&quot;, creator);</span>
+<span class="fc" id="L51">            return this;</span>
+        }
+
+        /**
+         * Gets the api url.
+         *
+         * @return the api url
+         */
+        @Override
+        public String getApiUrl() {
+<span class="fc" id="L61">            return repo.getApiTailUrl(&quot;issues&quot;);</span>
+        }
+
+        /**
+         * List.
+         *
+         * @return the paged iterable
+         */
+        @Override
+        public PagedIterable&lt;GHIssue&gt; list() {
+<span class="fc" id="L71">            return req.withUrlPath(getApiUrl()).toIterable(GHIssue[].class, item -&gt; item.wrap(repo));</span>
+        }
+
+        /**
+         * Mentioned gh issue query builder.
+         *
+         * @param mentioned
+         *            the mentioned
+         * @return the gh issue query builder
+         */
+        public ForRepository mentioned(String mentioned) {
+<span class="fc" id="L82">            req.with(&quot;mentioned&quot;, mentioned);</span>
+<span class="fc" id="L83">            return this;</span>
+        }
 
         /**
          * Milestone gh issue query builder.
@@ -169,65 +94,140 @@ public abstract class GHIssueQueryBuilder extends GHQueryBuilder&lt;GHIssue&gt; 
          * @return the gh issue request query builder
          */
         public ForRepository milestone(String milestone) {
-<span class="fc" id="L172">            req.with(&quot;milestone&quot;, milestone);</span>
-<span class="fc" id="L173">            return this;</span>
+<span class="fc" id="L97">            req.with(&quot;milestone&quot;, milestone);</span>
+<span class="fc" id="L98">            return this;</span>
         }
+    }
 
-        /**
-         * Assignee gh issue query builder.
-         *
-         * @param assignee
-         *            the assignee
-         * @return the gh issue query builder
-         */
-        public ForRepository assignee(String assignee) {
-<span class="fc" id="L184">            req.with(&quot;assignee&quot;, assignee);</span>
-<span class="fc" id="L185">            return this;</span>
-        }
+    /**
+     * The enum Sort.
+     */
+<span class="fc" id="L105">    public enum Sort {</span>
 
-        /**
-         * Creator gh issue query builder.
-         *
-         * @param creator
-         *            the creator
-         * @return the gh issue query builder
-         */
-        public ForRepository creator(String creator) {
-<span class="fc" id="L196">            req.with(&quot;creator&quot;, creator);</span>
-<span class="fc" id="L197">            return this;</span>
-        }
+        /** The comments. */
+<span class="fc" id="L108">        COMMENTS,</span>
+        /** The created. */
+<span class="fc" id="L110">        CREATED,</span>
+        /** The updated. */
+<span class="fc" id="L112">        UPDATED</span>
+    }
 
-        /**
-         * Mentioned gh issue query builder.
-         *
-         * @param mentioned
-         *            the mentioned
-         * @return the gh issue query builder
-         */
-        public ForRepository mentioned(String mentioned) {
-<span class="fc" id="L208">            req.with(&quot;mentioned&quot;, mentioned);</span>
-<span class="fc" id="L209">            return this;</span>
-        }
+<span class="fc" id="L115">    private final List&lt;String&gt; labels = new ArrayList&lt;&gt;();</span>
 
-        /**
-         * Gets the api url.
-         *
-         * @return the api url
-         */
-        @Override
-        public String getApiUrl() {
-<span class="fc" id="L219">            return repo.getApiTailUrl(&quot;issues&quot;);</span>
-        }
+    /**
+     * Instantiates a new GH issue query builder.
+     *
+     * @param root
+     *            the root
+     */
+    GHIssueQueryBuilder(GitHub root) {
+<span class="fc" id="L124">        super(root);</span>
+<span class="fc" id="L125">    }</span>
 
-        /**
-         * List.
-         *
-         * @return the paged iterable
-         */
-        @Override
-        public PagedIterable&lt;GHIssue&gt; list() {
-<span class="fc" id="L229">            return req.withUrlPath(getApiUrl()).toIterable(GHIssue[].class, item -&gt; item.wrap(repo));</span>
+    /**
+     * Direction gh issue query builder.
+     *
+     * @param direction
+     *            the direction
+     * @return the gh issue query builder
+     */
+    public GHIssueQueryBuilder direction(GHDirection direction) {
+<span class="fc" id="L135">        req.with(&quot;direction&quot;, direction);</span>
+<span class="fc" id="L136">        return this;</span>
+    }
+
+    /**
+     * Gets the api url.
+     *
+     * @return the api url
+     */
+    public abstract String getApiUrl();
+
+    /**
+     * Labels gh issue query builder.
+     *
+     * @param label
+     *            the labels
+     * @return the gh issue query builder
+     */
+    public GHIssueQueryBuilder label(String label) {
+<span class="fc bfc" id="L154" title="All 4 branches covered.">        if (label != null &amp;&amp; !label.trim().isEmpty()) {</span>
+<span class="fc" id="L155">            labels.add(label);</span>
+<span class="fc" id="L156">            req.with(&quot;labels&quot;, String.join(&quot;,&quot;, labels));</span>
         }
+<span class="fc" id="L158">        return this;</span>
+    }
+
+    /**
+     * Page size gh issue query builder.
+     *
+     * @param pageSize
+     *            the page size
+     * @return the gh issue query builder
+     */
+    public GHIssueQueryBuilder pageSize(int pageSize) {
+<span class="fc" id="L169">        req.with(&quot;per_page&quot;, pageSize);</span>
+<span class="fc" id="L170">        return this;</span>
+    }
+
+    /**
+     * Only issues after this date will be returned.
+     *
+     * @param date
+     *            the date
+     * @return the gh issue query builder
+     * @deprecated Use {@link #since(Instant)}
+     */
+    @Deprecated
+    public GHIssueQueryBuilder since(Date date) {
+<span class="fc" id="L183">        return since(GitHubClient.toInstantOrNull(date));</span>
+    }
+
+    /**
+     * Only issues after this date will be returned.
+     *
+     * @param date
+     *            the date
+     * @return the gh issue query builder
+     */
+    public GHIssueQueryBuilder since(Instant date) {
+<span class="fc" id="L194">        req.with(&quot;since&quot;, GitHubClient.printInstant(date));</span>
+<span class="fc" id="L195">        return this;</span>
+    }
+
+    /**
+     * Only issues after this date will be returned.
+     *
+     * @param timestamp
+     *            the timestamp
+     * @return the gh issue query builder
+     */
+    public GHIssueQueryBuilder since(long timestamp) {
+<span class="fc" id="L206">        return since(new Date(timestamp));</span>
+    }
+
+    /**
+     * Sort gh issue query builder.
+     *
+     * @param sort
+     *            the sort
+     * @return the gh issue query builder
+     */
+    public GHIssueQueryBuilder sort(Sort sort) {
+<span class="fc" id="L217">        req.with(&quot;sort&quot;, sort);</span>
+<span class="fc" id="L218">        return this;</span>
+    }
+
+    /**
+     * State gh issue query builder.
+     *
+     * @param state
+     *            the state
+     * @return the gh issue query builder
+     */
+    public GHIssueQueryBuilder state(GHIssueState state) {
+<span class="fc" id="L229">        req.with(&quot;state&quot;, state);</span>
+<span class="fc" id="L230">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

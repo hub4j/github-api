@@ -23,8 +23,41 @@ import javax.annotation.Nonnull;
  */
 <span class="fc" id="L24">class GitHubPageIterator&lt;T&gt; implements Iterator&lt;T&gt; {</span>
 
+    /**
+     * Loads paginated resources.
+     *
+     * @param &lt;T&gt;
+     *            type of each page (not the items in the page).
+     * @param client
+     *            the {@link GitHubClient} from which to request responses
+     * @param type
+     *            type of each page (not the items in the page).
+     * @param request
+     *            the request
+     * @param pageSize
+     *            the page size
+     * @return iterator
+     */
+    static &lt;T&gt; GitHubPageIterator&lt;T&gt; create(GitHubClient client, Class&lt;T&gt; type, GitHubRequest request, int pageSize) {
+
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (pageSize &gt; 0) {</span>
+<span class="fc" id="L44">            GitHubRequest.Builder&lt;?&gt; builder = request.toBuilder().with(&quot;per_page&quot;, pageSize);</span>
+<span class="fc" id="L45">            request = builder.build();</span>
+        }
+
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        if (!&quot;GET&quot;.equals(request.method())) {</span>
+<span class="nc" id="L49">            throw new IllegalArgumentException(&quot;Request method \&quot;GET\&quot; is required for page iterator.&quot;);</span>
+        }
+
+<span class="fc" id="L52">        return new GitHubPageIterator&lt;&gt;(client, type, request);</span>
+    }
     private final GitHubClient client;
-    private final Class&lt;T&gt; type;
+
+    /**
+     * When done iterating over pages, it is on rare occasions useful to be able to get information from the final
+     * response that was retrieved.
+     */
+<span class="fc" id="L60">    private GitHubResponse&lt;T&gt; finalResponse = null;</span>
 
     /**
      * The page that will be returned when {@link #next()} is called.
@@ -44,53 +77,32 @@ import javax.annotation.Nonnull;
      */
     private GitHubRequest nextRequest;
 
-    /**
-     * When done iterating over pages, it is on rare occasions useful to be able to get information from the final
-     * response that was retrieved.
-     */
-<span class="fc" id="L51">    private GitHubResponse&lt;T&gt; finalResponse = null;</span>
+    private final Class&lt;T&gt; type;
 
-<span class="fc" id="L53">    private GitHubPageIterator(GitHubClient client, Class&lt;T&gt; type, GitHubRequest request) {</span>
-<span class="fc" id="L54">        this.client = client;</span>
-<span class="fc" id="L55">        this.type = type;</span>
-<span class="fc" id="L56">        this.nextRequest = request;</span>
-<span class="fc" id="L57">    }</span>
+<span class="fc" id="L82">    private GitHubPageIterator(GitHubClient client, Class&lt;T&gt; type, GitHubRequest request) {</span>
+<span class="fc" id="L83">        this.client = client;</span>
+<span class="fc" id="L84">        this.type = type;</span>
+<span class="fc" id="L85">        this.nextRequest = request;</span>
+<span class="fc" id="L86">    }</span>
 
     /**
-     * Loads paginated resources.
+     * On rare occasions the final response from iterating is needed.
      *
-     * @param &lt;T&gt;
-     *            type of each page (not the items in the page).
-     * @param client
-     *            the {@link GitHubClient} from which to request responses
-     * @param type
-     *            type of each page (not the items in the page).
-     * @param request
-     *            the request
-     * @param pageSize
-     *            the page size
-     * @return iterator
+     * @return the final response of the iterator.
      */
-    static &lt;T&gt; GitHubPageIterator&lt;T&gt; create(GitHubClient client, Class&lt;T&gt; type, GitHubRequest request, int pageSize) {
-
-<span class="fc bfc" id="L76" title="All 2 branches covered.">        if (pageSize &gt; 0) {</span>
-<span class="fc" id="L77">            GitHubRequest.Builder&lt;?&gt; builder = request.toBuilder().with(&quot;per_page&quot;, pageSize);</span>
-<span class="fc" id="L78">            request = builder.build();</span>
+    public GitHubResponse&lt;T&gt; finalResponse() {
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        if (hasNext()) {</span>
+<span class="nc" id="L95">            throw new GHException(&quot;Final response is not available until after iterator is done.&quot;);</span>
         }
-
-<span class="pc bpc" id="L81" title="1 of 2 branches missed.">        if (!&quot;GET&quot;.equals(request.method())) {</span>
-<span class="nc" id="L82">            throw new IllegalArgumentException(&quot;Request method \&quot;GET\&quot; is required for page iterator.&quot;);</span>
-        }
-
-<span class="fc" id="L85">        return new GitHubPageIterator&lt;&gt;(client, type, request);</span>
+<span class="fc" id="L97">        return finalResponse;</span>
     }
 
     /**
      * {@inheritDoc}
      */
     public boolean hasNext() {
-<span class="fc" id="L92">        fetch();</span>
-<span class="fc bfc" id="L93" title="All 2 branches covered.">        return next != null;</span>
+<span class="fc" id="L104">        fetch();</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        return next != null;</span>
     }
 
     /**
@@ -100,25 +112,13 @@ import javax.annotation.Nonnull;
      */
     @Nonnull
     public T next() {
-<span class="fc" id="L103">        fetch();</span>
-<span class="fc" id="L104">        T result = next;</span>
-<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        if (result == null)</span>
-<span class="nc" id="L106">            throw new NoSuchElementException();</span>
+<span class="fc" id="L115">        fetch();</span>
+<span class="fc" id="L116">        T result = next;</span>
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">        if (result == null)</span>
+<span class="nc" id="L118">            throw new NoSuchElementException();</span>
         // If this is the last page, keep the response
-<span class="fc" id="L108">        next = null;</span>
-<span class="fc" id="L109">        return result;</span>
-    }
-
-    /**
-     * On rare occasions the final response from iterating is needed.
-     *
-     * @return the final response of the iterator.
-     */
-    public GitHubResponse&lt;T&gt; finalResponse() {
-<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        if (hasNext()) {</span>
-<span class="nc" id="L119">            throw new GHException(&quot;Final response is not available until after iterator is done.&quot;);</span>
-        }
-<span class="fc" id="L121">        return finalResponse;</span>
+<span class="fc" id="L120">        next = null;</span>
+<span class="fc" id="L121">        return result;</span>
     }
 
     /**

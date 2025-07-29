@@ -9,15 +9,15 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * @see GHApp#listInstallationRequests() GHApp#listInstallationRequests()
  */
 public class GHAppInstallationRequest extends GHObject {
-    /**
-     * Create default GHAppInstallationRequest instance
-     */
-<span class="fc" id="L15">    public GHAppInstallationRequest() {</span>
-<span class="fc" id="L16">    }</span>
-
     private GHOrganization account;
 
     private GHUser requester;
+
+    /**
+     * Create default GHAppInstallationRequest instance
+     */
+<span class="fc" id="L19">    public GHAppInstallationRequest() {</span>
+<span class="fc" id="L20">    }</span>
 
     /**
      * Gets the organization where the app was requested to be installed.

@@ -18,80 +18,35 @@ import java.util.Map;
  */
 public class GHMeta {
 
-    /**
-     * Create default GHMeta instance
-     */
-<span class="fc" id="L24">    public GHMeta() {</span>
-<span class="fc" id="L25">    }</span>
+    private List&lt;String&gt; actions;
 
-    @JsonProperty(&quot;verifiable_password_authentication&quot;)
-    private boolean verifiablePasswordAuthentication;
+    private List&lt;String&gt; api;
+    private List&lt;String&gt; dependabot;
+    private List&lt;String&gt; git;
+    private List&lt;String&gt; hooks;
+<span class="fc" id="L27">    private List&lt;String&gt; importer = new ArrayList&lt;&gt;();</span>
+    private List&lt;String&gt; packages;
+    private List&lt;String&gt; pages;
     @JsonProperty(&quot;ssh_key_fingerprints&quot;)
     private Map&lt;String, String&gt; sshKeyFingerprints;
     @JsonProperty(&quot;ssh_keys&quot;)
     private List&lt;String&gt; sshKeys;
-    private List&lt;String&gt; hooks;
-    private List&lt;String&gt; git;
+    @JsonProperty(&quot;verifiable_password_authentication&quot;)
+    private boolean verifiablePasswordAuthentication;
     private List&lt;String&gt; web;
-    private List&lt;String&gt; api;
-    private List&lt;String&gt; pages;
-<span class="fc" id="L38">    private List&lt;String&gt; importer = new ArrayList&lt;&gt;();</span>
-    private List&lt;String&gt; packages;
-    private List&lt;String&gt; actions;
-    private List&lt;String&gt; dependabot;
+    /**
+     * Create default GHMeta instance
+     */
+<span class="fc" id="L40">    public GHMeta() {</span>
+<span class="fc" id="L41">    }</span>
 
     /**
-     * Is verifiable password authentication boolean.
+     * Gets actions.
      *
-     * @return the boolean
+     * @return the actions
      */
-    public boolean isVerifiablePasswordAuthentication() {
-<span class="fc" id="L49">        return verifiablePasswordAuthentication;</span>
-    }
-
-    /**
-     * Gets ssh key fingerprints.
-     *
-     * @return the ssh key fingerprints
-     */
-    public Map&lt;String, String&gt; getSshKeyFingerprints() {
-<span class="fc" id="L58">        return Collections.unmodifiableMap(sshKeyFingerprints);</span>
-    }
-
-    /**
-     * Gets ssh keys.
-     *
-     * @return the ssh keys
-     */
-    public List&lt;String&gt; getSshKeys() {
-<span class="fc" id="L67">        return Collections.unmodifiableList(sshKeys);</span>
-    }
-
-    /**
-     * Gets hooks.
-     *
-     * @return the hooks
-     */
-    public List&lt;String&gt; getHooks() {
-<span class="fc" id="L76">        return Collections.unmodifiableList(hooks);</span>
-    }
-
-    /**
-     * Gets git.
-     *
-     * @return the git
-     */
-    public List&lt;String&gt; getGit() {
-<span class="fc" id="L85">        return Collections.unmodifiableList(git);</span>
-    }
-
-    /**
-     * Gets web.
-     *
-     * @return the web
-     */
-    public List&lt;String&gt; getWeb() {
-<span class="fc" id="L94">        return Collections.unmodifiableList(web);</span>
+    public List&lt;String&gt; getActions() {
+<span class="fc" id="L49">        return Collections.unmodifiableList(actions);</span>
     }
 
     /**
@@ -100,7 +55,52 @@ public class GHMeta {
      * @return the api
      */
     public List&lt;String&gt; getApi() {
-<span class="fc" id="L103">        return Collections.unmodifiableList(api);</span>
+<span class="fc" id="L58">        return Collections.unmodifiableList(api);</span>
+    }
+
+    /**
+     * Gets dependabot.
+     *
+     * @return the dependabot
+     */
+    public List&lt;String&gt; getDependabot() {
+<span class="fc" id="L67">        return Collections.unmodifiableList(dependabot);</span>
+    }
+
+    /**
+     * Gets git.
+     *
+     * @return the git
+     */
+    public List&lt;String&gt; getGit() {
+<span class="fc" id="L76">        return Collections.unmodifiableList(git);</span>
+    }
+
+    /**
+     * Gets hooks.
+     *
+     * @return the hooks
+     */
+    public List&lt;String&gt; getHooks() {
+<span class="fc" id="L85">        return Collections.unmodifiableList(hooks);</span>
+    }
+
+    /**
+     * Gets importer.
+     *
+     * @return the importer
+     */
+    public List&lt;String&gt; getImporter() {
+<span class="fc" id="L94">        return Collections.unmodifiableList(importer);</span>
+    }
+
+    /**
+     * Gets package.
+     *
+     * @return the package
+     */
+    public List&lt;String&gt; getPackages() {
+<span class="fc" id="L103">        return Collections.unmodifiableList(packages);</span>
     }
 
     /**
@@ -113,39 +113,39 @@ public class GHMeta {
     }
 
     /**
-     * Gets importer.
+     * Gets ssh key fingerprints.
      *
-     * @return the importer
+     * @return the ssh key fingerprints
      */
-    public List&lt;String&gt; getImporter() {
-<span class="fc" id="L121">        return Collections.unmodifiableList(importer);</span>
+    public Map&lt;String, String&gt; getSshKeyFingerprints() {
+<span class="fc" id="L121">        return Collections.unmodifiableMap(sshKeyFingerprints);</span>
     }
 
     /**
-     * Gets package.
+     * Gets ssh keys.
      *
-     * @return the package
+     * @return the ssh keys
      */
-    public List&lt;String&gt; getPackages() {
-<span class="fc" id="L130">        return Collections.unmodifiableList(packages);</span>
+    public List&lt;String&gt; getSshKeys() {
+<span class="fc" id="L130">        return Collections.unmodifiableList(sshKeys);</span>
     }
 
     /**
-     * Gets actions.
+     * Gets web.
      *
-     * @return the actions
+     * @return the web
      */
-    public List&lt;String&gt; getActions() {
-<span class="fc" id="L139">        return Collections.unmodifiableList(actions);</span>
+    public List&lt;String&gt; getWeb() {
+<span class="fc" id="L139">        return Collections.unmodifiableList(web);</span>
     }
 
     /**
-     * Gets dependabot.
+     * Is verifiable password authentication boolean.
      *
-     * @return the dependabot
+     * @return the boolean
      */
-    public List&lt;String&gt; getDependabot() {
-<span class="fc" id="L148">        return Collections.unmodifiableList(dependabot);</span>
+    public boolean isVerifiablePasswordAuthentication() {
+<span class="fc" id="L148">        return verifiablePasswordAuthentication;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -35,41 +35,37 @@ class GitHubResponse&lt;T&gt; {
 
 <span class="fc" id="L36">    private static final Logger LOGGER = Logger.getLogger(GitHubResponse.class.getName());</span>
 
-    private final int statusCode;
-
-    @Nonnull
-    private final Map&lt;String, List&lt;String&gt;&gt; headers;
-
-    @CheckForNull
-    private final T body;
-
     /**
-     * Instantiates a new git hub response.
-     *
-     * @param response
-     *            the response
-     * @param body
-     *            the body
-     */
-<span class="fc" id="L54">    GitHubResponse(GitHubResponse&lt;T&gt; response, @CheckForNull T body) {</span>
-<span class="fc" id="L55">        this.statusCode = response.statusCode();</span>
-<span class="fc" id="L56">        this.headers = response.headers;</span>
-<span class="fc" id="L57">        this.body = body;</span>
-<span class="fc" id="L58">    }</span>
-
-    /**
-     * Instantiates a new git hub response.
+     * Gets the body of the response as a {@link String}.
      *
      * @param connectorResponse
-     *            the connector response
-     * @param body
-     *            the body
+     *            the response to read
+     * @return the body of the response as a {@link String}.
+     * @throws IOException
+     *             if an I/O Exception occurs.
      */
-<span class="fc" id="L68">    GitHubResponse(GitHubConnectorResponse connectorResponse, @CheckForNull T body) {</span>
-<span class="fc" id="L69">        this.statusCode = connectorResponse.statusCode();</span>
-<span class="fc" id="L70">        this.headers = connectorResponse.allHeaders();</span>
-<span class="fc" id="L71">        this.body = body;</span>
-<span class="fc" id="L72">    }</span>
+    @Nonnull
+    static String getBodyAsString(GitHubConnectorResponse connectorResponse) throws IOException {
+<span class="fc" id="L49">        InputStream inputStream = connectorResponse.bodyStream();</span>
+<span class="fc" id="L50">        try (InputStreamReader r = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {</span>
+<span class="fc" id="L51">            return IOUtils.toString(r);</span>
+        }
+    }
+
+    /**
+     * Gets the body of the response as a {@link String}.
+     *
+     * @param connectorResponse
+     *            the response to read
+     * @return the body of the response as a {@link String}.
+     */
+    static String getBodyAsStringOrNull(GitHubConnectorResponse connectorResponse) {
+        try {
+<span class="fc" id="L64">            return getBodyAsString(connectorResponse);</span>
+<span class="nc" id="L65">        } catch (IOException e) {</span>
+        }
+<span class="nc" id="L67">        return null;</span>
+    }
 
     /**
      * Parses a {@link GitHubConnectorResponse} body into a new instance of {@code T}.
@@ -87,26 +83,26 @@ class GitHubResponse&lt;T&gt; {
     @CheckForNull
     static &lt;T&gt; T parseBody(GitHubConnectorResponse connectorResponse, Class&lt;T&gt; type) throws IOException {
 
-<span class="fc bfc" id="L90" title="All 2 branches covered.">        if (connectorResponse.statusCode() == HTTP_NO_CONTENT) {</span>
-<span class="pc bpc" id="L91" title="1 of 4 branches missed.">            if (type != null &amp;&amp; type.isArray()) {</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        if (connectorResponse.statusCode() == HTTP_NO_CONTENT) {</span>
+<span class="pc bpc" id="L87" title="1 of 4 branches missed.">            if (type != null &amp;&amp; type.isArray()) {</span>
                 // no content for array should be empty array
-<span class="fc" id="L93">                return type.cast(Array.newInstance(type.getComponentType(), 0));</span>
+<span class="fc" id="L89">                return type.cast(Array.newInstance(type.getComponentType(), 0));</span>
             } else {
                 // no content for object should be null
-<span class="fc" id="L96">                return null;</span>
+<span class="fc" id="L92">                return null;</span>
             }
         }
 
-<span class="fc" id="L100">        String data = getBodyAsString(connectorResponse);</span>
+<span class="fc" id="L96">        String data = getBodyAsString(connectorResponse);</span>
         try {
-<span class="fc" id="L102">            InjectableValues.Std inject = new InjectableValues.Std();</span>
-<span class="fc" id="L103">            inject.addValue(GitHubConnectorResponse.class, connectorResponse);</span>
+<span class="fc" id="L98">            InjectableValues.Std inject = new InjectableValues.Std();</span>
+<span class="fc" id="L99">            inject.addValue(GitHubConnectorResponse.class, connectorResponse);</span>
 
-<span class="fc" id="L105">            return GitHubClient.getMappingObjectReader(connectorResponse).forType(type).readValue(data);</span>
-<span class="fc" id="L106">        } catch (JsonMappingException | JsonParseException e) {</span>
-<span class="fc" id="L107">            String message = &quot;Failed to deserialize: &quot; + data;</span>
-<span class="fc" id="L108">            LOGGER.log(Level.FINE, message);</span>
-<span class="fc" id="L109">            throw e;</span>
+<span class="fc" id="L101">            return GitHubClient.getMappingObjectReader(connectorResponse).forType(type).readValue(data);</span>
+<span class="fc" id="L102">        } catch (JsonMappingException | JsonParseException e) {</span>
+<span class="fc" id="L103">            String message = &quot;Failed to deserialize: &quot; + data;</span>
+<span class="fc" id="L104">            LOGGER.log(Level.FINE, message);</span>
+<span class="fc" id="L105">            throw e;</span>
         }
     }
 
@@ -126,67 +122,59 @@ class GitHubResponse&lt;T&gt; {
     @CheckForNull
     static &lt;T&gt; T parseBody(GitHubConnectorResponse connectorResponse, T instance) throws IOException {
 
-<span class="fc" id="L129">        String data = getBodyAsString(connectorResponse);</span>
+<span class="fc" id="L125">        String data = getBodyAsString(connectorResponse);</span>
         try {
-<span class="fc" id="L131">            return GitHubClient.getMappingObjectReader(connectorResponse).withValueToUpdate(instance).readValue(data);</span>
-<span class="nc" id="L132">        } catch (JsonMappingException | JsonParseException e) {</span>
-<span class="nc" id="L133">            String message = &quot;Failed to deserialize: &quot; + data;</span>
-<span class="nc" id="L134">            LOGGER.log(Level.FINE, message);</span>
-<span class="nc" id="L135">            throw e;</span>
+<span class="fc" id="L127">            return GitHubClient.getMappingObjectReader(connectorResponse).withValueToUpdate(instance).readValue(data);</span>
+<span class="nc" id="L128">        } catch (JsonMappingException | JsonParseException e) {</span>
+<span class="nc" id="L129">            String message = &quot;Failed to deserialize: &quot; + data;</span>
+<span class="nc" id="L130">            LOGGER.log(Level.FINE, message);</span>
+<span class="nc" id="L131">            throw e;</span>
         }
     }
 
+    @CheckForNull
+    private final T body;
+
+    @Nonnull
+    private final Map&lt;String, List&lt;String&gt;&gt; headers;
+
+    private final int statusCode;
+
     /**
-     * Gets the body of the response as a {@link String}.
+     * Instantiates a new git hub response.
      *
      * @param connectorResponse
-     *            the response to read
-     * @return the body of the response as a {@link String}.
-     * @throws IOException
-     *             if an I/O Exception occurs.
+     *            the connector response
+     * @param body
+     *            the body
      */
-    @Nonnull
-    static String getBodyAsString(GitHubConnectorResponse connectorResponse) throws IOException {
-<span class="fc" id="L150">        InputStream inputStream = connectorResponse.bodyStream();</span>
-<span class="fc" id="L151">        try (InputStreamReader r = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {</span>
-<span class="fc" id="L152">            return IOUtils.toString(r);</span>
-        }
-    }
+<span class="fc" id="L151">    GitHubResponse(GitHubConnectorResponse connectorResponse, @CheckForNull T body) {</span>
+<span class="fc" id="L152">        this.statusCode = connectorResponse.statusCode();</span>
+<span class="fc" id="L153">        this.headers = connectorResponse.allHeaders();</span>
+<span class="fc" id="L154">        this.body = body;</span>
+<span class="fc" id="L155">    }</span>
 
     /**
-     * Gets the body of the response as a {@link String}.
+     * Instantiates a new git hub response.
      *
-     * @param connectorResponse
-     *            the response to read
-     * @return the body of the response as a {@link String}.
+     * @param response
+     *            the response
+     * @param body
+     *            the body
      */
-    static String getBodyAsStringOrNull(GitHubConnectorResponse connectorResponse) {
-        try {
-<span class="fc" id="L165">            return getBodyAsString(connectorResponse);</span>
-<span class="nc" id="L166">        } catch (IOException e) {</span>
-        }
-<span class="nc" id="L168">        return null;</span>
-    }
+<span class="fc" id="L165">    GitHubResponse(GitHubResponse&lt;T&gt; response, @CheckForNull T body) {</span>
+<span class="fc" id="L166">        this.statusCode = response.statusCode();</span>
+<span class="fc" id="L167">        this.headers = response.headers;</span>
+<span class="fc" id="L168">        this.body = body;</span>
+<span class="fc" id="L169">    }</span>
 
     /**
-     * The status code for this response.
+     * The body of the response parsed as a {@code T}.
      *
-     * @return the status code for this response.
+     * @return body of the response
      */
-    public int statusCode() {
-<span class="fc" id="L177">        return statusCode;</span>
-    }
-
-    /**
-     * The headers for this response.
-     *
-     * @param field
-     *            the field
-     * @return the headers for this response.
-     */
-    @Nonnull
-    public List&lt;String&gt; headers(String field) {
-<span class="nc" id="L189">        return headers.get(field);</span>
+    public T body() {
+<span class="fc" id="L177">        return body;</span>
     }
 
     /**
@@ -198,21 +186,33 @@ class GitHubResponse&lt;T&gt; {
      */
     @CheckForNull
     public String header(String name) {
-<span class="fc" id="L201">        String result = null;</span>
-<span class="fc" id="L202">        List&lt;String&gt; rawResult = headers.get(name);</span>
-<span class="fc bfc" id="L203" title="All 2 branches covered.">        if (rawResult != null) {</span>
-<span class="fc" id="L204">            result = rawResult.get(0);</span>
+<span class="fc" id="L189">        String result = null;</span>
+<span class="fc" id="L190">        List&lt;String&gt; rawResult = headers.get(name);</span>
+<span class="fc bfc" id="L191" title="All 2 branches covered.">        if (rawResult != null) {</span>
+<span class="fc" id="L192">            result = rawResult.get(0);</span>
         }
-<span class="fc" id="L206">        return result;</span>
+<span class="fc" id="L194">        return result;</span>
     }
 
     /**
-     * The body of the response parsed as a {@code T}.
+     * The headers for this response.
      *
-     * @return body of the response
+     * @param field
+     *            the field
+     * @return the headers for this response.
      */
-    public T body() {
-<span class="fc" id="L215">        return body;</span>
+    @Nonnull
+    public List&lt;String&gt; headers(String field) {
+<span class="nc" id="L206">        return headers.get(field);</span>
+    }
+
+    /**
+     * The status code for this response.
+     *
+     * @return the status code for this response.
+     */
+    public int statusCode() {
+<span class="fc" id="L215">        return statusCode;</span>
     }
 
 }

@@ -15,26 +15,59 @@ import java.io.IOException;
 public class GHCommitSearchBuilder extends GHSearchBuilder&lt;GHCommit&gt; {
 
     /**
+     * The enum Sort.
+     */
+<span class="fc" id="L20">    public enum Sort {</span>
+
+        /** The author date. */
+<span class="fc" id="L23">        AUTHOR_DATE,</span>
+        /** The committer date. */
+<span class="fc" id="L25">        COMMITTER_DATE</span>
+    }
+
+    @SuppressFBWarnings(
+            value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
+            justification = &quot;JSON API&quot;)
+    private static class CommitSearchResult extends SearchResult&lt;GHCommit&gt; {
+        private GHCommit[] items;
+
+        @Override
+        GHCommit[] getItems(GitHub root) {
+<span class="fc bfc" id="L36" title="All 2 branches covered.">            for (GHCommit commit : items) {</span>
+<span class="fc" id="L37">                String repoName = getRepoName(commit.url);</span>
+                try {
+<span class="fc" id="L39">                    GHRepository repo = root.getRepository(repoName);</span>
+<span class="fc" id="L40">                    commit.wrapUp(repo);</span>
+<span class="nc" id="L41">                } catch (IOException ioe) {</span>
+<span class="fc" id="L42">                }</span>
+            }
+<span class="fc" id="L44">            return items;</span>
+        }
+    }
+
+    /**
+     * @param commitUrl
+     *            a commit URL
+     * @return the repo name (&quot;username/reponame&quot;)
+     */
+    private static String getRepoName(String commitUrl) {
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        if (StringUtils.isBlank(commitUrl)) {</span>
+<span class="nc" id="L55">            return null;</span>
+        }
+<span class="fc" id="L57">        int indexOfUsername = (GitHubClient.GITHUB_URL + &quot;/repos/&quot;).length();</span>
+<span class="fc" id="L58">        String[] tokens = commitUrl.substring(indexOfUsername).split(&quot;/&quot;, 3);</span>
+<span class="fc" id="L59">        return tokens[0] + '/' + tokens[1];</span>
+    }
+
+    /**
      * Instantiates a new GH commit search builder.
      *
      * @param root
      *            the root
      */
     GHCommitSearchBuilder(GitHub root) {
-<span class="fc" id="L24">        super(root, CommitSearchResult.class);</span>
-<span class="fc" id="L25">    }</span>
-
-    /**
-     * Search terms.
-     *
-     * @param term
-     *            the term
-     * @return the GH commit search builder
-     */
-    public GHCommitSearchBuilder q(String term) {
-<span class="fc" id="L35">        super.q(term);</span>
-<span class="fc" id="L36">        return this;</span>
-    }
+<span class="fc" id="L69">        super(root, CommitSearchResult.class);</span>
+<span class="fc" id="L70">    }</span>
 
     /**
      * Author gh commit search builder.
@@ -44,62 +77,7 @@ public class GHCommitSearchBuilder extends GHSearchBuilder&lt;GHCommit&gt; {
      * @return the gh commit search builder
      */
     public GHCommitSearchBuilder author(String v) {
-<span class="fc" id="L47">        return q(&quot;author:&quot; + v);</span>
-    }
-
-    /**
-     * Committer gh commit search builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh commit search builder
-     */
-    public GHCommitSearchBuilder committer(String v) {
-<span class="nc" id="L58">        return q(&quot;committer:&quot; + v);</span>
-    }
-
-    /**
-     * Author name gh commit search builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh commit search builder
-     */
-    public GHCommitSearchBuilder authorName(String v) {
-<span class="nc" id="L69">        return q(&quot;author-name:&quot; + v);</span>
-    }
-
-    /**
-     * Committer name gh commit search builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh commit search builder
-     */
-    public GHCommitSearchBuilder committerName(String v) {
-<span class="nc" id="L80">        return q(&quot;committer-name:&quot; + v);</span>
-    }
-
-    /**
-     * Author email gh commit search builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh commit search builder
-     */
-    public GHCommitSearchBuilder authorEmail(String v) {
-<span class="nc" id="L91">        return q(&quot;author-email:&quot; + v);</span>
-    }
-
-    /**
-     * Committer email gh commit search builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh commit search builder
-     */
-    public GHCommitSearchBuilder committerEmail(String v) {
-<span class="nc" id="L102">        return q(&quot;committer-email:&quot; + v);</span>
+<span class="fc" id="L80">        return q(&quot;author:&quot; + v);</span>
     }
 
     /**
@@ -110,7 +88,40 @@ public class GHCommitSearchBuilder extends GHSearchBuilder&lt;GHCommit&gt; {
      * @return the gh commit search builder
      */
     public GHCommitSearchBuilder authorDate(String v) {
-<span class="nc" id="L113">        return q(&quot;author-date:&quot; + v);</span>
+<span class="nc" id="L91">        return q(&quot;author-date:&quot; + v);</span>
+    }
+
+    /**
+     * Author email gh commit search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh commit search builder
+     */
+    public GHCommitSearchBuilder authorEmail(String v) {
+<span class="nc" id="L102">        return q(&quot;author-email:&quot; + v);</span>
+    }
+
+    /**
+     * Author name gh commit search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh commit search builder
+     */
+    public GHCommitSearchBuilder authorName(String v) {
+<span class="nc" id="L113">        return q(&quot;author-name:&quot; + v);</span>
+    }
+
+    /**
+     * Committer gh commit search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh commit search builder
+     */
+    public GHCommitSearchBuilder committer(String v) {
+<span class="nc" id="L124">        return q(&quot;committer:&quot; + v);</span>
     }
 
     /**
@@ -121,18 +132,29 @@ public class GHCommitSearchBuilder extends GHSearchBuilder&lt;GHCommit&gt; {
      * @return the gh commit search builder
      */
     public GHCommitSearchBuilder committerDate(String v) {
-<span class="nc" id="L124">        return q(&quot;committer-date:&quot; + v);</span>
+<span class="nc" id="L135">        return q(&quot;committer-date:&quot; + v);</span>
     }
 
     /**
-     * Merge gh commit search builder.
+     * Committer email gh commit search builder.
      *
-     * @param merge
-     *            the merge
+     * @param v
+     *            the v
      * @return the gh commit search builder
      */
-    public GHCommitSearchBuilder merge(boolean merge) {
-<span class="nc" id="L135">        return q(&quot;merge:&quot; + Boolean.valueOf(merge).toString().toLowerCase());</span>
+    public GHCommitSearchBuilder committerEmail(String v) {
+<span class="nc" id="L146">        return q(&quot;committer-email:&quot; + v);</span>
+    }
+
+    /**
+     * Committer name gh commit search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh commit search builder
+     */
+    public GHCommitSearchBuilder committerName(String v) {
+<span class="nc" id="L157">        return q(&quot;committer-name:&quot; + v);</span>
     }
 
     /**
@@ -143,29 +165,7 @@ public class GHCommitSearchBuilder extends GHSearchBuilder&lt;GHCommit&gt; {
      * @return the gh commit search builder
      */
     public GHCommitSearchBuilder hash(String v) {
-<span class="nc" id="L146">        return q(&quot;hash:&quot; + v);</span>
-    }
-
-    /**
-     * Parent gh commit search builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh commit search builder
-     */
-    public GHCommitSearchBuilder parent(String v) {
-<span class="nc" id="L157">        return q(&quot;parent:&quot; + v);</span>
-    }
-
-    /**
-     * Tree gh commit search builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh commit search builder
-     */
-    public GHCommitSearchBuilder tree(String v) {
-<span class="nc" id="L168">        return q(&quot;tree:&quot; + v);</span>
+<span class="nc" id="L168">        return q(&quot;hash:&quot; + v);</span>
     }
 
     /**
@@ -180,36 +180,14 @@ public class GHCommitSearchBuilder extends GHSearchBuilder&lt;GHCommit&gt; {
     }
 
     /**
-     * User gh commit search builder.
+     * Merge gh commit search builder.
      *
-     * @param v
-     *            the v
+     * @param merge
+     *            the merge
      * @return the gh commit search builder
      */
-    public GHCommitSearchBuilder user(String v) {
-<span class="nc" id="L190">        return q(&quot;user:&quot; + v);</span>
-    }
-
-    /**
-     * Org gh commit search builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh commit search builder
-     */
-    public GHCommitSearchBuilder org(String v) {
-<span class="fc" id="L201">        return q(&quot;org:&quot; + v);</span>
-    }
-
-    /**
-     * Repo gh commit search builder.
-     *
-     * @param v
-     *            the v
-     * @return the gh commit search builder
-     */
-    public GHCommitSearchBuilder repo(String v) {
-<span class="fc" id="L212">        return q(&quot;repo:&quot; + v);</span>
+    public GHCommitSearchBuilder merge(boolean merge) {
+<span class="nc" id="L190">        return q(&quot;merge:&quot; + Boolean.valueOf(merge).toString().toLowerCase());</span>
     }
 
     /**
@@ -220,8 +198,53 @@ public class GHCommitSearchBuilder extends GHSearchBuilder&lt;GHCommit&gt; {
      * @return the gh commit search builder
      */
     public GHCommitSearchBuilder order(GHDirection v) {
-<span class="nc" id="L223">        req.with(&quot;order&quot;, v);</span>
-<span class="nc" id="L224">        return this;</span>
+<span class="nc" id="L201">        req.with(&quot;order&quot;, v);</span>
+<span class="nc" id="L202">        return this;</span>
+    }
+
+    /**
+     * Org gh commit search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh commit search builder
+     */
+    public GHCommitSearchBuilder org(String v) {
+<span class="fc" id="L213">        return q(&quot;org:&quot; + v);</span>
+    }
+
+    /**
+     * Parent gh commit search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh commit search builder
+     */
+    public GHCommitSearchBuilder parent(String v) {
+<span class="nc" id="L224">        return q(&quot;parent:&quot; + v);</span>
+    }
+
+    /**
+     * Search terms.
+     *
+     * @param term
+     *            the term
+     * @return the GH commit search builder
+     */
+    public GHCommitSearchBuilder q(String term) {
+<span class="fc" id="L235">        super.q(term);</span>
+<span class="fc" id="L236">        return this;</span>
+    }
+
+    /**
+     * Repo gh commit search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh commit search builder
+     */
+    public GHCommitSearchBuilder repo(String v) {
+<span class="fc" id="L247">        return q(&quot;repo:&quot; + v);</span>
     }
 
     /**
@@ -232,53 +255,30 @@ public class GHCommitSearchBuilder extends GHSearchBuilder&lt;GHCommit&gt; {
      * @return the gh commit search builder
      */
     public GHCommitSearchBuilder sort(Sort sort) {
-<span class="fc" id="L235">        req.with(&quot;sort&quot;, sort);</span>
-<span class="fc" id="L236">        return this;</span>
+<span class="fc" id="L258">        req.with(&quot;sort&quot;, sort);</span>
+<span class="fc" id="L259">        return this;</span>
     }
 
     /**
-     * The enum Sort.
+     * Tree gh commit search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh commit search builder
      */
-<span class="fc" id="L242">    public enum Sort {</span>
-
-        /** The author date. */
-<span class="fc" id="L245">        AUTHOR_DATE,</span>
-        /** The committer date. */
-<span class="fc" id="L247">        COMMITTER_DATE</span>
-    }
-
-    @SuppressFBWarnings(
-            value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
-            justification = &quot;JSON API&quot;)
-    private static class CommitSearchResult extends SearchResult&lt;GHCommit&gt; {
-        private GHCommit[] items;
-
-        @Override
-        GHCommit[] getItems(GitHub root) {
-<span class="fc bfc" id="L258" title="All 2 branches covered.">            for (GHCommit commit : items) {</span>
-<span class="fc" id="L259">                String repoName = getRepoName(commit.url);</span>
-                try {
-<span class="fc" id="L261">                    GHRepository repo = root.getRepository(repoName);</span>
-<span class="fc" id="L262">                    commit.wrapUp(repo);</span>
-<span class="nc" id="L263">                } catch (IOException ioe) {</span>
-<span class="fc" id="L264">                }</span>
-            }
-<span class="fc" id="L266">            return items;</span>
-        }
+    public GHCommitSearchBuilder tree(String v) {
+<span class="nc" id="L270">        return q(&quot;tree:&quot; + v);</span>
     }
 
     /**
-     * @param commitUrl
-     *            a commit URL
-     * @return the repo name (&quot;username/reponame&quot;)
+     * User gh commit search builder.
+     *
+     * @param v
+     *            the v
+     * @return the gh commit search builder
      */
-    private static String getRepoName(String commitUrl) {
-<span class="pc bpc" id="L276" title="1 of 2 branches missed.">        if (StringUtils.isBlank(commitUrl)) {</span>
-<span class="nc" id="L277">            return null;</span>
-        }
-<span class="fc" id="L279">        int indexOfUsername = (GitHubClient.GITHUB_URL + &quot;/repos/&quot;).length();</span>
-<span class="fc" id="L280">        String[] tokens = commitUrl.substring(indexOfUsername).split(&quot;/&quot;, 3);</span>
-<span class="fc" id="L281">        return tokens[0] + '/' + tokens[1];</span>
+    public GHCommitSearchBuilder user(String v) {
+<span class="nc" id="L281">        return q(&quot;user:&quot; + v);</span>
     }
 
     /**

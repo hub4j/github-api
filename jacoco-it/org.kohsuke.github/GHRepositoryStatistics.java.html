@@ -18,10 +18,346 @@ import java.util.NoSuchElementException;
  */
 public class GHRepositoryStatistics extends GitHubInteractiveObject {
 
-    private final GHRepository repo;
+    /**
+     * The type CodeFrequency.
+     */
+    public static class CodeFrequency {
+
+        private final int additions;
+        private final int deletions;
+        private final int week;
+
+        @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+<span class="fc" id="L31">        private CodeFrequency(List&lt;Integer&gt; item) {</span>
+<span class="fc" id="L32">            week = item.get(0);</span>
+<span class="fc" id="L33">            additions = item.get(1);</span>
+<span class="fc" id="L34">            deletions = item.get(2);</span>
+<span class="fc" id="L35">        }</span>
+
+        /**
+         * Gets additions.
+         *
+         * @return The number of additions for the week.
+         */
+        public long getAdditions() {
+<span class="fc" id="L43">            return additions;</span>
+        }
+
+        /**
+         * Gets deletions.
+         *
+         * @return The number of deletions for the week. NOTE: This will be a NEGATIVE number.
+         */
+        public long getDeletions() {
+            // TODO: Perhaps return Math.abs(deletions),
+            // since most developers may not expect a negative number.
+<span class="fc" id="L54">            return deletions;</span>
+        }
+
+        /**
+         * Gets week timestamp.
+         *
+         * @return The start of the week as a UNIX timestamp.
+         */
+        public int getWeekTimestamp() {
+<span class="fc" id="L63">            return week;</span>
+        }
+
+        /**
+         * To string.
+         *
+         * @return the string
+         */
+        @Override
+        public String toString() {
+<span class="fc" id="L73">            return &quot;Week starting &quot; + getWeekTimestamp() + &quot; has &quot; + getAdditions() + &quot; additions and &quot;</span>
+<span class="fc" id="L74">                    + Math.abs(getDeletions()) + &quot; deletions&quot;;</span>
+        }
+    }
+
+    /**
+     * The type CommitActivity.
+     */
+    @SuppressFBWarnings(
+            value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
+            justification = &quot;JSON API&quot;)
+    public static class CommitActivity extends GHObject {
+
+        private List&lt;Integer&gt; days;
+
+        private int total;
+        private long week;
+        /**
+         * Create default CommitActivity instance
+         */
+<span class="fc" id="L93">        public CommitActivity() {</span>
+<span class="fc" id="L94">        }</span>
+
+        /**
+         * Gets days.
+         *
+         * @return The number of commits for each day of the week. 0 = Sunday, 1 = Monday, etc.
+         */
+        public List&lt;Integer&gt; getDays() {
+<span class="fc" id="L102">            return Collections.unmodifiableList(days);</span>
+        }
+
+        /**
+         * Gets total.
+         *
+         * @return The total number of commits for the week.
+         */
+        public int getTotal() {
+<span class="fc" id="L111">            return total;</span>
+        }
+
+        /**
+         * Gets week.
+         *
+         * @return The start of the week as a UNIX timestamp.
+         */
+        public long getWeek() {
+<span class="fc" id="L120">            return week;</span>
+        }
+    }
+    /**
+     * The type ContributorStats.
+     */
+    @SuppressFBWarnings(
+            value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;,
+                    &quot;URF_UNREAD_FIELD&quot; },
+            justification = &quot;JSON API&quot;)
+    public static class ContributorStats extends GHObject {
+
+        /**
+         * The type Week.
+         */
+        @SuppressFBWarnings(
+                value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;,
+                        &quot;URF_UNREAD_FIELD&quot; },
+                justification = &quot;JSON API&quot;)
+        public static class Week {
+
+            private int a;
+
+            private int c;
+            private int d;
+            private long w;
+            /**
+             * Create default Week instance
+             */
+<span class="fc" id="L149">            public Week() {</span>
+<span class="fc" id="L150">            }</span>
+
+            /**
+             * Gets number of additions.
+             *
+             * @return The number of additions for the week.
+             */
+            public int getNumberOfAdditions() {
+<span class="fc" id="L158">                return a;</span>
+            }
+
+            /**
+             * Gets number of commits.
+             *
+             * @return The number of commits for the week.
+             */
+            public int getNumberOfCommits() {
+<span class="fc" id="L167">                return c;</span>
+            }
+
+            /**
+             * Gets number of deletions.
+             *
+             * @return The number of deletions for the week.
+             */
+            public int getNumberOfDeletions() {
+<span class="fc" id="L176">                return d;</span>
+            }
+
+            /**
+             * Gets week timestamp.
+             *
+             * @return Start of the week, as a UNIX timestamp.
+             */
+            public long getWeekTimestamp() {
+<span class="fc" id="L185">                return w;</span>
+            }
+
+            /**
+             * To string.
+             *
+             * @return the string
+             */
+            @Override
+            public String toString() {
+<span class="fc" id="L195">                return String.format(&quot;Week starting %d - Additions: %d, Deletions: %d, Commits: %d&quot;, w, a, d, c);</span>
+            }
+        }
+
+        private GHUser author;
+        private int total;
+        private List&lt;Week&gt; weeks;
+
+        /**
+         * Create default ContributorStats instance
+         */
+<span class="fc" id="L206">        public ContributorStats() {</span>
+<span class="fc" id="L207">        }</span>
+
+        /**
+         * Gets author.
+         *
+         * @return The author described by these statistics.
+         */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+        public GHUser getAuthor() {
+<span class="fc" id="L216">            return author;</span>
+        }
+
+        /**
+         * Gets total.
+         *
+         * @return The total number of commits authored by the contributor.
+         */
+        public int getTotal() {
+<span class="fc" id="L225">            return total;</span>
+        }
+
+        /**
+         * Convenience method to look up week with particular timestamp.
+         *
+         * @param timestamp
+         *            The timestamp to look for.
+         * @return The week starting with the given timestamp. Throws an exception if it is not found.
+         * @throws NoSuchElementException
+         *             the no such element exception
+         */
+        public Week getWeek(long timestamp) throws NoSuchElementException {
+            // maybe store the weeks in a map to make this more efficient?
+<span class="pc bpc" id="L239" title="1 of 2 branches missed.">            for (Week week : weeks) {</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">                if (week.getWeekTimestamp() == timestamp) {</span>
+<span class="fc" id="L241">                    return week;</span>
+                }
+<span class="fc" id="L243">            }</span>
+
+            // this is safer than returning null
+<span class="nc" id="L246">            throw new NoSuchElementException();</span>
+        }
+
+        /**
+         * Gets weeks.
+         *
+         * @return The total number of commits authored by the contributor.
+         */
+        public List&lt;Week&gt; getWeeks() {
+<span class="fc" id="L255">            return Collections.unmodifiableList(weeks);</span>
+        }
+
+        /**
+         * To string.
+         *
+         * @return the string
+         */
+        @Override
+        public String toString() {
+<span class="fc" id="L265">            return author.getLogin() + &quot; made &quot; + String.valueOf(total) + &quot; contributions over &quot;</span>
+<span class="fc" id="L266">                    + String.valueOf(weeks.size()) + &quot; weeks&quot;;</span>
+        }
+    }
+
+    /**
+     * The type Participation.
+     */
+    public static class Participation extends GHObject {
+
+        private List&lt;Integer&gt; all;
+
+        private List&lt;Integer&gt; owner;
+        /**
+         * Create default Participation instance
+         */
+<span class="fc" id="L281">        public Participation() {</span>
+<span class="fc" id="L282">        }</span>
+
+        /**
+         * Gets all commits.
+         *
+         * @return The list of commit counts for everyone combined, for the last 52 weeks.
+         */
+        public List&lt;Integer&gt; getAllCommits() {
+<span class="fc" id="L290">            return Collections.unmodifiableList(all);</span>
+        }
+
+        /**
+         * Gets owner commits.
+         *
+         * @return The list of commit counts for the owner, for the last 52 weeks.
+         */
+        public List&lt;Integer&gt; getOwnerCommits() {
+<span class="fc" id="L299">            return Collections.unmodifiableList(owner);</span>
+        }
+    }
+
+    /**
+     * The type PunchCardItem.
+     */
+    public static class PunchCardItem {
+
+        private final int dayOfWeek;
+        private final int hourOfDay;
+        private final int numberOfCommits;
+
+        @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+<span class="fc" id="L313">        private PunchCardItem(List&lt;Integer&gt; item) {</span>
+<span class="fc" id="L314">            dayOfWeek = item.get(0);</span>
+<span class="fc" id="L315">            hourOfDay = item.get(1);</span>
+<span class="fc" id="L316">            numberOfCommits = item.get(2);</span>
+<span class="fc" id="L317">        }</span>
+
+        /**
+         * Gets day of week.
+         *
+         * @return The day of the week. 0 = Sunday, 1 = Monday, etc.
+         */
+        public int getDayOfWeek() {
+<span class="fc" id="L325">            return dayOfWeek;</span>
+        }
+
+        /**
+         * Gets hour of day.
+         *
+         * @return The hour of the day from 0 to 23.
+         */
+        public long getHourOfDay() {
+<span class="fc" id="L334">            return hourOfDay;</span>
+        }
+
+        /**
+         * Gets number of commits.
+         *
+         * @return The number of commits for the day and hour.
+         */
+        public long getNumberOfCommits() {
+<span class="fc" id="L343">            return numberOfCommits;</span>
+        }
+
+        /**
+         * To string.
+         *
+         * @return the string
+         */
+        public String toString() {
+<span class="fc" id="L352">            return &quot;Day &quot; + getDayOfWeek() + &quot; Hour &quot; + getHourOfDay() + &quot;: &quot; + getNumberOfCommits() + &quot; commits&quot;;</span>
+        }
+    }
 
     private static final int MAX_WAIT_ITERATIONS = 3;
+
     private static final int WAIT_SLEEP_INTERVAL = 5000;
+
+    private final GHRepository repo;
 
     /**
      * Instantiates a new Gh repository statistics.
@@ -31,9 +367,44 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP2&quot; }, justification = &quot;Acceptable risk&quot;)
     public GHRepositoryStatistics(GHRepository repo) {
-<span class="fc" id="L34">        super(repo.root());</span>
-<span class="fc" id="L35">        this.repo = repo;</span>
-<span class="fc" id="L36">    }</span>
+<span class="fc" id="L370">        super(repo.root());</span>
+<span class="fc" id="L371">        this.repo = repo;</span>
+<span class="fc" id="L372">    }</span>
+
+    /**
+     * Get the number of additions and deletions per week. See
+     * https://developer.github.com/v3/repos/statistics/#get-the-number-of-additions-and-deletions-per-week
+     *
+     * @return the code frequency
+     * @throws IOException
+     *             the io exception
+     */
+    public List&lt;CodeFrequency&gt; getCodeFrequency() throws IOException {
+        try {
+<span class="fc" id="L384">            CodeFrequency[] list = root().createRequest()</span>
+<span class="fc" id="L385">                    .withUrlPath(getApiTailUrl(&quot;code_frequency&quot;))</span>
+<span class="fc" id="L386">                    .fetch(CodeFrequency[].class);</span>
+
+<span class="fc" id="L388">            return Arrays.asList(list);</span>
+<span class="nc" id="L389">        } catch (MismatchedInputException e) {</span>
+            // This sometimes happens when retrieving code frequency statistics
+            // for a repository for the first time. It is probably still being
+            // generated, so return null.
+<span class="nc" id="L393">            return null;</span>
+        }
+    }
+
+    /**
+     * Get the last year of commit activity data. See
+     * https://developer.github.com/v3/repos/statistics/#get-the-last-year-of-commit-activity-data
+     *
+     * @return the commit activity
+     */
+    public PagedIterable&lt;CommitActivity&gt; getCommitActivity() {
+<span class="fc" id="L404">        return root().createRequest()</span>
+<span class="fc" id="L405">                .withUrlPath(getApiTailUrl(&quot;commit_activity&quot;))</span>
+<span class="fc" id="L406">                .toIterable(CommitActivity[].class, null);</span>
+    }
 
     /**
      * Get contributors list with additions, deletions, and commit count. See
@@ -44,7 +415,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
      *             the interrupted exception
      */
     public PagedIterable&lt;ContributorStats&gt; getContributorStats() throws InterruptedException {
-<span class="fc" id="L47">        return getContributorStats(true);</span>
+<span class="fc" id="L418">        return getContributorStats(true);</span>
     }
 
     /**
@@ -60,314 +431,20 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
     @SuppressWarnings(&quot;SleepWhileInLoop&quot;)
     @SuppressFBWarnings(value = { &quot;RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE&quot; }, justification = &quot;JSON API&quot;)
     public PagedIterable&lt;ContributorStats&gt; getContributorStats(boolean waitTillReady) throws InterruptedException {
-<span class="fc" id="L63">        PagedIterable&lt;GHRepositoryStatistics.ContributorStats&gt; stats = getContributorStatsImpl();</span>
+<span class="fc" id="L434">        PagedIterable&lt;GHRepositoryStatistics.ContributorStats&gt; stats = getContributorStatsImpl();</span>
 
-<span class="pc bpc" id="L65" title="3 of 4 branches missed.">        if (stats == null &amp;&amp; waitTillReady) {</span>
-<span class="nc bnc" id="L66" title="All 2 branches missed.">            for (int i = 0; i &lt; MAX_WAIT_ITERATIONS; i += 1) {</span>
+<span class="pc bpc" id="L436" title="3 of 4 branches missed.">        if (stats == null &amp;&amp; waitTillReady) {</span>
+<span class="nc bnc" id="L437" title="All 2 branches missed.">            for (int i = 0; i &lt; MAX_WAIT_ITERATIONS; i += 1) {</span>
                 // Wait a few seconds and try again.
-<span class="nc" id="L68">                Thread.sleep(WAIT_SLEEP_INTERVAL);</span>
-<span class="nc" id="L69">                stats = getContributorStatsImpl();</span>
-<span class="nc bnc" id="L70" title="All 2 branches missed.">                if (stats != null) {</span>
-<span class="nc" id="L71">                    break;</span>
+<span class="nc" id="L439">                Thread.sleep(WAIT_SLEEP_INTERVAL);</span>
+<span class="nc" id="L440">                stats = getContributorStatsImpl();</span>
+<span class="nc bnc" id="L441" title="All 2 branches missed.">                if (stats != null) {</span>
+<span class="nc" id="L442">                    break;</span>
                 }
             }
         }
 
-<span class="fc" id="L76">        return stats;</span>
-    }
-
-    /**
-     * This gets the actual statistics from the server. Returns null if they are still being cached.
-     */
-    private PagedIterable&lt;ContributorStats&gt; getContributorStatsImpl() {
-<span class="fc" id="L83">        return root().createRequest()</span>
-<span class="fc" id="L84">                .withUrlPath(getApiTailUrl(&quot;contributors&quot;))</span>
-<span class="fc" id="L85">                .toIterable(ContributorStats[].class, null);</span>
-    }
-
-    /**
-     * The type ContributorStats.
-     */
-    @SuppressFBWarnings(
-            value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;,
-                    &quot;URF_UNREAD_FIELD&quot; },
-            justification = &quot;JSON API&quot;)
-    public static class ContributorStats extends GHObject {
-
-        /**
-         * Create default ContributorStats instance
-         */
-<span class="fc" id="L100">        public ContributorStats() {</span>
-<span class="fc" id="L101">        }</span>
-
-        private GHUser author;
-        private int total;
-        private List&lt;Week&gt; weeks;
-
-        /**
-         * Gets author.
-         *
-         * @return The author described by these statistics.
-         */
-        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-        public GHUser getAuthor() {
-<span class="fc" id="L114">            return author;</span>
-        }
-
-        /**
-         * Gets total.
-         *
-         * @return The total number of commits authored by the contributor.
-         */
-        public int getTotal() {
-<span class="fc" id="L123">            return total;</span>
-        }
-
-        /**
-         * Convenience method to look up week with particular timestamp.
-         *
-         * @param timestamp
-         *            The timestamp to look for.
-         * @return The week starting with the given timestamp. Throws an exception if it is not found.
-         * @throws NoSuchElementException
-         *             the no such element exception
-         */
-        public Week getWeek(long timestamp) throws NoSuchElementException {
-            // maybe store the weeks in a map to make this more efficient?
-<span class="pc bpc" id="L137" title="1 of 2 branches missed.">            for (Week week : weeks) {</span>
-<span class="fc bfc" id="L138" title="All 2 branches covered.">                if (week.getWeekTimestamp() == timestamp) {</span>
-<span class="fc" id="L139">                    return week;</span>
-                }
-<span class="fc" id="L141">            }</span>
-
-            // this is safer than returning null
-<span class="nc" id="L144">            throw new NoSuchElementException();</span>
-        }
-
-        /**
-         * Gets weeks.
-         *
-         * @return The total number of commits authored by the contributor.
-         */
-        public List&lt;Week&gt; getWeeks() {
-<span class="fc" id="L153">            return Collections.unmodifiableList(weeks);</span>
-        }
-
-        /**
-         * To string.
-         *
-         * @return the string
-         */
-        @Override
-        public String toString() {
-<span class="fc" id="L163">            return author.getLogin() + &quot; made &quot; + String.valueOf(total) + &quot; contributions over &quot;</span>
-<span class="fc" id="L164">                    + String.valueOf(weeks.size()) + &quot; weeks&quot;;</span>
-        }
-
-        /**
-         * The type Week.
-         */
-        @SuppressFBWarnings(
-                value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;,
-                        &quot;URF_UNREAD_FIELD&quot; },
-                justification = &quot;JSON API&quot;)
-        public static class Week {
-
-            /**
-             * Create default Week instance
-             */
-<span class="fc" id="L179">            public Week() {</span>
-<span class="fc" id="L180">            }</span>
-
-            private long w;
-            private int a;
-            private int d;
-            private int c;
-
-            /**
-             * Gets week timestamp.
-             *
-             * @return Start of the week, as a UNIX timestamp.
-             */
-            public long getWeekTimestamp() {
-<span class="fc" id="L193">                return w;</span>
-            }
-
-            /**
-             * Gets number of additions.
-             *
-             * @return The number of additions for the week.
-             */
-            public int getNumberOfAdditions() {
-<span class="fc" id="L202">                return a;</span>
-            }
-
-            /**
-             * Gets number of deletions.
-             *
-             * @return The number of deletions for the week.
-             */
-            public int getNumberOfDeletions() {
-<span class="fc" id="L211">                return d;</span>
-            }
-
-            /**
-             * Gets number of commits.
-             *
-             * @return The number of commits for the week.
-             */
-            public int getNumberOfCommits() {
-<span class="fc" id="L220">                return c;</span>
-            }
-
-            /**
-             * To string.
-             *
-             * @return the string
-             */
-            @Override
-            public String toString() {
-<span class="fc" id="L230">                return String.format(&quot;Week starting %d - Additions: %d, Deletions: %d, Commits: %d&quot;, w, a, d, c);</span>
-            }
-        }
-    }
-
-    /**
-     * Get the last year of commit activity data. See
-     * https://developer.github.com/v3/repos/statistics/#get-the-last-year-of-commit-activity-data
-     *
-     * @return the commit activity
-     */
-    public PagedIterable&lt;CommitActivity&gt; getCommitActivity() {
-<span class="fc" id="L242">        return root().createRequest()</span>
-<span class="fc" id="L243">                .withUrlPath(getApiTailUrl(&quot;commit_activity&quot;))</span>
-<span class="fc" id="L244">                .toIterable(CommitActivity[].class, null);</span>
-    }
-
-    /**
-     * The type CommitActivity.
-     */
-    @SuppressFBWarnings(
-            value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
-            justification = &quot;JSON API&quot;)
-    public static class CommitActivity extends GHObject {
-
-        /**
-         * Create default CommitActivity instance
-         */
-<span class="fc" id="L258">        public CommitActivity() {</span>
-<span class="fc" id="L259">        }</span>
-
-        private List&lt;Integer&gt; days;
-        private int total;
-        private long week;
-
-        /**
-         * Gets days.
-         *
-         * @return The number of commits for each day of the week. 0 = Sunday, 1 = Monday, etc.
-         */
-        public List&lt;Integer&gt; getDays() {
-<span class="fc" id="L271">            return Collections.unmodifiableList(days);</span>
-        }
-
-        /**
-         * Gets total.
-         *
-         * @return The total number of commits for the week.
-         */
-        public int getTotal() {
-<span class="fc" id="L280">            return total;</span>
-        }
-
-        /**
-         * Gets week.
-         *
-         * @return The start of the week as a UNIX timestamp.
-         */
-        public long getWeek() {
-<span class="fc" id="L289">            return week;</span>
-        }
-    }
-
-    /**
-     * Get the number of additions and deletions per week. See
-     * https://developer.github.com/v3/repos/statistics/#get-the-number-of-additions-and-deletions-per-week
-     *
-     * @return the code frequency
-     * @throws IOException
-     *             the io exception
-     */
-    public List&lt;CodeFrequency&gt; getCodeFrequency() throws IOException {
-        try {
-<span class="fc" id="L303">            CodeFrequency[] list = root().createRequest()</span>
-<span class="fc" id="L304">                    .withUrlPath(getApiTailUrl(&quot;code_frequency&quot;))</span>
-<span class="fc" id="L305">                    .fetch(CodeFrequency[].class);</span>
-
-<span class="fc" id="L307">            return Arrays.asList(list);</span>
-<span class="nc" id="L308">        } catch (MismatchedInputException e) {</span>
-            // This sometimes happens when retrieving code frequency statistics
-            // for a repository for the first time. It is probably still being
-            // generated, so return null.
-<span class="nc" id="L312">            return null;</span>
-        }
-    }
-
-    /**
-     * The type CodeFrequency.
-     */
-    public static class CodeFrequency {
-
-        private final int week;
-        private final int additions;
-        private final int deletions;
-
-        @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-<span class="fc" id="L326">        private CodeFrequency(List&lt;Integer&gt; item) {</span>
-<span class="fc" id="L327">            week = item.get(0);</span>
-<span class="fc" id="L328">            additions = item.get(1);</span>
-<span class="fc" id="L329">            deletions = item.get(2);</span>
-<span class="fc" id="L330">        }</span>
-
-        /**
-         * Gets week timestamp.
-         *
-         * @return The start of the week as a UNIX timestamp.
-         */
-        public int getWeekTimestamp() {
-<span class="fc" id="L338">            return week;</span>
-        }
-
-        /**
-         * Gets additions.
-         *
-         * @return The number of additions for the week.
-         */
-        public long getAdditions() {
-<span class="fc" id="L347">            return additions;</span>
-        }
-
-        /**
-         * Gets deletions.
-         *
-         * @return The number of deletions for the week. NOTE: This will be a NEGATIVE number.
-         */
-        public long getDeletions() {
-            // TODO: Perhaps return Math.abs(deletions),
-            // since most developers may not expect a negative number.
-<span class="fc" id="L358">            return deletions;</span>
-        }
-
-        /**
-         * To string.
-         *
-         * @return the string
-         */
-        @Override
-        public String toString() {
-<span class="fc" id="L368">            return &quot;Week starting &quot; + getWeekTimestamp() + &quot; has &quot; + getAdditions() + &quot; additions and &quot;</span>
-<span class="fc" id="L369">                    + Math.abs(getDeletions()) + &quot; deletions&quot;;</span>
-        }
+<span class="fc" id="L447">        return stats;</span>
     }
 
     /**
@@ -379,40 +456,7 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
      *             the io exception
      */
     public Participation getParticipation() throws IOException {
-<span class="fc" id="L382">        return root().createRequest().withUrlPath(getApiTailUrl(&quot;participation&quot;)).fetch(Participation.class);</span>
-    }
-
-    /**
-     * The type Participation.
-     */
-    public static class Participation extends GHObject {
-
-        /**
-         * Create default Participation instance
-         */
-<span class="fc" id="L393">        public Participation() {</span>
-<span class="fc" id="L394">        }</span>
-
-        private List&lt;Integer&gt; all;
-        private List&lt;Integer&gt; owner;
-
-        /**
-         * Gets all commits.
-         *
-         * @return The list of commit counts for everyone combined, for the last 52 weeks.
-         */
-        public List&lt;Integer&gt; getAllCommits() {
-<span class="fc" id="L405">            return Collections.unmodifiableList(all);</span>
-        }
-
-        /**
-         * Gets owner commits.
-         *
-         * @return The list of commit counts for the owner, for the last 52 weeks.
-         */
-        public List&lt;Integer&gt; getOwnerCommits() {
-<span class="fc" id="L414">            return Collections.unmodifiableList(owner);</span>
-        }
+<span class="fc" id="L459">        return root().createRequest().withUrlPath(getApiTailUrl(&quot;participation&quot;)).fetch(Participation.class);</span>
     }
 
     /**
@@ -424,63 +468,19 @@ public class GHRepositoryStatistics extends GitHubInteractiveObject {
      *             the io exception
      */
     public List&lt;PunchCardItem&gt; getPunchCard() throws IOException {
-<span class="fc" id="L427">        PunchCardItem[] list = root().createRequest()</span>
-<span class="fc" id="L428">                .withUrlPath(getApiTailUrl(&quot;punch_card&quot;))</span>
-<span class="fc" id="L429">                .fetch(PunchCardItem[].class);</span>
-<span class="fc" id="L430">        return Arrays.asList(list);</span>
+<span class="fc" id="L471">        PunchCardItem[] list = root().createRequest()</span>
+<span class="fc" id="L472">                .withUrlPath(getApiTailUrl(&quot;punch_card&quot;))</span>
+<span class="fc" id="L473">                .fetch(PunchCardItem[].class);</span>
+<span class="fc" id="L474">        return Arrays.asList(list);</span>
     }
 
     /**
-     * The type PunchCardItem.
+     * This gets the actual statistics from the server. Returns null if they are still being cached.
      */
-    public static class PunchCardItem {
-
-        private final int dayOfWeek;
-        private final int hourOfDay;
-        private final int numberOfCommits;
-
-        @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-<span class="fc" id="L443">        private PunchCardItem(List&lt;Integer&gt; item) {</span>
-<span class="fc" id="L444">            dayOfWeek = item.get(0);</span>
-<span class="fc" id="L445">            hourOfDay = item.get(1);</span>
-<span class="fc" id="L446">            numberOfCommits = item.get(2);</span>
-<span class="fc" id="L447">        }</span>
-
-        /**
-         * Gets day of week.
-         *
-         * @return The day of the week. 0 = Sunday, 1 = Monday, etc.
-         */
-        public int getDayOfWeek() {
-<span class="fc" id="L455">            return dayOfWeek;</span>
-        }
-
-        /**
-         * Gets hour of day.
-         *
-         * @return The hour of the day from 0 to 23.
-         */
-        public long getHourOfDay() {
-<span class="fc" id="L464">            return hourOfDay;</span>
-        }
-
-        /**
-         * Gets number of commits.
-         *
-         * @return The number of commits for the day and hour.
-         */
-        public long getNumberOfCommits() {
-<span class="fc" id="L473">            return numberOfCommits;</span>
-        }
-
-        /**
-         * To string.
-         *
-         * @return the string
-         */
-        public String toString() {
-<span class="fc" id="L482">            return &quot;Day &quot; + getDayOfWeek() + &quot; Hour &quot; + getHourOfDay() + &quot;: &quot; + getNumberOfCommits() + &quot; commits&quot;;</span>
-        }
+    private PagedIterable&lt;ContributorStats&gt; getContributorStatsImpl() {
+<span class="fc" id="L481">        return root().createRequest()</span>
+<span class="fc" id="L482">                .withUrlPath(getApiTailUrl(&quot;contributors&quot;))</span>
+<span class="fc" id="L483">                .toIterable(ContributorStats[].class, null);</span>
     }
 
     /**

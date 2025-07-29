@@ -21,10 +21,497 @@ import java.util.Collections;
 public class GHBranchProtection extends GitHubInteractiveObject {
 
     /**
-     * Create default GHBranchProtection instance
+     * The type AllowDeletions.
      */
-<span class="fc" id="L26">    public GHBranchProtection() {</span>
-<span class="fc" id="L27">    }</span>
+    public static class AllowDeletions {
+
+        @JsonProperty
+        private boolean enabled;
+
+        /**
+         * Create default AllowDeletions instance
+         */
+<span class="fc" id="L34">        public AllowDeletions() {</span>
+<span class="fc" id="L35">        }</span>
+
+        /**
+         * Is enabled boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isEnabled() {
+<span class="fc" id="L43">            return enabled;</span>
+        }
+    }
+
+    /**
+     * The type AllowForcePushes.
+     */
+    public static class AllowForcePushes {
+
+        @JsonProperty
+        private boolean enabled;
+
+        /**
+         * Create default AllowForcePushes instance
+         */
+<span class="fc" id="L58">        public AllowForcePushes() {</span>
+<span class="fc" id="L59">        }</span>
+
+        /**
+         * Is enabled boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isEnabled() {
+<span class="fc" id="L67">            return enabled;</span>
+        }
+    }
+
+    /**
+     * The type AllowForkSyncing.
+     */
+    public static class AllowForkSyncing {
+
+        @JsonProperty
+        private boolean enabled;
+
+        /**
+         * Create default AllowForkSyncing instance
+         */
+<span class="fc" id="L82">        public AllowForkSyncing() {</span>
+<span class="fc" id="L83">        }</span>
+
+        /**
+         * Is enabled boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isEnabled() {
+<span class="fc" id="L91">            return enabled;</span>
+        }
+    }
+
+    /**
+     * The type BlockCreations.
+     */
+    public static class BlockCreations {
+
+        @JsonProperty
+        private boolean enabled;
+
+        /**
+         * Create default BlockCreations instance
+         */
+<span class="fc" id="L106">        public BlockCreations() {</span>
+<span class="fc" id="L107">        }</span>
+
+        /**
+         * Is enabled boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isEnabled() {
+<span class="fc" id="L115">            return enabled;</span>
+        }
+    }
+
+    /**
+     * The type Check.
+     */
+    public static class Check {
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        private Integer appId;
+
+        private String context;
+
+        /**
+         * no-arg constructor for the serializer
+         */
+<span class="fc" id="L131">        public Check() {</span>
+<span class="fc" id="L132">        }</span>
+
+        /**
+         * Regular constructor for use in user business logic
+         *
+         * @param context
+         *            the context string of the check
+         * @param appId
+         *            the application ID the check is supposed to come from. Pass &quot;-1&quot; to explicitly allow any app to
+         *            set the status. Pass &quot;null&quot; to automatically select the GitHub App that has recently provided this
+         *            check.
+         */
+<span class="fc" id="L144">        public Check(String context, Integer appId) {</span>
+<span class="fc" id="L145">            this.context = context;</span>
+<span class="fc" id="L146">            this.appId = appId;</span>
+<span class="fc" id="L147">        }</span>
+
+        /**
+         * The application ID the check is supposed to come from. The value &quot;-1&quot; indicates &quot;any source&quot;.
+         *
+         * @return the integer
+         */
+        public Integer getAppId() {
+<span class="fc" id="L155">            return appId;</span>
+        }
+
+        /**
+         * The context string of the check
+         *
+         * @return the string
+         */
+        public String getContext() {
+<span class="fc" id="L164">            return context;</span>
+        }
+    }
+
+    /**
+     * The type EnforceAdmins.
+     */
+    public static class EnforceAdmins {
+
+        @JsonProperty
+        private boolean enabled;
+
+        @JsonProperty
+        private String url;
+
+        /**
+         * Create default EnforceAdmins instance
+         */
+<span class="fc" id="L182">        public EnforceAdmins() {</span>
+<span class="fc" id="L183">        }</span>
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public String getUrl() {
+<span class="nc" id="L191">            return url;</span>
+        }
+
+        /**
+         * Is enabled boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isEnabled() {
+<span class="fc" id="L200">            return enabled;</span>
+        }
+    }
+
+    /**
+     * The type LockBranch.
+     */
+    public static class LockBranch {
+
+        @JsonProperty
+        private boolean enabled;
+
+        /**
+         * Create default LockBranch instance
+         */
+<span class="fc" id="L215">        public LockBranch() {</span>
+<span class="fc" id="L216">        }</span>
+
+        /**
+         * Is enabled boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isEnabled() {
+<span class="fc" id="L224">            return enabled;</span>
+        }
+    }
+
+    /**
+     * The type RequiredConversationResolution.
+     */
+    public static class RequiredConversationResolution {
+
+        @JsonProperty
+        private boolean enabled;
+
+        /**
+         * Create default RequiredConversationResolution instance
+         */
+<span class="fc" id="L239">        public RequiredConversationResolution() {</span>
+<span class="fc" id="L240">        }</span>
+
+        /**
+         * Is enabled boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isEnabled() {
+<span class="fc" id="L248">            return enabled;</span>
+        }
+    }
+
+    /**
+     * The type RequiredLinearHistory.
+     */
+    public static class RequiredLinearHistory {
+
+        @JsonProperty
+        private boolean enabled;
+
+        /**
+         * Create default RequiredLinearHistory instance
+         */
+<span class="fc" id="L263">        public RequiredLinearHistory() {</span>
+<span class="fc" id="L264">        }</span>
+
+        /**
+         * Is enabled boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isEnabled() {
+<span class="fc" id="L272">            return enabled;</span>
+        }
+    }
+
+    /**
+     * The type RequiredReviews.
+     */
+    public static class RequiredReviews {
+
+        @JsonProperty
+        private boolean dismissStaleReviews;
+
+        @JsonProperty(&quot;dismissal_restrictions&quot;)
+        private Restrictions dismissalRestriction;
+
+        @JsonProperty
+        private boolean requireCodeOwnerReviews;
+
+        @JsonProperty
+        private boolean requireLastPushApproval;
+
+        @JsonProperty(&quot;required_approving_review_count&quot;)
+        private int requiredReviewers;
+
+        @JsonProperty
+        private String url;
+
+        /**
+         * Create default RequiredReviews instance
+         */
+<span class="fc" id="L302">        public RequiredReviews() {</span>
+<span class="fc" id="L303">        }</span>
+
+        /**
+         * Gets dismissal restrictions.
+         *
+         * @return the dismissal restrictions
+         */
+        public Restrictions getDismissalRestrictions() {
+<span class="nc" id="L311">            return dismissalRestriction;</span>
+        }
+
+        /**
+         * Gets required reviewers.
+         *
+         * @return the required reviewers
+         */
+        public int getRequiredReviewers() {
+<span class="fc" id="L320">            return requiredReviewers;</span>
+        }
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public String getUrl() {
+<span class="nc" id="L329">            return url;</span>
+        }
+
+        /**
+         * Is dismiss stale reviews boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isDismissStaleReviews() {
+<span class="fc" id="L338">            return dismissStaleReviews;</span>
+        }
+
+        /**
+         * Is require code owner reviews boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isRequireCodeOwnerReviews() {
+<span class="fc" id="L347">            return requireCodeOwnerReviews;</span>
+        }
+
+        /**
+         * Is require last push approval boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isRequireLastPushApproval() {
+<span class="fc" id="L356">            return requireLastPushApproval;</span>
+        }
+    }
+
+    /**
+     * The type RequiredStatusChecks.
+     */
+    public static class RequiredStatusChecks {
+
+        @JsonProperty
+        private Collection&lt;Check&gt; checks;
+
+        @JsonProperty
+        private Collection&lt;String&gt; contexts;
+
+        @JsonProperty
+        private boolean strict;
+
+        @JsonProperty
+        private String url;
+
+        /**
+         * Create default RequiredStatusChecks instance
+         */
+<span class="fc" id="L380">        public RequiredStatusChecks() {</span>
+<span class="fc" id="L381">        }</span>
+
+        /**
+         * Gets checks.
+         *
+         * @return the checks
+         */
+        public Collection&lt;Check&gt; getChecks() {
+<span class="fc" id="L389">            return Collections.unmodifiableCollection(checks);</span>
+        }
+
+        /**
+         * Gets contexts.
+         *
+         * @return the contexts
+         */
+        public Collection&lt;String&gt; getContexts() {
+<span class="fc" id="L398">            return Collections.unmodifiableCollection(contexts);</span>
+        }
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public String getUrl() {
+<span class="nc" id="L407">            return url;</span>
+        }
+
+        /**
+         * Is requires branch up to date boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isRequiresBranchUpToDate() {
+<span class="fc" id="L416">            return strict;</span>
+        }
+    }
+
+    /**
+     * The type Restrictions.
+     */
+    public static class Restrictions {
+
+        @JsonProperty
+        private Collection&lt;GHTeam&gt; teams;
+
+        private String teamsUrl;
+
+        @JsonProperty
+        private String url;
+
+        @JsonProperty
+        private Collection&lt;GHUser&gt; users;
+
+        private String usersUrl;
+
+        /**
+         * Create default Restrictions instance
+         */
+<span class="nc" id="L441">        public Restrictions() {</span>
+<span class="nc" id="L442">        }</span>
+
+        /**
+         * Gets teams.
+         *
+         * @return the teams
+         */
+        public Collection&lt;GHTeam&gt; getTeams() {
+<span class="nc" id="L450">            return Collections.unmodifiableCollection(teams);</span>
+        }
+
+        /**
+         * Gets teams url.
+         *
+         * @return the teams url
+         */
+        public String getTeamsUrl() {
+<span class="nc" id="L459">            return teamsUrl;</span>
+        }
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public String getUrl() {
+<span class="nc" id="L468">            return url;</span>
+        }
+
+        /**
+         * Gets users.
+         *
+         * @return the users
+         */
+        public Collection&lt;GHUser&gt; getUsers() {
+<span class="nc" id="L477">            return Collections.unmodifiableCollection(users);</span>
+        }
+
+        /**
+         * Gets users url.
+         *
+         * @return the users url
+         */
+        public String getUsersUrl() {
+<span class="nc" id="L486">            return usersUrl;</span>
+        }
+    }
+
+    private static class RequiredSignatures {
+        @JsonProperty
+        private boolean enabled;
+
+        @JsonProperty
+        private String url;
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public String getUrl() {
+<span class="nc" id="L503">            return url;</span>
+        }
+
+        /**
+         * Is enabled boolean.
+         *
+         * @return the boolean
+         */
+        public boolean isEnabled() {
+<span class="nc" id="L512">            return enabled;</span>
+        }
+    }
 
     private static final String REQUIRE_SIGNATURES_URI = &quot;/required_signatures&quot;;
 
@@ -65,14 +552,10 @@ public class GHBranchProtection extends GitHubInteractiveObject {
     private String url;
 
     /**
-     * Enabled signed commits.
-     *
-     * @throws IOException
-     *             the io exception
+     * Create default GHBranchProtection instance
      */
-    public void enabledSignedCommits() throws IOException {
-<span class="fc" id="L74">        requester().method(&quot;POST&quot;).withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class);</span>
-<span class="fc" id="L75">    }</span>
+<span class="fc" id="L557">    public GHBranchProtection() {</span>
+<span class="fc" id="L558">    }</span>
 
     /**
      * Disable signed commits.
@@ -81,8 +564,18 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      *             the io exception
      */
     public void disableSignedCommits() throws IOException {
-<span class="fc" id="L84">        requester().method(&quot;DELETE&quot;).withUrlPath(url + REQUIRE_SIGNATURES_URI).send();</span>
-<span class="fc" id="L85">    }</span>
+<span class="fc" id="L567">        requester().method(&quot;DELETE&quot;).withUrlPath(url + REQUIRE_SIGNATURES_URI).send();</span>
+<span class="fc" id="L568">    }</span>
+
+    /**
+     * Enabled signed commits.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void enabledSignedCommits() throws IOException {
+<span class="fc" id="L577">        requester().method(&quot;POST&quot;).withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class);</span>
+<span class="fc" id="L578">    }</span>
 
     /**
      * Gets allow deletions.
@@ -90,7 +583,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the enforce admins
      */
     public AllowDeletions getAllowDeletions() {
-<span class="fc" id="L93">        return allowDeletions;</span>
+<span class="fc" id="L586">        return allowDeletions;</span>
     }
 
     /**
@@ -99,7 +592,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the enforce admins
      */
     public AllowForcePushes getAllowForcePushes() {
-<span class="fc" id="L102">        return allowForcePushes;</span>
+<span class="fc" id="L595">        return allowForcePushes;</span>
     }
 
     /**
@@ -108,7 +601,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the enforce admins
      */
     public AllowForkSyncing getAllowForkSyncing() {
-<span class="fc" id="L111">        return allowForkSyncing;</span>
+<span class="fc" id="L604">        return allowForkSyncing;</span>
     }
 
     /**
@@ -117,7 +610,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the enforce admins
      */
     public BlockCreations getBlockCreations() {
-<span class="fc" id="L120">        return blockCreations;</span>
+<span class="fc" id="L613">        return blockCreations;</span>
     }
 
     /**
@@ -126,7 +619,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the enforce admins
      */
     public EnforceAdmins getEnforceAdmins() {
-<span class="fc" id="L129">        return enforceAdmins;</span>
+<span class="fc" id="L622">        return enforceAdmins;</span>
     }
 
     /**
@@ -135,7 +628,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the enforce admins
      */
     public LockBranch getLockBranch() {
-<span class="fc" id="L138">        return lockBranch;</span>
+<span class="fc" id="L631">        return lockBranch;</span>
     }
 
     /**
@@ -144,7 +637,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the enforce admins
      */
     public RequiredConversationResolution getRequiredConversationResolution() {
-<span class="fc" id="L147">        return requiredConversationResolution;</span>
+<span class="fc" id="L640">        return requiredConversationResolution;</span>
     }
 
     /**
@@ -153,7 +646,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the enforce admins
      */
     public RequiredLinearHistory getRequiredLinearHistory() {
-<span class="fc" id="L156">        return requiredLinearHistory;</span>
+<span class="fc" id="L649">        return requiredLinearHistory;</span>
     }
 
     /**
@@ -162,7 +655,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the required reviews
      */
     public RequiredReviews getRequiredReviews() {
-<span class="fc" id="L165">        return requiredReviews;</span>
+<span class="fc" id="L658">        return requiredReviews;</span>
     }
 
     /**
@@ -173,7 +666,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      *             the io exception
      */
     public boolean getRequiredSignatures() throws IOException {
-<span class="fc" id="L176">        return requester().withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class).enabled;</span>
+<span class="fc" id="L669">        return requester().withUrlPath(url + REQUIRE_SIGNATURES_URI).fetch(RequiredSignatures.class).enabled;</span>
     }
 
     /**
@@ -182,7 +675,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the required status checks
      */
     public RequiredStatusChecks getRequiredStatusChecks() {
-<span class="fc" id="L185">        return requiredStatusChecks;</span>
+<span class="fc" id="L678">        return requiredStatusChecks;</span>
     }
 
     /**
@@ -191,7 +684,7 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the restrictions
      */
     public Restrictions getRestrictions() {
-<span class="nc" id="L194">        return restrictions;</span>
+<span class="nc" id="L687">        return restrictions;</span>
     }
 
     /**
@@ -200,504 +693,11 @@ public class GHBranchProtection extends GitHubInteractiveObject {
      * @return the url
      */
     public String getUrl() {
-<span class="nc" id="L203">        return url;</span>
+<span class="nc" id="L696">        return url;</span>
     }
 
     private Requester requester() {
-<span class="fc" id="L207">        return root().createRequest();</span>
-    }
-
-    /**
-     * The type AllowDeletions.
-     */
-    public static class AllowDeletions {
-
-        /**
-         * Create default AllowDeletions instance
-         */
-<span class="fc" id="L218">        public AllowDeletions() {</span>
-<span class="fc" id="L219">        }</span>
-
-        @JsonProperty
-        private boolean enabled;
-
-        /**
-         * Is enabled boolean.
-         *
-         * @return the boolean
-         */
-        public boolean isEnabled() {
-<span class="fc" id="L230">            return enabled;</span>
-        }
-    }
-
-    /**
-     * The type Check.
-     */
-    public static class Check {
-        private String context;
-
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        private Integer appId;
-
-        /**
-         * no-arg constructor for the serializer
-         */
-<span class="fc" id="L246">        public Check() {</span>
-<span class="fc" id="L247">        }</span>
-
-        /**
-         * Regular constructor for use in user business logic
-         *
-         * @param context
-         *            the context string of the check
-         * @param appId
-         *            the application ID the check is supposed to come from. Pass &quot;-1&quot; to explicitly allow any app to
-         *            set the status. Pass &quot;null&quot; to automatically select the GitHub App that has recently provided this
-         *            check.
-         */
-<span class="fc" id="L259">        public Check(String context, Integer appId) {</span>
-<span class="fc" id="L260">            this.context = context;</span>
-<span class="fc" id="L261">            this.appId = appId;</span>
-<span class="fc" id="L262">        }</span>
-
-        /**
-         * The context string of the check
-         *
-         * @return the string
-         */
-        public String getContext() {
-<span class="fc" id="L270">            return context;</span>
-        }
-
-        /**
-         * The application ID the check is supposed to come from. The value &quot;-1&quot; indicates &quot;any source&quot;.
-         *
-         * @return the integer
-         */
-        public Integer getAppId() {
-<span class="fc" id="L279">            return appId;</span>
-        }
-    }
-
-    /**
-     * The type AllowForcePushes.
-     */
-    public static class AllowForcePushes {
-
-        /**
-         * Create default AllowForcePushes instance
-         */
-<span class="fc" id="L291">        public AllowForcePushes() {</span>
-<span class="fc" id="L292">        }</span>
-
-        @JsonProperty
-        private boolean enabled;
-
-        /**
-         * Is enabled boolean.
-         *
-         * @return the boolean
-         */
-        public boolean isEnabled() {
-<span class="fc" id="L303">            return enabled;</span>
-        }
-    }
-
-    /**
-     * The type AllowForkSyncing.
-     */
-    public static class AllowForkSyncing {
-
-        /**
-         * Create default AllowForkSyncing instance
-         */
-<span class="fc" id="L315">        public AllowForkSyncing() {</span>
-<span class="fc" id="L316">        }</span>
-
-        @JsonProperty
-        private boolean enabled;
-
-        /**
-         * Is enabled boolean.
-         *
-         * @return the boolean
-         */
-        public boolean isEnabled() {
-<span class="fc" id="L327">            return enabled;</span>
-        }
-    }
-
-    /**
-     * The type BlockCreations.
-     */
-    public static class BlockCreations {
-
-        /**
-         * Create default BlockCreations instance
-         */
-<span class="fc" id="L339">        public BlockCreations() {</span>
-<span class="fc" id="L340">        }</span>
-
-        @JsonProperty
-        private boolean enabled;
-
-        /**
-         * Is enabled boolean.
-         *
-         * @return the boolean
-         */
-        public boolean isEnabled() {
-<span class="fc" id="L351">            return enabled;</span>
-        }
-    }
-
-    /**
-     * The type EnforceAdmins.
-     */
-    public static class EnforceAdmins {
-
-        /**
-         * Create default EnforceAdmins instance
-         */
-<span class="fc" id="L363">        public EnforceAdmins() {</span>
-<span class="fc" id="L364">        }</span>
-
-        @JsonProperty
-        private boolean enabled;
-
-        @JsonProperty
-        private String url;
-
-        /**
-         * Gets url.
-         *
-         * @return the url
-         */
-        public String getUrl() {
-<span class="nc" id="L378">            return url;</span>
-        }
-
-        /**
-         * Is enabled boolean.
-         *
-         * @return the boolean
-         */
-        public boolean isEnabled() {
-<span class="fc" id="L387">            return enabled;</span>
-        }
-    }
-
-    /**
-     * The type LockBranch.
-     */
-    public static class LockBranch {
-
-        /**
-         * Create default LockBranch instance
-         */
-<span class="fc" id="L399">        public LockBranch() {</span>
-<span class="fc" id="L400">        }</span>
-
-        @JsonProperty
-        private boolean enabled;
-
-        /**
-         * Is enabled boolean.
-         *
-         * @return the boolean
-         */
-        public boolean isEnabled() {
-<span class="fc" id="L411">            return enabled;</span>
-        }
-    }
-
-    /**
-     * The type RequiredConversationResolution.
-     */
-    public static class RequiredConversationResolution {
-
-        /**
-         * Create default RequiredConversationResolution instance
-         */
-<span class="fc" id="L423">        public RequiredConversationResolution() {</span>
-<span class="fc" id="L424">        }</span>
-
-        @JsonProperty
-        private boolean enabled;
-
-        /**
-         * Is enabled boolean.
-         *
-         * @return the boolean
-         */
-        public boolean isEnabled() {
-<span class="fc" id="L435">            return enabled;</span>
-        }
-    }
-
-    /**
-     * The type RequiredLinearHistory.
-     */
-    public static class RequiredLinearHistory {
-
-        /**
-         * Create default RequiredLinearHistory instance
-         */
-<span class="fc" id="L447">        public RequiredLinearHistory() {</span>
-<span class="fc" id="L448">        }</span>
-
-        @JsonProperty
-        private boolean enabled;
-
-        /**
-         * Is enabled boolean.
-         *
-         * @return the boolean
-         */
-        public boolean isEnabled() {
-<span class="fc" id="L459">            return enabled;</span>
-        }
-    }
-
-    /**
-     * The type RequiredReviews.
-     */
-    public static class RequiredReviews {
-
-        /**
-         * Create default RequiredReviews instance
-         */
-<span class="fc" id="L471">        public RequiredReviews() {</span>
-<span class="fc" id="L472">        }</span>
-
-        @JsonProperty(&quot;dismissal_restrictions&quot;)
-        private Restrictions dismissalRestriction;
-
-        @JsonProperty
-        private boolean dismissStaleReviews;
-
-        @JsonProperty
-        private boolean requireCodeOwnerReviews;
-
-        @JsonProperty
-        private boolean requireLastPushApproval;
-
-        @JsonProperty(&quot;required_approving_review_count&quot;)
-        private int requiredReviewers;
-
-        @JsonProperty
-        private String url;
-
-        /**
-         * Gets dismissal restrictions.
-         *
-         * @return the dismissal restrictions
-         */
-        public Restrictions getDismissalRestrictions() {
-<span class="nc" id="L498">            return dismissalRestriction;</span>
-        }
-
-        /**
-         * Gets url.
-         *
-         * @return the url
-         */
-        public String getUrl() {
-<span class="nc" id="L507">            return url;</span>
-        }
-
-        /**
-         * Is dismiss stale reviews boolean.
-         *
-         * @return the boolean
-         */
-        public boolean isDismissStaleReviews() {
-<span class="fc" id="L516">            return dismissStaleReviews;</span>
-        }
-
-        /**
-         * Is require code owner reviews boolean.
-         *
-         * @return the boolean
-         */
-        public boolean isRequireCodeOwnerReviews() {
-<span class="fc" id="L525">            return requireCodeOwnerReviews;</span>
-        }
-
-        /**
-         * Is require last push approval boolean.
-         *
-         * @return the boolean
-         */
-        public boolean isRequireLastPushApproval() {
-<span class="fc" id="L534">            return requireLastPushApproval;</span>
-        }
-
-        /**
-         * Gets required reviewers.
-         *
-         * @return the required reviewers
-         */
-        public int getRequiredReviewers() {
-<span class="fc" id="L543">            return requiredReviewers;</span>
-        }
-    }
-
-    private static class RequiredSignatures {
-        @JsonProperty
-        private boolean enabled;
-
-        @JsonProperty
-        private String url;
-
-        /**
-         * Gets url.
-         *
-         * @return the url
-         */
-        public String getUrl() {
-<span class="nc" id="L560">            return url;</span>
-        }
-
-        /**
-         * Is enabled boolean.
-         *
-         * @return the boolean
-         */
-        public boolean isEnabled() {
-<span class="nc" id="L569">            return enabled;</span>
-        }
-    }
-
-    /**
-     * The type RequiredStatusChecks.
-     */
-    public static class RequiredStatusChecks {
-
-        /**
-         * Create default RequiredStatusChecks instance
-         */
-<span class="fc" id="L581">        public RequiredStatusChecks() {</span>
-<span class="fc" id="L582">        }</span>
-
-        @JsonProperty
-        private Collection&lt;String&gt; contexts;
-
-        @JsonProperty
-        private Collection&lt;Check&gt; checks;
-
-        @JsonProperty
-        private boolean strict;
-
-        @JsonProperty
-        private String url;
-
-        /**
-         * Gets contexts.
-         *
-         * @return the contexts
-         */
-        public Collection&lt;String&gt; getContexts() {
-<span class="fc" id="L602">            return Collections.unmodifiableCollection(contexts);</span>
-        }
-
-        /**
-         * Gets checks.
-         *
-         * @return the checks
-         */
-        public Collection&lt;Check&gt; getChecks() {
-<span class="fc" id="L611">            return Collections.unmodifiableCollection(checks);</span>
-        }
-
-        /**
-         * Gets url.
-         *
-         * @return the url
-         */
-        public String getUrl() {
-<span class="nc" id="L620">            return url;</span>
-        }
-
-        /**
-         * Is requires branch up to date boolean.
-         *
-         * @return the boolean
-         */
-        public boolean isRequiresBranchUpToDate() {
-<span class="fc" id="L629">            return strict;</span>
-        }
-    }
-
-    /**
-     * The type Restrictions.
-     */
-    public static class Restrictions {
-
-        /**
-         * Create default Restrictions instance
-         */
-<span class="nc" id="L641">        public Restrictions() {</span>
-<span class="nc" id="L642">        }</span>
-
-        @JsonProperty
-        private Collection&lt;GHTeam&gt; teams;
-
-        private String teamsUrl;
-
-        @JsonProperty
-        private String url;
-
-        @JsonProperty
-        private Collection&lt;GHUser&gt; users;
-
-        private String usersUrl;
-
-        /**
-         * Gets teams.
-         *
-         * @return the teams
-         */
-        public Collection&lt;GHTeam&gt; getTeams() {
-<span class="nc" id="L663">            return Collections.unmodifiableCollection(teams);</span>
-        }
-
-        /**
-         * Gets teams url.
-         *
-         * @return the teams url
-         */
-        public String getTeamsUrl() {
-<span class="nc" id="L672">            return teamsUrl;</span>
-        }
-
-        /**
-         * Gets url.
-         *
-         * @return the url
-         */
-        public String getUrl() {
-<span class="nc" id="L681">            return url;</span>
-        }
-
-        /**
-         * Gets users.
-         *
-         * @return the users
-         */
-        public Collection&lt;GHUser&gt; getUsers() {
-<span class="nc" id="L690">            return Collections.unmodifiableCollection(users);</span>
-        }
-
-        /**
-         * Gets users url.
-         *
-         * @return the users url
-         */
-        public String getUsersUrl() {
-<span class="nc" id="L699">            return usersUrl;</span>
-        }
+<span class="fc" id="L700">        return root().createRequest();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -43,13 +43,13 @@ import javax.annotation.Nonnull;
  */
 abstract class AbstractBuilder&lt;R, S&gt; extends GitHubInteractiveObject implements GitHubRequestBuilderDone&lt;R&gt; {
 
-    @Nonnull
-    private final Class&lt;R&gt; returnType;
+    @CheckForNull
+    private final R baseInstance;
 
     private final boolean commitChangesImmediately;
 
-    @CheckForNull
-    private final R baseInstance;
+    @Nonnull
+    private final Class&lt;R&gt; returnType;
 
     /** The requester. */
     @Nonnull
@@ -111,6 +111,34 @@ abstract class AbstractBuilder&lt;R, S&gt; extends GitHubInteractiveObject imple
     }
 
     /**
+     * Chooses whether to return a continuing builder or an updated data record
+     *
+     * If {@code S} is the same as {@code R}, this method will commit changes after the first value change and return a
+     * {@code R} from {@link #done()}.
+     *
+     * If {@code S} is not the same as {@code R}, this method will return an {@code S} and letting the caller batch
+     * together multiple changes and call {@link #done()} when they are ready.
+     *
+     * @return either a continuing builder or an updated data record
+     * @throws IOException
+     *             if an I/O error occurs
+     */
+    @Nonnull
+    @BetaApi
+    protected S continueOrDone() throws IOException {
+        // This little bit of roughness in this base class means all inheriting builders get to create Updater and
+        // Setter classes from almost identical code. Creator can often be implemented with significant code reuse as
+        // well.
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        if (commitChangesImmediately) {</span>
+            // These casts look strange and risky, but they they're actually guaranteed safe due to the return path
+            // being based on the previous comparison of class instances passed to the constructor.
+<span class="fc" id="L135">            return (S) done();</span>
+        } else {
+<span class="fc" id="L137">            return (S) this;</span>
+        }
+    }
+
+    /**
      * Applies a value to a name for this builder.
      *
      * If {@code S} is the same as {@code R}, this method will commit changes after the first value change and return a
@@ -130,36 +158,8 @@ abstract class AbstractBuilder&lt;R, S&gt; extends GitHubInteractiveObject imple
     @Nonnull
     @BetaApi
     protected S with(@Nonnull String name, Object value) throws IOException {
-<span class="fc" id="L133">        requester.with(name, value);</span>
-<span class="fc" id="L134">        return continueOrDone();</span>
-    }
-
-    /**
-     * Chooses whether to return a continuing builder or an updated data record
-     *
-     * If {@code S} is the same as {@code R}, this method will commit changes after the first value change and return a
-     * {@code R} from {@link #done()}.
-     *
-     * If {@code S} is not the same as {@code R}, this method will return an {@code S} and letting the caller batch
-     * together multiple changes and call {@link #done()} when they are ready.
-     *
-     * @return either a continuing builder or an updated data record
-     * @throws IOException
-     *             if an I/O error occurs
-     */
-    @Nonnull
-    @BetaApi
-    protected S continueOrDone() throws IOException {
-        // This little bit of roughness in this base class means all inheriting builders get to create Updater and
-        // Setter classes from almost identical code. Creator can often be implemented with significant code reuse as
-        // well.
-<span class="fc bfc" id="L156" title="All 2 branches covered.">        if (commitChangesImmediately) {</span>
-            // These casts look strange and risky, but they they're actually guaranteed safe due to the return path
-            // being based on the previous comparison of class instances passed to the constructor.
-<span class="fc" id="L159">            return (S) done();</span>
-        } else {
-<span class="fc" id="L161">            return (S) this;</span>
-        }
+<span class="fc" id="L161">        requester.with(name, value);</span>
+<span class="fc" id="L162">        return continueOrDone();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

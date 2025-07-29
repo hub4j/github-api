@@ -19,72 +19,6 @@ import java.util.stream.Collectors;
  */
 public class GHGraphQLResponse&lt;T&gt; {
 
-    private final T data;
-
-    private final List&lt;GraphQLError&gt; errors;
-
-    /**
-     * GHGraphQLResponse constructor
-     *
-     * @param data
-     *            GraphQL success response
-     * @param errors
-     *            GraphQL failure response, This will be empty if not fail
-     */
-    @JsonCreator
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP2&quot; }, justification = &quot;Spotbugs also doesn't like this&quot;)
-<span class="fc" id="L36">    public GHGraphQLResponse(@JsonProperty(&quot;data&quot;) T data, @JsonProperty(&quot;errors&quot;) List&lt;GraphQLError&gt; errors) {</span>
-<span class="fc bfc" id="L37" title="All 2 branches covered.">        if (errors == null) {</span>
-<span class="fc" id="L38">            errors = Collections.emptyList();</span>
-        }
-<span class="fc" id="L40">        this.data = data;</span>
-<span class="fc" id="L41">        this.errors = Collections.unmodifiableList(errors);</span>
-<span class="fc" id="L42">    }</span>
-
-    /**
-     * Is response succesful.
-     *
-     * @return request is succeeded. True when error list is empty.
-     */
-    public boolean isSuccessful() {
-<span class="fc" id="L50">        return errors.isEmpty();</span>
-    }
-
-    /**
-     * Get response data.
-     *
-     * @return GraphQL success response
-     */
-    public T getData() {
-<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (!isSuccessful()) {</span>
-<span class="fc" id="L60">            throw new RuntimeException(&quot;Response not successful, data invalid&quot;);</span>
-        }
-
-<span class="fc" id="L63">        return data;</span>
-    }
-
-    /**
-     * Get response error message.
-     *
-     * @return GraphQL error messages from Github Response. Empty list when no errors occurred.
-     */
-    public List&lt;String&gt; getErrorMessages() {
-<span class="fc" id="L72">        return errors.stream().map(GraphQLError::getMessage).collect(Collectors.toList());</span>
-    }
-
-    /**
-     * A error of GraphQL response. Minimum implementation for GraphQL error.
-     */
-    @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot; },
-            justification = &quot;JSON API&quot;)
-    private static class GraphQLError {
-        private String message;
-
-        public String getMessage() {
-<span class="fc" id="L84">            return message;</span>
-        }
-    }
-
     /**
      * A GraphQL response with basic Object data type.
      */
@@ -100,8 +34,74 @@ public class GHGraphQLResponse&lt;T&gt; {
         @JsonCreator
         @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP2&quot; }, justification = &quot;Spotbugs also doesn't like this&quot;)
         public ObjectResponse(@JsonProperty(&quot;data&quot;) Object data, @JsonProperty(&quot;errors&quot;) List&lt;GraphQLError&gt; errors) {
-<span class="fc" id="L103">            super(data, errors);</span>
-<span class="fc" id="L104">        }</span>
+<span class="fc" id="L37">            super(data, errors);</span>
+<span class="fc" id="L38">        }</span>
+    }
+
+    /**
+     * A error of GraphQL response. Minimum implementation for GraphQL error.
+     */
+    @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot; },
+            justification = &quot;JSON API&quot;)
+    private static class GraphQLError {
+        private String message;
+
+        public String getMessage() {
+<span class="fc" id="L50">            return message;</span>
+        }
+    }
+
+    private final T data;
+
+    private final List&lt;GraphQLError&gt; errors;
+
+    /**
+     * GHGraphQLResponse constructor
+     *
+     * @param data
+     *            GraphQL success response
+     * @param errors
+     *            GraphQL failure response, This will be empty if not fail
+     */
+    @JsonCreator
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP2&quot; }, justification = &quot;Spotbugs also doesn't like this&quot;)
+<span class="fc" id="L68">    public GHGraphQLResponse(@JsonProperty(&quot;data&quot;) T data, @JsonProperty(&quot;errors&quot;) List&lt;GraphQLError&gt; errors) {</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (errors == null) {</span>
+<span class="fc" id="L70">            errors = Collections.emptyList();</span>
+        }
+<span class="fc" id="L72">        this.data = data;</span>
+<span class="fc" id="L73">        this.errors = Collections.unmodifiableList(errors);</span>
+<span class="fc" id="L74">    }</span>
+
+    /**
+     * Get response data.
+     *
+     * @return GraphQL success response
+     */
+    public T getData() {
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        if (!isSuccessful()) {</span>
+<span class="fc" id="L83">            throw new RuntimeException(&quot;Response not successful, data invalid&quot;);</span>
+        }
+
+<span class="fc" id="L86">        return data;</span>
+    }
+
+    /**
+     * Get response error message.
+     *
+     * @return GraphQL error messages from Github Response. Empty list when no errors occurred.
+     */
+    public List&lt;String&gt; getErrorMessages() {
+<span class="fc" id="L95">        return errors.stream().map(GraphQLError::getMessage).collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Is response succesful.
+     *
+     * @return request is succeeded. True when error list is empty.
+     */
+    public boolean isSuccessful() {
+<span class="fc" id="L104">        return errors.isEmpty();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -10,18 +10,27 @@
  */
 public class GHGistFile {
 
+    private String rawUrl, type, language, content;
+
+    private int size;
+
+    private boolean truncated;
+    /** The file name. */
+    /* package almost final */ String fileName;
     /**
      * Create default GHGistFile instance
      */
-<span class="fc" id="L16">    public GHGistFile() {</span>
-<span class="fc" id="L17">    }</span>
+<span class="fc" id="L23">    public GHGistFile() {</span>
+<span class="fc" id="L24">    }</span>
 
-    /** The file name. */
-    /* package almost final */ String fileName;
-
-    private int size;
-    private String rawUrl, type, language, content;
-    private boolean truncated;
+    /**
+     * Content of this file.
+     *
+     * @return the content
+     */
+    public String getContent() {
+<span class="fc" id="L32">        return content;</span>
+    }
 
     /**
      * Gets file name.
@@ -29,34 +38,7 @@ public class GHGistFile {
      * @return the file name
      */
     public String getFileName() {
-<span class="fc" id="L32">        return fileName;</span>
-    }
-
-    /**
-     * File size in bytes.
-     *
-     * @return the size
-     */
-    public int getSize() {
-<span class="fc" id="L41">        return size;</span>
-    }
-
-    /**
-     * URL that serves this file as-is.
-     *
-     * @return the raw url
-     */
-    public String getRawUrl() {
-<span class="fc" id="L50">        return rawUrl;</span>
-    }
-
-    /**
-     * Content type of this Gist, such as &quot;text/plain&quot;.
-     *
-     * @return the type
-     */
-    public String getType() {
-<span class="fc" id="L59">        return type;</span>
+<span class="fc" id="L41">        return fileName;</span>
     }
 
     /**
@@ -65,16 +47,34 @@ public class GHGistFile {
      * @return the language
      */
     public String getLanguage() {
-<span class="fc" id="L68">        return language;</span>
+<span class="fc" id="L50">        return language;</span>
     }
 
     /**
-     * Content of this file.
+     * URL that serves this file as-is.
      *
-     * @return the content
+     * @return the raw url
      */
-    public String getContent() {
-<span class="fc" id="L77">        return content;</span>
+    public String getRawUrl() {
+<span class="fc" id="L59">        return rawUrl;</span>
+    }
+
+    /**
+     * File size in bytes.
+     *
+     * @return the size
+     */
+    public int getSize() {
+<span class="fc" id="L68">        return size;</span>
+    }
+
+    /**
+     * Content type of this Gist, such as &quot;text/plain&quot;.
+     *
+     * @return the type
+     */
+    public String getType() {
+<span class="fc" id="L77">        return type;</span>
     }
 
     /**

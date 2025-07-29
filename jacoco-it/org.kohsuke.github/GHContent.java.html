@@ -19,101 +19,83 @@ import java.util.Base64;
 public class GHContent extends GitHubInteractiveObject implements Refreshable {
 
     /**
-     * Create default GHContent instance
+     * Gets the api route.
+     *
+     * @param repository
+     *            the repository
+     * @param path
+     *            the path
+     * @return the api route
      */
-<span class="fc" id="L24">    public GHContent() {</span>
-<span class="fc" id="L25">    }</span>
+    static String getApiRoute(GHRepository repository, String path) {
+<span class="fc" id="L31">        return repository.getApiTailUrl(&quot;contents/&quot; + path);</span>
+    }
 
+    private String content;
+
+    private String downloadUrl;
+    private String encoding;
+    private String gitUrl; // this is the Blob url
+    private String htmlUrl; // this is the UI
+    private String name;
+    private String path;
     /*
      * In normal use of this class, repository field is set via wrap(), but in the code search API, there's a nested
      * 'repository' field that gets populated from JSON.
      */
     private GHRepository repository;
-
-    private String type;
-    private String encoding;
-    private long size;
     private String sha;
-    private String name;
-    private String path;
+    private long size;
     private String target;
-    private String content;
+    private String type;
     private String url; // this is the API url
-    private String gitUrl; // this is the Blob url
-    private String htmlUrl; // this is the UI
-    private String downloadUrl;
 
     /**
-     * Gets owner.
-     *
-     * @return the owner
+     * Create default GHContent instance
      */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHRepository getOwner() {
-<span class="fc" id="L53">        return repository;</span>
+<span class="fc" id="L56">    public GHContent() {</span>
+<span class="fc" id="L57">    }</span>
+
+    /**
+     * Delete gh content update response.
+     *
+     * @param message
+     *            the message
+     * @return the gh content update response
+     * @throws IOException
+     *             the io exception
+     */
+    public GHContentUpdateResponse delete(String message) throws IOException {
+<span class="fc" id="L69">        return delete(message, null);</span>
     }
 
     /**
-     * Gets type.
+     * Delete gh content update response.
      *
-     * @return the type
+     * @param commitMessage
+     *            the commit message
+     * @param branch
+     *            the branch
+     * @return the gh content update response
+     * @throws IOException
+     *             the io exception
      */
-    public String getType() {
-<span class="fc" id="L62">        return type;</span>
-    }
+    public GHContentUpdateResponse delete(String commitMessage, String branch) throws IOException {
+<span class="fc" id="L84">        Requester requester = root().createRequest()</span>
+<span class="fc" id="L85">                .method(&quot;DELETE&quot;)</span>
+<span class="fc" id="L86">                .with(&quot;path&quot;, path)</span>
+<span class="fc" id="L87">                .with(&quot;message&quot;, commitMessage)</span>
+<span class="fc" id="L88">                .with(&quot;sha&quot;, sha);</span>
 
-    /**
-     * Gets encoding.
-     *
-     * @return the encoding
-     */
-    public String getEncoding() {
-<span class="fc" id="L71">        return encoding;</span>
-    }
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        if (branch != null) {</span>
+<span class="nc" id="L91">            requester.with(&quot;branch&quot;, branch);</span>
+        }
 
-    /**
-     * Gets size.
-     *
-     * @return the size
-     */
-    public long getSize() {
-<span class="fc" id="L80">        return size;</span>
-    }
+<span class="fc" id="L94">        GHContentUpdateResponse response = requester.withUrlPath(getApiRoute(repository, path))</span>
+<span class="fc" id="L95">                .fetch(GHContentUpdateResponse.class);</span>
 
-    /**
-     * Gets sha.
-     *
-     * @return the sha
-     */
-    public String getSha() {
-<span class="fc" id="L89">        return sha;</span>
-    }
-
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String getName() {
-<span class="fc" id="L98">        return name;</span>
-    }
-
-    /**
-     * Gets path.
-     *
-     * @return the path
-     */
-    public String getPath() {
-<span class="fc" id="L107">        return path;</span>
-    }
-
-    /**
-     * Gets target of a symlink. This will only be set if {@code &quot;symlink&quot;.equals(getType())}
-     *
-     * @return the target
-     */
-    public String getTarget() {
-<span class="fc" id="L116">        return target;</span>
+<span class="fc" id="L97">        response.getCommit().wrapUp(repository);</span>
+<span class="fc" id="L98">        return response;</span>
     }
 
     /**
@@ -131,7 +113,19 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
     @Deprecated
     @SuppressFBWarnings(&quot;DM_DEFAULT_ENCODING&quot;)
     public String getContent() throws IOException {
-<span class="fc" id="L134">        return new String(readDecodedContent());</span>
+<span class="fc" id="L116">        return new String(readDecodedContent());</span>
+    }
+
+    /**
+     * URL to retrieve the raw content of the file. Null if this is a directory.
+     *
+     * @return the download url
+     * @throws IOException
+     *             the io exception
+     */
+    public String getDownloadUrl() throws IOException {
+<span class="fc" id="L127">        refresh(downloadUrl);</span>
+<span class="fc" id="L128">        return downloadUrl;</span>
     }
 
     /**
@@ -148,17 +142,17 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      */
     @Deprecated
     public String getEncodedContent() throws IOException {
-<span class="fc" id="L151">        refresh(content);</span>
-<span class="fc" id="L152">        return content;</span>
+<span class="fc" id="L145">        refresh(content);</span>
+<span class="fc" id="L146">        return content;</span>
     }
 
     /**
-     * Gets url.
+     * Gets encoding.
      *
-     * @return the url
+     * @return the encoding
      */
-    public String getUrl() {
-<span class="fc" id="L161">        return url;</span>
+    public String getEncoding() {
+<span class="fc" id="L155">        return encoding;</span>
     }
 
     /**
@@ -167,7 +161,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @return the git url
      */
     public String getGitUrl() {
-<span class="fc" id="L170">        return gitUrl;</span>
+<span class="fc" id="L164">        return gitUrl;</span>
     }
 
     /**
@@ -176,7 +170,110 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @return the html url
      */
     public String getHtmlUrl() {
-<span class="fc" id="L179">        return htmlUrl;</span>
+<span class="fc" id="L173">        return htmlUrl;</span>
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+<span class="fc" id="L182">        return name;</span>
+    }
+
+    /**
+     * Gets owner.
+     *
+     * @return the owner
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHRepository getOwner() {
+<span class="fc" id="L192">        return repository;</span>
+    }
+
+    /**
+     * Gets path.
+     *
+     * @return the path
+     */
+    public String getPath() {
+<span class="fc" id="L201">        return path;</span>
+    }
+
+    /**
+     * Gets sha.
+     *
+     * @return the sha
+     */
+    public String getSha() {
+<span class="fc" id="L210">        return sha;</span>
+    }
+
+    /**
+     * Gets size.
+     *
+     * @return the size
+     */
+    public long getSize() {
+<span class="fc" id="L219">        return size;</span>
+    }
+
+    /**
+     * Gets target of a symlink. This will only be set if {@code &quot;symlink&quot;.equals(getType())}
+     *
+     * @return the target
+     */
+    public String getTarget() {
+<span class="fc" id="L228">        return target;</span>
+    }
+
+    /**
+     * Gets type.
+     *
+     * @return the type
+     */
+    public String getType() {
+<span class="fc" id="L237">        return type;</span>
+    }
+
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
+    public String getUrl() {
+<span class="fc" id="L246">        return url;</span>
+    }
+
+    /**
+     * Is directory boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isDirectory() {
+<span class="fc" id="L255">        return &quot;dir&quot;.equals(type);</span>
+    }
+
+    /**
+     * Is file boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isFile() {
+<span class="fc" id="L264">        return &quot;file&quot;.equals(type);</span>
+    }
+
+    /**
+     * List immediate children of this directory.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHContent&gt; listDirectoryContent() {
+<span class="pc bpc" id="L273" title="1 of 2 branches missed.">        if (!isDirectory())</span>
+<span class="nc" id="L274">            throw new IllegalStateException(path + &quot; is not a directory&quot;);</span>
+
+<span class="fc" id="L276">        return root().createRequest().setRawUrlPath(url).toIterable(GHContent[].class, item -&gt; item.wrap(repository));</span>
     }
 
     /**
@@ -187,83 +284,21 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      *             the io exception
      */
     public InputStream read() throws IOException {
-<span class="fc" id="L190">        return new ByteArrayInputStream(readDecodedContent());</span>
-    }
-
-    /**
-     * Retrieves the decoded bytes of the blob.
-     *
-     * @return the input stream
-     * @throws IOException
-     *             the io exception
-     */
-    private byte[] readDecodedContent() throws IOException {
-<span class="fc" id="L201">        String encodedContent = getEncodedContent();</span>
-<span class="pc bpc" id="L202" title="1 of 2 branches missed.">        if (encoding.equals(&quot;base64&quot;)) {</span>
-            try {
-<span class="fc" id="L204">                Base64.Decoder decoder = Base64.getMimeDecoder();</span>
-<span class="fc" id="L205">                return decoder.decode(encodedContent.getBytes(StandardCharsets.US_ASCII));</span>
-<span class="nc" id="L206">            } catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L207">                throw new AssertionError(e); // US-ASCII is mandatory</span>
-            }
-        }
-
-<span class="nc" id="L211">        throw new UnsupportedOperationException(&quot;Unrecognized encoding: &quot; + encoding);</span>
-    }
-
-    /**
-     * URL to retrieve the raw content of the file. Null if this is a directory.
-     *
-     * @return the download url
-     * @throws IOException
-     *             the io exception
-     */
-    public String getDownloadUrl() throws IOException {
-<span class="fc" id="L222">        refresh(downloadUrl);</span>
-<span class="fc" id="L223">        return downloadUrl;</span>
-    }
-
-    /**
-     * Is file boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isFile() {
-<span class="fc" id="L232">        return &quot;file&quot;.equals(type);</span>
-    }
-
-    /**
-     * Is directory boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isDirectory() {
-<span class="fc" id="L241">        return &quot;dir&quot;.equals(type);</span>
+<span class="fc" id="L287">        return new ByteArrayInputStream(readDecodedContent());</span>
     }
 
     /**
      * Fully populate the data by retrieving missing data.
-     * &lt;p&gt;
+     *
      * Depending on the original API call where this object is created, it may not contain everything.
      *
      * @throws IOException
-     *             the io exception
+     *             Signals that an I/O exception has occurred.
      */
-    protected synchronized void populate() throws IOException {
-<span class="nc" id="L253">        root().createRequest().withUrlPath(url).fetchInto(this);</span>
-<span class="nc" id="L254">    }</span>
-
-    /**
-     * List immediate children of this directory.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;GHContent&gt; listDirectoryContent() {
-<span class="pc bpc" id="L262" title="1 of 2 branches missed.">        if (!isDirectory())</span>
-<span class="nc" id="L263">            throw new IllegalStateException(path + &quot; is not a directory&quot;);</span>
-
-<span class="fc" id="L265">        return root().createRequest().setRawUrlPath(url).toIterable(GHContent[].class, item -&gt; item.wrap(repository));</span>
-    }
+    @Override
+    public synchronized void refresh() throws IOException {
+<span class="fc" id="L300">        root().createRequest().setRawUrlPath(url).fetchInto(this);</span>
+<span class="fc" id="L301">    }</span>
 
     /**
      * Update gh content update response.
@@ -278,7 +313,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      */
     @SuppressFBWarnings(&quot;DM_DEFAULT_ENCODING&quot;)
     public GHContentUpdateResponse update(String newContent, String commitMessage) throws IOException {
-<span class="fc" id="L281">        return update(newContent.getBytes(), commitMessage, null);</span>
+<span class="fc" id="L316">        return update(newContent.getBytes(), commitMessage, null);</span>
     }
 
     /**
@@ -296,7 +331,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      */
     @SuppressFBWarnings(&quot;DM_DEFAULT_ENCODING&quot;)
     public GHContentUpdateResponse update(String newContent, String commitMessage, String branch) throws IOException {
-<span class="nc" id="L299">        return update(newContent.getBytes(), commitMessage, branch);</span>
+<span class="nc" id="L334">        return update(newContent.getBytes(), commitMessage, branch);</span>
     }
 
     /**
@@ -311,7 +346,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      *             the io exception
      */
     public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage) throws IOException {
-<span class="nc" id="L314">        return update(newContentBytes, commitMessage, null);</span>
+<span class="nc" id="L349">        return update(newContentBytes, commitMessage, null);</span>
     }
 
     /**
@@ -329,83 +364,61 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      */
     public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage, String branch)
             throws IOException {
-<span class="fc" id="L332">        String encodedContent = Base64.getEncoder().encodeToString(newContentBytes);</span>
+<span class="fc" id="L367">        String encodedContent = Base64.getEncoder().encodeToString(newContentBytes);</span>
 
-<span class="fc" id="L334">        Requester requester = root().createRequest()</span>
-<span class="fc" id="L335">                .method(&quot;PUT&quot;)</span>
-<span class="fc" id="L336">                .with(&quot;path&quot;, path)</span>
-<span class="fc" id="L337">                .with(&quot;message&quot;, commitMessage)</span>
-<span class="fc" id="L338">                .with(&quot;sha&quot;, sha)</span>
-<span class="fc" id="L339">                .with(&quot;content&quot;, encodedContent);</span>
+<span class="fc" id="L369">        Requester requester = root().createRequest()</span>
+<span class="fc" id="L370">                .method(&quot;PUT&quot;)</span>
+<span class="fc" id="L371">                .with(&quot;path&quot;, path)</span>
+<span class="fc" id="L372">                .with(&quot;message&quot;, commitMessage)</span>
+<span class="fc" id="L373">                .with(&quot;sha&quot;, sha)</span>
+<span class="fc" id="L374">                .with(&quot;content&quot;, encodedContent);</span>
 
-<span class="pc bpc" id="L341" title="1 of 2 branches missed.">        if (branch != null) {</span>
-<span class="nc" id="L342">            requester.with(&quot;branch&quot;, branch);</span>
+<span class="pc bpc" id="L376" title="1 of 2 branches missed.">        if (branch != null) {</span>
+<span class="nc" id="L377">            requester.with(&quot;branch&quot;, branch);</span>
         }
 
-<span class="fc" id="L345">        GHContentUpdateResponse response = requester.withUrlPath(getApiRoute(repository, path))</span>
-<span class="fc" id="L346">                .fetch(GHContentUpdateResponse.class);</span>
+<span class="fc" id="L380">        GHContentUpdateResponse response = requester.withUrlPath(getApiRoute(repository, path))</span>
+<span class="fc" id="L381">                .fetch(GHContentUpdateResponse.class);</span>
 
-<span class="fc" id="L348">        response.getContent().wrap(repository);</span>
-<span class="fc" id="L349">        response.getCommit().wrapUp(repository);</span>
+<span class="fc" id="L383">        response.getContent().wrap(repository);</span>
+<span class="fc" id="L384">        response.getCommit().wrapUp(repository);</span>
 
-<span class="fc" id="L351">        this.content = encodedContent;</span>
-<span class="fc" id="L352">        return response;</span>
+<span class="fc" id="L386">        this.content = encodedContent;</span>
+<span class="fc" id="L387">        return response;</span>
     }
 
     /**
-     * Delete gh content update response.
+     * Retrieves the decoded bytes of the blob.
      *
-     * @param message
-     *            the message
-     * @return the gh content update response
+     * @return the input stream
      * @throws IOException
      *             the io exception
      */
-    public GHContentUpdateResponse delete(String message) throws IOException {
-<span class="fc" id="L365">        return delete(message, null);</span>
+    private byte[] readDecodedContent() throws IOException {
+<span class="fc" id="L398">        String encodedContent = getEncodedContent();</span>
+<span class="pc bpc" id="L399" title="1 of 2 branches missed.">        if (encoding.equals(&quot;base64&quot;)) {</span>
+            try {
+<span class="fc" id="L401">                Base64.Decoder decoder = Base64.getMimeDecoder();</span>
+<span class="fc" id="L402">                return decoder.decode(encodedContent.getBytes(StandardCharsets.US_ASCII));</span>
+<span class="nc" id="L403">            } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L404">                throw new AssertionError(e); // US-ASCII is mandatory</span>
+            }
+        }
+
+<span class="nc" id="L408">        throw new UnsupportedOperationException(&quot;Unrecognized encoding: &quot; + encoding);</span>
     }
 
     /**
-     * Delete gh content update response.
+     * Fully populate the data by retrieving missing data.
+     * &lt;p&gt;
+     * Depending on the original API call where this object is created, it may not contain everything.
      *
-     * @param commitMessage
-     *            the commit message
-     * @param branch
-     *            the branch
-     * @return the gh content update response
      * @throws IOException
      *             the io exception
      */
-    public GHContentUpdateResponse delete(String commitMessage, String branch) throws IOException {
-<span class="fc" id="L380">        Requester requester = root().createRequest()</span>
-<span class="fc" id="L381">                .method(&quot;DELETE&quot;)</span>
-<span class="fc" id="L382">                .with(&quot;path&quot;, path)</span>
-<span class="fc" id="L383">                .with(&quot;message&quot;, commitMessage)</span>
-<span class="fc" id="L384">                .with(&quot;sha&quot;, sha);</span>
-
-<span class="pc bpc" id="L386" title="1 of 2 branches missed.">        if (branch != null) {</span>
-<span class="nc" id="L387">            requester.with(&quot;branch&quot;, branch);</span>
-        }
-
-<span class="fc" id="L390">        GHContentUpdateResponse response = requester.withUrlPath(getApiRoute(repository, path))</span>
-<span class="fc" id="L391">                .fetch(GHContentUpdateResponse.class);</span>
-
-<span class="fc" id="L393">        response.getCommit().wrapUp(repository);</span>
-<span class="fc" id="L394">        return response;</span>
-    }
-
-    /**
-     * Gets the api route.
-     *
-     * @param repository
-     *            the repository
-     * @param path
-     *            the path
-     * @return the api route
-     */
-    static String getApiRoute(GHRepository repository, String path) {
-<span class="fc" id="L407">        return repository.getApiTailUrl(&quot;contents/&quot; + path);</span>
-    }
+    protected synchronized void populate() throws IOException {
+<span class="nc" id="L420">        root().createRequest().withUrlPath(url).fetchInto(this);</span>
+<span class="nc" id="L421">    }</span>
 
     /**
      * Wrap.
@@ -415,21 +428,8 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @return the GH content
      */
     GHContent wrap(GHRepository owner) {
-<span class="fc" id="L418">        this.repository = owner;</span>
-<span class="fc" id="L419">        return this;</span>
+<span class="fc" id="L431">        this.repository = owner;</span>
+<span class="fc" id="L432">        return this;</span>
     }
-
-    /**
-     * Fully populate the data by retrieving missing data.
-     *
-     * Depending on the original API call where this object is created, it may not contain everything.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Override
-    public synchronized void refresh() throws IOException {
-<span class="fc" id="L432">        root().createRequest().setRawUrlPath(url).fetchInto(this);</span>
-<span class="fc" id="L433">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -31,8 +31,8 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder&lt;GHWorkflowRun&g
      *            the actor
      * @return the gh workflow run query builder
      */
-    public GHWorkflowRunQueryBuilder actor(String actor) {
-<span class="nc" id="L35">        req.with(&quot;actor&quot;, actor);</span>
+    public GHWorkflowRunQueryBuilder actor(GHUser actor) {
+<span class="nc" id="L35">        req.with(&quot;actor&quot;, actor.getLogin());</span>
 <span class="nc" id="L36">        return this;</span>
     }
 
@@ -43,8 +43,8 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder&lt;GHWorkflowRun&g
      *            the actor
      * @return the gh workflow run query builder
      */
-    public GHWorkflowRunQueryBuilder actor(GHUser actor) {
-<span class="nc" id="L47">        req.with(&quot;actor&quot;, actor.getLogin());</span>
+    public GHWorkflowRunQueryBuilder actor(String actor) {
+<span class="nc" id="L47">        req.with(&quot;actor&quot;, actor);</span>
 <span class="nc" id="L48">        return this;</span>
     }
 
@@ -61,42 +61,6 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder&lt;GHWorkflowRun&g
     }
 
     /**
-     * Event workflow run query builder.
-     *
-     * @param event
-     *            the event
-     * @return the gh workflow run query builder
-     */
-    public GHWorkflowRunQueryBuilder event(GHEvent event) {
-<span class="fc" id="L71">        req.with(&quot;event&quot;, event.symbol());</span>
-<span class="fc" id="L72">        return this;</span>
-    }
-
-    /**
-     * Event workflow run query builder.
-     *
-     * @param event
-     *            the event
-     * @return the gh workflow run query builder
-     */
-    public GHWorkflowRunQueryBuilder event(String event) {
-<span class="nc" id="L83">        req.with(&quot;event&quot;, event);</span>
-<span class="nc" id="L84">        return this;</span>
-    }
-
-    /**
-     * Status workflow run query builder.
-     *
-     * @param status
-     *            the status
-     * @return the gh workflow run query builder
-     */
-    public GHWorkflowRunQueryBuilder status(Status status) {
-<span class="fc" id="L95">        req.with(&quot;status&quot;, status.toString());</span>
-<span class="fc" id="L96">        return this;</span>
-    }
-
-    /**
      * Conclusion workflow run query builder.
      * &lt;p&gt;
      * The GitHub API is also using the status field to search by conclusion.
@@ -106,8 +70,8 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder&lt;GHWorkflowRun&g
      * @return the gh workflow run query builder
      */
     public GHWorkflowRunQueryBuilder conclusion(Conclusion conclusion) {
-<span class="fc" id="L109">        req.with(&quot;status&quot;, conclusion.toString());</span>
-<span class="fc" id="L110">        return this;</span>
+<span class="fc" id="L73">        req.with(&quot;status&quot;, conclusion.toString());</span>
+<span class="fc" id="L74">        return this;</span>
     }
 
     /**
@@ -122,8 +86,32 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder&lt;GHWorkflowRun&g
      *      for dates&lt;/a&gt;
      */
     public GHWorkflowRunQueryBuilder created(String created) {
-<span class="fc" id="L125">        req.with(&quot;created&quot;, created);</span>
-<span class="fc" id="L126">        return this;</span>
+<span class="fc" id="L89">        req.with(&quot;created&quot;, created);</span>
+<span class="fc" id="L90">        return this;</span>
+    }
+
+    /**
+     * Event workflow run query builder.
+     *
+     * @param event
+     *            the event
+     * @return the gh workflow run query builder
+     */
+    public GHWorkflowRunQueryBuilder event(GHEvent event) {
+<span class="fc" id="L101">        req.with(&quot;event&quot;, event.symbol());</span>
+<span class="fc" id="L102">        return this;</span>
+    }
+
+    /**
+     * Event workflow run query builder.
+     *
+     * @param event
+     *            the event
+     * @return the gh workflow run query builder
+     */
+    public GHWorkflowRunQueryBuilder event(String event) {
+<span class="nc" id="L113">        req.with(&quot;event&quot;, event);</span>
+<span class="nc" id="L114">        return this;</span>
     }
 
     /**
@@ -134,8 +122,8 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder&lt;GHWorkflowRun&g
      * @return the gh workflow run query builder
      */
     public GHWorkflowRunQueryBuilder headSha(String headSha) {
-<span class="fc" id="L137">        req.with(&quot;head_sha&quot;, headSha);</span>
-<span class="fc" id="L138">        return this;</span>
+<span class="fc" id="L125">        req.with(&quot;head_sha&quot;, headSha);</span>
+<span class="fc" id="L126">        return this;</span>
     }
 
     /**
@@ -145,7 +133,19 @@ public class GHWorkflowRunQueryBuilder extends GHQueryBuilder&lt;GHWorkflowRun&g
      */
     @Override
     public PagedIterable&lt;GHWorkflowRun&gt; list() {
-<span class="fc" id="L148">        return new GHWorkflowRunsIterable(repo, req.withUrlPath(repo.getApiTailUrl(&quot;actions/runs&quot;)));</span>
+<span class="fc" id="L136">        return new GHWorkflowRunsIterable(repo, req.withUrlPath(repo.getApiTailUrl(&quot;actions/runs&quot;)));</span>
+    }
+
+    /**
+     * Status workflow run query builder.
+     *
+     * @param status
+     *            the status
+     * @return the gh workflow run query builder
+     */
+    public GHWorkflowRunQueryBuilder status(Status status) {
+<span class="fc" id="L147">        req.with(&quot;status&quot;, status.toString());</span>
+<span class="fc" id="L148">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

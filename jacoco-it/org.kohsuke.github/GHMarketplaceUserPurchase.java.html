@@ -15,22 +15,31 @@ import java.util.Date;
  */
 public class GHMarketplaceUserPurchase extends GitHubInteractiveObject {
 
+    @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Field comes from JSON deserialization&quot;)
+    private GHMarketplaceAccount account;
+
+    private String billingCycle;
+    private String freeTrialEndsOn;
+    private String nextBillingDate;
+    private boolean onFreeTrial;
+    @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Field comes from JSON deserialization&quot;)
+    private GHMarketplacePlan plan;
+    private Long unitCount;
+    private String updatedAt;
     /**
      * Create default GHMarketplaceUserPurchase instance
      */
-<span class="fc" id="L21">    public GHMarketplaceUserPurchase() {</span>
-<span class="fc" id="L22">    }</span>
+<span class="fc" id="L32">    public GHMarketplaceUserPurchase() {</span>
+<span class="fc" id="L33">    }</span>
 
-    private String billingCycle;
-    private String nextBillingDate;
-    private boolean onFreeTrial;
-    private String freeTrialEndsOn;
-    private Long unitCount;
-    private String updatedAt;
-    @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Field comes from JSON deserialization&quot;)
-    private GHMarketplaceAccount account;
-    @SuppressFBWarnings(value = &quot;UWF_UNWRITTEN_FIELD&quot;, justification = &quot;Field comes from JSON deserialization&quot;)
-    private GHMarketplacePlan plan;
+    /**
+     * Gets account.
+     *
+     * @return the account
+     */
+    public GHMarketplaceAccount getAccount() {
+<span class="fc" id="L41">        return account;</span>
+    }
 
     /**
      * Gets billing cycle.
@@ -38,26 +47,7 @@ public class GHMarketplaceUserPurchase extends GitHubInteractiveObject {
      * @return the billing cycle
      */
     public String getBillingCycle() {
-<span class="fc" id="L41">        return billingCycle;</span>
-    }
-
-    /**
-     * Gets next billing date.
-     *
-     * @return the next billing date
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
-    public Instant getNextBillingDate() {
-<span class="fc" id="L51">        return GitHubClient.parseInstant(nextBillingDate);</span>
-    }
-
-    /**
-     * Is on free trial boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isOnFreeTrial() {
-<span class="fc" id="L60">        return onFreeTrial;</span>
+<span class="fc" id="L50">        return billingCycle;</span>
     }
 
     /**
@@ -67,7 +57,26 @@ public class GHMarketplaceUserPurchase extends GitHubInteractiveObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
     public Instant getFreeTrialEndsOn() {
-<span class="fc" id="L70">        return GitHubClient.parseInstant(freeTrialEndsOn);</span>
+<span class="fc" id="L60">        return GitHubClient.parseInstant(freeTrialEndsOn);</span>
+    }
+
+    /**
+     * Gets next billing date.
+     *
+     * @return the next billing date
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getNextBillingDate() {
+<span class="fc" id="L70">        return GitHubClient.parseInstant(nextBillingDate);</span>
+    }
+
+    /**
+     * Gets plan.
+     *
+     * @return the plan
+     */
+    public GHMarketplacePlan getPlan() {
+<span class="fc" id="L79">        return plan;</span>
     }
 
     /**
@@ -76,7 +85,7 @@ public class GHMarketplaceUserPurchase extends GitHubInteractiveObject {
      * @return the unit count
      */
     public Long getUnitCount() {
-<span class="nc" id="L79">        return unitCount;</span>
+<span class="nc" id="L88">        return unitCount;</span>
     }
 
     /**
@@ -86,25 +95,16 @@ public class GHMarketplaceUserPurchase extends GitHubInteractiveObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
     public Instant getUpdatedAt() {
-<span class="fc" id="L89">        return GitHubClient.parseInstant(updatedAt);</span>
+<span class="fc" id="L98">        return GitHubClient.parseInstant(updatedAt);</span>
     }
 
     /**
-     * Gets account.
+     * Is on free trial boolean.
      *
-     * @return the account
+     * @return the boolean
      */
-    public GHMarketplaceAccount getAccount() {
-<span class="fc" id="L98">        return account;</span>
-    }
-
-    /**
-     * Gets plan.
-     *
-     * @return the plan
-     */
-    public GHMarketplacePlan getPlan() {
-<span class="fc" id="L107">        return plan;</span>
+    public boolean isOnFreeTrial() {
+<span class="fc" id="L107">        return onFreeTrial;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

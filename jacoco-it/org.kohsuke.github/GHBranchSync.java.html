@@ -8,20 +8,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 public class GHBranchSync extends GitHubInteractiveObject {
 
     /**
-     * Create default GHBranchSync instance
+     * The base branch.
      */
-<span class="fc" id="L13">    public GHBranchSync() {</span>
-<span class="fc" id="L14">    }</span>
-
-    /**
-     * The Repository that this branch is in.
-     */
-    private GHRepository owner;
-
-    /**
-     * The message.
-     */
-    private String message;
+    private String baseBranch;
 
     /**
      * The merge type.
@@ -29,27 +18,28 @@ public class GHBranchSync extends GitHubInteractiveObject {
     private String mergeType;
 
     /**
-     * The base branch.
+     * The message.
      */
-    private String baseBranch;
+    private String message;
 
     /**
-     * Gets owner.
-     *
-     * @return the repository that this branch is in.
+     * The Repository that this branch is in.
      */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHRepository getOwner() {
-<span class="fc" id="L43">        return owner;</span>
-    }
+    private GHRepository owner;
 
     /**
-     * Gets message.
-     *
-     * @return the message
+     * Create default GHBranchSync instance
      */
-    public String getMessage() {
-<span class="fc" id="L52">        return message;</span>
+<span class="fc" id="L33">    public GHBranchSync() {</span>
+<span class="fc" id="L34">    }</span>
+
+    /**
+     * Gets base branch.
+     *
+     * @return the base branch
+     */
+    public String getBaseBranch() {
+<span class="fc" id="L42">        return baseBranch;</span>
     }
 
     /**
@@ -58,16 +48,26 @@ public class GHBranchSync extends GitHubInteractiveObject {
      * @return the merge type
      */
     public String getMergeType() {
-<span class="fc" id="L61">        return mergeType;</span>
+<span class="fc" id="L51">        return mergeType;</span>
     }
 
     /**
-     * Gets base branch.
+     * Gets message.
      *
-     * @return the base branch
+     * @return the message
      */
-    public String getBaseBranch() {
-<span class="fc" id="L70">        return baseBranch;</span>
+    public String getMessage() {
+<span class="fc" id="L60">        return message;</span>
+    }
+
+    /**
+     * Gets owner.
+     *
+     * @return the repository that this branch is in.
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHRepository getOwner() {
+<span class="fc" id="L70">        return owner;</span>
     }
 
     /**

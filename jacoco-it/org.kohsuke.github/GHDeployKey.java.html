@@ -13,21 +13,8 @@ import java.util.Date;
  */
 public class GHDeployKey {
 
-    /**
-     * Create default GHDeployKey instance
-     */
-<span class="fc" id="L19">    public GHDeployKey() {</span>
-<span class="fc" id="L20">    }</span>
-
-    /** The title. */
-    protected String url, key, title;
-
-    /** The verified. */
-    protected boolean verified;
-
-    /** The id. */
-    protected long id;
-    private GHRepository owner;
+    /** Name of user that added the deploy key */
+    private String addedBy;
 
     /** Creation date of the deploy key */
     private String createdAt;
@@ -35,75 +22,46 @@ public class GHDeployKey {
     /** Last used date of the deploy key */
     private String lastUsed;
 
-    /** Name of user that added the deploy key */
-    private String addedBy;
-
+    private GHRepository owner;
     /** Whether the deploykey has readonly permission or full access */
     private boolean readOnly;
 
-    /**
-     * Gets id.
-     *
-     * @return the id
-     */
-    public long getId() {
-<span class="fc" id="L50">        return id;</span>
-    }
+    /** The id. */
+    protected long id;
+
+    /** The title. */
+    protected String url, key, title;
+
+    /** The verified. */
+    protected boolean verified;
 
     /**
-     * Gets key.
-     *
-     * @return the key
+     * Create default GHDeployKey instance
      */
-    public String getKey() {
-<span class="nc" id="L59">        return key;</span>
-    }
+<span class="fc" id="L41">    public GHDeployKey() {</span>
+<span class="fc" id="L42">    }</span>
 
     /**
-     * Gets title.
+     * Delete.
      *
-     * @return the title
+     * @throws IOException
+     *             the io exception
      */
-    public String getTitle() {
-<span class="fc" id="L68">        return title;</span>
-    }
+    public void delete() throws IOException {
+<span class="fc" id="L51">        owner.root()</span>
+<span class="fc" id="L52">                .createRequest()</span>
+<span class="fc" id="L53">                .method(&quot;DELETE&quot;)</span>
+<span class="fc" id="L54">                .withUrlPath(String.format(&quot;/repos/%s/%s/keys/%d&quot;, owner.getOwnerName(), owner.getName(), id))</span>
+<span class="fc" id="L55">                .send();</span>
+<span class="fc" id="L56">    }</span>
 
     /**
-     * Gets url.
+     * Gets added_by
      *
-     * @return the url
+     * @return the added_by
      */
-    public String getUrl() {
-<span class="nc" id="L77">        return url;</span>
-    }
-
-    /**
-     * Is verified boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isVerified() {
-<span class="nc" id="L86">        return verified;</span>
-    }
-
-    /**
-     * Gets createdAt.
-     *
-     * @return the createdAt
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
-    public Instant getCreatedAt() {
-<span class="fc" id="L96">        return GitHubClient.parseInstant(createdAt);</span>
-    }
-
-    /**
-     * Gets last_used.
-     *
-     * @return the last_used
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
-    public Instant getLastUsedAt() {
-<span class="fc" id="L106">        return GitHubClient.parseInstant(lastUsed);</span>
+    public String getAddedBy() {
+<span class="fc" id="L64">        return addedBy;</span>
     }
 
     /**
@@ -114,16 +72,72 @@ public class GHDeployKey {
      */
     @Deprecated
     public String getAdded_by() {
-<span class="fc" id="L117">        return getAddedBy();</span>
+<span class="fc" id="L75">        return getAddedBy();</span>
     }
 
     /**
-     * Gets added_by
+     * Gets createdAt.
      *
-     * @return the added_by
+     * @return the createdAt
      */
-    public String getAddedBy() {
-<span class="fc" id="L126">        return addedBy;</span>
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getCreatedAt() {
+<span class="fc" id="L85">        return GitHubClient.parseInstant(createdAt);</span>
+    }
+
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
+    public long getId() {
+<span class="fc" id="L94">        return id;</span>
+    }
+
+    /**
+     * Gets key.
+     *
+     * @return the key
+     */
+    public String getKey() {
+<span class="nc" id="L103">        return key;</span>
+    }
+
+    /**
+     * Gets last_used.
+     *
+     * @return the last_used
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getLastUsedAt() {
+<span class="fc" id="L113">        return GitHubClient.parseInstant(lastUsed);</span>
+    }
+
+    /**
+     * Gets title.
+     *
+     * @return the title
+     */
+    public String getTitle() {
+<span class="fc" id="L122">        return title;</span>
+    }
+
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
+    public String getUrl() {
+<span class="nc" id="L131">        return url;</span>
+    }
+
+    /**
+     * Is read_only
+     *
+     * @return true if the key can only read. False if the key has write permission as well.
+     */
+    public boolean isReadOnly() {
+<span class="fc" id="L140">        return readOnly;</span>
     }
 
     /**
@@ -134,16 +148,32 @@ public class GHDeployKey {
      */
     @Deprecated
     public boolean isRead_only() {
-<span class="fc" id="L137">        return isReadOnly();</span>
+<span class="fc" id="L151">        return isReadOnly();</span>
     }
 
     /**
-     * Is read_only
+     * Is verified boolean.
      *
-     * @return true if the key can only read. False if the key has write permission as well.
+     * @return the boolean
      */
-    public boolean isReadOnly() {
-<span class="fc" id="L146">        return readOnly;</span>
+    public boolean isVerified() {
+<span class="nc" id="L160">        return verified;</span>
+    }
+
+    /**
+     * To string.
+     *
+     * @return the string
+     */
+    public String toString() {
+<span class="fc" id="L169">        return new ToStringBuilder(this).append(&quot;title&quot;, title)</span>
+<span class="fc" id="L170">                .append(&quot;id&quot;, id)</span>
+<span class="fc" id="L171">                .append(&quot;key&quot;, key)</span>
+<span class="fc" id="L172">                .append(&quot;created_at&quot;, createdAt)</span>
+<span class="fc" id="L173">                .append(&quot;last_used&quot;, lastUsed)</span>
+<span class="fc" id="L174">                .append(&quot;added_by&quot;, addedBy)</span>
+<span class="fc" id="L175">                .append(&quot;read_only&quot;, readOnly)</span>
+<span class="fc" id="L176">                .toString();</span>
     }
 
     /**
@@ -154,38 +184,8 @@ public class GHDeployKey {
      * @return the gh deploy key
      */
     GHDeployKey lateBind(GHRepository repo) {
-<span class="fc" id="L157">        this.owner = repo;</span>
-<span class="fc" id="L158">        return this;</span>
+<span class="fc" id="L187">        this.owner = repo;</span>
+<span class="fc" id="L188">        return this;</span>
     }
-
-    /**
-     * To string.
-     *
-     * @return the string
-     */
-    public String toString() {
-<span class="fc" id="L167">        return new ToStringBuilder(this).append(&quot;title&quot;, title)</span>
-<span class="fc" id="L168">                .append(&quot;id&quot;, id)</span>
-<span class="fc" id="L169">                .append(&quot;key&quot;, key)</span>
-<span class="fc" id="L170">                .append(&quot;created_at&quot;, createdAt)</span>
-<span class="fc" id="L171">                .append(&quot;last_used&quot;, lastUsed)</span>
-<span class="fc" id="L172">                .append(&quot;added_by&quot;, addedBy)</span>
-<span class="fc" id="L173">                .append(&quot;read_only&quot;, readOnly)</span>
-<span class="fc" id="L174">                .toString();</span>
-    }
-
-    /**
-     * Delete.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void delete() throws IOException {
-<span class="fc" id="L184">        owner.root()</span>
-<span class="fc" id="L185">                .createRequest()</span>
-<span class="fc" id="L186">                .method(&quot;DELETE&quot;)</span>
-<span class="fc" id="L187">                .withUrlPath(String.format(&quot;/repos/%s/%s/keys/%d&quot;, owner.getOwnerName(), owner.getName(), id))</span>
-<span class="fc" id="L188">                .send();</span>
-<span class="fc" id="L189">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

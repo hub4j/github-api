@@ -15,55 +15,28 @@ import java.util.Date;
  */
 public class GHIssueEvent extends GitHubInteractiveObject {
 
-    /**
-     * Create default GHIssueEvent instance
-     */
-<span class="fc" id="L21">    public GHIssueEvent() {</span>
-<span class="fc" id="L22">    }</span>
-
-    private long id;
-    private String nodeId;
-    private String url;
     private GHUser actor;
-    private String event;
+
+    private GHUser assignee;
     private String commitId;
     private String commitUrl;
     private String createdAt;
-    private GHMilestone milestone;
-    private GHLabel label;
-    private GHUser assignee;
-    private GHIssueRename rename;
-    private GHUser reviewRequester;
-    private GHUser requestedReviewer;
-
+    private String event;
+    private long id;
     private GHIssue issue;
+    private GHLabel label;
+    private GHMilestone milestone;
+    private String nodeId;
+    private GHIssueRename rename;
+    private GHUser requestedReviewer;
+    private GHUser reviewRequester;
+    private String url;
 
     /**
-     * Gets id.
-     *
-     * @return the id
+     * Create default GHIssueEvent instance
      */
-    public long getId() {
-<span class="fc" id="L47">        return id;</span>
-    }
-
-    /**
-     * Gets node id.
-     *
-     * @return the node id
-     */
-    public String getNodeId() {
-<span class="fc" id="L56">        return nodeId;</span>
-    }
-
-    /**
-     * Gets url.
-     *
-     * @return the url
-     */
-    public String getUrl() {
-<span class="nc" id="L65">        return url;</span>
-    }
+<span class="fc" id="L38">    public GHIssueEvent() {</span>
+<span class="fc" id="L39">    }</span>
 
     /**
      * Gets actor.
@@ -72,76 +45,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getActor() {
-<span class="fc" id="L75">        return actor;</span>
-    }
-
-    /**
-     * Gets event.
-     *
-     * @return the event
-     */
-    public String getEvent() {
-<span class="fc" id="L84">        return event;</span>
-    }
-
-    /**
-     * Gets commit id.
-     *
-     * @return the commit id
-     */
-    public String getCommitId() {
-<span class="fc" id="L93">        return commitId;</span>
-    }
-
-    /**
-     * Gets commit url.
-     *
-     * @return the commit url
-     */
-    public String getCommitUrl() {
-<span class="fc" id="L102">        return commitUrl;</span>
-    }
-
-    /**
-     * Gets created at.
-     *
-     * @return the created at
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
-    public Instant getCreatedAt() {
-<span class="fc" id="L112">        return GitHubClient.parseInstant(createdAt);</span>
-    }
-
-    /**
-     * Gets issue.
-     *
-     * @return the issue
-     */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHIssue getIssue() {
-<span class="fc" id="L122">        return issue;</span>
-    }
-
-    /**
-     * Get the {@link GHMilestone} that this issue was added to or removed from. Only present for events &quot;milestoned&quot;
-     * and &quot;demilestoned&quot;, &lt;code&gt;null&lt;/code&gt; otherwise.
-     *
-     * @return the milestone
-     */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHMilestone getMilestone() {
-<span class="fc" id="L133">        return milestone;</span>
-    }
-
-    /**
-     * Get the {@link GHLabel} that was added to or removed from the issue. Only present for events &quot;labeled&quot; and
-     * &quot;unlabeled&quot;, &lt;code&gt;null&lt;/code&gt; otherwise.
-     *
-     * @return the label
-     */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHLabel getLabel() {
-<span class="fc" id="L144">        return label;</span>
+<span class="fc" id="L48">        return actor;</span>
     }
 
     /**
@@ -152,7 +56,94 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getAssignee() {
-<span class="fc" id="L155">        return assignee;</span>
+<span class="fc" id="L59">        return assignee;</span>
+    }
+
+    /**
+     * Gets commit id.
+     *
+     * @return the commit id
+     */
+    public String getCommitId() {
+<span class="fc" id="L68">        return commitId;</span>
+    }
+
+    /**
+     * Gets commit url.
+     *
+     * @return the commit url
+     */
+    public String getCommitUrl() {
+<span class="fc" id="L77">        return commitUrl;</span>
+    }
+
+    /**
+     * Gets created at.
+     *
+     * @return the created at
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getCreatedAt() {
+<span class="fc" id="L87">        return GitHubClient.parseInstant(createdAt);</span>
+    }
+
+    /**
+     * Gets event.
+     *
+     * @return the event
+     */
+    public String getEvent() {
+<span class="fc" id="L96">        return event;</span>
+    }
+
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
+    public long getId() {
+<span class="fc" id="L105">        return id;</span>
+    }
+
+    /**
+     * Gets issue.
+     *
+     * @return the issue
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHIssue getIssue() {
+<span class="fc" id="L115">        return issue;</span>
+    }
+
+    /**
+     * Get the {@link GHLabel} that was added to or removed from the issue. Only present for events &quot;labeled&quot; and
+     * &quot;unlabeled&quot;, &lt;code&gt;null&lt;/code&gt; otherwise.
+     *
+     * @return the label
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHLabel getLabel() {
+<span class="fc" id="L126">        return label;</span>
+    }
+
+    /**
+     * Get the {@link GHMilestone} that this issue was added to or removed from. Only present for events &quot;milestoned&quot;
+     * and &quot;demilestoned&quot;, &lt;code&gt;null&lt;/code&gt; otherwise.
+     *
+     * @return the milestone
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHMilestone getMilestone() {
+<span class="fc" id="L137">        return milestone;</span>
+    }
+
+    /**
+     * Gets node id.
+     *
+     * @return the node id
+     */
+    public String getNodeId() {
+<span class="fc" id="L146">        return nodeId;</span>
     }
 
     /**
@@ -162,24 +153,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      * @return the GHIssueRename
      */
     public GHIssueRename getRename() {
-<span class="fc" id="L165">        return this.rename;</span>
-    }
-
-    /**
-     *
-     * Get the {@link GHUser} person who requested a review. Only present for events &quot;review_requested&quot;,
-     * &quot;review_request_removed&quot;, &lt;code&gt;null&lt;/code&gt; otherwise.
-     *
-     * @return the GHUser
-     *
-     * @see &lt;a href=
-     *      &quot;https://docs.github.com/en/developers/webhooks-and-events/events/issue-event-types#review_requested&quot;&gt;review_requested&lt;/a&gt;
-     *      and &lt;a href=
-     *      &quot;https://docs.github.com/en/developers/webhooks-and-events/events/issue-event-types#review_request_removed&quot;&gt;review_request_removed&lt;/a&gt;
-     */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHUser getReviewRequester() {
-<span class="fc" id="L182">        return this.reviewRequester;</span>
+<span class="fc" id="L156">        return this.rename;</span>
     }
 
     /**
@@ -196,7 +170,47 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHUser getRequestedReviewer() {
-<span class="fc" id="L199">        return this.requestedReviewer;</span>
+<span class="fc" id="L173">        return this.requestedReviewer;</span>
+    }
+
+    /**
+     *
+     * Get the {@link GHUser} person who requested a review. Only present for events &quot;review_requested&quot;,
+     * &quot;review_request_removed&quot;, &lt;code&gt;null&lt;/code&gt; otherwise.
+     *
+     * @return the GHUser
+     *
+     * @see &lt;a href=
+     *      &quot;https://docs.github.com/en/developers/webhooks-and-events/events/issue-event-types#review_requested&quot;&gt;review_requested&lt;/a&gt;
+     *      and &lt;a href=
+     *      &quot;https://docs.github.com/en/developers/webhooks-and-events/events/issue-event-types#review_request_removed&quot;&gt;review_request_removed&lt;/a&gt;
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHUser getReviewRequester() {
+<span class="fc" id="L190">        return this.reviewRequester;</span>
+    }
+
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
+    public String getUrl() {
+<span class="nc" id="L199">        return url;</span>
+    }
+
+    /**
+     * To string.
+     *
+     * @return the string
+     */
+    @Override
+    public String toString() {
+<span class="fc" id="L209">        return String.format(&quot;Issue %d was %s by %s on %s&quot;,</span>
+<span class="fc" id="L210">                getIssue().getNumber(),</span>
+<span class="fc" id="L211">                getEvent(),</span>
+<span class="fc" id="L212">                getActor().getLogin(),</span>
+<span class="fc" id="L213">                getCreatedAt().toString());</span>
     }
 
     /**
@@ -207,22 +221,8 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      * @return the GH issue event
      */
     GHIssueEvent wrapUp(GHIssue parent) {
-<span class="fc" id="L210">        this.issue = parent;</span>
-<span class="fc" id="L211">        return this;</span>
-    }
-
-    /**
-     * To string.
-     *
-     * @return the string
-     */
-    @Override
-    public String toString() {
-<span class="fc" id="L221">        return String.format(&quot;Issue %d was %s by %s on %s&quot;,</span>
-<span class="fc" id="L222">                getIssue().getNumber(),</span>
-<span class="fc" id="L223">                getEvent(),</span>
-<span class="fc" id="L224">                getActor().getLogin(),</span>
-<span class="fc" id="L225">                getCreatedAt().toString());</span>
+<span class="fc" id="L224">        this.issue = parent;</span>
+<span class="fc" id="L225">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

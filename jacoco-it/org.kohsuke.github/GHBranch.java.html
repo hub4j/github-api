@@ -21,12 +21,31 @@ import javax.annotation.CheckForNull;
                 &quot;URF_UNREAD_FIELD&quot; },
         justification = &quot;JSON API&quot;)
 public class GHBranch extends GitHubInteractiveObject {
-    private GHRepository owner;
+    /**
+     * The type Commit.
+     */
+    public static class Commit {
 
-    private String name;
+        /** The sha. */
+        String sha;
+
+        /** The url. */
+        @SuppressFBWarnings(value = &quot;UUF_UNUSED_FIELD&quot;, justification = &quot;We don't provide it in API now&quot;)
+        String url;
+
+        /**
+         * Create default Commit instance
+         */
+<span class="fc" id="L39">        public Commit() {</span>
+<span class="fc" id="L40">        }</span>
+    }
+
     private Commit commit;
+    private String name;
+    private GHRepository owner;
     @JsonProperty(&quot;protected&quot;)
     private boolean protection;
+
     private String protectionUrl;
 
     /**
@@ -36,28 +55,38 @@ public class GHBranch extends GitHubInteractiveObject {
      *            the name
      */
     @JsonCreator
-<span class="fc" id="L39">    GHBranch(@JsonProperty(value = &quot;name&quot;, required = true) String name) {</span>
-<span class="fc" id="L40">        Objects.requireNonNull(name);</span>
-<span class="fc" id="L41">        this.name = name;</span>
-<span class="fc" id="L42">    }</span>
+<span class="fc" id="L58">    GHBranch(@JsonProperty(value = &quot;name&quot;, required = true) String name) {</span>
+<span class="fc" id="L59">        Objects.requireNonNull(name);</span>
+<span class="fc" id="L60">        this.name = name;</span>
+<span class="fc" id="L61">    }</span>
 
     /**
-     * The type Commit.
+     * Disables branch protection and allows anyone with push access to push changes.
+     *
+     * @throws IOException
+     *             if disabling protection fails
      */
-    public static class Commit {
+    public void disableProtection() throws IOException {
+<span class="fc" id="L70">        root().createRequest().method(&quot;DELETE&quot;).setRawUrlPath(protectionUrl).send();</span>
+<span class="fc" id="L71">    }</span>
 
-        /**
-         * Create default Commit instance
-         */
-<span class="fc" id="L52">        public Commit() {</span>
-<span class="fc" id="L53">        }</span>
+    /**
+     * Enables branch protection to control what commit statuses are required to push.
+     *
+     * @return GHBranchProtectionBuilder for enabling protection
+     * @see GHCommitStatus#getContext() GHCommitStatus#getContext()
+     */
+    public GHBranchProtectionBuilder enableProtection() {
+<span class="fc" id="L80">        return new GHBranchProtectionBuilder(this);</span>
+    }
 
-        /** The sha. */
-        String sha;
-
-        /** The url. */
-        @SuppressFBWarnings(value = &quot;UUF_UNUSED_FIELD&quot;, justification = &quot;We don't provide it in API now&quot;)
-        String url;
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+<span class="fc" id="L89">        return name;</span>
     }
 
     /**
@@ -67,34 +96,7 @@ public class GHBranch extends GitHubInteractiveObject {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getOwner() {
-<span class="fc" id="L70">        return owner;</span>
-    }
-
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String getName() {
-<span class="fc" id="L79">        return name;</span>
-    }
-
-    /**
-     * Is protected boolean.
-     *
-     * @return true if the push to this branch is restricted via branch protection.
-     */
-    public boolean isProtected() {
-<span class="fc" id="L88">        return protection;</span>
-    }
-
-    /**
-     * Gets protection url.
-     *
-     * @return API URL that deals with the protection of this branch.
-     */
-    public URL getProtectionUrl() {
-<span class="fc" id="L97">        return GitHubClient.parseURL(protectionUrl);</span>
+<span class="fc" id="L99">        return owner;</span>
     }
 
     /**
@@ -105,7 +107,16 @@ public class GHBranch extends GitHubInteractiveObject {
      *             the io exception
      */
     public GHBranchProtection getProtection() throws IOException {
-<span class="fc" id="L108">        return root().createRequest().setRawUrlPath(protectionUrl).fetch(GHBranchProtection.class);</span>
+<span class="fc" id="L110">        return root().createRequest().setRawUrlPath(protectionUrl).fetch(GHBranchProtection.class);</span>
+    }
+
+    /**
+     * Gets protection url.
+     *
+     * @return API URL that deals with the protection of this branch.
+     */
+    public URL getProtectionUrl() {
+<span class="fc" id="L119">        return GitHubClient.parseURL(protectionUrl);</span>
     }
 
     /**
@@ -114,27 +125,16 @@ public class GHBranch extends GitHubInteractiveObject {
      * @return The SHA1 of the commit that this branch currently points to.
      */
     public String getSHA1() {
-<span class="fc" id="L117">        return commit.sha;</span>
+<span class="fc" id="L128">        return commit.sha;</span>
     }
 
     /**
-     * Disables branch protection and allows anyone with push access to push changes.
+     * Is protected boolean.
      *
-     * @throws IOException
-     *             if disabling protection fails
+     * @return true if the push to this branch is restricted via branch protection.
      */
-    public void disableProtection() throws IOException {
-<span class="fc" id="L127">        root().createRequest().method(&quot;DELETE&quot;).setRawUrlPath(protectionUrl).send();</span>
-<span class="fc" id="L128">    }</span>
-
-    /**
-     * Enables branch protection to control what commit statuses are required to push.
-     *
-     * @return GHBranchProtectionBuilder for enabling protection
-     * @see GHCommitStatus#getContext() GHCommitStatus#getContext()
-     */
-    public GHBranchProtectionBuilder enableProtection() {
-<span class="fc" id="L137">        return new GHBranchProtectionBuilder(this);</span>
+    public boolean isProtected() {
+<span class="fc" id="L137">        return protection;</span>
     }
 
     /**
@@ -191,23 +191,23 @@ public class GHBranch extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets the api route.
-     *
-     * @return the api route
-     */
-    String getApiRoute() {
-<span class="nc" id="L199">        return owner.getApiTailUrl(&quot;/branches/&quot; + name);</span>
-    }
-
-    /**
      * To string.
      *
      * @return the string
      */
     @Override
     public String toString() {
-<span class="nc bnc" id="L209" title="All 2 branches missed.">        final String url = owner != null ? owner.getUrl().toString() : &quot;unknown&quot;;</span>
-<span class="nc" id="L210">        return &quot;Branch:&quot; + name + &quot; in &quot; + url;</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">        final String url = owner != null ? owner.getUrl().toString() : &quot;unknown&quot;;</span>
+<span class="nc" id="L201">        return &quot;Branch:&quot; + name + &quot; in &quot; + url;</span>
+    }
+
+    /**
+     * Gets the api route.
+     *
+     * @return the api route
+     */
+    String getApiRoute() {
+<span class="nc" id="L210">        return owner.getApiTailUrl(&quot;/branches/&quot; + name);</span>
     }
 
     /**

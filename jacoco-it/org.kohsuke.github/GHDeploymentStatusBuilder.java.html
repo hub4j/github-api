@@ -10,8 +10,8 @@ import java.io.IOException;
  */
 public class GHDeploymentStatusBuilder {
     private final Requester builder;
-    private GHRepository repo;
     private long deploymentId;
+    private GHRepository repo;
 
     /**
      * Instantiates a new GH deployment status builder.
@@ -45,6 +45,20 @@ public class GHDeploymentStatusBuilder {
     }
 
     /**
+     * Create gh deployment status.
+     *
+     * @return the gh deployment status
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public GHDeploymentStatus create() throws IOException {
+<span class="fc" id="L56">        return builder.withUrlPath(repo.getApiTailUrl(&quot;deployments/&quot; + deploymentId + &quot;/statuses&quot;))</span>
+<span class="fc" id="L57">                .fetch(GHDeploymentStatus.class)</span>
+<span class="fc" id="L58">                .lateBind(repo);</span>
+    }
+
+    /**
      * Description gh deployment status builder.
      *
      * @param description
@@ -53,8 +67,8 @@ public class GHDeploymentStatusBuilder {
      * @return the gh deployment status builder
      */
     public GHDeploymentStatusBuilder description(String description) {
-<span class="fc" id="L56">        this.builder.with(&quot;description&quot;, description);</span>
-<span class="fc" id="L57">        return this;</span>
+<span class="fc" id="L70">        this.builder.with(&quot;description&quot;, description);</span>
+<span class="fc" id="L71">        return this;</span>
     }
 
     /**
@@ -65,8 +79,8 @@ public class GHDeploymentStatusBuilder {
      * @return the gh deployment status builder
      */
     public GHDeploymentStatusBuilder environment(String environment) {
-<span class="fc" id="L68">        this.builder.with(&quot;environment&quot;, environment);</span>
-<span class="fc" id="L69">        return this;</span>
+<span class="fc" id="L82">        this.builder.with(&quot;environment&quot;, environment);</span>
+<span class="fc" id="L83">        return this;</span>
     }
 
     /**
@@ -77,8 +91,8 @@ public class GHDeploymentStatusBuilder {
      * @return the gh deployment status builder
      */
     public GHDeploymentStatusBuilder environmentUrl(String environmentUrl) {
-<span class="fc" id="L80">        this.builder.with(&quot;environment_url&quot;, environmentUrl);</span>
-<span class="fc" id="L81">        return this;</span>
+<span class="fc" id="L94">        this.builder.with(&quot;environment_url&quot;, environmentUrl);</span>
+<span class="fc" id="L95">        return this;</span>
     }
 
     /**
@@ -89,22 +103,8 @@ public class GHDeploymentStatusBuilder {
      * @return the gh deployment status builder
      */
     public GHDeploymentStatusBuilder logUrl(String logUrl) {
-<span class="fc" id="L92">        this.builder.with(&quot;log_url&quot;, logUrl);</span>
-<span class="fc" id="L93">        return this;</span>
-    }
-
-    /**
-     * Create gh deployment status.
-     *
-     * @return the gh deployment status
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public GHDeploymentStatus create() throws IOException {
-<span class="fc" id="L105">        return builder.withUrlPath(repo.getApiTailUrl(&quot;deployments/&quot; + deploymentId + &quot;/statuses&quot;))</span>
-<span class="fc" id="L106">                .fetch(GHDeploymentStatus.class)</span>
-<span class="fc" id="L107">                .lateBind(repo);</span>
+<span class="fc" id="L106">        this.builder.with(&quot;log_url&quot;, logUrl);</span>
+<span class="fc" id="L107">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

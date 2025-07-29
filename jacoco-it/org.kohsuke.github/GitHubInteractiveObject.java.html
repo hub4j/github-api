@@ -38,23 +38,22 @@ abstract class GitHubInteractiveObject extends GitHubBridgeAdapterObject {
 <span class="fc" id="L38">    }</span>
 
     /**
-     * Get the root {@link GitHub} instance for this object.
-     *
-     * @return the root {@link GitHub} instance
-     */
-    @NonNull
-    GitHub root() {
-<span class="fc" id="L47">        return Objects.requireNonNull(root,</span>
-                &quot;The root GitHub reference for this instance is null. Probably caused by deserializing this class without using a GitHub instance. If you must do this, use the MappingObjectReader from GitHub.getMappingObjectReader().&quot;);
-    }
-
-    /**
      * Object is offline.
      *
      * @return true if GitHub instance is null or offline.
      */
     boolean isOffline() {
-<span class="fc bfc" id="L57" title="All 4 branches covered.">        return root == null || root.isOffline();</span>
+<span class="fc bfc" id="L46" title="All 4 branches covered.">        return root == null || root.isOffline();</span>
+    }
+
+    /**
+     * Get the root {@link GitHub} instance for this object.
+     *
+     * @return the root {@link GitHub} instance
+     */
+    @NonNull GitHub root() {
+<span class="fc" id="L55">        return Objects.requireNonNull(root,</span>
+                &quot;The root GitHub reference for this instance is null. Probably caused by deserializing this class without using a GitHub instance. If you must do this, use the MappingObjectReader from GitHub.getMappingObjectReader().&quot;);
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

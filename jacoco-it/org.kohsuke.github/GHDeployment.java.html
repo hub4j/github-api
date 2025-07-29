@@ -15,181 +15,49 @@ import java.util.Map;
  */
 public class GHDeployment extends GHObject {
 
-    /**
-     * Create default GHDeployment instance
-     */
-<span class="fc" id="L21">    public GHDeployment() {</span>
-<span class="fc" id="L22">    }</span>
-
     private GHRepository owner;
-
-    /** The sha. */
-    protected String sha;
-
-    /** The ref. */
-    protected String ref;
-
-    /** The task. */
-    protected String task;
-
-    /** The payload. */
-    protected Object payload;
-
-    /** The environment. */
-    protected String environment;
-
-    /** The description. */
-    protected String description;
-
-    /** The statuses url. */
-    protected String statusesUrl;
-
-    /** The repository url. */
-    protected String repositoryUrl;
 
     /** The creator. */
     protected GHUser creator;
 
+    /** The description. */
+    protected String description;
+
+    /** The environment. */
+    protected String environment;
+
     /** The original environment. */
     protected String originalEnvironment;
 
-    /** The transient environment. */
-    protected boolean transientEnvironment;
+    /** The payload. */
+    protected Object payload;
 
     /** The production environment. */
     protected boolean productionEnvironment;
 
-    /**
-     * Wrap.
-     *
-     * @param owner
-     *            the owner
-     * @return the GH deployment
-     */
-    GHDeployment wrap(GHRepository owner) {
-<span class="fc" id="L70">        this.owner = owner;</span>
-<span class="fc" id="L71">        return this;</span>
-    }
+    /** The ref. */
+    protected String ref;
+
+    /** The repository url. */
+    protected String repositoryUrl;
+
+    /** The sha. */
+    protected String sha;
+
+    /** The statuses url. */
+    protected String statusesUrl;
+
+    /** The task. */
+    protected String task;
+
+    /** The transient environment. */
+    protected boolean transientEnvironment;
 
     /**
-     * Gets statuses url.
-     *
-     * @return the statuses url
+     * Create default GHDeployment instance
      */
-    public URL getStatusesUrl() {
-<span class="fc" id="L80">        return GitHubClient.parseURL(statusesUrl);</span>
-    }
-
-    /**
-     * Gets repository url.
-     *
-     * @return the repository url
-     */
-    public URL getRepositoryUrl() {
-<span class="fc" id="L89">        return GitHubClient.parseURL(repositoryUrl);</span>
-    }
-
-    /**
-     * Gets task.
-     *
-     * @return the task
-     */
-    public String getTask() {
-<span class="fc" id="L98">        return task;</span>
-    }
-
-    /**
-     * Gets payload. &lt;b&gt;NOTE:&lt;/b&gt; only use this method if you can guarantee the payload will be a simple string,
-     * otherwise use {@link #getPayloadObject()}.
-     *
-     * @return the payload
-     */
-    public String getPayload() {
-<span class="fc" id="L108">        return (String) payload;</span>
-    }
-
-    /**
-     * Gets payload. &lt;b&gt;NOTE:&lt;/b&gt; only use this method if you can guarantee the payload will be a JSON object (Map),
-     * otherwise use {@link #getPayloadObject()}.
-     *
-     * @return the payload
-     */
-    public Map&lt;String, Object&gt; getPayloadMap() {
-<span class="fc" id="L118">        return Collections.unmodifiableMap((Map&lt;String, Object&gt;) payload);</span>
-    }
-
-    /**
-     * Gets payload without assuming its type. It could be a String or a Map.
-     *
-     * @return the payload
-     */
-    public Object getPayloadObject() {
-<span class="fc" id="L127">        return payload;</span>
-    }
-
-    /**
-     * The environment defined when the deployment was first created.
-     *
-     * @return the original deployment environment
-     */
-    public String getOriginalEnvironment() {
-<span class="fc" id="L136">        return originalEnvironment;</span>
-    }
-
-    /**
-     * Gets environment.
-     *
-     * @return the environment
-     */
-    public String getEnvironment() {
-<span class="fc" id="L145">        return environment;</span>
-    }
-
-    /**
-     * Specifies if the given environment is specific to the deployment and will no longer exist at some point in the
-     * future.
-     *
-     * @return the environment is transient
-     */
-    public boolean isTransientEnvironment() {
-<span class="fc" id="L155">        return transientEnvironment;</span>
-    }
-
-    /**
-     * Specifies if the given environment is one that end-users directly interact with.
-     *
-     * @return the environment is used by end-users directly
-     */
-    public boolean isProductionEnvironment() {
-<span class="fc" id="L164">        return productionEnvironment;</span>
-    }
-
-    /**
-     * Gets creator.
-     *
-     * @return the creator
-     */
-    public GHUser getCreator() {
-<span class="fc" id="L173">        return root().intern(creator);</span>
-    }
-
-    /**
-     * Gets ref.
-     *
-     * @return the ref
-     */
-    public String getRef() {
-<span class="fc" id="L182">        return ref;</span>
-    }
-
-    /**
-     * Gets sha.
-     *
-     * @return the sha
-     */
-    public String getSha() {
-<span class="fc" id="L191">        return sha;</span>
-    }
+<span class="fc" id="L59">    public GHDeployment() {</span>
+<span class="fc" id="L60">    }</span>
 
     /**
      * Create status gh deployment status builder.
@@ -199,7 +67,127 @@ public class GHDeployment extends GHObject {
      * @return the gh deployment status builder
      */
     public GHDeploymentStatusBuilder createStatus(GHDeploymentState state) {
-<span class="fc" id="L202">        return new GHDeploymentStatusBuilder(owner, getId(), state);</span>
+<span class="fc" id="L70">        return new GHDeploymentStatusBuilder(owner, getId(), state);</span>
+    }
+
+    /**
+     * Gets creator.
+     *
+     * @return the creator
+     */
+    public GHUser getCreator() {
+<span class="fc" id="L79">        return root().intern(creator);</span>
+    }
+
+    /**
+     * Gets environment.
+     *
+     * @return the environment
+     */
+    public String getEnvironment() {
+<span class="fc" id="L88">        return environment;</span>
+    }
+
+    /**
+     * The environment defined when the deployment was first created.
+     *
+     * @return the original deployment environment
+     */
+    public String getOriginalEnvironment() {
+<span class="fc" id="L97">        return originalEnvironment;</span>
+    }
+
+    /**
+     * Gets payload. &lt;b&gt;NOTE:&lt;/b&gt; only use this method if you can guarantee the payload will be a simple string,
+     * otherwise use {@link #getPayloadObject()}.
+     *
+     * @return the payload
+     */
+    public String getPayload() {
+<span class="fc" id="L107">        return (String) payload;</span>
+    }
+
+    /**
+     * Gets payload. &lt;b&gt;NOTE:&lt;/b&gt; only use this method if you can guarantee the payload will be a JSON object (Map),
+     * otherwise use {@link #getPayloadObject()}.
+     *
+     * @return the payload
+     */
+    public Map&lt;String, Object&gt; getPayloadMap() {
+<span class="fc" id="L117">        return Collections.unmodifiableMap((Map&lt;String, Object&gt;) payload);</span>
+    }
+
+    /**
+     * Gets payload without assuming its type. It could be a String or a Map.
+     *
+     * @return the payload
+     */
+    public Object getPayloadObject() {
+<span class="fc" id="L126">        return payload;</span>
+    }
+
+    /**
+     * Gets ref.
+     *
+     * @return the ref
+     */
+    public String getRef() {
+<span class="fc" id="L135">        return ref;</span>
+    }
+
+    /**
+     * Gets repository url.
+     *
+     * @return the repository url
+     */
+    public URL getRepositoryUrl() {
+<span class="fc" id="L144">        return GitHubClient.parseURL(repositoryUrl);</span>
+    }
+
+    /**
+     * Gets sha.
+     *
+     * @return the sha
+     */
+    public String getSha() {
+<span class="fc" id="L153">        return sha;</span>
+    }
+
+    /**
+     * Gets statuses url.
+     *
+     * @return the statuses url
+     */
+    public URL getStatusesUrl() {
+<span class="fc" id="L162">        return GitHubClient.parseURL(statusesUrl);</span>
+    }
+
+    /**
+     * Gets task.
+     *
+     * @return the task
+     */
+    public String getTask() {
+<span class="fc" id="L171">        return task;</span>
+    }
+
+    /**
+     * Specifies if the given environment is one that end-users directly interact with.
+     *
+     * @return the environment is used by end-users directly
+     */
+    public boolean isProductionEnvironment() {
+<span class="fc" id="L180">        return productionEnvironment;</span>
+    }
+
+    /**
+     * Specifies if the given environment is specific to the deployment and will no longer exist at some point in the
+     * future.
+     *
+     * @return the environment is transient
+     */
+    public boolean isTransientEnvironment() {
+<span class="fc" id="L190">        return transientEnvironment;</span>
     }
 
     /**
@@ -208,9 +196,9 @@ public class GHDeployment extends GHObject {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHDeploymentStatus&gt; listStatuses() {
-<span class="fc" id="L211">        return root().createRequest()</span>
-<span class="fc" id="L212">                .withUrlPath(statusesUrl)</span>
-<span class="fc" id="L213">                .toIterable(GHDeploymentStatus[].class, item -&gt; item.lateBind(owner));</span>
+<span class="fc" id="L199">        return root().createRequest()</span>
+<span class="fc" id="L200">                .withUrlPath(statusesUrl)</span>
+<span class="fc" id="L201">                .toIterable(GHDeploymentStatus[].class, item -&gt; item.lateBind(owner));</span>
     }
 
     /**
@@ -220,7 +208,19 @@ public class GHDeployment extends GHObject {
      */
     // test only
     GHRepository getOwner() {
-<span class="fc" id="L223">        return owner;</span>
+<span class="fc" id="L211">        return owner;</span>
+    }
+
+    /**
+     * Wrap.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH deployment
+     */
+    GHDeployment wrap(GHRepository owner) {
+<span class="fc" id="L222">        this.owner = owner;</span>
+<span class="fc" id="L223">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

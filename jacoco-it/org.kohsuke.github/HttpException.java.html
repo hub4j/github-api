@@ -30,6 +30,20 @@ public class HttpException extends GHIOException {
     /**
      * Instantiates a new Http exception.
      *
+     * @param connectorResponse
+     *            the connector response to base this on
+     */
+    public HttpException(GitHubConnectorResponse connectorResponse) {
+<span class="fc" id="L37">        this(GitHubResponse.getBodyAsStringOrNull(connectorResponse),</span>
+<span class="fc" id="L38">                connectorResponse.statusCode(),</span>
+<span class="fc" id="L39">                connectorResponse.header(&quot;Status&quot;),</span>
+<span class="fc" id="L40">                connectorResponse.request().url().toString());</span>
+<span class="fc" id="L41">        this.responseHeaderFields = connectorResponse.allHeaders();</span>
+<span class="fc" id="L42">    }</span>
+
+    /**
+     * Instantiates a new Http exception.
+     *
      * @param message
      *            The detail message (which is saved for later retrieval by the {@link #getMessage()} method)
      * @param responseCode
@@ -42,11 +56,11 @@ public class HttpException extends GHIOException {
      * @see HttpURLConnection#getResponseMessage() HttpURLConnection#getResponseMessage()
      */
     public HttpException(String message, int responseCode, String responseMessage, String url) {
-<span class="fc" id="L45">        super(message);</span>
-<span class="fc" id="L46">        this.responseCode = responseCode;</span>
-<span class="fc" id="L47">        this.responseMessage = responseMessage;</span>
-<span class="fc" id="L48">        this.url = url;</span>
-<span class="fc" id="L49">    }</span>
+<span class="fc" id="L59">        super(message);</span>
+<span class="fc" id="L60">        this.responseCode = responseCode;</span>
+<span class="fc" id="L61">        this.responseMessage = responseMessage;</span>
+<span class="fc" id="L62">        this.url = url;</span>
+<span class="fc" id="L63">    }</span>
 
     /**
      * Instantiates a new Http exception.
@@ -66,11 +80,11 @@ public class HttpException extends GHIOException {
      * @see HttpURLConnection#getResponseMessage() HttpURLConnection#getResponseMessage()
      */
     public HttpException(String message, int responseCode, String responseMessage, String url, Throwable cause) {
-<span class="nc" id="L69">        super(message, cause);</span>
-<span class="nc" id="L70">        this.responseCode = responseCode;</span>
-<span class="nc" id="L71">        this.responseMessage = responseMessage;</span>
-<span class="nc" id="L72">        this.url = url;</span>
-<span class="nc" id="L73">    }</span>
+<span class="nc" id="L83">        super(message, cause);</span>
+<span class="nc" id="L84">        this.responseCode = responseCode;</span>
+<span class="nc" id="L85">        this.responseMessage = responseMessage;</span>
+<span class="nc" id="L86">        this.url = url;</span>
+<span class="nc" id="L87">    }</span>
 
     /**
      * Instantiates a new Http exception.
@@ -88,12 +102,12 @@ public class HttpException extends GHIOException {
      * @see HttpURLConnection#getResponseMessage() HttpURLConnection#getResponseMessage()
      */
     public HttpException(int responseCode, String responseMessage, String url, Throwable cause) {
-<span class="fc" id="L91">        super(&quot;Server returned HTTP response code: &quot; + responseCode + &quot;, message: '&quot; + responseMessage + &quot;'&quot;</span>
+<span class="fc" id="L105">        super(&quot;Server returned HTTP response code: &quot; + responseCode + &quot;, message: '&quot; + responseMessage + &quot;'&quot;</span>
                 + &quot; for URL: &quot; + url, cause);
-<span class="fc" id="L93">        this.responseCode = responseCode;</span>
-<span class="fc" id="L94">        this.responseMessage = responseMessage;</span>
-<span class="fc" id="L95">        this.url = url;</span>
-<span class="fc" id="L96">    }</span>
+<span class="fc" id="L107">        this.responseCode = responseCode;</span>
+<span class="fc" id="L108">        this.responseMessage = responseMessage;</span>
+<span class="fc" id="L109">        this.url = url;</span>
+<span class="fc" id="L110">    }</span>
 
     /**
      * Instantiates a new Http exception.
@@ -111,22 +125,8 @@ public class HttpException extends GHIOException {
      * @see HttpURLConnection#getResponseMessage() HttpURLConnection#getResponseMessage()
      */
     public HttpException(int responseCode, String responseMessage, @CheckForNull URL url, Throwable cause) {
-<span class="nc bnc" id="L114" title="All 2 branches missed.">        this(responseCode, responseMessage, url == null ? null : url.toString(), cause);</span>
-<span class="nc" id="L115">    }</span>
-
-    /**
-     * Instantiates a new Http exception.
-     *
-     * @param connectorResponse
-     *            the connector response to base this on
-     */
-    public HttpException(GitHubConnectorResponse connectorResponse) {
-<span class="fc" id="L124">        this(GitHubResponse.getBodyAsStringOrNull(connectorResponse),</span>
-<span class="fc" id="L125">                connectorResponse.statusCode(),</span>
-<span class="fc" id="L126">                connectorResponse.header(&quot;Status&quot;),</span>
-<span class="fc" id="L127">                connectorResponse.request().url().toString());</span>
-<span class="fc" id="L128">        this.responseHeaderFields = connectorResponse.allHeaders();</span>
-<span class="fc" id="L129">    }</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        this(responseCode, responseMessage, url == null ? null : url.toString(), cause);</span>
+<span class="nc" id="L129">    }</span>
 
     /**
      * Http response code of the request that cause the exception.

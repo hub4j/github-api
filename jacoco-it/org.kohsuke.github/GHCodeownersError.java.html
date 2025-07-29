@@ -9,24 +9,15 @@
  */
 public class GHCodeownersError {
 
-    /**
-     * Create default GHCodeownersError instance
-     */
-<span class="fc" id="L15">    public GHCodeownersError() {</span>
-<span class="fc" id="L16">    }</span>
+    private String kind, source, suggestion, message, path;
 
     private int line, column;
 
-    private String kind, source, suggestion, message, path;
-
     /**
-     * Gets line.
-     *
-     * @return the line
+     * Create default GHCodeownersError instance
      */
-    public int getLine() {
-<span class="fc" id="L28">        return line;</span>
-    }
+<span class="fc" id="L19">    public GHCodeownersError() {</span>
+<span class="fc" id="L20">    }</span>
 
     /**
      * Gets column.
@@ -34,7 +25,7 @@ public class GHCodeownersError {
      * @return the column
      */
     public int getColumn() {
-<span class="fc" id="L37">        return column;</span>
+<span class="fc" id="L28">        return column;</span>
     }
 
     /**
@@ -43,25 +34,16 @@ public class GHCodeownersError {
      * @return the kind
      */
     public String getKind() {
-<span class="fc" id="L46">        return kind;</span>
+<span class="fc" id="L37">        return kind;</span>
     }
 
     /**
-     * Gets source.
+     * Gets line.
      *
-     * @return the source
+     * @return the line
      */
-    public String getSource() {
-<span class="fc" id="L55">        return source;</span>
-    }
-
-    /**
-     * Gets suggestion.
-     *
-     * @return the suggestion
-     */
-    public String getSuggestion() {
-<span class="fc" id="L64">        return suggestion;</span>
+    public int getLine() {
+<span class="fc" id="L46">        return line;</span>
     }
 
     /**
@@ -70,7 +52,7 @@ public class GHCodeownersError {
      * @return the message
      */
     public String getMessage() {
-<span class="fc" id="L73">        return message;</span>
+<span class="fc" id="L55">        return message;</span>
     }
 
     /**
@@ -79,7 +61,25 @@ public class GHCodeownersError {
      * @return the path
      */
     public String getPath() {
-<span class="fc" id="L82">        return path;</span>
+<span class="fc" id="L64">        return path;</span>
+    }
+
+    /**
+     * Gets source.
+     *
+     * @return the source
+     */
+    public String getSource() {
+<span class="fc" id="L73">        return source;</span>
+    }
+
+    /**
+     * Gets suggestion.
+     *
+     * @return the suggestion
+     */
+    public String getSuggestion() {
+<span class="fc" id="L82">        return suggestion;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -11,6 +11,33 @@ public final class EnumUtils {
 <span class="fc" id="L11">    private static final Logger LOGGER = Logger.getLogger(EnumUtils.class.getName());</span>
 
     /**
+     * Returns an enum value matching the value if found, {@code defaultEnum} if the value is null or cannot be matched
+     * to a value of the enum.
+     *
+     * @param &lt;E&gt;
+     *            the type of the enum
+     * @param enumClass
+     *            the type of the enum
+     * @param value
+     *            the value to interpret
+     * @param defaultEnum
+     *            the default enum value if the value doesn't match one of the enum value
+     * @return an enum value
+     */
+    public static &lt;E extends Enum&lt;E&gt;&gt; E getEnumOrDefault(Class&lt;E&gt; enumClass, String value, E defaultEnum) {
+        try {
+<span class="fc bfc" id="L29" title="All 2 branches covered.">            if (value != null) {</span>
+<span class="fc" id="L30">                return Enum.valueOf(enumClass, value.toUpperCase(Locale.ROOT));</span>
+            }
+<span class="fc" id="L32">        } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L33">        }</span>
+
+<span class="fc" id="L35">        LOGGER.warning(&quot;Unknown value &quot; + value + &quot; for enum class &quot; + enumClass.getName() + &quot;, defaulting to &quot;</span>
+<span class="fc" id="L36">                + defaultEnum.name());</span>
+<span class="fc" id="L37">        return defaultEnum;</span>
+    }
+
+    /**
      * Returns an enum value matching the value if found, null if the value is null and {@code defaultEnum} if the value
      * cannot be matched to a value of the enum.
      * &lt;p&gt;
@@ -27,37 +54,10 @@ public final class EnumUtils {
      * @return an enum value or null
      */
     public static &lt;E extends Enum&lt;E&gt;&gt; E getNullableEnumOrDefault(Class&lt;E&gt; enumClass, String value, E defaultEnum) {
-<span class="fc bfc" id="L30" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L31">            return null;</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L58">            return null;</span>
         }
-<span class="fc" id="L33">        return getEnumOrDefault(enumClass, value, defaultEnum);</span>
-    }
-
-    /**
-     * Returns an enum value matching the value if found, {@code defaultEnum} if the value is null or cannot be matched
-     * to a value of the enum.
-     *
-     * @param &lt;E&gt;
-     *            the type of the enum
-     * @param enumClass
-     *            the type of the enum
-     * @param value
-     *            the value to interpret
-     * @param defaultEnum
-     *            the default enum value if the value doesn't match one of the enum value
-     * @return an enum value
-     */
-    public static &lt;E extends Enum&lt;E&gt;&gt; E getEnumOrDefault(Class&lt;E&gt; enumClass, String value, E defaultEnum) {
-        try {
-<span class="fc bfc" id="L52" title="All 2 branches covered.">            if (value != null) {</span>
-<span class="fc" id="L53">                return Enum.valueOf(enumClass, value.toUpperCase(Locale.ROOT));</span>
-            }
-<span class="fc" id="L55">        } catch (IllegalArgumentException e) {</span>
-<span class="fc" id="L56">        }</span>
-
-<span class="fc" id="L58">        LOGGER.warning(&quot;Unknown value &quot; + value + &quot; for enum class &quot; + enumClass.getName() + &quot;, defaulting to &quot;</span>
-<span class="fc" id="L59">                + defaultEnum.name());</span>
-<span class="fc" id="L60">        return defaultEnum;</span>
+<span class="fc" id="L60">        return getEnumOrDefault(enumClass, value, defaultEnum);</span>
     }
 
     private EnumUtils() {

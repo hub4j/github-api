@@ -12,25 +12,51 @@ import java.time.format.DateTimeFormatter;
  */
 public class GHPullRequestSearchBuilder extends GHSearchBuilder&lt;GHPullRequest&gt; {
     /**
+     * The sort order values.
+     */
+<span class="fc" id="L17">    public enum Sort {</span>
+
+        /** The comments. */
+<span class="fc" id="L20">        COMMENTS,</span>
+        /** The created. */
+<span class="fc" id="L22">        CREATED,</span>
+        /** The relevance. */
+<span class="fc" id="L24">        RELEVANCE,</span>
+        /** The updated. */
+<span class="fc" id="L26">        UPDATED</span>
+
+    }
+
+    private static class PullRequestSearchResult extends SearchResult&lt;GHPullRequest&gt; {
+
+        private GHPullRequest[] items;
+
+        @Override
+        GHPullRequest[] getItems(GitHub root) {
+<span class="fc" id="L36">            return items;</span>
+        }
+    }
+
+    /**
      * Instantiates a new GH search builder.
      *
      * @param root
      *            the root
      */
     GHPullRequestSearchBuilder(GitHub root) {
-<span class="fc" id="L21">        super(root, PullRequestSearchResult.class);</span>
-<span class="fc" id="L22">    }</span>
+<span class="fc" id="L47">        super(root, PullRequestSearchResult.class);</span>
+<span class="fc" id="L48">    }</span>
 
     /**
-     * Repository gh pull request search builder.
+     * Assigned to gh pull request user.
      *
-     * @param repository
-     *            the repository
+     * @param u
+     *            the gh user
      * @return the gh pull request search builder
      */
-    public GHPullRequestSearchBuilder repo(GHRepository repository) {
-<span class="fc" id="L32">        q(&quot;repo&quot;, repository.getFullName());</span>
-<span class="fc" id="L33">        return this;</span>
+    public GHPullRequestSearchBuilder assigned(GHUser u) {
+<span class="fc" id="L58">        q(&quot;assignee&quot;, u.getLogin());</span>
+<span class="fc" id="L59">        return this;</span>
     }
 
     /**
@@ -41,90 +67,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder&lt;GHPullRequest
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder author(GHUser user) {
-<span class="fc" id="L44">        q(&quot;author&quot;, user.getLogin());</span>
-<span class="fc" id="L45">        return this;</span>
-    }
-
-    /**
-     * CreatedByMe gh pull request search builder.
-     *
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder createdByMe() {
-<span class="fc" id="L54">        q(&quot;author:@me&quot;);</span>
-<span class="fc" id="L55">        return this;</span>
-    }
-
-    /**
-     * Assigned to gh pull request user.
-     *
-     * @param u
-     *            the gh user
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder assigned(GHUser u) {
-<span class="fc" id="L66">        q(&quot;assignee&quot;, u.getLogin());</span>
-<span class="fc" id="L67">        return this;</span>
-    }
-
-    /**
-     * Mentions gh pull request search builder.
-     *
-     * @param u
-     *            the gh user
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder mentions(GHUser u) {
-<span class="fc" id="L78">        q(&quot;mentions&quot;, u.getLogin());</span>
-<span class="fc" id="L79">        return this;</span>
-    }
-
-    /**
-     * Is open gh pull request search builder.
-     *
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder isOpen() {
-<span class="fc" id="L88">        return q(&quot;is:open&quot;);</span>
-    }
-
-    /**
-     * Is closed gh pull request search builder.
-     *
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder isClosed() {
-<span class="fc" id="L97">        return q(&quot;is:closed&quot;);</span>
-    }
-
-    /**
-     * Is merged gh pull request search builder.
-     *
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder isMerged() {
-<span class="fc" id="L106">        return q(&quot;is:merged&quot;);</span>
-    }
-
-    /**
-     * Is draft gh pull request search builder.
-     *
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder isDraft() {
-<span class="fc" id="L115">        return q(&quot;draft:true&quot;);</span>
-    }
-
-    /**
-     * Head gh pull request search builder.
-     *
-     * @param branch
-     *            the head branch
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder head(GHBranch branch) {
-<span class="fc" id="L126">        q(&quot;head&quot;, branch.getName());</span>
-<span class="fc" id="L127">        return this;</span>
+<span class="fc" id="L70">        q(&quot;author&quot;, user.getLogin());</span>
+<span class="fc" id="L71">        return this;</span>
     }
 
     /**
@@ -135,134 +79,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder&lt;GHPullRequest
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder base(GHBranch branch) {
-<span class="fc" id="L138">        q(&quot;base&quot;, branch.getName());</span>
-<span class="fc" id="L139">        return this;</span>
-    }
-
-    /**
-     * Commit gh pull request search builder.
-     *
-     * @param sha
-     *            the commit SHA
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder commit(String sha) {
-<span class="fc" id="L150">        q(&quot;SHA&quot;, sha);</span>
-<span class="fc" id="L151">        return this;</span>
-    }
-
-    /**
-     * Created gh pull request search builder.
-     *
-     * @param created
-     *            the createdAt
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder created(LocalDate created) {
-<span class="fc" id="L162">        q(&quot;created&quot;, created.format(DateTimeFormatter.ISO_DATE));</span>
-<span class="fc" id="L163">        return this;</span>
-    }
-
-    /**
-     * CreatedBefore gh pull request search builder.
-     *
-     * @param created
-     *            the createdAt
-     * @param inclusive
-     *            whether to include date
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder createdBefore(LocalDate created, boolean inclusive) {
-<span class="pc bpc" id="L176" title="1 of 2 branches missed.">        String comparisonSign = inclusive ? &quot;&lt;=&quot; : &quot;&lt;&quot;;</span>
-<span class="fc" id="L177">        q(&quot;created:&quot; + comparisonSign + created.format(DateTimeFormatter.ISO_DATE));</span>
-<span class="fc" id="L178">        return this;</span>
-    }
-
-    /**
-     * CreatedAfter gh pull request search builder.
-     *
-     * @param created
-     *            the createdAt
-     * @param inclusive
-     *            whether to include date
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder createdAfter(LocalDate created, boolean inclusive) {
-<span class="pc bpc" id="L191" title="1 of 2 branches missed.">        String comparisonSign = inclusive ? &quot;&gt;=&quot; : &quot;&gt;&quot;;</span>
-<span class="fc" id="L192">        q(&quot;created:&quot; + comparisonSign + created.format(DateTimeFormatter.ISO_DATE));</span>
-<span class="fc" id="L193">        return this;</span>
-    }
-
-    /**
-     * Created gh pull request search builder.
-     *
-     * @param from
-     *            the createdAt starting from
-     * @param to
-     *            the createdAt ending to
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder created(LocalDate from, LocalDate to) {
-<span class="fc" id="L206">        String createdRange = from.format(DateTimeFormatter.ISO_DATE) + &quot;..&quot; + to.format(DateTimeFormatter.ISO_DATE);</span>
-<span class="fc" id="L207">        q(&quot;created&quot;, createdRange);</span>
-<span class="fc" id="L208">        return this;</span>
-    }
-
-    /**
-     * Merged gh pull request search builder.
-     *
-     * @param merged
-     *            the merged
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder merged(LocalDate merged) {
-<span class="fc" id="L219">        q(&quot;merged&quot;, merged.format(DateTimeFormatter.ISO_DATE));</span>
-<span class="fc" id="L220">        return this;</span>
-    }
-
-    /**
-     * MergedBefore gh pull request search builder.
-     *
-     * @param merged
-     *            the merged
-     * @param inclusive
-     *            whether to include date
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder mergedBefore(LocalDate merged, boolean inclusive) {
-<span class="pc bpc" id="L233" title="1 of 2 branches missed.">        String comparisonSign = inclusive ? &quot;&lt;=&quot; : &quot;&lt;&quot;;</span>
-<span class="fc" id="L234">        q(&quot;merged:&quot; + comparisonSign + merged.format(DateTimeFormatter.ISO_DATE));</span>
-<span class="fc" id="L235">        return this;</span>
-    }
-
-    /**
-     * MergedAfter gh pull request search builder.
-     *
-     * @param merged
-     *            the merged
-     * @param inclusive
-     *            whether to include date
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder mergedAfter(LocalDate merged, boolean inclusive) {
-<span class="pc bpc" id="L248" title="1 of 2 branches missed.">        String comparisonSign = inclusive ? &quot;&gt;=&quot; : &quot;&gt;&quot;;</span>
-<span class="fc" id="L249">        q(&quot;merged:&quot; + comparisonSign + merged.format(DateTimeFormatter.ISO_DATE));</span>
-<span class="fc" id="L250">        return this;</span>
-    }
-
-    /**
-     * Merged gh pull request search builder.
-     *
-     * @param from
-     *            the merged starting from
-     * @param to
-     *            the merged ending to
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder merged(LocalDate from, LocalDate to) {
-<span class="fc" id="L263">        String mergedRange = from.format(DateTimeFormatter.ISO_DATE) + &quot;..&quot; + to.format(DateTimeFormatter.ISO_DATE);</span>
-<span class="fc" id="L264">        q(&quot;merged&quot;, mergedRange);</span>
-<span class="fc" id="L265">        return this;</span>
+<span class="fc" id="L82">        q(&quot;base&quot;, branch.getName());</span>
+<span class="fc" id="L83">        return this;</span>
     }
 
     /**
@@ -273,38 +91,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder&lt;GHPullRequest
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder closed(LocalDate closed) {
-<span class="fc" id="L276">        q(&quot;closed&quot;, closed.format(DateTimeFormatter.ISO_DATE));</span>
-<span class="fc" id="L277">        return this;</span>
-    }
-
-    /**
-     * ClosedBefore gh pull request search builder.
-     *
-     * @param closed
-     *            the closed
-     * @param inclusive
-     *            whether to include date
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder closedBefore(LocalDate closed, boolean inclusive) {
-<span class="pc bpc" id="L290" title="1 of 2 branches missed.">        String comparisonSign = inclusive ? &quot;&lt;=&quot; : &quot;&lt;&quot;;</span>
-<span class="fc" id="L291">        q(&quot;closed:&quot; + comparisonSign + closed.format(DateTimeFormatter.ISO_DATE));</span>
-<span class="fc" id="L292">        return this;</span>
-    }
-
-    /**
-     * ClosedAfter gh pull request search builder.
-     *
-     * @param closed
-     *            the closed
-     * @param inclusive
-     *            whether to include date
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder closedAfter(LocalDate closed, boolean inclusive) {
-<span class="pc bpc" id="L305" title="1 of 2 branches missed.">        String comparisonSign = inclusive ? &quot;&gt;=&quot; : &quot;&gt;&quot;;</span>
-<span class="fc" id="L306">        q(&quot;closed:&quot; + comparisonSign + closed.format(DateTimeFormatter.ISO_DATE));</span>
-<span class="fc" id="L307">        return this;</span>
+<span class="fc" id="L94">        q(&quot;closed&quot;, closed.format(DateTimeFormatter.ISO_DATE));</span>
+<span class="fc" id="L95">        return this;</span>
     }
 
     /**
@@ -317,9 +105,319 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder&lt;GHPullRequest
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder closed(LocalDate from, LocalDate to) {
-<span class="fc" id="L320">        String closedRange = from.format(DateTimeFormatter.ISO_DATE) + &quot;..&quot; + to.format(DateTimeFormatter.ISO_DATE);</span>
-<span class="fc" id="L321">        q(&quot;closed&quot;, closedRange);</span>
-<span class="fc" id="L322">        return this;</span>
+<span class="fc" id="L108">        String closedRange = from.format(DateTimeFormatter.ISO_DATE) + &quot;..&quot; + to.format(DateTimeFormatter.ISO_DATE);</span>
+<span class="fc" id="L109">        q(&quot;closed&quot;, closedRange);</span>
+<span class="fc" id="L110">        return this;</span>
+    }
+
+    /**
+     * ClosedAfter gh pull request search builder.
+     *
+     * @param closed
+     *            the closed
+     * @param inclusive
+     *            whether to include date
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder closedAfter(LocalDate closed, boolean inclusive) {
+<span class="pc bpc" id="L123" title="1 of 2 branches missed.">        String comparisonSign = inclusive ? &quot;&gt;=&quot; : &quot;&gt;&quot;;</span>
+<span class="fc" id="L124">        q(&quot;closed:&quot; + comparisonSign + closed.format(DateTimeFormatter.ISO_DATE));</span>
+<span class="fc" id="L125">        return this;</span>
+    }
+
+    /**
+     * ClosedBefore gh pull request search builder.
+     *
+     * @param closed
+     *            the closed
+     * @param inclusive
+     *            whether to include date
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder closedBefore(LocalDate closed, boolean inclusive) {
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">        String comparisonSign = inclusive ? &quot;&lt;=&quot; : &quot;&lt;&quot;;</span>
+<span class="fc" id="L139">        q(&quot;closed:&quot; + comparisonSign + closed.format(DateTimeFormatter.ISO_DATE));</span>
+<span class="fc" id="L140">        return this;</span>
+    }
+
+    /**
+     * Commit gh pull request search builder.
+     *
+     * @param sha
+     *            the commit SHA
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder commit(String sha) {
+<span class="fc" id="L151">        q(&quot;SHA&quot;, sha);</span>
+<span class="fc" id="L152">        return this;</span>
+    }
+
+    /**
+     * Created gh pull request search builder.
+     *
+     * @param created
+     *            the createdAt
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder created(LocalDate created) {
+<span class="fc" id="L163">        q(&quot;created&quot;, created.format(DateTimeFormatter.ISO_DATE));</span>
+<span class="fc" id="L164">        return this;</span>
+    }
+
+    /**
+     * Created gh pull request search builder.
+     *
+     * @param from
+     *            the createdAt starting from
+     * @param to
+     *            the createdAt ending to
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder created(LocalDate from, LocalDate to) {
+<span class="fc" id="L177">        String createdRange = from.format(DateTimeFormatter.ISO_DATE) + &quot;..&quot; + to.format(DateTimeFormatter.ISO_DATE);</span>
+<span class="fc" id="L178">        q(&quot;created&quot;, createdRange);</span>
+<span class="fc" id="L179">        return this;</span>
+    }
+
+    /**
+     * CreatedAfter gh pull request search builder.
+     *
+     * @param created
+     *            the createdAt
+     * @param inclusive
+     *            whether to include date
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder createdAfter(LocalDate created, boolean inclusive) {
+<span class="pc bpc" id="L192" title="1 of 2 branches missed.">        String comparisonSign = inclusive ? &quot;&gt;=&quot; : &quot;&gt;&quot;;</span>
+<span class="fc" id="L193">        q(&quot;created:&quot; + comparisonSign + created.format(DateTimeFormatter.ISO_DATE));</span>
+<span class="fc" id="L194">        return this;</span>
+    }
+
+    /**
+     * CreatedBefore gh pull request search builder.
+     *
+     * @param created
+     *            the createdAt
+     * @param inclusive
+     *            whether to include date
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder createdBefore(LocalDate created, boolean inclusive) {
+<span class="pc bpc" id="L207" title="1 of 2 branches missed.">        String comparisonSign = inclusive ? &quot;&lt;=&quot; : &quot;&lt;&quot;;</span>
+<span class="fc" id="L208">        q(&quot;created:&quot; + comparisonSign + created.format(DateTimeFormatter.ISO_DATE));</span>
+<span class="fc" id="L209">        return this;</span>
+    }
+
+    /**
+     * CreatedByMe gh pull request search builder.
+     *
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder createdByMe() {
+<span class="fc" id="L218">        q(&quot;author:@me&quot;);</span>
+<span class="fc" id="L219">        return this;</span>
+    }
+
+    /**
+     * Head gh pull request search builder.
+     *
+     * @param branch
+     *            the head branch
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder head(GHBranch branch) {
+<span class="fc" id="L230">        q(&quot;head&quot;, branch.getName());</span>
+<span class="fc" id="L231">        return this;</span>
+    }
+
+    /**
+     * Labels gh pull request search builder.
+     *
+     * @param labels
+     *            the labels
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder inLabels(Iterable&lt;String&gt; labels) {
+<span class="fc" id="L242">        q(&quot;label&quot;, String.join(&quot;,&quot;, labels));</span>
+<span class="fc" id="L243">        return this;</span>
+    }
+
+    /**
+     * Is closed gh pull request search builder.
+     *
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder isClosed() {
+<span class="fc" id="L252">        return q(&quot;is:closed&quot;);</span>
+    }
+
+    /**
+     * Is draft gh pull request search builder.
+     *
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder isDraft() {
+<span class="fc" id="L261">        return q(&quot;draft:true&quot;);</span>
+    }
+
+    /**
+     * Is merged gh pull request search builder.
+     *
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder isMerged() {
+<span class="fc" id="L270">        return q(&quot;is:merged&quot;);</span>
+    }
+
+    /**
+     * Is open gh pull request search builder.
+     *
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder isOpen() {
+<span class="fc" id="L279">        return q(&quot;is:open&quot;);</span>
+    }
+
+    /**
+     * Label gh pull request search builder.
+     *
+     * @param label
+     *            the label
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder label(String label) {
+<span class="fc" id="L290">        q(&quot;label&quot;, label);</span>
+<span class="fc" id="L291">        return this;</span>
+    }
+
+    @Override
+    public PagedSearchIterable&lt;GHPullRequest&gt; list() {
+<span class="fc" id="L296">        this.q(&quot;is:pr&quot;);</span>
+<span class="fc" id="L297">        return super.list();</span>
+    }
+
+    /**
+     * Mentions gh pull request search builder.
+     *
+     * @param u
+     *            the gh user
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder mentions(GHUser u) {
+<span class="fc" id="L308">        q(&quot;mentions&quot;, u.getLogin());</span>
+<span class="fc" id="L309">        return this;</span>
+    }
+
+    /**
+     * Merged gh pull request search builder.
+     *
+     * @param merged
+     *            the merged
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder merged(LocalDate merged) {
+<span class="fc" id="L320">        q(&quot;merged&quot;, merged.format(DateTimeFormatter.ISO_DATE));</span>
+<span class="fc" id="L321">        return this;</span>
+    }
+
+    /**
+     * Merged gh pull request search builder.
+     *
+     * @param from
+     *            the merged starting from
+     * @param to
+     *            the merged ending to
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder merged(LocalDate from, LocalDate to) {
+<span class="fc" id="L334">        String mergedRange = from.format(DateTimeFormatter.ISO_DATE) + &quot;..&quot; + to.format(DateTimeFormatter.ISO_DATE);</span>
+<span class="fc" id="L335">        q(&quot;merged&quot;, mergedRange);</span>
+<span class="fc" id="L336">        return this;</span>
+    }
+
+    /**
+     * MergedAfter gh pull request search builder.
+     *
+     * @param merged
+     *            the merged
+     * @param inclusive
+     *            whether to include date
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder mergedAfter(LocalDate merged, boolean inclusive) {
+<span class="pc bpc" id="L349" title="1 of 2 branches missed.">        String comparisonSign = inclusive ? &quot;&gt;=&quot; : &quot;&gt;&quot;;</span>
+<span class="fc" id="L350">        q(&quot;merged:&quot; + comparisonSign + merged.format(DateTimeFormatter.ISO_DATE));</span>
+<span class="fc" id="L351">        return this;</span>
+    }
+
+    /**
+     * MergedBefore gh pull request search builder.
+     *
+     * @param merged
+     *            the merged
+     * @param inclusive
+     *            whether to include date
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder mergedBefore(LocalDate merged, boolean inclusive) {
+<span class="pc bpc" id="L364" title="1 of 2 branches missed.">        String comparisonSign = inclusive ? &quot;&lt;=&quot; : &quot;&lt;&quot;;</span>
+<span class="fc" id="L365">        q(&quot;merged:&quot; + comparisonSign + merged.format(DateTimeFormatter.ISO_DATE));</span>
+<span class="fc" id="L366">        return this;</span>
+    }
+
+    /**
+     * Order gh pull request search builder.
+     *
+     * @param direction
+     *            the direction
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder order(GHDirection direction) {
+<span class="fc" id="L377">        req.with(&quot;order&quot;, direction);</span>
+<span class="fc" id="L378">        return this;</span>
+    }
+
+    @Override
+    public GHPullRequestSearchBuilder q(String term) {
+<span class="fc" id="L383">        super.q(term);</span>
+<span class="fc" id="L384">        return this;</span>
+    }
+
+    /**
+     * Repository gh pull request search builder.
+     *
+     * @param repository
+     *            the repository
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder repo(GHRepository repository) {
+<span class="fc" id="L395">        q(&quot;repo&quot;, repository.getFullName());</span>
+<span class="fc" id="L396">        return this;</span>
+    }
+
+    /**
+     * Sort gh pull request search builder.
+     *
+     * @param sort
+     *            the sort
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder sort(GHPullRequestSearchBuilder.Sort sort) {
+<span class="fc" id="L407">        req.with(&quot;sort&quot;, sort);</span>
+<span class="fc" id="L408">        return this;</span>
+    }
+
+    /**
+     * Title like search term
+     *
+     * @param title
+     *            the title to be matched
+     * @return the gh pull request search builder
+     */
+    public GHPullRequestSearchBuilder titleLike(String title) {
+<span class="fc" id="L419">        q(title + &quot; in:title&quot;);</span>
+<span class="fc" id="L420">        return this;</span>
     }
 
     /**
@@ -330,38 +428,8 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder&lt;GHPullRequest
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder updated(LocalDate updated) {
-<span class="fc" id="L333">        q(&quot;updated&quot;, updated.format(DateTimeFormatter.ISO_DATE));</span>
-<span class="fc" id="L334">        return this;</span>
-    }
-
-    /**
-     * UpdatedBefore gh pull request search builder.
-     *
-     * @param updated
-     *            the updated
-     * @param inclusive
-     *            whether to include date
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder updatedBefore(LocalDate updated, boolean inclusive) {
-<span class="pc bpc" id="L347" title="1 of 2 branches missed.">        String comparisonSign = inclusive ? &quot;&lt;=&quot; : &quot;&lt;&quot;;</span>
-<span class="fc" id="L348">        q(&quot;updated:&quot; + comparisonSign + updated.format(DateTimeFormatter.ISO_DATE));</span>
-<span class="fc" id="L349">        return this;</span>
-    }
-
-    /**
-     * UpdatedAfter gh pull request search builder.
-     *
-     * @param updated
-     *            the updated
-     * @param inclusive
-     *            whether to include date
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder updatedAfter(LocalDate updated, boolean inclusive) {
-<span class="pc bpc" id="L362" title="1 of 2 branches missed.">        String comparisonSign = inclusive ? &quot;&gt;=&quot; : &quot;&gt;&quot;;</span>
-<span class="fc" id="L363">        q(&quot;updated:&quot; + comparisonSign + updated.format(DateTimeFormatter.ISO_DATE));</span>
-<span class="fc" id="L364">        return this;</span>
+<span class="fc" id="L431">        q(&quot;updated&quot;, updated.format(DateTimeFormatter.ISO_DATE));</span>
+<span class="fc" id="L432">        return this;</span>
     }
 
     /**
@@ -374,112 +442,44 @@ public class GHPullRequestSearchBuilder extends GHSearchBuilder&lt;GHPullRequest
      * @return the gh pull request search builder
      */
     public GHPullRequestSearchBuilder updated(LocalDate from, LocalDate to) {
-<span class="fc" id="L377">        String updatedRange = from.format(DateTimeFormatter.ISO_DATE) + &quot;..&quot; + to.format(DateTimeFormatter.ISO_DATE);</span>
-<span class="fc" id="L378">        q(&quot;updated&quot;, updatedRange);</span>
-<span class="fc" id="L379">        return this;</span>
+<span class="fc" id="L445">        String updatedRange = from.format(DateTimeFormatter.ISO_DATE) + &quot;..&quot; + to.format(DateTimeFormatter.ISO_DATE);</span>
+<span class="fc" id="L446">        q(&quot;updated&quot;, updatedRange);</span>
+<span class="fc" id="L447">        return this;</span>
     }
 
     /**
-     * Label gh pull request search builder.
+     * UpdatedAfter gh pull request search builder.
      *
-     * @param label
-     *            the label
+     * @param updated
+     *            the updated
+     * @param inclusive
+     *            whether to include date
      * @return the gh pull request search builder
      */
-    public GHPullRequestSearchBuilder label(String label) {
-<span class="fc" id="L390">        q(&quot;label&quot;, label);</span>
-<span class="fc" id="L391">        return this;</span>
+    public GHPullRequestSearchBuilder updatedAfter(LocalDate updated, boolean inclusive) {
+<span class="pc bpc" id="L460" title="1 of 2 branches missed.">        String comparisonSign = inclusive ? &quot;&gt;=&quot; : &quot;&gt;&quot;;</span>
+<span class="fc" id="L461">        q(&quot;updated:&quot; + comparisonSign + updated.format(DateTimeFormatter.ISO_DATE));</span>
+<span class="fc" id="L462">        return this;</span>
     }
 
     /**
-     * Labels gh pull request search builder.
+     * UpdatedBefore gh pull request search builder.
      *
-     * @param labels
-     *            the labels
+     * @param updated
+     *            the updated
+     * @param inclusive
+     *            whether to include date
      * @return the gh pull request search builder
      */
-    public GHPullRequestSearchBuilder inLabels(Iterable&lt;String&gt; labels) {
-<span class="fc" id="L402">        q(&quot;label&quot;, String.join(&quot;,&quot;, labels));</span>
-<span class="fc" id="L403">        return this;</span>
-    }
-
-    /**
-     * Title like search term
-     *
-     * @param title
-     *            the title to be matched
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder titleLike(String title) {
-<span class="fc" id="L414">        q(title + &quot; in:title&quot;);</span>
-<span class="fc" id="L415">        return this;</span>
-    }
-
-    /**
-     * Order gh pull request search builder.
-     *
-     * @param direction
-     *            the direction
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder order(GHDirection direction) {
-<span class="fc" id="L426">        req.with(&quot;order&quot;, direction);</span>
-<span class="fc" id="L427">        return this;</span>
-    }
-
-    /**
-     * Sort gh pull request search builder.
-     *
-     * @param sort
-     *            the sort
-     * @return the gh pull request search builder
-     */
-    public GHPullRequestSearchBuilder sort(GHPullRequestSearchBuilder.Sort sort) {
-<span class="fc" id="L438">        req.with(&quot;sort&quot;, sort);</span>
-<span class="fc" id="L439">        return this;</span>
-    }
-
-    @Override
-    public GHPullRequestSearchBuilder q(String term) {
-<span class="fc" id="L444">        super.q(term);</span>
-<span class="fc" id="L445">        return this;</span>
-    }
-
-    @Override
-    public PagedSearchIterable&lt;GHPullRequest&gt; list() {
-<span class="fc" id="L450">        this.q(&quot;is:pr&quot;);</span>
-<span class="fc" id="L451">        return super.list();</span>
+    public GHPullRequestSearchBuilder updatedBefore(LocalDate updated, boolean inclusive) {
+<span class="pc bpc" id="L475" title="1 of 2 branches missed.">        String comparisonSign = inclusive ? &quot;&lt;=&quot; : &quot;&lt;&quot;;</span>
+<span class="fc" id="L476">        q(&quot;updated:&quot; + comparisonSign + updated.format(DateTimeFormatter.ISO_DATE));</span>
+<span class="fc" id="L477">        return this;</span>
     }
 
     @Override
     protected String getApiUrl() {
-<span class="fc" id="L456">        return &quot;/search/issues&quot;;</span>
-    }
-
-    /**
-     * The sort order values.
-     */
-<span class="fc" id="L462">    public enum Sort {</span>
-
-        /** The comments. */
-<span class="fc" id="L465">        COMMENTS,</span>
-        /** The created. */
-<span class="fc" id="L467">        CREATED,</span>
-        /** The updated. */
-<span class="fc" id="L469">        UPDATED,</span>
-        /** The relevance. */
-<span class="fc" id="L471">        RELEVANCE</span>
-
-    }
-
-    private static class PullRequestSearchResult extends SearchResult&lt;GHPullRequest&gt; {
-
-        private GHPullRequest[] items;
-
-        @Override
-        GHPullRequest[] getItems(GitHub root) {
-<span class="fc" id="L481">            return items;</span>
-        }
+<span class="fc" id="L482">        return &quot;/search/issues&quot;;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

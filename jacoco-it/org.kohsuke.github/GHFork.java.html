@@ -7,18 +7,18 @@
 <span class="fc" id="L7">public enum GHFork {</span>
 
     /**
-     * Search in the parent repository and in forks with more stars than the parent repository.
-     *
-     * Forks with the same or fewer stars than the parent repository are still ignored.
-     */
-<span class="fc" id="L14">    PARENT_AND_FORKS(&quot;true&quot;),</span>
-
-    /**
      * Search only in forks with more stars than the parent repository.
      *
      * The parent repository is ignored. If no forks have more stars than the parent, no results will be returned.
      */
-<span class="fc" id="L21">    FORKS_ONLY(&quot;only&quot;),</span>
+<span class="fc" id="L14">    FORKS_ONLY(&quot;only&quot;),</span>
+
+    /**
+     * Search in the parent repository and in forks with more stars than the parent repository.
+     *
+     * Forks with the same or fewer stars than the parent repository are still ignored.
+     */
+<span class="fc" id="L21">    PARENT_AND_FORKS(&quot;true&quot;),</span>
 
     /**
      * (Default) Search only the parent repository.

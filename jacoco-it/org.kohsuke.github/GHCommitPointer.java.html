@@ -35,64 +35,15 @@ import java.io.IOException;
  */
 public class GHCommitPointer {
 
+    private String ref, sha, label;
+
+    private GHRepository repo;
+    private GHUser user;
     /**
      * Create default GHCommitPointer instance
      */
-<span class="fc" id="L41">    public GHCommitPointer() {</span>
-<span class="fc" id="L42">    }</span>
-
-    private String ref, sha, label;
-    private GHUser user;
-    private GHRepository repo;
-
-    /**
-     * This points to the user who owns the {@link #getRepository()}.
-     *
-     * @return the user
-     */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHUser getUser() {
-<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if (user != null)</span>
-<span class="fc" id="L56">            return user.root().intern(user);</span>
-<span class="nc" id="L57">        return user;</span>
-    }
-
-    /**
-     * The repository that contains the commit.
-     *
-     * @return the repository
-     */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHRepository getRepository() {
-<span class="nc" id="L67">        return repo;</span>
-    }
-
-    /**
-     * Named ref to the commit. This appears to be a &quot;short ref&quot; that doesn't include &quot;refs/heads/&quot; portion.
-     *
-     * @return the ref
-     */
-    public String getRef() {
-<span class="fc" id="L76">        return ref;</span>
-    }
-
-    /**
-     * SHA1 of the commit.
-     *
-     * @return the sha
-     */
-    public String getSha() {
-<span class="fc" id="L85">        return sha;</span>
-    }
-
-    /**
-     * String that looks like &quot;USERNAME:REF&quot;.
-     *
-     * @return the label
-     */
-    public String getLabel() {
-<span class="fc" id="L94">        return label;</span>
-    }
+<span class="fc" id="L45">    public GHCommitPointer() {</span>
+<span class="fc" id="L46">    }</span>
 
     /**
      * Obtains the commit that this pointer is referring to.
@@ -102,7 +53,56 @@ public class GHCommitPointer {
      *             the io exception
      */
     public GHCommit getCommit() throws IOException {
-<span class="nc" id="L105">        return getRepository().getCommit(getSha());</span>
+<span class="nc" id="L56">        return getRepository().getCommit(getSha());</span>
+    }
+
+    /**
+     * String that looks like &quot;USERNAME:REF&quot;.
+     *
+     * @return the label
+     */
+    public String getLabel() {
+<span class="fc" id="L65">        return label;</span>
+    }
+
+    /**
+     * Named ref to the commit. This appears to be a &quot;short ref&quot; that doesn't include &quot;refs/heads/&quot; portion.
+     *
+     * @return the ref
+     */
+    public String getRef() {
+<span class="fc" id="L74">        return ref;</span>
+    }
+
+    /**
+     * The repository that contains the commit.
+     *
+     * @return the repository
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHRepository getRepository() {
+<span class="nc" id="L84">        return repo;</span>
+    }
+
+    /**
+     * SHA1 of the commit.
+     *
+     * @return the sha
+     */
+    public String getSha() {
+<span class="fc" id="L93">        return sha;</span>
+    }
+
+    /**
+     * This points to the user who owns the {@link #getRepository()}.
+     *
+     * @return the user
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHUser getUser() {
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">        if (user != null)</span>
+<span class="fc" id="L104">            return user.root().intern(user);</span>
+<span class="nc" id="L105">        return user;</span>
     }
 
 }

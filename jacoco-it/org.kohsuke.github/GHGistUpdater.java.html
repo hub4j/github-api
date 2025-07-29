@@ -60,6 +60,18 @@ public class GHGistUpdater {
     }
 
     /**
+     * Description gh gist updater.
+     *
+     * @param desc
+     *            the desc
+     * @return the gh gist updater
+     */
+    public GHGistUpdater description(String desc) {
+<span class="fc" id="L70">        builder.with(&quot;description&quot;, desc);</span>
+<span class="fc" id="L71">        return this;</span>
+    }
+
+    /**
      * Rename file gh gist updater.
      *
      * @param fileName
@@ -69,9 +81,21 @@ public class GHGistUpdater {
      * @return the gh gist updater
      */
     public GHGistUpdater renameFile(@Nonnull String fileName, @Nonnull String newFileName) {
-<span class="fc" id="L72">        Map&lt;String, String&gt; file = files.computeIfAbsent(fileName, d -&gt; new HashMap&lt;&gt;());</span>
-<span class="fc" id="L73">        file.put(&quot;filename&quot;, newFileName);</span>
-<span class="fc" id="L74">        return this;</span>
+<span class="fc" id="L84">        Map&lt;String, String&gt; file = files.computeIfAbsent(fileName, d -&gt; new HashMap&lt;&gt;());</span>
+<span class="fc" id="L85">        file.put(&quot;filename&quot;, newFileName);</span>
+<span class="fc" id="L86">        return this;</span>
+    }
+
+    /**
+     * Updates the Gist based on the parameters specified thus far.
+     *
+     * @return the gh gist
+     * @throws IOException
+     *             the io exception
+     */
+    public GHGist update() throws IOException {
+<span class="fc" id="L97">        builder.with(&quot;files&quot;, files);</span>
+<span class="fc" id="L98">        return builder.method(&quot;PATCH&quot;).withUrlPath(base.getApiTailUrl(&quot;&quot;)).fetch(GHGist.class);</span>
     }
 
     /**
@@ -84,9 +108,9 @@ public class GHGistUpdater {
      * @return the gh gist updater
      */
     public GHGistUpdater updateFile(@Nonnull String fileName, @Nonnull String content) {
-<span class="fc" id="L87">        Map&lt;String, String&gt; file = files.computeIfAbsent(fileName, d -&gt; new HashMap&lt;&gt;());</span>
-<span class="fc" id="L88">        file.put(&quot;content&quot;, content);</span>
-<span class="fc" id="L89">        return this;</span>
+<span class="fc" id="L111">        Map&lt;String, String&gt; file = files.computeIfAbsent(fileName, d -&gt; new HashMap&lt;&gt;());</span>
+<span class="fc" id="L112">        file.put(&quot;content&quot;, content);</span>
+<span class="fc" id="L113">        return this;</span>
     }
 
     /**
@@ -101,35 +125,11 @@ public class GHGistUpdater {
      * @return the gh gist updater
      */
     public GHGistUpdater updateFile(@Nonnull String fileName, @Nonnull String newFileName, @Nonnull String content) {
-<span class="fc" id="L104">        Map&lt;String, String&gt; file = files.computeIfAbsent(fileName, d -&gt; new HashMap&lt;&gt;());</span>
-<span class="fc" id="L105">        file.put(&quot;content&quot;, content);</span>
-<span class="fc" id="L106">        file.put(&quot;filename&quot;, newFileName);</span>
-<span class="fc" id="L107">        files.put(fileName, file);</span>
-<span class="fc" id="L108">        return this;</span>
-    }
-
-    /**
-     * Description gh gist updater.
-     *
-     * @param desc
-     *            the desc
-     * @return the gh gist updater
-     */
-    public GHGistUpdater description(String desc) {
-<span class="fc" id="L119">        builder.with(&quot;description&quot;, desc);</span>
-<span class="fc" id="L120">        return this;</span>
-    }
-
-    /**
-     * Updates the Gist based on the parameters specified thus far.
-     *
-     * @return the gh gist
-     * @throws IOException
-     *             the io exception
-     */
-    public GHGist update() throws IOException {
-<span class="fc" id="L131">        builder.with(&quot;files&quot;, files);</span>
-<span class="fc" id="L132">        return builder.method(&quot;PATCH&quot;).withUrlPath(base.getApiTailUrl(&quot;&quot;)).fetch(GHGist.class);</span>
+<span class="fc" id="L128">        Map&lt;String, String&gt; file = files.computeIfAbsent(fileName, d -&gt; new HashMap&lt;&gt;());</span>
+<span class="fc" id="L129">        file.put(&quot;content&quot;, content);</span>
+<span class="fc" id="L130">        file.put(&quot;filename&quot;, newFileName);</span>
+<span class="fc" id="L131">        files.put(fileName, file);</span>
+<span class="fc" id="L132">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -22,77 +22,21 @@ import static java.util.Objects.requireNonNull;
  */
 public class GHArtifact extends GHObject {
 
-    /**
-     * Create default GHArtifact instance
-     */
-<span class="fc" id="L28">    public GHArtifact() {</span>
-<span class="fc" id="L29">    }</span>
+    private String archiveDownloadUrl;
 
+    private boolean expired;
+
+    private String expiresAt;
+    private String name;
     // Not provided by the API.
     @JsonIgnore
     private GHRepository owner;
-
-    private String name;
     private long sizeInBytes;
-    private String archiveDownloadUrl;
-    private boolean expired;
-    private String expiresAt;
-
     /**
-     * Gets the name.
-     *
-     * @return the name
+     * Create default GHArtifact instance
      */
-    public String getName() {
-<span class="fc" id="L47">        return name;</span>
-    }
-
-    /**
-     * Gets the size of the artifact in bytes.
-     *
-     * @return the size
-     */
-    public long getSizeInBytes() {
-<span class="fc" id="L56">        return sizeInBytes;</span>
-    }
-
-    /**
-     * Gets the archive download URL.
-     *
-     * @return the archive download URL
-     */
-    public URL getArchiveDownloadUrl() {
-<span class="fc" id="L65">        return GitHubClient.parseURL(archiveDownloadUrl);</span>
-    }
-
-    /**
-     * If this artifact has expired.
-     *
-     * @return if the artifact has expired
-     */
-    public boolean isExpired() {
-<span class="fc" id="L74">        return expired;</span>
-    }
-
-    /**
-     * Gets the date at which this artifact will expire.
-     *
-     * @return the date of expiration
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
-    public Instant getExpiresAt() {
-<span class="fc" id="L84">        return GitHubClient.parseInstant(expiresAt);</span>
-    }
-
-    /**
-     * Repository to which the artifact belongs.
-     *
-     * @return the repository
-     */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHRepository getRepository() {
-<span class="fc" id="L94">        return owner;</span>
-    }
+<span class="fc" id="L38">    public GHArtifact() {</span>
+<span class="fc" id="L39">    }</span>
 
     /**
      * Deletes the artifact.
@@ -101,8 +45,8 @@ public class GHArtifact extends GHObject {
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L104">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L105">    }</span>
+<span class="fc" id="L48">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L49">    }</span>
 
     /**
      * Downloads the artifact.
@@ -116,9 +60,65 @@ public class GHArtifact extends GHObject {
      *             The IO exception.
      */
     public &lt;T&gt; T download(InputStreamFunction&lt;T&gt; streamFunction) throws IOException {
-<span class="fc" id="L119">        requireNonNull(streamFunction, &quot;Stream function must not be null&quot;);</span>
+<span class="fc" id="L63">        requireNonNull(streamFunction, &quot;Stream function must not be null&quot;);</span>
 
-<span class="fc" id="L121">        return root().createRequest().method(&quot;GET&quot;).withUrlPath(getApiRoute(), &quot;zip&quot;).fetchStream(streamFunction);</span>
+<span class="fc" id="L65">        return root().createRequest().method(&quot;GET&quot;).withUrlPath(getApiRoute(), &quot;zip&quot;).fetchStream(streamFunction);</span>
+    }
+
+    /**
+     * Gets the archive download URL.
+     *
+     * @return the archive download URL
+     */
+    public URL getArchiveDownloadUrl() {
+<span class="fc" id="L74">        return GitHubClient.parseURL(archiveDownloadUrl);</span>
+    }
+
+    /**
+     * Gets the date at which this artifact will expire.
+     *
+     * @return the date of expiration
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getExpiresAt() {
+<span class="fc" id="L84">        return GitHubClient.parseInstant(expiresAt);</span>
+    }
+
+    /**
+     * Gets the name.
+     *
+     * @return the name
+     */
+    public String getName() {
+<span class="fc" id="L93">        return name;</span>
+    }
+
+    /**
+     * Repository to which the artifact belongs.
+     *
+     * @return the repository
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHRepository getRepository() {
+<span class="fc" id="L103">        return owner;</span>
+    }
+
+    /**
+     * Gets the size of the artifact in bytes.
+     *
+     * @return the size
+     */
+    public long getSizeInBytes() {
+<span class="fc" id="L112">        return sizeInBytes;</span>
+    }
+
+    /**
+     * If this artifact has expired.
+     *
+     * @return if the artifact has expired
+     */
+    public boolean isExpired() {
+<span class="fc" id="L121">        return expired;</span>
     }
 
     private String getApiRoute() {

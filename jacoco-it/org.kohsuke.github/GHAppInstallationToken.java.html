@@ -14,55 +14,19 @@ import java.util.*;
  */
 public class GHAppInstallationToken extends GitHubInteractiveObject {
 
+    private Map&lt;String, String&gt; permissions;
+
+    private List&lt;GHRepository&gt; repositories;
+
+    private GHRepositorySelection repositorySelection;
+    private String token;
+    /** The expires at. */
+    protected String expiresAt;
     /**
      * Create default GHAppInstallationToken instance
      */
-<span class="fc" id="L20">    public GHAppInstallationToken() {</span>
-<span class="fc" id="L21">    }</span>
-
-    private String token;
-
-    /** The expires at. */
-    protected String expiresAt;
-    private Map&lt;String, String&gt; permissions;
-    private List&lt;GHRepository&gt; repositories;
-    private GHRepositorySelection repositorySelection;
-
-    /**
-     * Gets permissions.
-     *
-     * @return the permissions
-     */
-    public Map&lt;String, String&gt; getPermissions() {
-<span class="fc" id="L37">        return Collections.unmodifiableMap(permissions);</span>
-    }
-
-    /**
-     * Gets token.
-     *
-     * @return the token
-     */
-    public String getToken() {
-<span class="fc" id="L46">        return token;</span>
-    }
-
-    /**
-     * Gets repositories.
-     *
-     * @return the repositories
-     */
-    public List&lt;GHRepository&gt; getRepositories() {
-<span class="fc" id="L55">        return GitHubClient.unmodifiableListOrNull(repositories);</span>
-    }
-
-    /**
-     * Gets repository selection.
-     *
-     * @return the repository selection
-     */
-    public GHRepositorySelection getRepositorySelection() {
-<span class="fc" id="L64">        return repositorySelection;</span>
-    }
+<span class="fc" id="L28">    public GHAppInstallationToken() {</span>
+<span class="fc" id="L29">    }</span>
 
     /**
      * Gets expires at.
@@ -71,7 +35,43 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
     public Instant getExpiresAt() {
-<span class="fc" id="L74">        return GitHubClient.parseInstant(expiresAt);</span>
+<span class="fc" id="L38">        return GitHubClient.parseInstant(expiresAt);</span>
+    }
+
+    /**
+     * Gets permissions.
+     *
+     * @return the permissions
+     */
+    public Map&lt;String, String&gt; getPermissions() {
+<span class="fc" id="L47">        return Collections.unmodifiableMap(permissions);</span>
+    }
+
+    /**
+     * Gets repositories.
+     *
+     * @return the repositories
+     */
+    public List&lt;GHRepository&gt; getRepositories() {
+<span class="fc" id="L56">        return GitHubClient.unmodifiableListOrNull(repositories);</span>
+    }
+
+    /**
+     * Gets repository selection.
+     *
+     * @return the repository selection
+     */
+    public GHRepositorySelection getRepositorySelection() {
+<span class="fc" id="L65">        return repositorySelection;</span>
+    }
+
+    /**
+     * Gets token.
+     *
+     * @return the token
+     */
+    public String getToken() {
+<span class="fc" id="L74">        return token;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

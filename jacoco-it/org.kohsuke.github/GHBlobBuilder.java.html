@@ -23,19 +23,6 @@ public class GHBlobBuilder {
 <span class="fc" id="L23">    }</span>
 
     /**
-     * Configures a blob with the specified text {@code content}.
-     *
-     * @param content
-     *            string text of the blob
-     * @return a GHBlobBuilder
-     */
-    public GHBlobBuilder textContent(String content) {
-<span class="nc" id="L33">        req.with(&quot;content&quot;, content);</span>
-<span class="nc" id="L34">        req.with(&quot;encoding&quot;, &quot;utf-8&quot;);</span>
-<span class="nc" id="L35">        return this;</span>
-    }
-
-    /**
      * Configures a blob with the specified binary {@code content}.
      *
      * @param content
@@ -43,14 +30,10 @@ public class GHBlobBuilder {
      * @return a GHBlobBuilder
      */
     public GHBlobBuilder binaryContent(byte[] content) {
-<span class="fc" id="L46">        String base64Content = Base64.getEncoder().encodeToString(content);</span>
-<span class="fc" id="L47">        req.with(&quot;content&quot;, base64Content);</span>
-<span class="fc" id="L48">        req.with(&quot;encoding&quot;, &quot;base64&quot;);</span>
-<span class="fc" id="L49">        return this;</span>
-    }
-
-    private String getApiTail() {
-<span class="fc" id="L53">        return String.format(&quot;/repos/%s/%s/git/blobs&quot;, repo.getOwnerName(), repo.getName());</span>
+<span class="fc" id="L33">        String base64Content = Base64.getEncoder().encodeToString(content);</span>
+<span class="fc" id="L34">        req.with(&quot;content&quot;, base64Content);</span>
+<span class="fc" id="L35">        req.with(&quot;encoding&quot;, &quot;base64&quot;);</span>
+<span class="fc" id="L36">        return this;</span>
     }
 
     /**
@@ -61,7 +44,24 @@ public class GHBlobBuilder {
      *             if the blob cannot be created.
      */
     public GHBlob create() throws IOException {
-<span class="fc" id="L64">        return req.method(&quot;POST&quot;).withUrlPath(getApiTail()).fetch(GHBlob.class);</span>
+<span class="fc" id="L47">        return req.method(&quot;POST&quot;).withUrlPath(getApiTail()).fetch(GHBlob.class);</span>
+    }
+
+    /**
+     * Configures a blob with the specified text {@code content}.
+     *
+     * @param content
+     *            string text of the blob
+     * @return a GHBlobBuilder
+     */
+    public GHBlobBuilder textContent(String content) {
+<span class="nc" id="L58">        req.with(&quot;content&quot;, content);</span>
+<span class="nc" id="L59">        req.with(&quot;encoding&quot;, &quot;utf-8&quot;);</span>
+<span class="nc" id="L60">        return this;</span>
+    }
+
+    private String getApiTail() {
+<span class="fc" id="L64">        return String.format(&quot;/repos/%s/%s/git/blobs&quot;, repo.getOwnerName(), repo.getName());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

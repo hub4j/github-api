@@ -26,121 +26,16 @@ import java.util.Locale;
 public class GHCheckRun extends GHObject {
 
     /**
-     * Create default GHCheckRun instance
+     * The Enum AnnotationLevel.
      */
-<span class="fc" id="L31">    public GHCheckRun() {</span>
-<span class="fc" id="L32">    }</span>
+<span class="fc" id="L31">    public static enum AnnotationLevel {</span>
 
-    /** The owner. */
-    @JsonProperty(&quot;repository&quot;)
-    GHRepository owner;
-
-    private String status;
-    private String conclusion;
-    private String name;
-    private String headSha;
-    private String nodeId;
-    private String externalId;
-    private String startedAt;
-    private String completedAt;
-    private String htmlUrl;
-    private String detailsUrl;
-    private Output output;
-    private GHApp app;
-<span class="fc" id="L50">    private GHPullRequest[] pullRequests = new GHPullRequest[0];</span>
-    private GHCheckSuite checkSuite;
-
-    /**
-     * Wrap.
-     *
-     * @param owner
-     *            the owner
-     * @return the GH check run
-     */
-    GHCheckRun wrap(GHRepository owner) {
-<span class="fc" id="L61">        this.owner = owner;</span>
-<span class="fc" id="L62">        wrap(owner.root());</span>
-<span class="fc" id="L63">        return this;</span>
-    }
-
-    /**
-     * Wrap.
-     *
-     * @param root
-     *            the root
-     * @return the GH check run
-     */
-    GHCheckRun wrap(GitHub root) {
-<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        if (owner != null) {</span>
-<span class="fc bfc" id="L75" title="All 2 branches covered.">            for (GHPullRequest singlePull : pullRequests) {</span>
-<span class="fc" id="L76">                singlePull.wrap(owner);</span>
-            }
-        }
-<span class="pc bpc" id="L79" title="1 of 2 branches missed.">        if (checkSuite != null) {</span>
-<span class="pc bpc" id="L80" title="1 of 2 branches missed.">            if (owner != null) {</span>
-<span class="fc" id="L81">                checkSuite.wrap(owner);</span>
-            } else {
-<span class="nc" id="L83">                checkSuite.wrap(root);</span>
-            }
-        }
-
-<span class="fc" id="L87">        return this;</span>
-    }
-
-    /**
-     * Gets status of the check run.
-     *
-     * @return Status of the check run
-     * @see Status
-     */
-    public Status getStatus() {
-<span class="fc" id="L97">        return Status.from(status);</span>
-    }
-
-    /**
-     * The Enum Status.
-     */
-<span class="fc" id="L103">    public static enum Status {</span>
-
-        /** The queued. */
-<span class="fc" id="L106">        QUEUED,</span>
-        /** The in progress. */
-<span class="fc" id="L108">        IN_PROGRESS,</span>
-        /** The completed. */
-<span class="fc" id="L110">        COMPLETED,</span>
-        /** The unknown. */
-<span class="fc" id="L112">        UNKNOWN;</span>
-
-        /**
-         * From.
-         *
-         * @param value
-         *            the value
-         * @return the status
-         */
-        public static Status from(String value) {
-<span class="fc" id="L122">            return EnumUtils.getNullableEnumOrDefault(Status.class, value, Status.UNKNOWN);</span>
-        }
-
-        /**
-         * To string.
-         *
-         * @return the string
-         */
-        @Override
-        public String toString() {
-<span class="fc" id="L132">            return name().toLowerCase(Locale.ROOT);</span>
-        }
-    }
-
-    /**
-     * Gets conclusion of a completed check run.
-     *
-     * @return Status of the check run
-     * @see Conclusion
-     */
-    public Conclusion getConclusion() {
-<span class="fc" id="L143">        return Conclusion.from(conclusion);</span>
+        /** The failure. */
+<span class="fc" id="L34">        FAILURE,</span>
+        /** The notice. */
+<span class="fc" id="L36">        NOTICE,</span>
+        /** The warning. */
+<span class="fc" id="L38">        WARNING</span>
     }
 
     /**
@@ -149,26 +44,26 @@ public class GHCheckRun extends GHObject {
      * From &lt;a href=&quot;https://docs.github.com/en/rest/reference/checks#create-a-check-run--parameters&quot;&gt;Check Run
      * Parameters - &lt;code&gt;conclusion&lt;/code&gt;&lt;/a&gt;.
      */
-<span class="fc" id="L152">    public static enum Conclusion {</span>
+<span class="fc" id="L47">    public static enum Conclusion {</span>
 
         /** The action required. */
-<span class="fc" id="L155">        ACTION_REQUIRED,</span>
+<span class="fc" id="L50">        ACTION_REQUIRED,</span>
         /** The cancelled. */
-<span class="fc" id="L157">        CANCELLED,</span>
+<span class="fc" id="L52">        CANCELLED,</span>
         /** The failure. */
-<span class="fc" id="L159">        FAILURE,</span>
+<span class="fc" id="L54">        FAILURE,</span>
         /** The neutral. */
-<span class="fc" id="L161">        NEUTRAL,</span>
-        /** The success. */
-<span class="fc" id="L163">        SUCCESS,</span>
+<span class="fc" id="L56">        NEUTRAL,</span>
         /** The skipped. */
-<span class="fc" id="L165">        SKIPPED,</span>
+<span class="fc" id="L58">        SKIPPED,</span>
         /** The stale. */
-<span class="fc" id="L167">        STALE,</span>
+<span class="fc" id="L60">        STALE,</span>
+        /** The success. */
+<span class="fc" id="L62">        SUCCESS,</span>
         /** The timed out. */
-<span class="fc" id="L169">        TIMED_OUT,</span>
+<span class="fc" id="L64">        TIMED_OUT,</span>
         /** The unknown. */
-<span class="fc" id="L171">        UNKNOWN;</span>
+<span class="fc" id="L66">        UNKNOWN;</span>
 
         /**
          * From.
@@ -178,7 +73,7 @@ public class GHCheckRun extends GHObject {
          * @return the conclusion
          */
         public static Conclusion from(String value) {
-<span class="fc" id="L181">            return EnumUtils.getNullableEnumOrDefault(Conclusion.class, value, Conclusion.UNKNOWN);</span>
+<span class="fc" id="L76">            return EnumUtils.getNullableEnumOrDefault(Conclusion.class, value, Conclusion.UNKNOWN);</span>
         }
 
         /**
@@ -188,17 +83,192 @@ public class GHCheckRun extends GHObject {
          */
         @Override
         public String toString() {
-<span class="fc" id="L191">            return name().toLowerCase(Locale.ROOT);</span>
+<span class="fc" id="L86">            return name().toLowerCase(Locale.ROOT);</span>
         }
     }
 
     /**
-     * Gets the custom name of this check run.
+     * Represents an output in a check run to include summary and other results.
      *
-     * @return Name of the check run
+     * @see &lt;a href=&quot;https://developer.github.com/v3/checks/runs/#output-object&quot;&gt;documentation&lt;/a&gt;
      */
-    public String getName() {
-<span class="fc" id="L201">        return name;</span>
+    public static class Output {
+
+        private int annotationsCount;
+
+        private String annotationsUrl;
+        private String summary;
+        private String text;
+        private String title;
+        /**
+         * Create default Output instance
+         */
+<span class="fc" id="L106">        public Output() {</span>
+<span class="fc" id="L107">        }</span>
+
+        /**
+         * Gets the annotation count of a check run.
+         *
+         * @return annotation count of a check run
+         */
+        public int getAnnotationsCount() {
+<span class="fc" id="L115">            return annotationsCount;</span>
+        }
+
+        /**
+         * Gets the URL of annotations.
+         *
+         * @return URL of annotations
+         */
+        public URL getAnnotationsUrl() {
+<span class="fc" id="L124">            return GitHubClient.parseURL(annotationsUrl);</span>
+        }
+
+        /**
+         * Gets the summary of the check run, note that it supports Markdown.
+         *
+         * @return summary of check run
+         */
+        public String getSummary() {
+<span class="fc" id="L133">            return summary;</span>
+        }
+
+        /**
+         * Gets the details of the check run, note that it supports Markdown.
+         *
+         * @return Details of the check run
+         */
+        public String getText() {
+<span class="fc" id="L142">            return text;</span>
+        }
+
+        /**
+         * Gets the title of check run.
+         *
+         * @return title of check run
+         */
+        public String getTitle() {
+<span class="fc" id="L151">            return title;</span>
+        }
+    }
+    /**
+     * The Enum Status.
+     */
+<span class="fc" id="L157">    public static enum Status {</span>
+
+        /** The completed. */
+<span class="fc" id="L160">        COMPLETED,</span>
+        /** The in progress. */
+<span class="fc" id="L162">        IN_PROGRESS,</span>
+        /** The queued. */
+<span class="fc" id="L164">        QUEUED,</span>
+        /** The unknown. */
+<span class="fc" id="L166">        UNKNOWN;</span>
+
+        /**
+         * From.
+         *
+         * @param value
+         *            the value
+         * @return the status
+         */
+        public static Status from(String value) {
+<span class="fc" id="L176">            return EnumUtils.getNullableEnumOrDefault(Status.class, value, Status.UNKNOWN);</span>
+        }
+
+        /**
+         * To string.
+         *
+         * @return the string
+         */
+        @Override
+        public String toString() {
+<span class="fc" id="L186">            return name().toLowerCase(Locale.ROOT);</span>
+        }
+    }
+    private GHApp app;
+    private GHCheckSuite checkSuite;
+    private String completedAt;
+    private String conclusion;
+    private String detailsUrl;
+    private String externalId;
+    private String headSha;
+    private String htmlUrl;
+    private String name;
+    private String nodeId;
+    private Output output;
+<span class="fc" id="L200">    private GHPullRequest[] pullRequests = new GHPullRequest[0];</span>
+
+    private String startedAt;
+
+    private String status;
+
+    /** The owner. */
+    @JsonProperty(&quot;repository&quot;)
+    GHRepository owner;
+
+    /**
+     * Create default GHCheckRun instance
+     */
+<span class="fc" id="L213">    public GHCheckRun() {</span>
+<span class="fc" id="L214">    }</span>
+
+    /**
+     * Gets the GitHub app this check run belongs to, included in response.
+     *
+     * @return GitHub App
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
+    public GHApp getApp() {
+<span class="fc" id="L223">        return app;</span>
+    }
+
+    /**
+     * Gets the check suite this check run belongs to.
+     *
+     * @return Check suite
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
+    public GHCheckSuite getCheckSuite() {
+<span class="fc" id="L233">        return checkSuite;</span>
+    }
+
+    /**
+     * Gets the completed time of the check run in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
+     *
+     * @return Timestamp of the completed time
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getCompletedAt() {
+<span class="fc" id="L243">        return GitHubClient.parseInstant(completedAt);</span>
+    }
+
+    /**
+     * Gets conclusion of a completed check run.
+     *
+     * @return Status of the check run
+     * @see Conclusion
+     */
+    public Conclusion getConclusion() {
+<span class="fc" id="L253">        return Conclusion.from(conclusion);</span>
+    }
+
+    /**
+     * Gets the details URL from which to find full details of the check run on the integrator's site.
+     *
+     * @return Details URL
+     */
+    public URL getDetailsUrl() {
+<span class="fc" id="L262">        return GitHubClient.parseURL(detailsUrl);</span>
+    }
+
+    /**
+     * Gets a reference for the check run on the integrator's system.
+     *
+     * @return Reference id
+     */
+    public String getExternalId() {
+<span class="fc" id="L271">        return externalId;</span>
     }
 
     /**
@@ -207,7 +277,46 @@ public class GHCheckRun extends GHObject {
      * @return sha for the HEAD commit
      */
     public String getHeadSha() {
-<span class="fc" id="L210">        return headSha;</span>
+<span class="fc" id="L280">        return headSha;</span>
+    }
+
+    /**
+     * Gets the HTML URL: https://github.com/[owner]/[repo-name]/runs/[check-run-id], usually an GitHub Action page of
+     * the check run.
+     *
+     * @return HTML URL
+     */
+    public URL getHtmlUrl() {
+<span class="fc" id="L290">        return GitHubClient.parseURL(htmlUrl);</span>
+    }
+
+    /**
+     * Gets the custom name of this check run.
+     *
+     * @return Name of the check run
+     */
+    public String getName() {
+<span class="fc" id="L299">        return name;</span>
+    }
+
+    /**
+     * Gets the global node id to access most objects in GitHub.
+     *
+     * @return Global node id
+     * @see &lt;a href=&quot;https://developer.github.com/v4/guides/using-global-node-ids/&quot;&gt;documentation&lt;/a&gt;
+     */
+    public String getNodeId() {
+<span class="fc" id="L309">        return nodeId;</span>
+    }
+
+    /**
+     * Gets an output for a check run.
+     *
+     * @return Output of a check run
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
+    public Output getOutput() {
+<span class="fc" id="L319">        return output;</span>
     }
 
     /**
@@ -221,49 +330,11 @@ public class GHCheckRun extends GHObject {
      *             the io exception
      */
     public List&lt;GHPullRequest&gt; getPullRequests() throws IOException {
-<span class="fc bfc" id="L224" title="All 2 branches covered.">        for (GHPullRequest singlePull : pullRequests) {</span>
+<span class="fc bfc" id="L333" title="All 2 branches covered.">        for (GHPullRequest singlePull : pullRequests) {</span>
             // Only refresh if we haven't do so before
-<span class="fc" id="L226">            singlePull.refresh(singlePull.getTitle());</span>
+<span class="fc" id="L335">            singlePull.refresh(singlePull.getTitle());</span>
         }
-<span class="fc" id="L228">        return Collections.unmodifiableList(Arrays.asList(pullRequests));</span>
-    }
-
-    /**
-     * Gets the HTML URL: https://github.com/[owner]/[repo-name]/runs/[check-run-id], usually an GitHub Action page of
-     * the check run.
-     *
-     * @return HTML URL
-     */
-    public URL getHtmlUrl() {
-<span class="fc" id="L238">        return GitHubClient.parseURL(htmlUrl);</span>
-    }
-
-    /**
-     * Gets the global node id to access most objects in GitHub.
-     *
-     * @return Global node id
-     * @see &lt;a href=&quot;https://developer.github.com/v4/guides/using-global-node-ids/&quot;&gt;documentation&lt;/a&gt;
-     */
-    public String getNodeId() {
-<span class="fc" id="L248">        return nodeId;</span>
-    }
-
-    /**
-     * Gets a reference for the check run on the integrator's system.
-     *
-     * @return Reference id
-     */
-    public String getExternalId() {
-<span class="fc" id="L257">        return externalId;</span>
-    }
-
-    /**
-     * Gets the details URL from which to find full details of the check run on the integrator's site.
-     *
-     * @return Details URL
-     */
-    public URL getDetailsUrl() {
-<span class="fc" id="L266">        return GitHubClient.parseURL(detailsUrl);</span>
+<span class="fc" id="L337">        return Collections.unmodifiableList(Arrays.asList(pullRequests));</span>
     }
 
     /**
@@ -273,125 +344,17 @@ public class GHCheckRun extends GHObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
     public Instant getStartedAt() {
-<span class="fc" id="L276">        return GitHubClient.parseInstant(startedAt);</span>
+<span class="fc" id="L347">        return GitHubClient.parseInstant(startedAt);</span>
     }
 
     /**
-     * Gets the completed time of the check run in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
+     * Gets status of the check run.
      *
-     * @return Timestamp of the completed time
+     * @return Status of the check run
+     * @see Status
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
-    public Instant getCompletedAt() {
-<span class="fc" id="L286">        return GitHubClient.parseInstant(completedAt);</span>
-    }
-
-    /**
-     * Gets the GitHub app this check run belongs to, included in response.
-     *
-     * @return GitHub App
-     */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
-    public GHApp getApp() {
-<span class="fc" id="L296">        return app;</span>
-    }
-
-    /**
-     * Gets the check suite this check run belongs to.
-     *
-     * @return Check suite
-     */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
-    public GHCheckSuite getCheckSuite() {
-<span class="fc" id="L306">        return checkSuite;</span>
-    }
-
-    /**
-     * Gets an output for a check run.
-     *
-     * @return Output of a check run
-     */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
-    public Output getOutput() {
-<span class="fc" id="L316">        return output;</span>
-    }
-
-    /**
-     * Represents an output in a check run to include summary and other results.
-     *
-     * @see &lt;a href=&quot;https://developer.github.com/v3/checks/runs/#output-object&quot;&gt;documentation&lt;/a&gt;
-     */
-    public static class Output {
-
-        /**
-         * Create default Output instance
-         */
-<span class="fc" id="L329">        public Output() {</span>
-<span class="fc" id="L330">        }</span>
-
-        private String title;
-        private String summary;
-        private String text;
-        private int annotationsCount;
-        private String annotationsUrl;
-
-        /**
-         * Gets the title of check run.
-         *
-         * @return title of check run
-         */
-        public String getTitle() {
-<span class="fc" id="L344">            return title;</span>
-        }
-
-        /**
-         * Gets the summary of the check run, note that it supports Markdown.
-         *
-         * @return summary of check run
-         */
-        public String getSummary() {
-<span class="fc" id="L353">            return summary;</span>
-        }
-
-        /**
-         * Gets the details of the check run, note that it supports Markdown.
-         *
-         * @return Details of the check run
-         */
-        public String getText() {
-<span class="fc" id="L362">            return text;</span>
-        }
-
-        /**
-         * Gets the annotation count of a check run.
-         *
-         * @return annotation count of a check run
-         */
-        public int getAnnotationsCount() {
-<span class="fc" id="L371">            return annotationsCount;</span>
-        }
-
-        /**
-         * Gets the URL of annotations.
-         *
-         * @return URL of annotations
-         */
-        public URL getAnnotationsUrl() {
-<span class="fc" id="L380">            return GitHubClient.parseURL(annotationsUrl);</span>
-        }
-    }
-
-    /**
-     * The Enum AnnotationLevel.
-     */
-<span class="fc" id="L387">    public static enum AnnotationLevel {</span>
-
-        /** The notice. */
-<span class="fc" id="L390">        NOTICE,</span>
-        /** The warning. */
-<span class="fc" id="L392">        WARNING,</span>
-        /** The failure. */
-<span class="fc" id="L394">        FAILURE</span>
+    public Status getStatus() {
+<span class="fc" id="L357">        return Status.from(status);</span>
     }
 
     /**
@@ -400,7 +363,44 @@ public class GHCheckRun extends GHObject {
      * @return a builder which you should customize, then call {@link GHCheckRunBuilder#create}
      */
     public @NonNull GHCheckRunBuilder update() {
-<span class="fc" id="L403">        return new GHCheckRunBuilder(owner, getId());</span>
+<span class="fc" id="L366">        return new GHCheckRunBuilder(owner, getId());</span>
+    }
+
+    /**
+     * Wrap.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH check run
+     */
+    GHCheckRun wrap(GHRepository owner) {
+<span class="fc" id="L377">        this.owner = owner;</span>
+<span class="fc" id="L378">        wrap(owner.root());</span>
+<span class="fc" id="L379">        return this;</span>
+    }
+
+    /**
+     * Wrap.
+     *
+     * @param root
+     *            the root
+     * @return the GH check run
+     */
+    GHCheckRun wrap(GitHub root) {
+<span class="pc bpc" id="L390" title="1 of 2 branches missed.">        if (owner != null) {</span>
+<span class="fc bfc" id="L391" title="All 2 branches covered.">            for (GHPullRequest singlePull : pullRequests) {</span>
+<span class="fc" id="L392">                singlePull.wrap(owner);</span>
+            }
+        }
+<span class="pc bpc" id="L395" title="1 of 2 branches missed.">        if (checkSuite != null) {</span>
+<span class="pc bpc" id="L396" title="1 of 2 branches missed.">            if (owner != null) {</span>
+<span class="fc" id="L397">                checkSuite.wrap(owner);</span>
+            } else {
+<span class="nc" id="L399">                checkSuite.wrap(root);</span>
+            }
+        }
+
+<span class="fc" id="L403">        return this;</span>
     }
 
 }

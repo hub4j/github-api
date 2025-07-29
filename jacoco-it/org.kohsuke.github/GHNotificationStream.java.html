@@ -26,10 +26,12 @@ import java.util.NoSuchElementException;
  * @see GHRepository#listNotifications() GHRepository#listNotifications()
  */
 public class GHNotificationStream extends GitHubInteractiveObject implements Iterable&lt;GHThread&gt; {
+<span class="fc" id="L29">    private static final GHThread[] EMPTY_ARRAY = new GHThread[0];</span>
     private Boolean all, participating;
-    private String since;
     private String apiUrl;
 <span class="fc" id="L32">    private boolean nonBlocking = false;</span>
+
+    private String since;
 
     /**
      * Instantiates a new GH notification stream.
@@ -40,20 +42,165 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
      *            the api url
      */
     GHNotificationStream(GitHub root, String apiUrl) {
-<span class="fc" id="L43">        super(root);</span>
-<span class="fc" id="L44">        this.apiUrl = apiUrl;</span>
-<span class="fc" id="L45">    }</span>
+<span class="fc" id="L45">        super(root);</span>
+<span class="fc" id="L46">        this.apiUrl = apiUrl;</span>
+<span class="fc" id="L47">    }</span>
 
     /**
-     * Should the stream include notifications that are already read?.
+     * Returns an infinite blocking {@link Iterator} that returns {@link GHThread} as notifications arrive.
+     *
+     * @return the iterator
+     */
+    public Iterator&lt;GHThread&gt; iterator() {
+        // capture the configuration setting here
+<span class="fc" id="L56">        final Requester req = root().createRequest()</span>
+<span class="fc" id="L57">                .with(&quot;all&quot;, all)</span>
+<span class="fc" id="L58">                .with(&quot;participating&quot;, participating)</span>
+<span class="fc" id="L59">                .with(&quot;since&quot;, since);</span>
+
+<span class="fc" id="L61">        return new Iterator&lt;GHThread&gt;() {</span>
+            /**
+             * Next element in {@link #threads} to return. This counts down.
+             */
+<span class="fc" id="L65">            private int idx = -1;</span>
+
+            /**
+             * Next request should have &quot;If-Modified-Since&quot; header with this value.
+             */
+            private String lastModified;
+
+            /**
+             * threads whose updated_at is older than this should be ignored.
+             */
+<span class="fc" id="L75">            private long lastUpdated = -1;</span>
+
+            private GHThread next;
+
+            /**
+             * When is the next polling allowed?
+             */
+<span class="fc" id="L82">            private long nextCheckTime = -1;</span>
+
+            /**
+             * Stuff we've fetched but haven't returned to the caller. Newer ones first.
+             */
+<span class="fc" id="L87">            private GHThread[] threads = EMPTY_ARRAY;</span>
+
+            public boolean hasNext() {
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">                if (next == null)</span>
+<span class="fc" id="L91">                    next = fetch();</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">                return next != null;</span>
+            }
+
+            public GHThread next() {
+<span class="fc bfc" id="L96" title="All 2 branches covered.">                if (next == null) {</span>
+<span class="fc" id="L97">                    next = fetch();</span>
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">                    if (next == null)</span>
+<span class="nc" id="L99">                        throw new NoSuchElementException();</span>
+                }
+
+<span class="fc" id="L102">                GHThread r = next;</span>
+<span class="fc" id="L103">                next = null;</span>
+<span class="fc" id="L104">                return r;</span>
+            }
+
+            private long calcNextCheckTime(GitHubResponse&lt;GHThread[]&gt; response) {
+<span class="fc" id="L108">                String v = response.header(&quot;X-Poll-Interval&quot;);</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">                if (v == null)</span>
+<span class="nc" id="L110">                    v = &quot;60&quot;;</span>
+<span class="fc" id="L111">                long seconds = Integer.parseInt(v);</span>
+<span class="fc" id="L112">                return System.currentTimeMillis() + seconds * 1000;</span>
+            }
+
+            GHThread fetch() {
+                try {
+                    while (true) {// loop until we get new threads to return
+
+                        // if we have fetched un-returned threads, use them first
+<span class="fc bfc" id="L120" title="All 2 branches covered.">                        while (idx &gt;= 0) {</span>
+<span class="fc" id="L121">                            GHThread n = threads[idx--];</span>
+<span class="fc" id="L122">                            long nt = n.getUpdatedAt().toEpochMilli();</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">                            if (nt &gt;= lastUpdated) {</span>
+<span class="fc" id="L124">                                lastUpdated = nt;</span>
+<span class="fc" id="L125">                                return n;</span>
+                            }
+<span class="fc" id="L127">                        }</span>
+
+<span class="fc bfc" id="L129" title="All 4 branches covered.">                        if (nonBlocking &amp;&amp; nextCheckTime &gt;= 0)</span>
+<span class="fc" id="L130">                            return null; // nothing more to report, and we aren't blocking</span>
+
+                        // observe the polling interval before making the call
+                        while (true) {
+<span class="fc" id="L134">                            long now = System.currentTimeMillis();</span>
+<span class="pc bpc" id="L135" title="1 of 2 branches missed.">                            if (nextCheckTime &lt; now)</span>
+<span class="fc" id="L136">                                break;</span>
+<span class="nc" id="L137">                            long waitTime = Math.min(Math.max(nextCheckTime - now, 1000), 60 * 1000);</span>
+<span class="nc" id="L138">                            Thread.sleep(waitTime);</span>
+<span class="nc" id="L139">                        }</span>
+
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">                        if (lastModified != null) {</span>
+<span class="nc" id="L142">                            req.setHeader(&quot;If-Modified-Since&quot;, lastModified);</span>
+                        }
+
+<span class="fc" id="L145">                        Requester requester = req.withUrlPath(apiUrl);</span>
+<span class="fc" id="L146">                        GitHubResponse&lt;GHThread[]&gt; response = ((GitHubPageContentsIterable&lt;GHThread&gt;) requester</span>
+<span class="fc" id="L147">                                .toIterable(GHThread[].class, null)).toResponse();</span>
+<span class="fc" id="L148">                        threads = response.body();</span>
+
+<span class="pc bpc" id="L150" title="1 of 2 branches missed.">                        if (threads == null) {</span>
+<span class="nc" id="L151">                            threads = EMPTY_ARRAY; // if unmodified, we get empty array</span>
+                        } else {
+                            // we get a new batch, but we want to ignore the ones that we've seen
+<span class="fc" id="L154">                            lastUpdated++;</span>
+                        }
+<span class="fc" id="L156">                        idx = threads.length - 1;</span>
+
+<span class="fc" id="L158">                        nextCheckTime = calcNextCheckTime(response);</span>
+<span class="fc" id="L159">                        lastModified = response.header(&quot;Last-Modified&quot;);</span>
+<span class="fc" id="L160">                    }</span>
+<span class="nc" id="L161">                } catch (IOException | InterruptedException e) {</span>
+<span class="nc" id="L162">                    throw new RuntimeException(e);</span>
+                }
+            }
+        };
+    }
+
+    /**
+     * Mark as read.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void markAsRead() throws IOException {
+<span class="fc" id="L175">        markAsRead(-1);</span>
+<span class="fc" id="L176">    }</span>
+
+    /**
+     * Marks all the notifications as read.
+     *
+     * @param timestamp
+     *            the timestamp
+     * @throws IOException
+     *             the io exception
+     */
+    public void markAsRead(long timestamp) throws IOException {
+<span class="fc" id="L187">        final Requester req = root().createRequest();</span>
+<span class="pc bpc" id="L188" title="1 of 2 branches missed.">        if (timestamp &gt;= 0)</span>
+<span class="nc" id="L189">            req.with(&quot;last_read_at&quot;, GitHubClient.printInstant(Instant.ofEpochMilli(timestamp)));</span>
+<span class="fc" id="L190">        req.withUrlPath(apiUrl).fetchHttpStatusCode();</span>
+<span class="fc" id="L191">    }</span>
+
+    /**
+     * If set to true, {@link #iterator()} will stop iterating instead of blocking and waiting for the updates to
+     * arrive.
      *
      * @param v
      *            the v
      * @return the gh notification stream
      */
-    public GHNotificationStream read(boolean v) {
-<span class="fc" id="L55">        all = v;</span>
-<span class="fc" id="L56">        return this;</span>
+    public GHNotificationStream nonBlocking(boolean v) {
+<span class="fc" id="L202">        this.nonBlocking = v;</span>
+<span class="fc" id="L203">        return this;</span>
     }
 
     /**
@@ -64,19 +211,20 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
      * @return the gh notification stream
      */
     public GHNotificationStream participating(boolean v) {
-<span class="nc" id="L67">        participating = v;</span>
-<span class="nc" id="L68">        return this;</span>
+<span class="nc" id="L214">        participating = v;</span>
+<span class="nc" id="L215">        return this;</span>
     }
 
     /**
-     * Since gh notification stream.
+     * Should the stream include notifications that are already read?.
      *
-     * @param timestamp
-     *            the timestamp
+     * @param v
+     *            the v
      * @return the gh notification stream
      */
-    public GHNotificationStream since(long timestamp) {
-<span class="fc" id="L79">        return since(new Date(timestamp));</span>
+    public GHNotificationStream read(boolean v) {
+<span class="fc" id="L226">        all = v;</span>
+<span class="fc" id="L227">        return this;</span>
     }
 
     /**
@@ -89,7 +237,7 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
      */
     @Deprecated
     public GHNotificationStream since(Date dt) {
-<span class="fc" id="L92">        return since(GitHubClient.toInstantOrNull(dt));</span>
+<span class="fc" id="L240">        return since(GitHubClient.toInstantOrNull(dt));</span>
     }
 
     /**
@@ -100,167 +248,19 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
      * @return the gh notification stream
      */
     public GHNotificationStream since(Instant dt) {
-<span class="fc" id="L103">        since = GitHubClient.printInstant(dt);</span>
-<span class="fc" id="L104">        return this;</span>
+<span class="fc" id="L251">        since = GitHubClient.printInstant(dt);</span>
+<span class="fc" id="L252">        return this;</span>
     }
 
     /**
-     * If set to true, {@link #iterator()} will stop iterating instead of blocking and waiting for the updates to
-     * arrive.
-     *
-     * @param v
-     *            the v
-     * @return the gh notification stream
-     */
-    public GHNotificationStream nonBlocking(boolean v) {
-<span class="fc" id="L116">        this.nonBlocking = v;</span>
-<span class="fc" id="L117">        return this;</span>
-    }
-
-    /**
-     * Returns an infinite blocking {@link Iterator} that returns {@link GHThread} as notifications arrive.
-     *
-     * @return the iterator
-     */
-    public Iterator&lt;GHThread&gt; iterator() {
-        // capture the configuration setting here
-<span class="fc" id="L127">        final Requester req = root().createRequest()</span>
-<span class="fc" id="L128">                .with(&quot;all&quot;, all)</span>
-<span class="fc" id="L129">                .with(&quot;participating&quot;, participating)</span>
-<span class="fc" id="L130">                .with(&quot;since&quot;, since);</span>
-
-<span class="fc" id="L132">        return new Iterator&lt;GHThread&gt;() {</span>
-            /**
-             * Stuff we've fetched but haven't returned to the caller. Newer ones first.
-             */
-<span class="fc" id="L136">            private GHThread[] threads = EMPTY_ARRAY;</span>
-
-            /**
-             * Next element in {@link #threads} to return. This counts down.
-             */
-<span class="fc" id="L141">            private int idx = -1;</span>
-
-            /**
-             * threads whose updated_at is older than this should be ignored.
-             */
-<span class="fc" id="L146">            private long lastUpdated = -1;</span>
-
-            /**
-             * Next request should have &quot;If-Modified-Since&quot; header with this value.
-             */
-            private String lastModified;
-
-            /**
-             * When is the next polling allowed?
-             */
-<span class="fc" id="L156">            private long nextCheckTime = -1;</span>
-
-            private GHThread next;
-
-            public GHThread next() {
-<span class="fc bfc" id="L161" title="All 2 branches covered.">                if (next == null) {</span>
-<span class="fc" id="L162">                    next = fetch();</span>
-<span class="pc bpc" id="L163" title="1 of 2 branches missed.">                    if (next == null)</span>
-<span class="nc" id="L164">                        throw new NoSuchElementException();</span>
-                }
-
-<span class="fc" id="L167">                GHThread r = next;</span>
-<span class="fc" id="L168">                next = null;</span>
-<span class="fc" id="L169">                return r;</span>
-            }
-
-            public boolean hasNext() {
-<span class="pc bpc" id="L173" title="1 of 2 branches missed.">                if (next == null)</span>
-<span class="fc" id="L174">                    next = fetch();</span>
-<span class="fc bfc" id="L175" title="All 2 branches covered.">                return next != null;</span>
-            }
-
-            GHThread fetch() {
-                try {
-                    while (true) {// loop until we get new threads to return
-
-                        // if we have fetched un-returned threads, use them first
-<span class="fc bfc" id="L183" title="All 2 branches covered.">                        while (idx &gt;= 0) {</span>
-<span class="fc" id="L184">                            GHThread n = threads[idx--];</span>
-<span class="fc" id="L185">                            long nt = n.getUpdatedAt().toEpochMilli();</span>
-<span class="fc bfc" id="L186" title="All 2 branches covered.">                            if (nt &gt;= lastUpdated) {</span>
-<span class="fc" id="L187">                                lastUpdated = nt;</span>
-<span class="fc" id="L188">                                return n;</span>
-                            }
-<span class="fc" id="L190">                        }</span>
-
-<span class="fc bfc" id="L192" title="All 4 branches covered.">                        if (nonBlocking &amp;&amp; nextCheckTime &gt;= 0)</span>
-<span class="fc" id="L193">                            return null; // nothing more to report, and we aren't blocking</span>
-
-                        // observe the polling interval before making the call
-                        while (true) {
-<span class="fc" id="L197">                            long now = System.currentTimeMillis();</span>
-<span class="pc bpc" id="L198" title="1 of 2 branches missed.">                            if (nextCheckTime &lt; now)</span>
-<span class="fc" id="L199">                                break;</span>
-<span class="nc" id="L200">                            long waitTime = Math.min(Math.max(nextCheckTime - now, 1000), 60 * 1000);</span>
-<span class="nc" id="L201">                            Thread.sleep(waitTime);</span>
-<span class="nc" id="L202">                        }</span>
-
-<span class="pc bpc" id="L204" title="1 of 2 branches missed.">                        if (lastModified != null) {</span>
-<span class="nc" id="L205">                            req.setHeader(&quot;If-Modified-Since&quot;, lastModified);</span>
-                        }
-
-<span class="fc" id="L208">                        Requester requester = req.withUrlPath(apiUrl);</span>
-<span class="fc" id="L209">                        GitHubResponse&lt;GHThread[]&gt; response = ((GitHubPageContentsIterable&lt;GHThread&gt;) requester</span>
-<span class="fc" id="L210">                                .toIterable(GHThread[].class, null)).toResponse();</span>
-<span class="fc" id="L211">                        threads = response.body();</span>
-
-<span class="pc bpc" id="L213" title="1 of 2 branches missed.">                        if (threads == null) {</span>
-<span class="nc" id="L214">                            threads = EMPTY_ARRAY; // if unmodified, we get empty array</span>
-                        } else {
-                            // we get a new batch, but we want to ignore the ones that we've seen
-<span class="fc" id="L217">                            lastUpdated++;</span>
-                        }
-<span class="fc" id="L219">                        idx = threads.length - 1;</span>
-
-<span class="fc" id="L221">                        nextCheckTime = calcNextCheckTime(response);</span>
-<span class="fc" id="L222">                        lastModified = response.header(&quot;Last-Modified&quot;);</span>
-<span class="fc" id="L223">                    }</span>
-<span class="nc" id="L224">                } catch (IOException | InterruptedException e) {</span>
-<span class="nc" id="L225">                    throw new RuntimeException(e);</span>
-                }
-            }
-
-            private long calcNextCheckTime(GitHubResponse&lt;GHThread[]&gt; response) {
-<span class="fc" id="L230">                String v = response.header(&quot;X-Poll-Interval&quot;);</span>
-<span class="pc bpc" id="L231" title="1 of 2 branches missed.">                if (v == null)</span>
-<span class="nc" id="L232">                    v = &quot;60&quot;;</span>
-<span class="fc" id="L233">                long seconds = Integer.parseInt(v);</span>
-<span class="fc" id="L234">                return System.currentTimeMillis() + seconds * 1000;</span>
-            }
-        };
-    }
-
-    /**
-     * Mark as read.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void markAsRead() throws IOException {
-<span class="fc" id="L246">        markAsRead(-1);</span>
-<span class="fc" id="L247">    }</span>
-
-    /**
-     * Marks all the notifications as read.
+     * Since gh notification stream.
      *
      * @param timestamp
      *            the timestamp
-     * @throws IOException
-     *             the io exception
+     * @return the gh notification stream
      */
-    public void markAsRead(long timestamp) throws IOException {
-<span class="fc" id="L258">        final Requester req = root().createRequest();</span>
-<span class="pc bpc" id="L259" title="1 of 2 branches missed.">        if (timestamp &gt;= 0)</span>
-<span class="nc" id="L260">            req.with(&quot;last_read_at&quot;, GitHubClient.printInstant(Instant.ofEpochMilli(timestamp)));</span>
-<span class="fc" id="L261">        req.withUrlPath(apiUrl).fetchHttpStatusCode();</span>
-<span class="fc" id="L262">    }</span>
-
-<span class="fc" id="L264">    private static final GHThread[] EMPTY_ARRAY = new GHThread[0];</span>
+    public GHNotificationStream since(long timestamp) {
+<span class="fc" id="L263">        return since(new Date(timestamp));</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -26,78 +26,6 @@ import javax.annotation.Nonnull;
  * @author Liam Newman
  */
 public class OkHttpGitHubConnector implements GitHubConnector {
-    private static final String HEADER_NAME = &quot;Cache-Control&quot;;
-    private final String maxAgeHeaderValue;
-
-    private final OkHttpClient client;
-
-    /**
-     * Instantiates a new Ok http connector.
-     *
-     * @param client
-     *            the client
-     */
-    public OkHttpGitHubConnector(OkHttpClient client) {
-<span class="fc" id="L41">        this(client, 0);</span>
-<span class="fc" id="L42">    }</span>
-
-    /**
-     * Instantiates a new Ok http connector.
-     *
-     * @param client
-     *            the client
-     * @param cacheMaxAge
-     *            the cache max age
-     */
-<span class="fc" id="L52">    public OkHttpGitHubConnector(OkHttpClient client, int cacheMaxAge) {</span>
-
-<span class="fc" id="L54">        OkHttpClient.Builder builder = client.newBuilder();</span>
-
-<span class="fc" id="L56">        builder.connectionSpecs(TlsConnectionSpecs());</span>
-<span class="fc" id="L57">        this.client = builder.build();</span>
-<span class="pc bpc" id="L58" title="1 of 6 branches missed.">        if (cacheMaxAge &gt;= 0 &amp;&amp; this.client != null &amp;&amp; this.client.cache() != null) {</span>
-<span class="fc" id="L59">            maxAgeHeaderValue = new CacheControl.Builder().maxAge(cacheMaxAge, TimeUnit.SECONDS).build().toString();</span>
-        } else {
-<span class="fc" id="L61">            maxAgeHeaderValue = null;</span>
-        }
-<span class="fc" id="L63">    }</span>
-
-    @Override
-    public GitHubConnectorResponse send(GitHubConnectorRequest request) throws IOException {
-<span class="fc" id="L67">        Request.Builder builder = new Request.Builder().url(request.url());</span>
-<span class="fc bfc" id="L68" title="All 4 branches covered.">        if (maxAgeHeaderValue != null &amp;&amp; request.header(HEADER_NAME) == null) {</span>
-            // By default OkHttp honors max-age, meaning it will use local cache
-            // without checking the network within that timeframe.
-            // However, that can result in stale data being returned during that time so
-            // we force network-based checking no matter how often the query is made.
-            // OkHttp still automatically does ETag checking and returns cached data when
-            // GitHub reports 304, but those do not count against rate limit.
-<span class="fc" id="L75">            builder.header(HEADER_NAME, maxAgeHeaderValue);</span>
-        }
-
-<span class="fc bfc" id="L78" title="All 2 branches covered.">        for (Map.Entry&lt;String, List&lt;String&gt;&gt; e : request.allHeaders().entrySet()) {</span>
-<span class="fc" id="L79">            List&lt;String&gt; v = e.getValue();</span>
-<span class="pc bpc" id="L80" title="1 of 2 branches missed.">            if (v != null) {</span>
-<span class="fc" id="L81">                builder.addHeader(e.getKey(), String.join(&quot;, &quot;, v));</span>
-            }
-<span class="fc" id="L83">        }</span>
-
-<span class="fc" id="L85">        RequestBody body = null;</span>
-<span class="fc bfc" id="L86" title="All 2 branches covered.">        if (request.hasBody()) {</span>
-<span class="fc" id="L87">            body = RequestBody.create(IOUtils.toByteArray(request.body()));</span>
-        }
-<span class="fc" id="L89">        builder.method(request.method(), body);</span>
-<span class="fc" id="L90">        Request okhttpRequest = builder.build();</span>
-<span class="fc" id="L91">        Response okhttpResponse = client.newCall(okhttpRequest).execute();</span>
-
-<span class="fc" id="L93">        return new OkHttpGitHubConnectorResponse(request, okhttpResponse);</span>
-    }
-
-    /** Returns connection spec with TLS v1.2 in it */
-    private List&lt;ConnectionSpec&gt; TlsConnectionSpecs() {
-<span class="fc" id="L98">        return Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.CLEARTEXT);</span>
-    }
-
     /**
      * Initial response information when a response is initially received and before the body is processed.
      *
@@ -109,26 +37,98 @@ public class OkHttpGitHubConnector implements GitHubConnector {
         private final Response response;
 
         OkHttpGitHubConnectorResponse(@Nonnull GitHubConnectorRequest request, @Nonnull Response response) {
-<span class="fc" id="L112">            super(request, response.code(), response.headers().toMultimap());</span>
-<span class="fc" id="L113">            this.response = response;</span>
-<span class="fc" id="L114">        }</span>
+<span class="fc" id="L40">            super(request, response.code(), response.headers().toMultimap());</span>
+<span class="fc" id="L41">            this.response = response;</span>
+<span class="fc" id="L42">        }</span>
+
+        @Override
+        public void close() throws IOException {
+<span class="fc" id="L46">            super.close();</span>
+<span class="fc" id="L47">            response.close();</span>
+<span class="fc" id="L48">        }</span>
 
         @CheckForNull
         @Override
         protected InputStream rawBodyStream() throws IOException {
-<span class="fc" id="L119">            ResponseBody body = response.body();</span>
-<span class="pc bpc" id="L120" title="1 of 2 branches missed.">            if (body != null) {</span>
-<span class="fc" id="L121">                return body.byteStream();</span>
+<span class="fc" id="L53">            ResponseBody body = response.body();</span>
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">            if (body != null) {</span>
+<span class="fc" id="L55">                return body.byteStream();</span>
             } else {
-<span class="nc" id="L123">                return null;</span>
+<span class="nc" id="L57">                return null;</span>
             }
         }
+    }
+    private static final String HEADER_NAME = &quot;Cache-Control&quot;;
 
-        @Override
-        public void close() throws IOException {
-<span class="fc" id="L129">            super.close();</span>
-<span class="fc" id="L130">            response.close();</span>
-<span class="fc" id="L131">        }</span>
+    private final OkHttpClient client;
+
+    private final String maxAgeHeaderValue;
+
+    /**
+     * Instantiates a new Ok http connector.
+     *
+     * @param client
+     *            the client
+     */
+    public OkHttpGitHubConnector(OkHttpClient client) {
+<span class="fc" id="L74">        this(client, 0);</span>
+<span class="fc" id="L75">    }</span>
+
+    /**
+     * Instantiates a new Ok http connector.
+     *
+     * @param client
+     *            the client
+     * @param cacheMaxAge
+     *            the cache max age
+     */
+<span class="fc" id="L85">    public OkHttpGitHubConnector(OkHttpClient client, int cacheMaxAge) {</span>
+
+<span class="fc" id="L87">        OkHttpClient.Builder builder = client.newBuilder();</span>
+
+<span class="fc" id="L89">        builder.connectionSpecs(TlsConnectionSpecs());</span>
+<span class="fc" id="L90">        this.client = builder.build();</span>
+<span class="pc bpc" id="L91" title="1 of 6 branches missed.">        if (cacheMaxAge &gt;= 0 &amp;&amp; this.client != null &amp;&amp; this.client.cache() != null) {</span>
+<span class="fc" id="L92">            maxAgeHeaderValue = new CacheControl.Builder().maxAge(cacheMaxAge, TimeUnit.SECONDS).build().toString();</span>
+        } else {
+<span class="fc" id="L94">            maxAgeHeaderValue = null;</span>
+        }
+<span class="fc" id="L96">    }</span>
+
+    @Override
+    public GitHubConnectorResponse send(GitHubConnectorRequest request) throws IOException {
+<span class="fc" id="L100">        Request.Builder builder = new Request.Builder().url(request.url());</span>
+<span class="fc bfc" id="L101" title="All 4 branches covered.">        if (maxAgeHeaderValue != null &amp;&amp; request.header(HEADER_NAME) == null) {</span>
+            // By default OkHttp honors max-age, meaning it will use local cache
+            // without checking the network within that timeframe.
+            // However, that can result in stale data being returned during that time so
+            // we force network-based checking no matter how often the query is made.
+            // OkHttp still automatically does ETag checking and returns cached data when
+            // GitHub reports 304, but those do not count against rate limit.
+<span class="fc" id="L108">            builder.header(HEADER_NAME, maxAgeHeaderValue);</span>
+        }
+
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        for (Map.Entry&lt;String, List&lt;String&gt;&gt; e : request.allHeaders().entrySet()) {</span>
+<span class="fc" id="L112">            List&lt;String&gt; v = e.getValue();</span>
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">            if (v != null) {</span>
+<span class="fc" id="L114">                builder.addHeader(e.getKey(), String.join(&quot;, &quot;, v));</span>
+            }
+<span class="fc" id="L116">        }</span>
+
+<span class="fc" id="L118">        RequestBody body = null;</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">        if (request.hasBody()) {</span>
+<span class="fc" id="L120">            body = RequestBody.create(IOUtils.toByteArray(request.body()));</span>
+        }
+<span class="fc" id="L122">        builder.method(request.method(), body);</span>
+<span class="fc" id="L123">        Request okhttpRequest = builder.build();</span>
+<span class="fc" id="L124">        Response okhttpResponse = client.newCall(okhttpRequest).execute();</span>
+
+<span class="fc" id="L126">        return new OkHttpGitHubConnectorResponse(request, okhttpResponse);</span>
+    }
+
+    /** Returns connection spec with TLS v1.2 in it */
+    private List&lt;ConnectionSpec&gt; TlsConnectionSpecs() {
+<span class="fc" id="L131">        return Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.CLEARTEXT);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

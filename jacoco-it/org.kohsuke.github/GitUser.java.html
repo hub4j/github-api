@@ -23,12 +23,20 @@ public class GitUser extends GitHubBridgeAdapterObject {
     private String name, email, date, username;
 
     /**
-     * Gets the git user name for an author or committer on a git commit.
-     *
-     * @return Human readable name of the user, such as &quot;Kohsuke Kawaguchi&quot;
+     * Instantiates a new git user.
      */
-    public String getName() {
-<span class="fc" id="L31">        return name;</span>
+<span class="fc" id="L28">    public GitUser() {</span>
+        // Empty constructor for Jackson binding
+<span class="fc" id="L30">    }</span>
+
+    /**
+     * Gets date.
+     *
+     * @return Commit Date.
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getDate() {
+<span class="fc" id="L39">        return GitHubClient.parseInstant(date);</span>
     }
 
     /**
@@ -37,7 +45,16 @@ public class GitUser extends GitHubBridgeAdapterObject {
      * @return E-mail address, such as &quot;foo@example.com&quot;
      */
     public String getEmail() {
-<span class="fc" id="L40">        return email;</span>
+<span class="fc" id="L48">        return email;</span>
+    }
+
+    /**
+     * Gets the git user name for an author or committer on a git commit.
+     *
+     * @return Human readable name of the user, such as &quot;Kohsuke Kawaguchi&quot;
+     */
+    public String getName() {
+<span class="fc" id="L57">        return name;</span>
     }
 
     /**
@@ -47,24 +64,7 @@ public class GitUser extends GitHubBridgeAdapterObject {
      */
     @CheckForNull
     public String getUsername() {
-<span class="fc" id="L50">        return username;</span>
+<span class="fc" id="L67">        return username;</span>
     }
-
-    /**
-     * Gets date.
-     *
-     * @return Commit Date.
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
-    public Instant getDate() {
-<span class="fc" id="L60">        return GitHubClient.parseInstant(date);</span>
-    }
-
-    /**
-     * Instantiates a new git user.
-     */
-<span class="fc" id="L66">    public GitUser() {</span>
-        // Empty constructor for Jackson binding
-<span class="fc" id="L68">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

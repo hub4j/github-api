@@ -45,124 +45,6 @@ import javax.annotation.Nonnull;
  */
 class Requester extends GitHubRequest.Builder&lt;Requester&gt; {
 
-    /** The client. */
-    /* private */ final transient GitHubClient client;
-
-    /**
-     * Instantiates a new requester.
-     *
-     * @param client
-     *            the client
-     */
-<span class="fc" id="L57">    Requester(GitHubClient client) {</span>
-<span class="fc" id="L58">        this.client = client;</span>
-<span class="fc" id="L59">        this.withApiUrl(client.getApiUrl());</span>
-<span class="fc" id="L60">    }</span>
-
-    /**
-     * Sends a request to the specified URL and checks that it is successful.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void send() throws IOException {
-        // Send expects there to be some body response, but doesn't care what it is.
-        // If there isn't a body, this will throw.
-<span class="fc" id="L71">        client.sendRequest(this, (connectorResponse) -&gt; GitHubResponse.getBodyAsString(connectorResponse));</span>
-<span class="fc" id="L72">    }</span>
-
-    /**
-     * Sends a request and parses the response into the given type via databinding.
-     *
-     * @param &lt;T&gt;
-     *            the type parameter
-     * @param type
-     *            the type
-     * @return an instance of {@code T}
-     * @throws IOException
-     *             if the server returns 4xx/5xx responses.
-     */
-    public &lt;T&gt; T fetch(@Nonnull Class&lt;T&gt; type) throws IOException {
-<span class="fc" id="L86">        return client.sendRequest(this, (connectorResponse) -&gt; GitHubResponse.parseBody(connectorResponse, type))</span>
-<span class="fc" id="L87">                .body();</span>
-    }
-
-    /**
-     * Like {@link #fetch(Class)} but updates an existing object instead of creating a new instance.
-     *
-     * @param &lt;T&gt;
-     *            the type parameter
-     * @param existingInstance
-     *            the existing instance
-     * @return the updated instance
-     * @throws IOException
-     *             the io exception
-     */
-    public &lt;T&gt; T fetchInto(@Nonnull T existingInstance) throws IOException {
-<span class="fc" id="L102">        return client</span>
-<span class="fc" id="L103">                .sendRequest(this, (connectorResponse) -&gt; GitHubResponse.parseBody(connectorResponse, existingInstance))</span>
-<span class="fc" id="L104">                .body();</span>
-    }
-
-    /**
-     * Sends a GraphQL request with no response
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void sendGraphQL() throws IOException {
-<span class="fc" id="L114">        fetchGraphQL(GHGraphQLResponse.ObjectResponse.class);</span>
-<span class="fc" id="L115">    }</span>
-
-    /**
-     * Sends a request and parses the response into the given type via databinding in GraphQL response.
-     *
-     * @param &lt;T&gt;
-     *            the type parameter
-     * @param type
-     *            the type
-     * @return an instance of {@code GHGraphQLResponse&lt;T&gt;}
-     * @throws IOException
-     *             if the server returns 4xx/5xx responses.
-     */
-    public &lt;T extends GHGraphQLResponse&lt;S&gt;, S&gt; S fetchGraphQL(@Nonnull Class&lt;T&gt; type) throws IOException {
-<span class="fc" id="L129">        T response = fetch(type);</span>
-
-<span class="fc bfc" id="L131" title="All 2 branches covered.">        if (!response.isSuccessful()) {</span>
-<span class="fc" id="L132">            throw new IOException(&quot;GraphQL request failed by:&quot; + response.getErrorMessages());</span>
-        }
-
-<span class="fc" id="L135">        return response.getData();</span>
-    }
-
-    /**
-     * Makes a request and just obtains the HTTP status code. Method does not throw exceptions for many status codes
-     * that would otherwise throw.
-     *
-     * @return the int
-     * @throws IOException
-     *             the io exception
-     */
-    public int fetchHttpStatusCode() throws IOException {
-<span class="fc" id="L147">        return client.sendRequest(build(), null).statusCode();</span>
-    }
-
-    /**
-     * Response input stream. There are scenarios where direct stream reading is needed, however it is better to use
-     * {@link #fetch(Class)} where possible.
-     *
-     * @param &lt;T&gt;
-     *            the generic type
-     * @param handler
-     *            the handler
-     * @return the t
-     * @throws IOException
-     *             the io exception
-     */
-    public &lt;T&gt; T fetchStream(@Nonnull InputStreamFunction&lt;T&gt; handler) throws IOException {
-<span class="fc" id="L163">        return client.sendRequest(this, (connectorResponse) -&gt; handler.apply(connectorResponse.bodyStream())).body();</span>
-    }
-
     /**
      * Helper function to make it easy to pull streams.
      *
@@ -178,10 +60,127 @@ class Requester extends GitHubRequest.Builder&lt;Requester&gt; {
      * @throws IOException
      *             if an error occurs while copying the stream
      */
-    @NonNull
-    public static InputStream copyInputStream(InputStream inputStream) throws IOException {
-<span class="fc" id="L183">        return new ByteArrayInputStream(IOUtils.toByteArray(inputStream));</span>
+    @NonNull public static InputStream copyInputStream(InputStream inputStream) throws IOException {
+<span class="fc" id="L64">        return new ByteArrayInputStream(IOUtils.toByteArray(inputStream));</span>
     }
+
+    /** The client. */
+    /* private */ final transient GitHubClient client;
+
+    /**
+     * Instantiates a new requester.
+     *
+     * @param client
+     *            the client
+     */
+<span class="fc" id="L76">    Requester(GitHubClient client) {</span>
+<span class="fc" id="L77">        this.client = client;</span>
+<span class="fc" id="L78">        this.withApiUrl(client.getApiUrl());</span>
+<span class="fc" id="L79">    }</span>
+
+    /**
+     * Sends a request and parses the response into the given type via databinding.
+     *
+     * @param &lt;T&gt;
+     *            the type parameter
+     * @param type
+     *            the type
+     * @return an instance of {@code T}
+     * @throws IOException
+     *             if the server returns 4xx/5xx responses.
+     */
+    public &lt;T&gt; T fetch(@Nonnull Class&lt;T&gt; type) throws IOException {
+<span class="fc" id="L93">        return client.sendRequest(this, (connectorResponse) -&gt; GitHubResponse.parseBody(connectorResponse, type))</span>
+<span class="fc" id="L94">                .body();</span>
+    }
+
+    /**
+     * Sends a request and parses the response into the given type via databinding in GraphQL response.
+     *
+     * @param &lt;T&gt;
+     *            the type parameter
+     * @param type
+     *            the type
+     * @return an instance of {@code GHGraphQLResponse&lt;T&gt;}
+     * @throws IOException
+     *             if the server returns 4xx/5xx responses.
+     */
+    public &lt;T extends GHGraphQLResponse&lt;S&gt;, S&gt; S fetchGraphQL(@Nonnull Class&lt;T&gt; type) throws IOException {
+<span class="fc" id="L109">        T response = fetch(type);</span>
+
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        if (!response.isSuccessful()) {</span>
+<span class="fc" id="L112">            throw new IOException(&quot;GraphQL request failed by:&quot; + response.getErrorMessages());</span>
+        }
+
+<span class="fc" id="L115">        return response.getData();</span>
+    }
+
+    /**
+     * Makes a request and just obtains the HTTP status code. Method does not throw exceptions for many status codes
+     * that would otherwise throw.
+     *
+     * @return the int
+     * @throws IOException
+     *             the io exception
+     */
+    public int fetchHttpStatusCode() throws IOException {
+<span class="fc" id="L127">        return client.sendRequest(build(), null).statusCode();</span>
+    }
+
+    /**
+     * Like {@link #fetch(Class)} but updates an existing object instead of creating a new instance.
+     *
+     * @param &lt;T&gt;
+     *            the type parameter
+     * @param existingInstance
+     *            the existing instance
+     * @return the updated instance
+     * @throws IOException
+     *             the io exception
+     */
+    public &lt;T&gt; T fetchInto(@Nonnull T existingInstance) throws IOException {
+<span class="fc" id="L142">        return client</span>
+<span class="fc" id="L143">                .sendRequest(this, (connectorResponse) -&gt; GitHubResponse.parseBody(connectorResponse, existingInstance))</span>
+<span class="fc" id="L144">                .body();</span>
+    }
+
+    /**
+     * Response input stream. There are scenarios where direct stream reading is needed, however it is better to use
+     * {@link #fetch(Class)} where possible.
+     *
+     * @param &lt;T&gt;
+     *            the generic type
+     * @param handler
+     *            the handler
+     * @return the t
+     * @throws IOException
+     *             the io exception
+     */
+    public &lt;T&gt; T fetchStream(@Nonnull InputStreamFunction&lt;T&gt; handler) throws IOException {
+<span class="fc" id="L160">        return client.sendRequest(this, (connectorResponse) -&gt; handler.apply(connectorResponse.bodyStream())).body();</span>
+    }
+
+    /**
+     * Sends a request to the specified URL and checks that it is successful.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void send() throws IOException {
+        // Send expects there to be some body response, but doesn't care what it is.
+        // If there isn't a body, this will throw.
+<span class="fc" id="L172">        client.sendRequest(this, (connectorResponse) -&gt; GitHubResponse.getBodyAsString(connectorResponse));</span>
+<span class="fc" id="L173">    }</span>
+
+    /**
+     * Sends a GraphQL request with no response
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void sendGraphQL() throws IOException {
+<span class="fc" id="L182">        fetchGraphQL(GHGraphQLResponse.ObjectResponse.class);</span>
+<span class="fc" id="L183">    }</span>
 
     /**
      * Creates {@link PagedIterable &lt;R&gt;} from this builder using the provided {@link Consumer}{@code &lt;R&gt;}.
@@ -199,7 +198,7 @@ class Requester extends GitHubRequest.Builder&lt;Requester&gt; {
      * @return the {@link PagedIterable} for this builder.
      */
     public &lt;R&gt; PagedIterable&lt;R&gt; toIterable(Class&lt;R[]&gt; type, Consumer&lt;R&gt; itemInitializer) {
-<span class="fc" id="L202">        return new GitHubPageContentsIterable&lt;&gt;(client, build(), type, itemInitializer);</span>
+<span class="fc" id="L201">        return new GitHubPageContentsIterable&lt;&gt;(client, build(), type, itemInitializer);</span>
 
     }
 }

@@ -8,24 +8,14 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class GHContentUpdateResponse {
 
+    private GitCommit commit;
+
+    private GHContent content;
     /**
      * Create default GHContentUpdateResponse instance
      */
-<span class="fc" id="L14">    public GHContentUpdateResponse() {</span>
-<span class="fc" id="L15">    }</span>
-
-    private GHContent content;
-    private GitCommit commit;
-
-    /**
-     * Gets content.
-     *
-     * @return the content
-     */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHContent getContent() {
-<span class="fc" id="L27">        return content;</span>
-    }
+<span class="fc" id="L17">    public GHContentUpdateResponse() {</span>
+<span class="fc" id="L18">    }</span>
 
     /**
      * Gets commit.
@@ -34,7 +24,17 @@ public class GHContentUpdateResponse {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GitCommit getCommit() {
-<span class="fc" id="L37">        return commit;</span>
+<span class="fc" id="L27">        return commit;</span>
+    }
+
+    /**
+     * Gets content.
+     *
+     * @return the content
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHContent getContent() {
+<span class="fc" id="L37">        return content;</span>
     }
 
 }

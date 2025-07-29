@@ -9,43 +9,25 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 public class GHRepositoryChanges {
 
     /**
-     * Create default GHRepositoryChanges instance
+     * Repository name that was changed.
      */
-<span class="fc" id="L14">    public GHRepositoryChanges() {</span>
-<span class="fc" id="L15">    }</span>
+    public static class FromName {
 
-    private FromRepository repository;
-    private Owner owner;
-
-    /**
-     * Get outer owner object.
-     *
-     * @return Owner
-     */
-    public Owner getOwner() {
-<span class="fc" id="L26">        return owner;</span>
-    }
-
-    /**
-     * Outer object of owner from whom this repository was transferred.
-     */
-    public static class Owner {
+        private String from;
 
         /**
-         * Create default Owner instance
+         * Create default FromName instance
          */
-<span class="fc" id="L37">        public Owner() {</span>
-<span class="fc" id="L38">        }</span>
-
-        private FromOwner from;
+<span class="fc" id="L21">        public FromName() {</span>
+<span class="fc" id="L22">        }</span>
 
         /**
-         * Get in owner object.
+         * Get previous name of the repository before rename.
          *
-         * @return FromOwner
+         * @return String
          */
-        public FromOwner getFrom() {
-<span class="fc" id="L48">            return from;</span>
+        public String getFrom() {
+<span class="fc" id="L30">            return from;</span>
         }
     }
 
@@ -54,24 +36,14 @@ public class GHRepositoryChanges {
      */
     public static class FromOwner {
 
+        private GHOrganization organization;
+
+        private GHUser user;
         /**
          * Create default FromOwner instance
          */
-<span class="fc" id="L60">        public FromOwner() {</span>
-<span class="fc" id="L61">        }</span>
-
-        private GHUser user;
-        private GHOrganization organization;
-
-        /**
-         * Get user from which this repository was transferred.
-         *
-         * @return user
-         */
-        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
-        public GHUser getUser() {
-<span class="fc" id="L73">            return user;</span>
-        }
+<span class="fc" id="L45">        public FromOwner() {</span>
+<span class="fc" id="L46">        }</span>
 
         /**
          * Get organization from which this repository was transferred.
@@ -80,8 +52,82 @@ public class GHRepositoryChanges {
          */
         @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
         public GHOrganization getOrganization() {
-<span class="fc" id="L83">            return organization;</span>
+<span class="fc" id="L55">            return organization;</span>
         }
+
+        /**
+         * Get user from which this repository was transferred.
+         *
+         * @return user
+         */
+        @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected&quot;)
+        public GHUser getUser() {
+<span class="fc" id="L65">            return user;</span>
+        }
+    }
+    /**
+     * Repository object from which the name was changed.
+     */
+    public static class FromRepository {
+
+        private FromName name;
+
+        /**
+         * Create default FromRepository instance
+         */
+<span class="fc" id="L78">        public FromRepository() {</span>
+<span class="fc" id="L79">        }</span>
+
+        /**
+         * Get top level object for the previous name of the repository.
+         *
+         * @return FromName
+         */
+        public FromName getName() {
+<span class="fc" id="L87">            return name;</span>
+        }
+    }
+
+    /**
+     * Outer object of owner from whom this repository was transferred.
+     */
+    public static class Owner {
+
+        private FromOwner from;
+
+        /**
+         * Create default Owner instance
+         */
+<span class="fc" id="L101">        public Owner() {</span>
+<span class="fc" id="L102">        }</span>
+
+        /**
+         * Get in owner object.
+         *
+         * @return FromOwner
+         */
+        public FromOwner getFrom() {
+<span class="fc" id="L110">            return from;</span>
+        }
+    }
+
+    private Owner owner;
+
+    private FromRepository repository;
+
+    /**
+     * Create default GHRepositoryChanges instance
+     */
+<span class="fc" id="L121">    public GHRepositoryChanges() {</span>
+<span class="fc" id="L122">    }</span>
+
+    /**
+     * Get outer owner object.
+     *
+     * @return Owner
+     */
+    public Owner getOwner() {
+<span class="fc" id="L130">        return owner;</span>
     }
 
     /**
@@ -90,53 +136,7 @@ public class GHRepositoryChanges {
      * @return FromRepository
      */
     public FromRepository getRepository() {
-<span class="fc" id="L93">        return repository;</span>
-    }
-
-    /**
-     * Repository object from which the name was changed.
-     */
-    public static class FromRepository {
-
-        /**
-         * Create default FromRepository instance
-         */
-<span class="fc" id="L104">        public FromRepository() {</span>
-<span class="fc" id="L105">        }</span>
-
-        private FromName name;
-
-        /**
-         * Get top level object for the previous name of the repository.
-         *
-         * @return FromName
-         */
-        public FromName getName() {
-<span class="fc" id="L115">            return name;</span>
-        }
-    }
-
-    /**
-     * Repository name that was changed.
-     */
-    public static class FromName {
-
-        /**
-         * Create default FromName instance
-         */
-<span class="fc" id="L127">        public FromName() {</span>
-<span class="fc" id="L128">        }</span>
-
-        private String from;
-
-        /**
-         * Get previous name of the repository before rename.
-         *
-         * @return String
-         */
-        public String getFrom() {
-<span class="fc" id="L138">            return from;</span>
-        }
+<span class="fc" id="L139">        return repository;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

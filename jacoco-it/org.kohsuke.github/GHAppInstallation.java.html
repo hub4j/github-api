@@ -27,197 +27,55 @@ import java.util.stream.Collectors;
  */
 public class GHAppInstallation extends GHObject {
 
-    /**
-     * Create default GHAppInstallation instance
-     */
-<span class="fc" id="L33">    public GHAppInstallation() {</span>
-<span class="fc" id="L34">    }</span>
-
-    private GHUser account;
-
-    @JsonProperty(&quot;access_tokens_url&quot;)
-    private String accessTokenUrl;
-    @JsonProperty(&quot;repositories_url&quot;)
-    private String repositoriesUrl;
-    @JsonProperty(&quot;app_id&quot;)
-    private long appId;
-    @JsonProperty(&quot;target_id&quot;)
-    private long targetId;
-    @JsonProperty(&quot;target_type&quot;)
-    private GHTargetType targetType;
-    private Map&lt;String, GHPermissionType&gt; permissions;
-    private List&lt;String&gt; events;
-    @JsonProperty(&quot;single_file_name&quot;)
-    private String singleFileName;
-    @JsonProperty(&quot;repository_selection&quot;)
-    private GHRepositorySelection repositorySelection;
-    private String htmlUrl;
-    private String suspendedAt;
-    private GHUser suspendedBy;
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     */
-    public URL getHtmlUrl() {
-<span class="nc" id="L64">        return GitHubClient.parseURL(htmlUrl);</span>
-    }
-
-    /**
-     * Gets account.
-     *
-     * @return the account
-     */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHUser getAccount() {
-<span class="fc" id="L74">        return account;</span>
-    }
-
-    /**
-     * Gets access token url.
-     *
-     * @return the access token url
-     */
-    public String getAccessTokenUrl() {
-<span class="fc" id="L83">        return accessTokenUrl;</span>
-    }
-
-    /**
-     * Gets repositories url.
-     *
-     * @return the repositories url
-     */
-    public String getRepositoriesUrl() {
-<span class="fc" id="L92">        return repositoriesUrl;</span>
-    }
-
-    /**
-     * List repositories that this app installation can access.
-     *
-     * @return the paged iterable
-     * @deprecated This method cannot work on a {@link GHAppInstallation} retrieved from
-     *             {@link GHApp#listInstallations()} (for example), except when resorting to unsupported hacks involving
-     *             setRoot(GitHub) to switch from an application client to an installation client. This method will be
-     *             removed. You should instead use an installation client (with an installation token, not a JWT),
-     *             retrieve a {@link GHAuthenticatedAppInstallation} from {@link GitHub#getInstallation()}, then call
-     *             {@link GHAuthenticatedAppInstallation#listRepositories()}.
-     */
-    @Deprecated
-    public PagedSearchIterable&lt;GHRepository&gt; listRepositories() {
-        GitHubRequest request;
-
-<span class="fc" id="L110">        request = root().createRequest().withUrlPath(&quot;/installation/repositories&quot;).build();</span>
-
-<span class="fc" id="L112">        return new PagedSearchIterable&lt;&gt;(root(), request, GHAppInstallationRepositoryResult.class);</span>
-    }
-
     private static class GHAppInstallationRepositoryResult extends SearchResult&lt;GHRepository&gt; {
         private GHRepository[] repositories;
 
         @Override
         GHRepository[] getItems(GitHub root) {
-<span class="fc" id="L120">            return repositories;</span>
+<span class="fc" id="L35">            return repositories;</span>
         }
     }
 
-    /**
-     * Gets app id.
-     *
-     * @return the app id
-     */
-    public long getAppId() {
-<span class="fc" id="L130">        return appId;</span>
-    }
+    @JsonProperty(&quot;access_tokens_url&quot;)
+    private String accessTokenUrl;
+
+    private GHUser account;
+    @JsonProperty(&quot;app_id&quot;)
+    private long appId;
+    private List&lt;String&gt; events;
+    private String htmlUrl;
+    private Map&lt;String, GHPermissionType&gt; permissions;
+    @JsonProperty(&quot;repositories_url&quot;)
+    private String repositoriesUrl;
+    @JsonProperty(&quot;repository_selection&quot;)
+    private GHRepositorySelection repositorySelection;
+    @JsonProperty(&quot;single_file_name&quot;)
+    private String singleFileName;
+    private String suspendedAt;
+    private GHUser suspendedBy;
+    @JsonProperty(&quot;target_id&quot;)
+    private long targetId;
+    @JsonProperty(&quot;target_type&quot;)
+    private GHTargetType targetType;
 
     /**
-     * Gets target id.
-     *
-     * @return the target id
+     * Create default GHAppInstallation instance
      */
-    public long getTargetId() {
-<span class="fc" id="L139">        return targetId;</span>
-    }
+<span class="fc" id="L64">    public GHAppInstallation() {</span>
+<span class="fc" id="L65">    }</span>
 
     /**
-     * Gets target type.
+     * Starts a builder that creates a new App Installation Token.
      *
-     * @return the target type
-     */
-    public GHTargetType getTargetType() {
-<span class="fc" id="L148">        return targetType;</span>
-    }
-
-    /**
-     * Gets permissions.
-     *
-     * @return the permissions
-     */
-    public Map&lt;String, GHPermissionType&gt; getPermissions() {
-<span class="fc" id="L157">        return Collections.unmodifiableMap(permissions);</span>
-    }
-
-    /**
-     * Gets events.
-     *
-     * @return the events
-     */
-    public List&lt;GHEvent&gt; getEvents() {
-<span class="fc" id="L166">        return events.stream()</span>
-<span class="fc" id="L167">                .map(e -&gt; EnumUtils.getEnumOrDefault(GHEvent.class, e, GHEvent.UNKNOWN))</span>
-<span class="fc" id="L168">                .collect(Collectors.toList());</span>
-    }
-
-    /**
-     * Gets single file name.
-     *
-     * @return the single file name
-     */
-    public String getSingleFileName() {
-<span class="fc" id="L177">        return singleFileName;</span>
-    }
-
-    /**
-     * Gets repository selection.
-     *
-     * @return the repository selection
-     */
-    public GHRepositorySelection getRepositorySelection() {
-<span class="fc" id="L186">        return repositorySelection;</span>
-    }
-
-    /**
-     * Gets suspended at.
-     *
-     * @return the suspended at
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
-    public Instant getSuspendedAt() {
-<span class="fc" id="L196">        return GitHubClient.parseInstant(suspendedAt);</span>
-    }
-
-    /**
-     * Gets suspended by.
-     *
-     * @return the suspended by
-     */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHUser getSuspendedBy() {
-<span class="fc" id="L206">        return suspendedBy;</span>
-    }
-
-    /**
-     * Delete a Github App installation
      * &lt;p&gt;
-     * You must use a JWT to access this endpoint.
+     * You use the returned builder to set various properties, then call {@link GHAppCreateTokenBuilder#create()} to
+     * finally create an access token.
      *
-     * @throws IOException
-     *             on error
-     * @see &lt;a href=&quot;https://developer.github.com/v3/apps/#delete-an-installation&quot;&gt;Delete an installation&lt;/a&gt;
+     * @return a GHAppCreateTokenBuilder instance
      */
-    public void deleteInstallation() throws IOException {
-<span class="fc" id="L219">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(String.format(&quot;/app/installations/%d&quot;, getId())).send();</span>
-<span class="fc" id="L220">    }</span>
+    public GHAppCreateTokenBuilder createToken() {
+<span class="fc" id="L77">        return new GHAppCreateTokenBuilder(root(), String.format(&quot;/app/installations/%d/access_tokens&quot;, getId()));</span>
+    }
 
     /**
      * Starts a builder that creates a new App Installation Token.
@@ -233,20 +91,68 @@ public class GHAppInstallation extends GHObject {
      */
     @Deprecated
     public GHAppCreateTokenBuilder createToken(Map&lt;String, GHPermissionType&gt; permissions) {
-<span class="fc" id="L236">        return createToken().permissions(permissions);</span>
+<span class="fc" id="L94">        return createToken().permissions(permissions);</span>
     }
 
     /**
-     * Starts a builder that creates a new App Installation Token.
-     *
+     * Delete a Github App installation
      * &lt;p&gt;
-     * You use the returned builder to set various properties, then call {@link GHAppCreateTokenBuilder#create()} to
-     * finally create an access token.
+     * You must use a JWT to access this endpoint.
      *
-     * @return a GHAppCreateTokenBuilder instance
+     * @throws IOException
+     *             on error
+     * @see &lt;a href=&quot;https://developer.github.com/v3/apps/#delete-an-installation&quot;&gt;Delete an installation&lt;/a&gt;
      */
-    public GHAppCreateTokenBuilder createToken() {
-<span class="fc" id="L249">        return new GHAppCreateTokenBuilder(root(), String.format(&quot;/app/installations/%d/access_tokens&quot;, getId()));</span>
+    public void deleteInstallation() throws IOException {
+<span class="fc" id="L107">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(String.format(&quot;/app/installations/%d&quot;, getId())).send();</span>
+<span class="fc" id="L108">    }</span>
+
+    /**
+     * Gets access token url.
+     *
+     * @return the access token url
+     */
+    public String getAccessTokenUrl() {
+<span class="fc" id="L116">        return accessTokenUrl;</span>
+    }
+
+    /**
+     * Gets account.
+     *
+     * @return the account
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHUser getAccount() {
+<span class="fc" id="L126">        return account;</span>
+    }
+
+    /**
+     * Gets app id.
+     *
+     * @return the app id
+     */
+    public long getAppId() {
+<span class="fc" id="L135">        return appId;</span>
+    }
+
+    /**
+     * Gets events.
+     *
+     * @return the events
+     */
+    public List&lt;GHEvent&gt; getEvents() {
+<span class="fc" id="L144">        return events.stream()</span>
+<span class="fc" id="L145">                .map(e -&gt; EnumUtils.getEnumOrDefault(GHEvent.class, e, GHEvent.UNKNOWN))</span>
+<span class="fc" id="L146">                .collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
+    public URL getHtmlUrl() {
+<span class="nc" id="L155">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**
@@ -267,7 +173,101 @@ public class GHAppInstallation extends GHObject {
      *      a subscription plan for an account&lt;/a&gt;
      */
     public GHMarketplaceAccountPlan getMarketplaceAccount() throws IOException {
-<span class="fc" id="L270">        return new GHMarketplacePlanForAccountBuilder(root(), account.getId()).createRequest();</span>
+<span class="fc" id="L176">        return new GHMarketplacePlanForAccountBuilder(root(), account.getId()).createRequest();</span>
+    }
+
+    /**
+     * Gets permissions.
+     *
+     * @return the permissions
+     */
+    public Map&lt;String, GHPermissionType&gt; getPermissions() {
+<span class="fc" id="L185">        return Collections.unmodifiableMap(permissions);</span>
+    }
+
+    /**
+     * Gets repositories url.
+     *
+     * @return the repositories url
+     */
+    public String getRepositoriesUrl() {
+<span class="fc" id="L194">        return repositoriesUrl;</span>
+    }
+
+    /**
+     * Gets repository selection.
+     *
+     * @return the repository selection
+     */
+    public GHRepositorySelection getRepositorySelection() {
+<span class="fc" id="L203">        return repositorySelection;</span>
+    }
+
+    /**
+     * Gets single file name.
+     *
+     * @return the single file name
+     */
+    public String getSingleFileName() {
+<span class="fc" id="L212">        return singleFileName;</span>
+    }
+
+    /**
+     * Gets suspended at.
+     *
+     * @return the suspended at
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
+    public Instant getSuspendedAt() {
+<span class="fc" id="L222">        return GitHubClient.parseInstant(suspendedAt);</span>
+    }
+
+    /**
+     * Gets suspended by.
+     *
+     * @return the suspended by
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHUser getSuspendedBy() {
+<span class="fc" id="L232">        return suspendedBy;</span>
+    }
+
+    /**
+     * Gets target id.
+     *
+     * @return the target id
+     */
+    public long getTargetId() {
+<span class="fc" id="L241">        return targetId;</span>
+    }
+
+    /**
+     * Gets target type.
+     *
+     * @return the target type
+     */
+    public GHTargetType getTargetType() {
+<span class="fc" id="L250">        return targetType;</span>
+    }
+
+    /**
+     * List repositories that this app installation can access.
+     *
+     * @return the paged iterable
+     * @deprecated This method cannot work on a {@link GHAppInstallation} retrieved from
+     *             {@link GHApp#listInstallations()} (for example), except when resorting to unsupported hacks involving
+     *             setRoot(GitHub) to switch from an application client to an installation client. This method will be
+     *             removed. You should instead use an installation client (with an installation token, not a JWT),
+     *             retrieve a {@link GHAuthenticatedAppInstallation} from {@link GitHub#getInstallation()}, then call
+     *             {@link GHAuthenticatedAppInstallation#listRepositories()}.
+     */
+    @Deprecated
+    public PagedSearchIterable&lt;GHRepository&gt; listRepositories() {
+        GitHubRequest request;
+
+<span class="fc" id="L268">        request = root().createRequest().withUrlPath(&quot;/installation/repositories&quot;).build();</span>
+
+<span class="fc" id="L270">        return new PagedSearchIterable&lt;&gt;(root(), request, GHAppInstallationRepositoryResult.class);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

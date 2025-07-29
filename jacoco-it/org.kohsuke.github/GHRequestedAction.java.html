@@ -10,16 +10,43 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
         justification = &quot;JSON API&quot;)
 public class GHRequestedAction extends GHObject {
 
+    private String description;
+
+    private String identifier;
+    private String label;
+    private GHRepository owner;
     /**
      * Create default GHRequestedAction instance
      */
-<span class="nc" id="L16">    public GHRequestedAction() {</span>
-<span class="nc" id="L17">    }</span>
+<span class="nc" id="L21">    public GHRequestedAction() {</span>
+<span class="nc" id="L22">    }</span>
 
-    private GHRepository owner;
-    private String identifier;
-    private String label;
-    private String description;
+    /**
+     * Gets the identifier.
+     *
+     * @return the identifier
+     */
+    public String getIdentifier() {
+<span class="nc" id="L30">        return identifier;</span>
+    }
+
+    /**
+     * Gets the description.
+     *
+     * @return the description
+     */
+    String getDescription() {
+<span class="nc" id="L39">        return description;</span>
+    }
+
+    /**
+     * Gets the label.
+     *
+     * @return the label
+     */
+    String getLabel() {
+<span class="nc" id="L48">        return label;</span>
+    }
 
     /**
      * Wrap.
@@ -29,35 +56,8 @@ public class GHRequestedAction extends GHObject {
      * @return the GH requested action
      */
     GHRequestedAction wrap(GHRepository owner) {
-<span class="nc" id="L32">        this.owner = owner;</span>
-<span class="nc" id="L33">        return this;</span>
-    }
-
-    /**
-     * Gets the identifier.
-     *
-     * @return the identifier
-     */
-    public String getIdentifier() {
-<span class="nc" id="L42">        return identifier;</span>
-    }
-
-    /**
-     * Gets the label.
-     *
-     * @return the label
-     */
-    String getLabel() {
-<span class="nc" id="L51">        return label;</span>
-    }
-
-    /**
-     * Gets the description.
-     *
-     * @return the description
-     */
-    String getDescription() {
-<span class="nc" id="L60">        return description;</span>
+<span class="nc" id="L59">        this.owner = owner;</span>
+<span class="nc" id="L60">        return this;</span>
     }
 
 }

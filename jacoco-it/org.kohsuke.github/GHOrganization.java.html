@@ -19,163 +19,87 @@ import java.util.TreeMap;
 public class GHOrganization extends GHPerson {
 
     /**
-     * Create default GHOrganization instance
-     */
-<span class="fc" id="L24">    public GHOrganization() {</span>
-<span class="fc" id="L25">    }</span>
-
-    private boolean hasOrganizationProjects;
-
-    /**
-     * Starts a builder that creates a new repository.
-     * &lt;p&gt;
-     * You use the returned builder to set various properties, then call {@link GHCreateRepositoryBuilder#create()} to
-     * finally create a repository.
+     * The enum Permission.
      *
-     * @param name
-     *            the name
-     * @return the gh create repository builder
+     * @see RepositoryRole
      */
-    public GHCreateRepositoryBuilder createRepository(String name) {
-<span class="fc" id="L40">        return new GHCreateRepositoryBuilder(name, root(), &quot;/orgs/&quot; + login + &quot;/repos&quot;);</span>
+<span class="fc" id="L26">    public enum Permission {</span>
+
+        /** The admin. */
+<span class="fc" id="L29">        ADMIN,</span>
+        /** The maintain. */
+<span class="fc" id="L31">        MAINTAIN,</span>
+        /** The pull. */
+<span class="fc" id="L33">        PULL,</span>
+        /** The push. */
+<span class="fc" id="L35">        PUSH,</span>
+        /** The triage. */
+<span class="fc" id="L37">        TRIAGE,</span>
+        /** Unknown, before we add the new permission to the enum */
+<span class="fc" id="L39">        UNKNOWN</span>
     }
 
     /**
-     * Teams by their names.
-     *
-     * @return the teams
+     * Repository permissions (roles) for teams and collaborators.
      */
-    public Map&lt;String, GHTeam&gt; getTeams() {
-<span class="fc" id="L49">        Map&lt;String, GHTeam&gt; r = new TreeMap&lt;String, GHTeam&gt;();</span>
-<span class="fc bfc" id="L50" title="All 2 branches covered.">        for (GHTeam t : listTeams()) {</span>
-<span class="fc" id="L51">            r.put(t.getName(), t);</span>
-<span class="fc" id="L52">        }</span>
-<span class="fc" id="L53">        return r;</span>
-    }
-
-    /**
-     * List up all the teams.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;GHTeam&gt; listTeams() {
-<span class="fc" id="L62">        return root().createRequest()</span>
-<span class="fc" id="L63">                .withUrlPath(String.format(&quot;/orgs/%s/teams&quot;, login))</span>
-<span class="fc" id="L64">                .toIterable(GHTeam[].class, item -&gt; item.wrapUp(this));</span>
-    }
-
-    /**
-     * Gets a single team by ID.
-     *
-     * @param teamId
-     *            id of the team that we want to query for
-     * @return the team
-     * @throws IOException
-     *             the io exception
-     * @see &lt;a href= &quot;https://developer.github.com/v3/teams/#get-team-by-name&quot;&gt;documentation&lt;/a&gt;
-     */
-    public GHTeam getTeam(long teamId) throws IOException {
-<span class="fc" id="L78">        return root().createRequest()</span>
-<span class="fc" id="L79">                .withUrlPath(String.format(&quot;/organizations/%d/team/%d&quot;, getId(), teamId))</span>
-<span class="fc" id="L80">                .fetch(GHTeam.class)</span>
-<span class="fc" id="L81">                .wrapUp(this);</span>
-    }
-
-    /**
-     * Finds a team that has the given name in its {@link GHTeam#getName()}.
-     *
-     * @param name
-     *            the name
-     * @return the team by name
-     */
-    public GHTeam getTeamByName(String name) {
-<span class="pc bpc" id="L92" title="1 of 2 branches missed.">        for (GHTeam t : listTeams()) {</span>
-<span class="fc bfc" id="L93" title="All 2 branches covered.">            if (t.getName().equals(name))</span>
-<span class="fc" id="L94">                return t;</span>
-<span class="fc" id="L95">        }</span>
-<span class="nc" id="L96">        return null;</span>
-    }
-
-    /**
-     * Finds a team that has the given slug in its {@link GHTeam#getSlug()}.
-     *
-     * @param slug
-     *            the slug
-     * @return the team by slug
-     * @throws IOException
-     *             the io exception
-     * @see &lt;a href= &quot;https://developer.github.com/v3/teams/#get-team-by-name&quot;&gt;documentation&lt;/a&gt;
-     */
-    public GHTeam getTeamBySlug(String slug) throws IOException {
-<span class="fc" id="L110">        return root().createRequest()</span>
-<span class="fc" id="L111">                .withUrlPath(String.format(&quot;/orgs/%s/teams/%s&quot;, login, slug))</span>
-<span class="fc" id="L112">                .fetch(GHTeam.class)</span>
-<span class="fc" id="L113">                .wrapUp(this);</span>
-    }
-
-    /**
-     * List up all the external groups.
-     *
-     * @return the paged iterable
-     * @see &lt;a href=
-     *      &quot;https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#list-external-groups-in-an-organization&quot;&gt;documentation&lt;/a&gt;
-     */
-    public PagedIterable&lt;GHExternalGroup&gt; listExternalGroups() {
-<span class="fc" id="L124">        return listExternalGroups(null);</span>
-    }
-
-    /**
-     * List up all the external groups with a given text in their name
-     *
-     * @param displayName
-     *            the text that must be part of the returned groups name
-     * @return the paged iterable
-     * @see &lt;a href=
-     *      &quot;https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#list-external-groups-in-an-organization&quot;&gt;documentation&lt;/a&gt;
-     */
-    public PagedIterable&lt;GHExternalGroup&gt; listExternalGroups(final String displayName) {
-<span class="fc" id="L137">        final Requester requester = root().createRequest()</span>
-<span class="fc" id="L138">                .withUrlPath(String.format(&quot;/orgs/%s/external-groups&quot;, login));</span>
-<span class="fc bfc" id="L139" title="All 2 branches covered.">        if (displayName != null) {</span>
-<span class="fc" id="L140">            requester.with(&quot;display_name&quot;, displayName);</span>
+    public static class RepositoryRole {
+        /**
+         * Custom.
+         *
+         * @param permission
+         *            the permission
+         * @return the repository role
+         */
+        public static RepositoryRole custom(String permission) {
+<span class="fc" id="L54">            return new RepositoryRole(permission);</span>
         }
-<span class="fc" id="L142">        return new GHExternalGroupIterable(this, requester);</span>
-    }
 
-    /**
-     * Gets a single external group by ID.
-     *
-     * @param groupId
-     *            id of the external group that we want to query for
-     * @return the external group
-     * @throws IOException
-     *             the io exception
-     * @see &lt;a href=
-     *      &quot;https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#get-an-external-group&quot;&gt;documentation&lt;/a&gt;
-     */
-    public GHExternalGroup getExternalGroup(final long groupId) throws IOException {
-        try {
-<span class="fc" id="L158">            return root().createRequest()</span>
-<span class="fc" id="L159">                    .withUrlPath(String.format(&quot;/orgs/%s/external-group/%d&quot;, login, groupId))</span>
-<span class="fc" id="L160">                    .fetch(GHExternalGroup.class)</span>
-<span class="fc" id="L161">                    .wrapUp(this);</span>
-<span class="fc" id="L162">        } catch (final HttpException e) {</span>
-<span class="fc" id="L163">            throw EnterpriseManagedSupport.forOrganization(this)</span>
-<span class="fc" id="L164">                    .filterException(e, &quot;Could not retrieve organization external group&quot;)</span>
-<span class="fc" id="L165">                    .orElse(e);</span>
+        /**
+         * From.
+         *
+         * @param permission
+         *            the permission
+         * @return the repository role
+         */
+        public static RepositoryRole from(Permission permission) {
+<span class="fc" id="L65">            return custom(permission.toString().toLowerCase());</span>
+        }
+
+        private final String permission;
+
+<span class="fc" id="L70">        private RepositoryRole(String permission) {</span>
+<span class="fc" id="L71">            this.permission = permission;</span>
+<span class="fc" id="L72">        }</span>
+
+        /**
+         * To string.
+         *
+         * @return the string
+         */
+        @Override
+        public String toString() {
+<span class="fc" id="L81">            return permission;</span>
         }
     }
 
     /**
      * Member's role in an organization.
      */
-<span class="fc" id="L172">    public enum Role {</span>
+<span class="fc" id="L88">    public enum Role {</span>
 
         /** The admin. */
-<span class="fc" id="L175">        ADMIN,</span>
+<span class="fc" id="L91">        ADMIN,</span>
         /** The user is an owner of the organization. */
-<span class="fc" id="L177">        MEMBER /** The user is a non-owner member of the organization. */</span>
+<span class="fc" id="L93">        MEMBER /** The user is a non-owner member of the organization. */</span>
     }
+
+    private boolean hasOrganizationProjects;
+
+    /**
+     * Create default GHOrganization instance
+     */
+<span class="fc" id="L101">    public GHOrganization() {</span>
+<span class="fc" id="L102">    }</span>
 
     /**
      * Adds (invites) a user to the organization.
@@ -190,171 +114,20 @@ public class GHOrganization extends GHPerson {
      *      &quot;https://developer.github.com/v3/orgs/members/#add-or-update-organization-membership&quot;&gt;documentation&lt;/a&gt;
      */
     public void add(GHUser user, Role role) throws IOException {
-<span class="fc" id="L193">        root().createRequest()</span>
-<span class="fc" id="L194">                .method(&quot;PUT&quot;)</span>
-<span class="fc" id="L195">                .with(&quot;role&quot;, role.name().toLowerCase())</span>
-<span class="fc" id="L196">                .withUrlPath(&quot;/orgs/&quot; + login + &quot;/memberships/&quot; + user.getLogin())</span>
-<span class="fc" id="L197">                .send();</span>
-<span class="fc" id="L198">    }</span>
+<span class="fc" id="L117">        root().createRequest()</span>
+<span class="fc" id="L118">                .method(&quot;PUT&quot;)</span>
+<span class="fc" id="L119">                .with(&quot;role&quot;, role.name().toLowerCase())</span>
+<span class="fc" id="L120">                .withUrlPath(&quot;/orgs/&quot; + login + &quot;/memberships/&quot; + user.getLogin())</span>
+<span class="fc" id="L121">                .send();</span>
+<span class="fc" id="L122">    }</span>
 
     /**
-     * Checks if this organization has the specified user as a member.
+     * Are projects enabled for organization boolean.
      *
-     * @param user
-     *            the user
      * @return the boolean
      */
-    public boolean hasMember(GHUser user) {
-        try {
-<span class="fc" id="L209">            root().createRequest().withUrlPath(&quot;/orgs/&quot; + login + &quot;/members/&quot; + user.getLogin()).send();</span>
-<span class="fc" id="L210">            return true;</span>
-<span class="fc" id="L211">        } catch (IOException ignore) {</span>
-<span class="fc" id="L212">            return false;</span>
-        }
-    }
-
-    /**
-     * Obtains the object that represents the user membership. In order to get a user's membership with an organization,
-     * the authenticated user must be an organization member. The state parameter in the response can be used to
-     * identify the user's membership status.
-     *
-     * @param username
-     *            the user's username
-     * @return the GHMembership if the username belongs to the organisation, otherwise null
-     * @throws IOException
-     *             the io exception
-     *
-     * @see &lt;a href=
-     *      &quot;https://docs.github.com/en/rest/orgs/members?apiVersion=2022-11-28#get-organization-membership-for-a-user&quot;&gt;documentation&lt;/a&gt;
-     */
-    public GHMembership getMembership(String username) throws IOException {
-<span class="fc" id="L231">        return root().createRequest()</span>
-<span class="fc" id="L232">                .withUrlPath(&quot;/orgs/&quot; + login + &quot;/memberships/&quot; + username)</span>
-<span class="fc" id="L233">                .fetch(GHMembership.class);</span>
-    }
-
-    /**
-     * Remove a member of the organisation - which will remove them from all teams, and remove their access to the
-     * organization’s repositories.
-     *
-     * @param user
-     *            the user
-     * @throws IOException
-     *             the io exception
-     */
-    public void remove(GHUser user) throws IOException {
-<span class="nc" id="L246">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(&quot;/orgs/&quot; + login + &quot;/members/&quot; + user.getLogin()).send();</span>
-<span class="nc" id="L247">    }</span>
-
-    /**
-     * Checks if this organization has the specified user as a public member.
-     *
-     * @param user
-     *            the user
-     * @return the boolean
-     */
-    public boolean hasPublicMember(GHUser user) {
-        try {
-<span class="fc" id="L258">            root().createRequest().withUrlPath(&quot;/orgs/&quot; + login + &quot;/public_members/&quot; + user.getLogin()).send();</span>
-<span class="fc" id="L259">            return true;</span>
-<span class="fc" id="L260">        } catch (IOException ignore) {</span>
-<span class="fc" id="L261">            return false;</span>
-        }
-    }
-
-    /**
-     * Publicizes the membership.
-     *
-     * @param u
-     *            the u
-     * @throws IOException
-     *             the io exception
-     */
-    public void publicize(GHUser u) throws IOException {
-<span class="nc" id="L274">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(&quot;/orgs/&quot; + login + &quot;/public_members/&quot; + u.getLogin()).send();</span>
-<span class="nc" id="L275">    }</span>
-
-    /**
-     * All the members of this organization.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;GHUser&gt; listMembers() {
-<span class="nc" id="L283">        return listMembers(&quot;members&quot;);</span>
-    }
-
-    /**
-     * All the public members of this organization.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;GHUser&gt; listPublicMembers() {
-<span class="nc" id="L292">        return listMembers(&quot;public_members&quot;);</span>
-    }
-
-    /**
-     * All the outside collaborators of this organization.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;GHUser&gt; listOutsideCollaborators() {
-<span class="fc" id="L301">        return listMembers(&quot;outside_collaborators&quot;);</span>
-    }
-
-    private PagedIterable&lt;GHUser&gt; listMembers(String suffix) {
-<span class="fc" id="L305">        return listMembers(suffix, null, null);</span>
-    }
-
-    /**
-     * List members with filter paged iterable.
-     *
-     * @param filter
-     *            the filter
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;GHUser&gt; listMembersWithFilter(String filter) {
-<span class="fc" id="L316">        return listMembers(&quot;members&quot;, filter, null);</span>
-    }
-
-    /**
-     * List outside collaborators with filter paged iterable.
-     *
-     * @param filter
-     *            the filter
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;GHUser&gt; listOutsideCollaboratorsWithFilter(String filter) {
-<span class="fc" id="L327">        return listMembers(&quot;outside_collaborators&quot;, filter, null);</span>
-    }
-
-    /**
-     * List members with specified role paged iterable.
-     *
-     * @param role
-     *            the role
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;GHUser&gt; listMembersWithRole(String role) {
-<span class="fc" id="L338">        return listMembers(&quot;members&quot;, null, role);</span>
-    }
-
-    private PagedIterable&lt;GHUser&gt; listMembers(final String suffix, final String filter, String role) {
-<span class="fc" id="L342">        return root().createRequest()</span>
-<span class="fc" id="L343">                .withUrlPath(String.format(&quot;/orgs/%s/%s&quot;, login, suffix))</span>
-<span class="fc" id="L344">                .with(&quot;filter&quot;, filter)</span>
-<span class="fc" id="L345">                .with(&quot;role&quot;, role)</span>
-<span class="fc" id="L346">                .toIterable(GHUser[].class, null);</span>
-    }
-
-    /**
-     * List up all the security managers.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;GHTeam&gt; listSecurityManagers() {
-<span class="fc" id="L355">        return root().createRequest()</span>
-<span class="fc" id="L356">                .withUrlPath(String.format(&quot;/orgs/%s/security-managers&quot;, login))</span>
-<span class="fc" id="L357">                .toIterable(GHTeam[].class, item -&gt; item.wrapUp(this));</span>
+    public boolean areOrganizationProjectsEnabled() {
+<span class="fc" id="L130">        return hasOrganizationProjects;</span>
     }
 
     /**
@@ -366,259 +139,11 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      */
     public void conceal(GHUser u) throws IOException {
-<span class="nc" id="L369">        root().createRequest()</span>
-<span class="nc" id="L370">                .method(&quot;DELETE&quot;)</span>
-<span class="nc" id="L371">                .withUrlPath(&quot;/orgs/&quot; + login + &quot;/public_members/&quot; + u.getLogin())</span>
-<span class="nc" id="L372">                .send();</span>
-<span class="nc" id="L373">    }</span>
-
-    /**
-     * Are projects enabled for organization boolean.
-     *
-     * @return the boolean
-     */
-    public boolean areOrganizationProjectsEnabled() {
-<span class="fc" id="L381">        return hasOrganizationProjects;</span>
-    }
-
-    /**
-     * Sets organization projects enabled status boolean.
-     *
-     * @param newStatus
-     *            enable status
-     * @throws IOException
-     *             the io exception
-     */
-    public void enableOrganizationProjects(boolean newStatus) throws IOException {
-<span class="fc" id="L393">        edit(&quot;has_organization_projects&quot;, newStatus);</span>
-<span class="fc" id="L394">    }</span>
-
-    private void edit(String key, Object value) throws IOException {
-<span class="fc" id="L397">        root().createRequest()</span>
-<span class="fc" id="L398">                .withUrlPath(String.format(&quot;/orgs/%s&quot;, login))</span>
-<span class="fc" id="L399">                .method(&quot;PATCH&quot;)</span>
-<span class="fc" id="L400">                .with(key, value)</span>
-<span class="fc" id="L401">                .fetchInto(this);</span>
-<span class="fc" id="L402">    }</span>
-
-    /**
-     * Returns the projects for this organization.
-     *
-     * @param status
-     *            The status filter (all, open or closed).
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;GHProject&gt; listProjects(final GHProject.ProjectStateFilter status) {
-<span class="nc" id="L412">        return root().createRequest()</span>
-<span class="nc" id="L413">                .with(&quot;state&quot;, status)</span>
-<span class="nc" id="L414">                .withUrlPath(String.format(&quot;/orgs/%s/projects&quot;, login))</span>
-<span class="nc" id="L415">                .toIterable(GHProject[].class, null);</span>
-    }
-
-    /**
-     * Returns all open projects for the organization.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable&lt;GHProject&gt; listProjects() {
-<span class="nc" id="L424">        return listProjects(GHProject.ProjectStateFilter.OPEN);</span>
-    }
-
-    /**
-     * Creates a project for the organization.
-     *
-     * @param name
-     *            the name
-     * @param body
-     *            the body
-     * @return the gh project
-     * @throws IOException
-     *             the io exception
-     */
-    public GHProject createProject(String name, String body) throws IOException {
-<span class="fc" id="L439">        return root().createRequest()</span>
-<span class="fc" id="L440">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L441">                .with(&quot;name&quot;, name)</span>
-<span class="fc" id="L442">                .with(&quot;body&quot;, body)</span>
-<span class="fc" id="L443">                .withUrlPath(String.format(&quot;/orgs/%s/projects&quot;, login))</span>
-<span class="fc" id="L444">                .fetch(GHProject.class);</span>
-    }
-
-    /**
-     * The enum Permission.
-     *
-     * @see RepositoryRole
-     */
-<span class="fc" id="L452">    public enum Permission {</span>
-
-        /** The admin. */
-<span class="fc" id="L455">        ADMIN,</span>
-        /** The maintain. */
-<span class="fc" id="L457">        MAINTAIN,</span>
-        /** The push. */
-<span class="fc" id="L459">        PUSH,</span>
-        /** The triage. */
-<span class="fc" id="L461">        TRIAGE,</span>
-        /** The pull. */
-<span class="fc" id="L463">        PULL,</span>
-        /** Unknown, before we add the new permission to the enum */
-<span class="fc" id="L465">        UNKNOWN</span>
-    }
-
-    /**
-     * Repository permissions (roles) for teams and collaborators.
-     */
-    public static class RepositoryRole {
-        private final String permission;
-
-<span class="fc" id="L474">        private RepositoryRole(String permission) {</span>
-<span class="fc" id="L475">            this.permission = permission;</span>
-<span class="fc" id="L476">        }</span>
-
-        /**
-         * Custom.
-         *
-         * @param permission
-         *            the permission
-         * @return the repository role
-         */
-        public static RepositoryRole custom(String permission) {
-<span class="fc" id="L486">            return new RepositoryRole(permission);</span>
-        }
-
-        /**
-         * From.
-         *
-         * @param permission
-         *            the permission
-         * @return the repository role
-         */
-        public static RepositoryRole from(Permission permission) {
-<span class="fc" id="L497">            return custom(permission.toString().toLowerCase());</span>
-        }
-
-        /**
-         * To string.
-         *
-         * @return the string
-         */
-        @Override
-        public String toString() {
-<span class="fc" id="L507">            return permission;</span>
-        }
-    }
-
-    /**
-     * Starts a builder that creates a new team.
-     * &lt;p&gt;
-     * You use the returned builder to set various properties, then call {@link GHTeamBuilder#create()} to finally
-     * create a team.
-     *
-     * @param name
-     *            the name
-     * @return the gh create repository builder
-     */
-    public GHTeamBuilder createTeam(String name) {
-<span class="fc" id="L522">        return new GHTeamBuilder(root(), login, name);</span>
-    }
-
-    /**
-     * List repositories that has some open pull requests.
-     * &lt;p&gt;
-     * This used to be an efficient method that didn't involve traversing every repository, but now it doesn't do any
-     * optimization.
-     *
-     * @return the repositories with open pull requests
-     * @throws IOException
-     *             the io exception
-     */
-    public List&lt;GHRepository&gt; getRepositoriesWithOpenPullRequests() throws IOException {
-<span class="nc" id="L536">        List&lt;GHRepository&gt; r = new ArrayList&lt;GHRepository&gt;();</span>
-<span class="nc bnc" id="L537" title="All 2 branches missed.">        for (GHRepository repository : listRepositories().withPageSize(100)) {</span>
-<span class="nc" id="L538">            List&lt;GHPullRequest&gt; pullRequests = repository.queryPullRequests().state(GHIssueState.OPEN).list().toList();</span>
-<span class="nc bnc" id="L539" title="All 2 branches missed.">            if (pullRequests.size() &gt; 0) {</span>
-<span class="nc" id="L540">                r.add(repository);</span>
-            }
-<span class="nc" id="L542">        }</span>
-<span class="nc" id="L543">        return r;</span>
-    }
-
-    /**
-     * Gets all the open pull requests in this organization.
-     *
-     * @return the pull requests
-     * @throws IOException
-     *             the io exception
-     */
-    public List&lt;GHPullRequest&gt; getPullRequests() throws IOException {
-<span class="nc" id="L554">        List&lt;GHPullRequest&gt; all = new ArrayList&lt;GHPullRequest&gt;();</span>
-<span class="nc bnc" id="L555" title="All 2 branches missed.">        for (GHRepository r : getRepositoriesWithOpenPullRequests()) {</span>
-<span class="nc" id="L556">            all.addAll(r.queryPullRequests().state(GHIssueState.OPEN).list().toList());</span>
-<span class="nc" id="L557">        }</span>
-<span class="nc" id="L558">        return all;</span>
-    }
-
-    /**
-     * Lists events performed by a user (this includes private events if the caller is authenticated.
-     *
-     * @return the paged iterable
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    public PagedIterable&lt;GHEventInfo&gt; listEvents() throws IOException {
-<span class="nc" id="L569">        return root().createRequest()</span>
-<span class="nc" id="L570">                .withUrlPath(String.format(&quot;/orgs/%s/events&quot;, login))</span>
-<span class="nc" id="L571">                .toIterable(GHEventInfo[].class, null);</span>
-    }
-
-    /**
-     * List all the repositories using a default of 30 items page size.
-     *
-     * @return the paged iterable
-     */
-    @Override
-    public PagedIterable&lt;GHRepository&gt; listRepositories() {
-<span class="fc" id="L581">        return root().createRequest()</span>
-<span class="fc" id="L582">                .withUrlPath(&quot;/orgs/&quot; + login + &quot;/repos&quot;)</span>
-<span class="fc" id="L583">                .toIterable(GHRepository[].class, null)</span>
-<span class="fc" id="L584">                .withPageSize(30);</span>
-    }
-
-    /**
-     * Retrieves the currently configured hooks.
-     *
-     * @return the hooks
-     * @throws IOException
-     *             the io exception
-     */
-    public List&lt;GHHook&gt; getHooks() throws IOException {
-<span class="nc" id="L595">        return GHHooks.orgContext(this).getHooks();</span>
-    }
-
-    /**
-     * Gets hook.
-     *
-     * @param id
-     *            the id
-     * @return the hook
-     * @throws IOException
-     *             the io exception
-     */
-    public GHHook getHook(int id) throws IOException {
-<span class="fc" id="L608">        return GHHooks.orgContext(this).getHook(id);</span>
-    }
-
-    /**
-     * Deletes hook.
-     *
-     * @param id
-     *            the id
-     * @throws IOException
-     *             the io exception
-     */
-    public void deleteHook(int id) throws IOException {
-<span class="fc" id="L620">        GHHooks.orgContext(this).deleteHook(id);</span>
-<span class="fc" id="L621">    }</span>
+<span class="nc" id="L142">        root().createRequest()</span>
+<span class="nc" id="L143">                .method(&quot;DELETE&quot;)</span>
+<span class="nc" id="L144">                .withUrlPath(&quot;/orgs/&quot; + login + &quot;/public_members/&quot; + u.getLogin())</span>
+<span class="nc" id="L145">                .send();</span>
+<span class="nc" id="L146">    }</span>
 
     /**
      * See https://api.github.com/hooks for possible names and their configuration scheme. TODO: produce type-safe
@@ -638,7 +163,68 @@ public class GHOrganization extends GHPerson {
      */
     public GHHook createHook(String name, Map&lt;String, String&gt; config, Collection&lt;GHEvent&gt; events, boolean active)
             throws IOException {
-<span class="fc" id="L641">        return GHHooks.orgContext(this).createHook(name, config, events, active);</span>
+<span class="fc" id="L166">        return GHHooks.orgContext(this).createHook(name, config, events, active);</span>
+    }
+
+    /**
+     * Creates a project for the organization.
+     *
+     * @param name
+     *            the name
+     * @param body
+     *            the body
+     * @return the gh project
+     * @throws IOException
+     *             the io exception
+     */
+    public GHProject createProject(String name, String body) throws IOException {
+<span class="fc" id="L181">        return root().createRequest()</span>
+<span class="fc" id="L182">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L183">                .with(&quot;name&quot;, name)</span>
+<span class="fc" id="L184">                .with(&quot;body&quot;, body)</span>
+<span class="fc" id="L185">                .withUrlPath(String.format(&quot;/orgs/%s/projects&quot;, login))</span>
+<span class="fc" id="L186">                .fetch(GHProject.class);</span>
+    }
+
+    /**
+     * Starts a builder that creates a new repository.
+     * &lt;p&gt;
+     * You use the returned builder to set various properties, then call {@link GHCreateRepositoryBuilder#create()} to
+     * finally create a repository.
+     *
+     * @param name
+     *            the name
+     * @return the gh create repository builder
+     */
+    public GHCreateRepositoryBuilder createRepository(String name) {
+<span class="fc" id="L200">        return new GHCreateRepositoryBuilder(name, root(), &quot;/orgs/&quot; + login + &quot;/repos&quot;);</span>
+    }
+
+    /**
+     * Starts a builder that creates a new team.
+     * &lt;p&gt;
+     * You use the returned builder to set various properties, then call {@link GHTeamBuilder#create()} to finally
+     * create a team.
+     *
+     * @param name
+     *            the name
+     * @return the gh create repository builder
+     */
+    public GHTeamBuilder createTeam(String name) {
+<span class="fc" id="L214">        return new GHTeamBuilder(root(), login, name);</span>
+    }
+
+    /**
+     * Create web hook gh hook.
+     *
+     * @param url
+     *            the url
+     * @return the gh hook
+     * @throws IOException
+     *             the io exception
+     */
+    public GHHook createWebHook(URL url) throws IOException {
+<span class="fc" id="L227">        return createWebHook(url, null);</span>
     }
 
     /**
@@ -653,20 +239,434 @@ public class GHOrganization extends GHPerson {
      *             the io exception
      */
     public GHHook createWebHook(URL url, Collection&lt;GHEvent&gt; events) throws IOException {
-<span class="fc" id="L656">        return createHook(&quot;web&quot;, Collections.singletonMap(&quot;url&quot;, url.toExternalForm()), events, true);</span>
+<span class="fc" id="L242">        return createHook(&quot;web&quot;, Collections.singletonMap(&quot;url&quot;, url.toExternalForm()), events, true);</span>
     }
 
     /**
-     * Create web hook gh hook.
+     * Deletes hook.
      *
-     * @param url
-     *            the url
-     * @return the gh hook
+     * @param id
+     *            the id
      * @throws IOException
      *             the io exception
      */
-    public GHHook createWebHook(URL url) throws IOException {
-<span class="fc" id="L669">        return createWebHook(url, null);</span>
+    public void deleteHook(int id) throws IOException {
+<span class="fc" id="L254">        GHHooks.orgContext(this).deleteHook(id);</span>
+<span class="fc" id="L255">    }</span>
+
+    /**
+     * Sets organization projects enabled status boolean.
+     *
+     * @param newStatus
+     *            enable status
+     * @throws IOException
+     *             the io exception
+     */
+    public void enableOrganizationProjects(boolean newStatus) throws IOException {
+<span class="fc" id="L266">        edit(&quot;has_organization_projects&quot;, newStatus);</span>
+<span class="fc" id="L267">    }</span>
+
+    /**
+     * Gets a single external group by ID.
+     *
+     * @param groupId
+     *            id of the external group that we want to query for
+     * @return the external group
+     * @throws IOException
+     *             the io exception
+     * @see &lt;a href=
+     *      &quot;https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#get-an-external-group&quot;&gt;documentation&lt;/a&gt;
+     */
+    public GHExternalGroup getExternalGroup(final long groupId) throws IOException {
+        try {
+<span class="fc" id="L282">            return root().createRequest()</span>
+<span class="fc" id="L283">                    .withUrlPath(String.format(&quot;/orgs/%s/external-group/%d&quot;, login, groupId))</span>
+<span class="fc" id="L284">                    .fetch(GHExternalGroup.class)</span>
+<span class="fc" id="L285">                    .wrapUp(this);</span>
+<span class="fc" id="L286">        } catch (final HttpException e) {</span>
+<span class="fc" id="L287">            throw EnterpriseManagedSupport.forOrganization(this)</span>
+<span class="fc" id="L288">                    .filterException(e, &quot;Could not retrieve organization external group&quot;)</span>
+<span class="fc" id="L289">                    .orElse(e);</span>
+        }
+    }
+
+    /**
+     * Gets hook.
+     *
+     * @param id
+     *            the id
+     * @return the hook
+     * @throws IOException
+     *             the io exception
+     */
+    public GHHook getHook(int id) throws IOException {
+<span class="fc" id="L303">        return GHHooks.orgContext(this).getHook(id);</span>
+    }
+
+    /**
+     * Retrieves the currently configured hooks.
+     *
+     * @return the hooks
+     * @throws IOException
+     *             the io exception
+     */
+    public List&lt;GHHook&gt; getHooks() throws IOException {
+<span class="nc" id="L314">        return GHHooks.orgContext(this).getHooks();</span>
+    }
+
+    /**
+     * Obtains the object that represents the user membership. In order to get a user's membership with an organization,
+     * the authenticated user must be an organization member. The state parameter in the response can be used to
+     * identify the user's membership status.
+     *
+     * @param username
+     *            the user's username
+     * @return the GHMembership if the username belongs to the organisation, otherwise null
+     * @throws IOException
+     *             the io exception
+     *
+     * @see &lt;a href=
+     *      &quot;https://docs.github.com/en/rest/orgs/members?apiVersion=2022-11-28#get-organization-membership-for-a-user&quot;&gt;documentation&lt;/a&gt;
+     */
+    public GHMembership getMembership(String username) throws IOException {
+<span class="fc" id="L332">        return root().createRequest()</span>
+<span class="fc" id="L333">                .withUrlPath(&quot;/orgs/&quot; + login + &quot;/memberships/&quot; + username)</span>
+<span class="fc" id="L334">                .fetch(GHMembership.class);</span>
+    }
+
+    /**
+     * Gets all the open pull requests in this organization.
+     *
+     * @return the pull requests
+     * @throws IOException
+     *             the io exception
+     */
+    public List&lt;GHPullRequest&gt; getPullRequests() throws IOException {
+<span class="nc" id="L345">        List&lt;GHPullRequest&gt; all = new ArrayList&lt;GHPullRequest&gt;();</span>
+<span class="nc bnc" id="L346" title="All 2 branches missed.">        for (GHRepository r : getRepositoriesWithOpenPullRequests()) {</span>
+<span class="nc" id="L347">            all.addAll(r.queryPullRequests().state(GHIssueState.OPEN).list().toList());</span>
+<span class="nc" id="L348">        }</span>
+<span class="nc" id="L349">        return all;</span>
+    }
+
+    /**
+     * List repositories that has some open pull requests.
+     * &lt;p&gt;
+     * This used to be an efficient method that didn't involve traversing every repository, but now it doesn't do any
+     * optimization.
+     *
+     * @return the repositories with open pull requests
+     * @throws IOException
+     *             the io exception
+     */
+    public List&lt;GHRepository&gt; getRepositoriesWithOpenPullRequests() throws IOException {
+<span class="nc" id="L363">        List&lt;GHRepository&gt; r = new ArrayList&lt;GHRepository&gt;();</span>
+<span class="nc bnc" id="L364" title="All 2 branches missed.">        for (GHRepository repository : listRepositories().withPageSize(100)) {</span>
+<span class="nc" id="L365">            List&lt;GHPullRequest&gt; pullRequests = repository.queryPullRequests().state(GHIssueState.OPEN).list().toList();</span>
+<span class="nc bnc" id="L366" title="All 2 branches missed.">            if (pullRequests.size() &gt; 0) {</span>
+<span class="nc" id="L367">                r.add(repository);</span>
+            }
+<span class="nc" id="L369">        }</span>
+<span class="nc" id="L370">        return r;</span>
+    }
+
+    /**
+     * Gets a single team by ID.
+     *
+     * @param teamId
+     *            id of the team that we want to query for
+     * @return the team
+     * @throws IOException
+     *             the io exception
+     * @see &lt;a href= &quot;https://developer.github.com/v3/teams/#get-team-by-name&quot;&gt;documentation&lt;/a&gt;
+     */
+    public GHTeam getTeam(long teamId) throws IOException {
+<span class="fc" id="L384">        return root().createRequest()</span>
+<span class="fc" id="L385">                .withUrlPath(String.format(&quot;/organizations/%d/team/%d&quot;, getId(), teamId))</span>
+<span class="fc" id="L386">                .fetch(GHTeam.class)</span>
+<span class="fc" id="L387">                .wrapUp(this);</span>
+    }
+
+    /**
+     * Finds a team that has the given name in its {@link GHTeam#getName()}.
+     *
+     * @param name
+     *            the name
+     * @return the team by name
+     */
+    public GHTeam getTeamByName(String name) {
+<span class="pc bpc" id="L398" title="1 of 2 branches missed.">        for (GHTeam t : listTeams()) {</span>
+<span class="fc bfc" id="L399" title="All 2 branches covered.">            if (t.getName().equals(name))</span>
+<span class="fc" id="L400">                return t;</span>
+<span class="fc" id="L401">        }</span>
+<span class="nc" id="L402">        return null;</span>
+    }
+
+    /**
+     * Finds a team that has the given slug in its {@link GHTeam#getSlug()}.
+     *
+     * @param slug
+     *            the slug
+     * @return the team by slug
+     * @throws IOException
+     *             the io exception
+     * @see &lt;a href= &quot;https://developer.github.com/v3/teams/#get-team-by-name&quot;&gt;documentation&lt;/a&gt;
+     */
+    public GHTeam getTeamBySlug(String slug) throws IOException {
+<span class="fc" id="L416">        return root().createRequest()</span>
+<span class="fc" id="L417">                .withUrlPath(String.format(&quot;/orgs/%s/teams/%s&quot;, login, slug))</span>
+<span class="fc" id="L418">                .fetch(GHTeam.class)</span>
+<span class="fc" id="L419">                .wrapUp(this);</span>
+    }
+
+    /**
+     * Teams by their names.
+     *
+     * @return the teams
+     */
+    public Map&lt;String, GHTeam&gt; getTeams() {
+<span class="fc" id="L428">        Map&lt;String, GHTeam&gt; r = new TreeMap&lt;String, GHTeam&gt;();</span>
+<span class="fc bfc" id="L429" title="All 2 branches covered.">        for (GHTeam t : listTeams()) {</span>
+<span class="fc" id="L430">            r.put(t.getName(), t);</span>
+<span class="fc" id="L431">        }</span>
+<span class="fc" id="L432">        return r;</span>
+    }
+
+    /**
+     * Checks if this organization has the specified user as a member.
+     *
+     * @param user
+     *            the user
+     * @return the boolean
+     */
+    public boolean hasMember(GHUser user) {
+        try {
+<span class="fc" id="L444">            root().createRequest().withUrlPath(&quot;/orgs/&quot; + login + &quot;/members/&quot; + user.getLogin()).send();</span>
+<span class="fc" id="L445">            return true;</span>
+<span class="fc" id="L446">        } catch (IOException ignore) {</span>
+<span class="fc" id="L447">            return false;</span>
+        }
+    }
+
+    /**
+     * Checks if this organization has the specified user as a public member.
+     *
+     * @param user
+     *            the user
+     * @return the boolean
+     */
+    public boolean hasPublicMember(GHUser user) {
+        try {
+<span class="fc" id="L460">            root().createRequest().withUrlPath(&quot;/orgs/&quot; + login + &quot;/public_members/&quot; + user.getLogin()).send();</span>
+<span class="fc" id="L461">            return true;</span>
+<span class="fc" id="L462">        } catch (IOException ignore) {</span>
+<span class="fc" id="L463">            return false;</span>
+        }
+    }
+
+    /**
+     * Lists events performed by a user (this includes private events if the caller is authenticated.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    public PagedIterable&lt;GHEventInfo&gt; listEvents() throws IOException {
+<span class="nc" id="L475">        return root().createRequest()</span>
+<span class="nc" id="L476">                .withUrlPath(String.format(&quot;/orgs/%s/events&quot;, login))</span>
+<span class="nc" id="L477">                .toIterable(GHEventInfo[].class, null);</span>
+    }
+
+    /**
+     * List up all the external groups.
+     *
+     * @return the paged iterable
+     * @see &lt;a href=
+     *      &quot;https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#list-external-groups-in-an-organization&quot;&gt;documentation&lt;/a&gt;
+     */
+    public PagedIterable&lt;GHExternalGroup&gt; listExternalGroups() {
+<span class="fc" id="L488">        return listExternalGroups(null);</span>
+    }
+
+    /**
+     * List up all the external groups with a given text in their name
+     *
+     * @param displayName
+     *            the text that must be part of the returned groups name
+     * @return the paged iterable
+     * @see &lt;a href=
+     *      &quot;https://docs.github.com/en/enterprise-cloud@latest/rest/teams/external-groups?apiVersion=2022-11-28#list-external-groups-in-an-organization&quot;&gt;documentation&lt;/a&gt;
+     */
+    public PagedIterable&lt;GHExternalGroup&gt; listExternalGroups(final String displayName) {
+<span class="fc" id="L501">        final Requester requester = root().createRequest()</span>
+<span class="fc" id="L502">                .withUrlPath(String.format(&quot;/orgs/%s/external-groups&quot;, login));</span>
+<span class="fc bfc" id="L503" title="All 2 branches covered.">        if (displayName != null) {</span>
+<span class="fc" id="L504">            requester.with(&quot;display_name&quot;, displayName);</span>
+        }
+<span class="fc" id="L506">        return new GHExternalGroupIterable(this, requester);</span>
+    }
+
+    /**
+     * All the members of this organization.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHUser&gt; listMembers() {
+<span class="nc" id="L515">        return listMembers(&quot;members&quot;);</span>
+    }
+
+    /**
+     * List members with filter paged iterable.
+     *
+     * @param filter
+     *            the filter
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHUser&gt; listMembersWithFilter(String filter) {
+<span class="fc" id="L526">        return listMembers(&quot;members&quot;, filter, null);</span>
+    }
+
+    /**
+     * List members with specified role paged iterable.
+     *
+     * @param role
+     *            the role
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHUser&gt; listMembersWithRole(String role) {
+<span class="fc" id="L537">        return listMembers(&quot;members&quot;, null, role);</span>
+    }
+
+    /**
+     * All the outside collaborators of this organization.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHUser&gt; listOutsideCollaborators() {
+<span class="fc" id="L546">        return listMembers(&quot;outside_collaborators&quot;);</span>
+    }
+
+    /**
+     * List outside collaborators with filter paged iterable.
+     *
+     * @param filter
+     *            the filter
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHUser&gt; listOutsideCollaboratorsWithFilter(String filter) {
+<span class="fc" id="L557">        return listMembers(&quot;outside_collaborators&quot;, filter, null);</span>
+    }
+
+    /**
+     * Returns all open projects for the organization.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHProject&gt; listProjects() {
+<span class="nc" id="L566">        return listProjects(GHProject.ProjectStateFilter.OPEN);</span>
+    }
+
+    /**
+     * Returns the projects for this organization.
+     *
+     * @param status
+     *            The status filter (all, open or closed).
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHProject&gt; listProjects(final GHProject.ProjectStateFilter status) {
+<span class="nc" id="L577">        return root().createRequest()</span>
+<span class="nc" id="L578">                .with(&quot;state&quot;, status)</span>
+<span class="nc" id="L579">                .withUrlPath(String.format(&quot;/orgs/%s/projects&quot;, login))</span>
+<span class="nc" id="L580">                .toIterable(GHProject[].class, null);</span>
+    }
+
+    /**
+     * All the public members of this organization.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHUser&gt; listPublicMembers() {
+<span class="nc" id="L589">        return listMembers(&quot;public_members&quot;);</span>
+    }
+
+    /**
+     * List all the repositories using a default of 30 items page size.
+     *
+     * @return the paged iterable
+     */
+    @Override
+    public PagedIterable&lt;GHRepository&gt; listRepositories() {
+<span class="fc" id="L599">        return root().createRequest()</span>
+<span class="fc" id="L600">                .withUrlPath(&quot;/orgs/&quot; + login + &quot;/repos&quot;)</span>
+<span class="fc" id="L601">                .toIterable(GHRepository[].class, null)</span>
+<span class="fc" id="L602">                .withPageSize(30);</span>
+    }
+
+    /**
+     * List up all the security managers.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHTeam&gt; listSecurityManagers() {
+<span class="fc" id="L611">        return root().createRequest()</span>
+<span class="fc" id="L612">                .withUrlPath(String.format(&quot;/orgs/%s/security-managers&quot;, login))</span>
+<span class="fc" id="L613">                .toIterable(GHTeam[].class, item -&gt; item.wrapUp(this));</span>
+    }
+
+    /**
+     * List up all the teams.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable&lt;GHTeam&gt; listTeams() {
+<span class="fc" id="L622">        return root().createRequest()</span>
+<span class="fc" id="L623">                .withUrlPath(String.format(&quot;/orgs/%s/teams&quot;, login))</span>
+<span class="fc" id="L624">                .toIterable(GHTeam[].class, item -&gt; item.wrapUp(this));</span>
+    }
+
+    /**
+     * Publicizes the membership.
+     *
+     * @param u
+     *            the u
+     * @throws IOException
+     *             the io exception
+     */
+    public void publicize(GHUser u) throws IOException {
+<span class="nc" id="L636">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(&quot;/orgs/&quot; + login + &quot;/public_members/&quot; + u.getLogin()).send();</span>
+<span class="nc" id="L637">    }</span>
+
+    /**
+     * Remove a member of the organisation - which will remove them from all teams, and remove their access to the
+     * organization’s repositories.
+     *
+     * @param user
+     *            the user
+     * @throws IOException
+     *             the io exception
+     */
+    public void remove(GHUser user) throws IOException {
+<span class="nc" id="L649">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(&quot;/orgs/&quot; + login + &quot;/members/&quot; + user.getLogin()).send();</span>
+<span class="nc" id="L650">    }</span>
+
+    private void edit(String key, Object value) throws IOException {
+<span class="fc" id="L653">        root().createRequest()</span>
+<span class="fc" id="L654">                .withUrlPath(String.format(&quot;/orgs/%s&quot;, login))</span>
+<span class="fc" id="L655">                .method(&quot;PATCH&quot;)</span>
+<span class="fc" id="L656">                .with(key, value)</span>
+<span class="fc" id="L657">                .fetchInto(this);</span>
+<span class="fc" id="L658">    }</span>
+
+    private PagedIterable&lt;GHUser&gt; listMembers(String suffix) {
+<span class="fc" id="L661">        return listMembers(suffix, null, null);</span>
+    }
+
+    private PagedIterable&lt;GHUser&gt; listMembers(final String suffix, final String filter, String role) {
+<span class="fc" id="L665">        return root().createRequest()</span>
+<span class="fc" id="L666">                .withUrlPath(String.format(&quot;/orgs/%s/%s&quot;, login, suffix))</span>
+<span class="fc" id="L667">                .with(&quot;filter&quot;, filter)</span>
+<span class="fc" id="L668">                .with(&quot;role&quot;, role)</span>
+<span class="fc" id="L669">                .toIterable(GHUser[].class, null);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -37,12 +37,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
         justification = &quot;JSON API&quot;)
 public class GHEmail {
 
-    /**
-     * Create default GHEmail instance
-     */
-<span class="fc" id="L43">    public GHEmail() {</span>
-<span class="fc" id="L44">    }</span>
-
     /** The email. */
     protected String email;
 
@@ -53,51 +47,10 @@ public class GHEmail {
     protected boolean verified;
 
     /**
-     * Gets email.
-     *
-     * @return the email
+     * Create default GHEmail instance
      */
-    public String getEmail() {
-<span class="fc" id="L61">        return email;</span>
-    }
-
-    /**
-     * Is primary boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isPrimary() {
-<span class="nc" id="L70">        return primary;</span>
-    }
-
-    /**
-     * Is verified boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isVerified() {
-<span class="nc" id="L79">        return verified;</span>
-    }
-
-    /**
-     * To string.
-     *
-     * @return the string
-     */
-    @Override
-    public String toString() {
-<span class="nc" id="L89">        return &quot;Email:&quot; + email;</span>
-    }
-
-    /**
-     * Hash code.
-     *
-     * @return the int
-     */
-    @Override
-    public int hashCode() {
-<span class="nc" id="L99">        return email.hashCode();</span>
-    }
+<span class="fc" id="L52">    public GHEmail() {</span>
+<span class="fc" id="L53">    }</span>
 
     /**
      * Equals.
@@ -108,11 +61,58 @@ public class GHEmail {
      */
     @Override
     public boolean equals(Object obj) {
-<span class="nc bnc" id="L111" title="All 2 branches missed.">        if (obj instanceof GHEmail) {</span>
-<span class="nc" id="L112">            GHEmail that = (GHEmail) obj;</span>
-<span class="nc" id="L113">            return this.email.equals(that.email);</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        if (obj instanceof GHEmail) {</span>
+<span class="nc" id="L65">            GHEmail that = (GHEmail) obj;</span>
+<span class="nc" id="L66">            return this.email.equals(that.email);</span>
         }
-<span class="nc" id="L115">        return false;</span>
+<span class="nc" id="L68">        return false;</span>
+    }
+
+    /**
+     * Gets email.
+     *
+     * @return the email
+     */
+    public String getEmail() {
+<span class="fc" id="L77">        return email;</span>
+    }
+
+    /**
+     * Hash code.
+     *
+     * @return the int
+     */
+    @Override
+    public int hashCode() {
+<span class="nc" id="L87">        return email.hashCode();</span>
+    }
+
+    /**
+     * Is primary boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isPrimary() {
+<span class="nc" id="L96">        return primary;</span>
+    }
+
+    /**
+     * Is verified boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isVerified() {
+<span class="nc" id="L105">        return verified;</span>
+    }
+
+    /**
+     * To string.
+     *
+     * @return the string
+     */
+    @Override
+    public String toString() {
+<span class="nc" id="L115">        return &quot;Email:&quot; + email;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

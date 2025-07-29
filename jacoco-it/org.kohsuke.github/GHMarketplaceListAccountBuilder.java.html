@@ -8,7 +8,18 @@
  * @see GHMarketplacePlan#listAccounts()
  */
 public class GHMarketplaceListAccountBuilder extends GitHubInteractiveObject {
+    /**
+     * The enum Sort.
+     */
+<span class="fc" id="L14">    public enum Sort {</span>
+
+        /** The created. */
+<span class="fc" id="L17">        CREATED,</span>
+        /** The updated. */
+<span class="fc" id="L19">        UPDATED</span>
+    }
     private final Requester builder;
+
     private final long planId;
 
     /**
@@ -20,47 +31,10 @@ public class GHMarketplaceListAccountBuilder extends GitHubInteractiveObject {
      *            the plan id
      */
     GHMarketplaceListAccountBuilder(GitHub root, long planId) {
-<span class="fc" id="L23">        super(root);</span>
-<span class="fc" id="L24">        this.builder = root.createRequest();</span>
-<span class="fc" id="L25">        this.planId = planId;</span>
-<span class="fc" id="L26">    }</span>
-
-    /**
-     * Sorts the GitHub accounts by the date they were created or last updated. Can be one of created or updated.
-     * &lt;p&gt;
-     * If omitted, the default sorting strategy will be &quot;CREATED&quot;
-     *
-     * @param sort
-     *            the sort strategy
-     * @return a GHMarketplaceListAccountBuilder
-     */
-    public GHMarketplaceListAccountBuilder sort(Sort sort) {
-<span class="fc" id="L38">        this.builder.with(&quot;sort&quot;, sort);</span>
-<span class="fc" id="L39">        return this;</span>
-    }
-
-    /**
-     * Orders the GitHub accounts results, Can be one of asc or desc. Ignored without the sort parameter.
-     *
-     * @param direction
-     *            the order strategy
-     * @return a GHMarketplaceListAccountBuilder
-     */
-    public GHMarketplaceListAccountBuilder direction(GHDirection direction) {
-<span class="fc" id="L50">        this.builder.with(&quot;direction&quot;, direction);</span>
-<span class="fc" id="L51">        return this;</span>
-    }
-
-    /**
-     * The enum Sort.
-     */
-<span class="fc" id="L57">    public enum Sort {</span>
-
-        /** The created. */
-<span class="fc" id="L60">        CREATED,</span>
-        /** The updated. */
-<span class="fc" id="L62">        UPDATED</span>
-    }
+<span class="fc" id="L34">        super(root);</span>
+<span class="fc" id="L35">        this.builder = root.createRequest();</span>
+<span class="fc" id="L36">        this.planId = planId;</span>
+<span class="fc" id="L37">    }</span>
 
     /**
      * List any accounts associated with the plan specified on construction with all the order/sort parameters set.
@@ -72,8 +46,34 @@ public class GHMarketplaceListAccountBuilder extends GitHubInteractiveObject {
      * @return a paged iterable instance of GHMarketplaceAccountPlan
      */
     public PagedIterable&lt;GHMarketplaceAccountPlan&gt; createRequest() {
-<span class="fc" id="L75">        return builder.withUrlPath(String.format(&quot;/marketplace_listing/plans/%d/accounts&quot;, this.planId))</span>
-<span class="fc" id="L76">                .toIterable(GHMarketplaceAccountPlan[].class, null);</span>
+<span class="fc" id="L49">        return builder.withUrlPath(String.format(&quot;/marketplace_listing/plans/%d/accounts&quot;, this.planId))</span>
+<span class="fc" id="L50">                .toIterable(GHMarketplaceAccountPlan[].class, null);</span>
+    }
+
+    /**
+     * Orders the GitHub accounts results, Can be one of asc or desc. Ignored without the sort parameter.
+     *
+     * @param direction
+     *            the order strategy
+     * @return a GHMarketplaceListAccountBuilder
+     */
+    public GHMarketplaceListAccountBuilder direction(GHDirection direction) {
+<span class="fc" id="L61">        this.builder.with(&quot;direction&quot;, direction);</span>
+<span class="fc" id="L62">        return this;</span>
+    }
+
+    /**
+     * Sorts the GitHub accounts by the date they were created or last updated. Can be one of created or updated.
+     * &lt;p&gt;
+     * If omitted, the default sorting strategy will be &quot;CREATED&quot;
+     *
+     * @param sort
+     *            the sort strategy
+     * @return a GHMarketplaceListAccountBuilder
+     */
+    public GHMarketplaceListAccountBuilder sort(Sort sort) {
+<span class="fc" id="L75">        this.builder.with(&quot;sort&quot;, sort);</span>
+<span class="fc" id="L76">        return this;</span>
     }
 
 }

@@ -35,44 +35,125 @@ import java.net.URL;
  */
 public class GHPullRequestFileDetail {
 
-    /**
-     * Create default GHPullRequestFileDetail instance
-     */
-<span class="nc" id="L41">    public GHPullRequestFileDetail() {</span>
-<span class="nc" id="L42">    }</span>
-
-    /** The sha. */
-    String sha;
-
-    /** The filename. */
-    String filename;
-
-    /** The status. */
-    String status;
-
     /** The additions. */
     int additions;
-
-    /** The deletions. */
-    int deletions;
-
-    /** The changes. */
-    int changes;
 
     /** The blob url. */
     String blobUrl;
 
-    /** The raw url. */
-    String rawUrl;
+    /** The changes. */
+    int changes;
 
     /** The contents url. */
     String contentsUrl;
+
+    /** The deletions. */
+    int deletions;
+
+    /** The filename. */
+    String filename;
 
     /** The patch. */
     String patch;
 
     /** The previous filename. */
     String previousFilename;
+
+    /** The raw url. */
+    String rawUrl;
+
+    /** The sha. */
+    String sha;
+
+    /** The status. */
+    String status;
+
+    /**
+     * Create default GHPullRequestFileDetail instance
+     */
+<span class="nc" id="L74">    public GHPullRequestFileDetail() {</span>
+<span class="nc" id="L75">    }</span>
+
+    /**
+     * Gets additions.
+     *
+     * @return the additions
+     */
+    public int getAdditions() {
+<span class="nc" id="L83">        return additions;</span>
+    }
+
+    /**
+     * Gets blob url.
+     *
+     * @return the blob url
+     */
+    public URL getBlobUrl() {
+<span class="nc" id="L92">        return GitHubClient.parseURL(blobUrl);</span>
+    }
+
+    /**
+     * Gets changes.
+     *
+     * @return the changes
+     */
+    public int getChanges() {
+<span class="nc" id="L101">        return changes;</span>
+    }
+
+    /**
+     * Gets contents url.
+     *
+     * @return the contents url
+     */
+    public URL getContentsUrl() {
+<span class="nc" id="L110">        return GitHubClient.parseURL(contentsUrl);</span>
+    }
+
+    /**
+     * Gets deletions.
+     *
+     * @return the deletions
+     */
+    public int getDeletions() {
+<span class="nc" id="L119">        return deletions;</span>
+    }
+
+    /**
+     * Gets filename.
+     *
+     * @return the filename
+     */
+    public String getFilename() {
+<span class="nc" id="L128">        return filename;</span>
+    }
+
+    /**
+     * Gets patch.
+     *
+     * @return the patch
+     */
+    public String getPatch() {
+<span class="nc" id="L137">        return patch;</span>
+    }
+
+    /**
+     * Gets previous filename.
+     *
+     * @return the previous filename
+     */
+    public String getPreviousFilename() {
+<span class="nc" id="L146">        return previousFilename;</span>
+    }
+
+    /**
+     * Gets raw url.
+     *
+     * @return the raw url
+     */
+    public URL getRawUrl() {
+<span class="nc" id="L155">        return GitHubClient.parseURL(rawUrl);</span>
+    }
 
     /**
      * Gets sha of the file (not commit sha).
@@ -82,16 +163,7 @@ public class GHPullRequestFileDetail {
      *      files&lt;/a&gt;
      */
     public String getSha() {
-<span class="nc" id="L85">        return sha;</span>
-    }
-
-    /**
-     * Gets filename.
-     *
-     * @return the filename
-     */
-    public String getFilename() {
-<span class="nc" id="L94">        return filename;</span>
+<span class="nc" id="L166">        return sha;</span>
     }
 
     /**
@@ -100,79 +172,7 @@ public class GHPullRequestFileDetail {
      * @return the status
      */
     public String getStatus() {
-<span class="nc" id="L103">        return status;</span>
-    }
-
-    /**
-     * Gets additions.
-     *
-     * @return the additions
-     */
-    public int getAdditions() {
-<span class="nc" id="L112">        return additions;</span>
-    }
-
-    /**
-     * Gets deletions.
-     *
-     * @return the deletions
-     */
-    public int getDeletions() {
-<span class="nc" id="L121">        return deletions;</span>
-    }
-
-    /**
-     * Gets changes.
-     *
-     * @return the changes
-     */
-    public int getChanges() {
-<span class="nc" id="L130">        return changes;</span>
-    }
-
-    /**
-     * Gets blob url.
-     *
-     * @return the blob url
-     */
-    public URL getBlobUrl() {
-<span class="nc" id="L139">        return GitHubClient.parseURL(blobUrl);</span>
-    }
-
-    /**
-     * Gets raw url.
-     *
-     * @return the raw url
-     */
-    public URL getRawUrl() {
-<span class="nc" id="L148">        return GitHubClient.parseURL(rawUrl);</span>
-    }
-
-    /**
-     * Gets contents url.
-     *
-     * @return the contents url
-     */
-    public URL getContentsUrl() {
-<span class="nc" id="L157">        return GitHubClient.parseURL(contentsUrl);</span>
-    }
-
-    /**
-     * Gets patch.
-     *
-     * @return the patch
-     */
-    public String getPatch() {
-<span class="nc" id="L166">        return patch;</span>
-    }
-
-    /**
-     * Gets previous filename.
-     *
-     * @return the previous filename
-     */
-    public String getPreviousFilename() {
-<span class="nc" id="L175">        return previousFilename;</span>
+<span class="nc" id="L175">        return status;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

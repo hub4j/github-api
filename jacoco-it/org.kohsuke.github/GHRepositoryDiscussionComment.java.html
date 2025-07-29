@@ -17,37 +17,37 @@ import java.net.URL;
  */
 public class GHRepositoryDiscussionComment extends GHObject {
 
-    /**
-     * Create default GHRepositoryDiscussionComment instance
-     */
-<span class="fc" id="L23">    public GHRepositoryDiscussionComment() {</span>
-<span class="fc" id="L24">    }</span>
+    private GHCommentAuthorAssociation authorAssociation;
 
+    private String body;
+
+    private int childCommentCount;
     private String htmlUrl;
 
     private Long parentId;
-    private int childCommentCount;
-
     private GHUser user;
-    private GHCommentAuthorAssociation authorAssociation;
-    private String body;
+    /**
+     * Create default GHRepositoryDiscussionComment instance
+     */
+<span class="fc" id="L32">    public GHRepositoryDiscussionComment() {</span>
+<span class="fc" id="L33">    }</span>
 
     /**
-     * Gets the html url.
+     * Gets the author association.
      *
-     * @return the html url
+     * @return the author association
      */
-    public URL getHtmlUrl() {
-<span class="fc" id="L41">        return GitHubClient.parseURL(htmlUrl);</span>
+    public GHCommentAuthorAssociation getAuthorAssociation() {
+<span class="fc" id="L41">        return authorAssociation;</span>
     }
 
     /**
-     * Gets the parent comment id.
+     * Gets the body.
      *
-     * @return the parent comment id
+     * @return the body
      */
-    public Long getParentId() {
-<span class="fc" id="L50">        return parentId;</span>
+    public String getBody() {
+<span class="fc" id="L50">        return body;</span>
     }
 
     /**
@@ -60,30 +60,30 @@ public class GHRepositoryDiscussionComment extends GHObject {
     }
 
     /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
+    public URL getHtmlUrl() {
+<span class="fc" id="L68">        return GitHubClient.parseURL(htmlUrl);</span>
+    }
+
+    /**
+     * Gets the parent comment id.
+     *
+     * @return the parent comment id
+     */
+    public Long getParentId() {
+<span class="fc" id="L77">        return parentId;</span>
+    }
+
+    /**
      * Gets the user.
      *
      * @return the user
      */
     public GHUser getUser() {
-<span class="fc" id="L68">        return root().intern(user);</span>
-    }
-
-    /**
-     * Gets the author association.
-     *
-     * @return the author association
-     */
-    public GHCommentAuthorAssociation getAuthorAssociation() {
-<span class="fc" id="L77">        return authorAssociation;</span>
-    }
-
-    /**
-     * Gets the body.
-     *
-     * @return the body
-     */
-    public String getBody() {
-<span class="fc" id="L86">        return body;</span>
+<span class="fc" id="L86">        return root().intern(user);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

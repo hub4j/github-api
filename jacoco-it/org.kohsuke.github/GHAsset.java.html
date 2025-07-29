@@ -13,20 +13,55 @@ import java.io.IOException;
 public class GHAsset extends GHObject {
 
     /**
-     * Create default GHAsset instance
+     * Wrap gh asset [ ].
+     *
+     * @param assets
+     *            the assets
+     * @param release
+     *            the release
+     * @return the gh asset [ ]
      */
-<span class="fc" id="L18">    public GHAsset() {</span>
-<span class="fc" id="L19">    }</span>
+    public static GHAsset[] wrap(GHAsset[] assets, GHRelease release) {
+<span class="nc bnc" id="L25" title="All 2 branches missed.">        for (GHAsset aTo : assets) {</span>
+<span class="nc" id="L26">            aTo.wrap(release);</span>
+        }
+<span class="nc" id="L28">        return assets;</span>
+    }
 
+    private String browserDownloadUrl;
+    private String contentType;
+    private long downloadCount;
+    private String label;
+    private String name;
+    private long size;
+    private String state;
     /** The owner. */
     GHRepository owner;
-    private String name;
-    private String label;
-    private String state;
-    private String contentType;
-    private long size;
-    private long downloadCount;
-    private String browserDownloadUrl;
+
+    /**
+     * Create default GHAsset instance
+     */
+<span class="fc" id="L44">    public GHAsset() {</span>
+<span class="fc" id="L45">    }</span>
+
+    /**
+     * Delete.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+<span class="fc" id="L54">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L55">    }</span>
+
+    /**
+     * Gets browser download url.
+     *
+     * @return the browser download url
+     */
+    public String getBrowserDownloadUrl() {
+<span class="fc" id="L63">        return browserDownloadUrl;</span>
+    }
 
     /**
      * Gets content type.
@@ -34,7 +69,62 @@ public class GHAsset extends GHObject {
      * @return the content type
      */
     public String getContentType() {
-<span class="fc" id="L37">        return contentType;</span>
+<span class="fc" id="L72">        return contentType;</span>
+    }
+
+    /**
+     * Gets download count.
+     *
+     * @return the download count
+     */
+    public long getDownloadCount() {
+<span class="fc" id="L81">        return downloadCount;</span>
+    }
+
+    /**
+     * Gets label.
+     *
+     * @return the label
+     */
+    public String getLabel() {
+<span class="fc" id="L90">        return label;</span>
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+<span class="fc" id="L99">        return name;</span>
+    }
+
+    /**
+     * Gets owner.
+     *
+     * @return the owner
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHRepository getOwner() {
+<span class="fc" id="L109">        return owner;</span>
+    }
+
+    /**
+     * Gets size.
+     *
+     * @return the size
+     */
+    public long getSize() {
+<span class="fc" id="L118">        return size;</span>
+    }
+
+    /**
+     * Gets state.
+     *
+     * @return the state
+     */
+    public String getState() {
+<span class="fc" id="L127">        return state;</span>
     }
 
     /**
@@ -46,27 +136,9 @@ public class GHAsset extends GHObject {
      *             the io exception
      */
     public void setContentType(String contentType) throws IOException {
-<span class="nc" id="L49">        edit(&quot;content_type&quot;, contentType);</span>
-<span class="nc" id="L50">        this.contentType = contentType;</span>
-<span class="nc" id="L51">    }</span>
-
-    /**
-     * Gets download count.
-     *
-     * @return the download count
-     */
-    public long getDownloadCount() {
-<span class="fc" id="L59">        return downloadCount;</span>
-    }
-
-    /**
-     * Gets label.
-     *
-     * @return the label
-     */
-    public String getLabel() {
-<span class="fc" id="L68">        return label;</span>
-    }
+<span class="nc" id="L139">        edit(&quot;content_type&quot;, contentType);</span>
+<span class="nc" id="L140">        this.contentType = contentType;</span>
+<span class="nc" id="L141">    }</span>
 
     /**
      * Sets label.
@@ -77,72 +149,16 @@ public class GHAsset extends GHObject {
      *             the io exception
      */
     public void setLabel(String label) throws IOException {
-<span class="fc" id="L80">        edit(&quot;label&quot;, label);</span>
-<span class="fc" id="L81">        this.label = label;</span>
-<span class="fc" id="L82">    }</span>
-
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String getName() {
-<span class="fc" id="L90">        return name;</span>
-    }
-
-    /**
-     * Gets owner.
-     *
-     * @return the owner
-     */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHRepository getOwner() {
-<span class="fc" id="L100">        return owner;</span>
-    }
-
-    /**
-     * Gets size.
-     *
-     * @return the size
-     */
-    public long getSize() {
-<span class="fc" id="L109">        return size;</span>
-    }
-
-    /**
-     * Gets state.
-     *
-     * @return the state
-     */
-    public String getState() {
-<span class="fc" id="L118">        return state;</span>
-    }
-
-    /**
-     * Gets browser download url.
-     *
-     * @return the browser download url
-     */
-    public String getBrowserDownloadUrl() {
-<span class="fc" id="L127">        return browserDownloadUrl;</span>
-    }
+<span class="fc" id="L152">        edit(&quot;label&quot;, label);</span>
+<span class="fc" id="L153">        this.label = label;</span>
+<span class="fc" id="L154">    }</span>
 
     private void edit(String key, Object value) throws IOException {
-<span class="fc" id="L131">        root().createRequest().with(key, value).method(&quot;PATCH&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L132">    }</span>
-
-    /**
-     * Delete.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void delete() throws IOException {
-<span class="fc" id="L141">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="fc" id="L142">    }</span>
+<span class="fc" id="L157">        root().createRequest().with(key, value).method(&quot;PATCH&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="fc" id="L158">    }</span>
 
     private String getApiRoute() {
-<span class="fc" id="L145">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/releases/assets/&quot; + getId();</span>
+<span class="fc" id="L161">        return &quot;/repos/&quot; + owner.getOwnerName() + &quot;/&quot; + owner.getName() + &quot;/releases/assets/&quot; + getId();</span>
     }
 
     /**
@@ -153,24 +169,8 @@ public class GHAsset extends GHObject {
      * @return the GH asset
      */
     GHAsset wrap(GHRelease release) {
-<span class="fc" id="L156">        this.owner = release.getOwner();</span>
-<span class="fc" id="L157">        return this;</span>
-    }
-
-    /**
-     * Wrap gh asset [ ].
-     *
-     * @param assets
-     *            the assets
-     * @param release
-     *            the release
-     * @return the gh asset [ ]
-     */
-    public static GHAsset[] wrap(GHAsset[] assets, GHRelease release) {
-<span class="nc bnc" id="L170" title="All 2 branches missed.">        for (GHAsset aTo : assets) {</span>
-<span class="nc" id="L171">            aTo.wrap(release);</span>
-        }
-<span class="nc" id="L173">        return assets;</span>
+<span class="fc" id="L172">        this.owner = release.getOwner();</span>
+<span class="fc" id="L173">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

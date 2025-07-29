@@ -19,12 +19,6 @@ import java.net.URL;
         justification = &quot;JSON API&quot;)
 public class GHCommitComment extends GHObject implements Reactable {
 
-    /**
-     * Create default GHCommitComment instance
-     */
-<span class="fc" id="L25">    public GHCommitComment() {</span>
-<span class="fc" id="L26">    }</span>
-
     private GHRepository owner;
 
     /** The commit id. */
@@ -40,103 +34,10 @@ public class GHCommitComment extends GHObject implements Reactable {
     GHUser user; // not fully populated. beware.
 
     /**
-     * Gets owner.
-     *
-     * @return the owner
+     * Create default GHCommitComment instance
      */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHRepository getOwner() {
-<span class="fc" id="L49">        return owner;</span>
-    }
-
-    /**
-     * URL like
-     * 'https://github.com/kohsuke/sandbox-ant/commit/8ae38db0ea5837313ab5f39d43a6f73de3bd9000#commitcomment-1252827' to
-     * show this commit comment in a browser.
-     *
-     * @return the html url
-     */
-    public URL getHtmlUrl() {
-<span class="fc" id="L60">        return GitHubClient.parseURL(htmlUrl);</span>
-    }
-
-    /**
-     * Gets sha 1.
-     *
-     * @return the sha 1
-     */
-    public String getSHA1() {
-<span class="fc" id="L69">        return commitId;</span>
-    }
-
-    /**
-     * Commit comment in the GitHub flavored markdown format.
-     *
-     * @return the body
-     */
-    public String getBody() {
-<span class="fc" id="L78">        return body;</span>
-    }
-
-    /**
-     * A commit comment can be on a specific line of a specific file, if so, this field points to a file. Otherwise
-     * null.
-     *
-     * @return the path
-     */
-    public String getPath() {
-<span class="fc" id="L88">        return path;</span>
-    }
-
-    /**
-     * A commit comment can be on a specific line of a specific file, if so, this field points to the line number in the
-     * file. Otherwise -1.
-     *
-     * @return the line
-     */
-    public int getLine() {
-<span class="pc bpc" id="L98" title="1 of 2 branches missed.">        return line != null ? line : -1;</span>
-    }
-
-    /**
-     * Gets the user who put this comment.
-     *
-     * @return the user
-     * @throws IOException
-     *             the io exception
-     */
-    public GHUser getUser() throws IOException {
-<span class="pc bpc" id="L109" title="2 of 4 branches missed.">        return owner == null || owner.isOffline() ? user : owner.root().getUser(user.login);</span>
-    }
-
-    /**
-     * Gets the commit to which this comment is associated with.
-     *
-     * @return the commit
-     * @throws IOException
-     *             the io exception
-     */
-    public GHCommit getCommit() throws IOException {
-<span class="nc" id="L120">        return getOwner().getCommit(getSHA1());</span>
-    }
-
-    /**
-     * Updates the body of the commit message.
-     *
-     * @param body
-     *            the body
-     * @throws IOException
-     *             the io exception
-     */
-    public void update(String body) throws IOException {
-<span class="fc" id="L132">        owner.root()</span>
-<span class="fc" id="L133">                .createRequest()</span>
-<span class="fc" id="L134">                .method(&quot;PATCH&quot;)</span>
-<span class="fc" id="L135">                .with(&quot;body&quot;, body)</span>
-<span class="fc" id="L136">                .withUrlPath(getApiTail())</span>
-<span class="fc" id="L137">                .fetch(GHCommitComment.class);</span>
-<span class="fc" id="L138">        this.body = body;</span>
-<span class="fc" id="L139">    }</span>
+<span class="fc" id="L39">    public GHCommitComment() {</span>
+<span class="fc" id="L40">    }</span>
 
     /**
      * Creates the reaction.
@@ -148,13 +49,23 @@ public class GHCommitComment extends GHObject implements Reactable {
      *             Signals that an I/O exception has occurred.
      */
     public GHReaction createReaction(ReactionContent content) throws IOException {
-<span class="fc" id="L151">        return owner.root()</span>
-<span class="fc" id="L152">                .createRequest()</span>
-<span class="fc" id="L153">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L154">                .with(&quot;content&quot;, content.getContent())</span>
-<span class="fc" id="L155">                .withUrlPath(getApiTail() + &quot;/reactions&quot;)</span>
-<span class="fc" id="L156">                .fetch(GHReaction.class);</span>
+<span class="fc" id="L52">        return owner.root()</span>
+<span class="fc" id="L53">                .createRequest()</span>
+<span class="fc" id="L54">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L55">                .with(&quot;content&quot;, content.getContent())</span>
+<span class="fc" id="L56">                .withUrlPath(getApiTail() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L57">                .fetch(GHReaction.class);</span>
     }
+
+    /**
+     * Deletes this comment.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+<span class="fc" id="L67">        owner.root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiTail()).send();</span>
+<span class="fc" id="L68">    }</span>
 
     /**
      * Delete reaction.
@@ -165,12 +76,93 @@ public class GHCommitComment extends GHObject implements Reactable {
      *             Signals that an I/O exception has occurred.
      */
     public void deleteReaction(GHReaction reaction) throws IOException {
-<span class="fc" id="L168">        owner.root()</span>
-<span class="fc" id="L169">                .createRequest()</span>
-<span class="fc" id="L170">                .method(&quot;DELETE&quot;)</span>
-<span class="fc" id="L171">                .withUrlPath(getApiTail(), &quot;reactions&quot;, String.valueOf(reaction.getId()))</span>
-<span class="fc" id="L172">                .send();</span>
-<span class="fc" id="L173">    }</span>
+<span class="fc" id="L79">        owner.root()</span>
+<span class="fc" id="L80">                .createRequest()</span>
+<span class="fc" id="L81">                .method(&quot;DELETE&quot;)</span>
+<span class="fc" id="L82">                .withUrlPath(getApiTail(), &quot;reactions&quot;, String.valueOf(reaction.getId()))</span>
+<span class="fc" id="L83">                .send();</span>
+<span class="fc" id="L84">    }</span>
+
+    /**
+     * Commit comment in the GitHub flavored markdown format.
+     *
+     * @return the body
+     */
+    public String getBody() {
+<span class="fc" id="L92">        return body;</span>
+    }
+
+    /**
+     * Gets the commit to which this comment is associated with.
+     *
+     * @return the commit
+     * @throws IOException
+     *             the io exception
+     */
+    public GHCommit getCommit() throws IOException {
+<span class="nc" id="L103">        return getOwner().getCommit(getSHA1());</span>
+    }
+
+    /**
+     * URL like
+     * 'https://github.com/kohsuke/sandbox-ant/commit/8ae38db0ea5837313ab5f39d43a6f73de3bd9000#commitcomment-1252827' to
+     * show this commit comment in a browser.
+     *
+     * @return the html url
+     */
+    public URL getHtmlUrl() {
+<span class="fc" id="L114">        return GitHubClient.parseURL(htmlUrl);</span>
+    }
+
+    /**
+     * A commit comment can be on a specific line of a specific file, if so, this field points to the line number in the
+     * file. Otherwise -1.
+     *
+     * @return the line
+     */
+    public int getLine() {
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">        return line != null ? line : -1;</span>
+    }
+
+    /**
+     * Gets owner.
+     *
+     * @return the owner
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHRepository getOwner() {
+<span class="fc" id="L134">        return owner;</span>
+    }
+
+    /**
+     * A commit comment can be on a specific line of a specific file, if so, this field points to a file. Otherwise
+     * null.
+     *
+     * @return the path
+     */
+    public String getPath() {
+<span class="fc" id="L144">        return path;</span>
+    }
+
+    /**
+     * Gets sha 1.
+     *
+     * @return the sha 1
+     */
+    public String getSHA1() {
+<span class="fc" id="L153">        return commitId;</span>
+    }
+
+    /**
+     * Gets the user who put this comment.
+     *
+     * @return the user
+     * @throws IOException
+     *             the io exception
+     */
+    public GHUser getUser() throws IOException {
+<span class="pc bpc" id="L164" title="2 of 4 branches missed.">        return owner == null || owner.isOffline() ? user : owner.root().getUser(user.login);</span>
+    }
 
     /**
      * List reactions.
@@ -178,20 +170,28 @@ public class GHCommitComment extends GHObject implements Reactable {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHReaction&gt; listReactions() {
-<span class="fc" id="L181">        return owner.root()</span>
-<span class="fc" id="L182">                .createRequest()</span>
-<span class="fc" id="L183">                .withUrlPath(getApiTail() + &quot;/reactions&quot;)</span>
-<span class="fc" id="L184">                .toIterable(GHReaction[].class, item -&gt; owner.root());</span>
+<span class="fc" id="L173">        return owner.root()</span>
+<span class="fc" id="L174">                .createRequest()</span>
+<span class="fc" id="L175">                .withUrlPath(getApiTail() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L176">                .toIterable(GHReaction[].class, item -&gt; owner.root());</span>
     }
 
     /**
-     * Deletes this comment.
+     * Updates the body of the commit message.
      *
+     * @param body
+     *            the body
      * @throws IOException
      *             the io exception
      */
-    public void delete() throws IOException {
-<span class="fc" id="L194">        owner.root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiTail()).send();</span>
+    public void update(String body) throws IOException {
+<span class="fc" id="L188">        owner.root()</span>
+<span class="fc" id="L189">                .createRequest()</span>
+<span class="fc" id="L190">                .method(&quot;PATCH&quot;)</span>
+<span class="fc" id="L191">                .with(&quot;body&quot;, body)</span>
+<span class="fc" id="L192">                .withUrlPath(getApiTail())</span>
+<span class="fc" id="L193">                .fetch(GHCommitComment.class);</span>
+<span class="fc" id="L194">        this.body = body;</span>
 <span class="fc" id="L195">    }</span>
 
     private String getApiTail() {

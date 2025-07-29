@@ -9,37 +9,92 @@ import java.util.Locale;
  */
 public class GHDeploymentStatus extends GHObject {
 
-    /**
-     * Create default GHDeploymentStatus instance
-     */
-<span class="fc" id="L15">    public GHDeploymentStatus() {</span>
-<span class="fc" id="L16">    }</span>
-
     private GHRepository owner;
 
     /** The creator. */
     protected GHUser creator;
 
-    /** The state. */
-    protected String state;
+    /** The deployment url. */
+    protected String deploymentUrl;
 
     /** The description. */
     protected String description;
 
-    /** The target url. */
-    protected String targetUrl;
+    /** The environment url. */
+    protected String environmentUrl;
 
     /** The log url. */
     protected String logUrl;
 
-    /** The deployment url. */
-    protected String deploymentUrl;
-
     /** The repository url. */
     protected String repositoryUrl;
 
-    /** The environment url. */
-    protected String environmentUrl;
+    /** The state. */
+    protected String state;
+
+    /** The target url. */
+    protected String targetUrl;
+
+    /**
+     * Create default GHDeploymentStatus instance
+     */
+<span class="fc" id="L41">    public GHDeploymentStatus() {</span>
+<span class="fc" id="L42">    }</span>
+
+    /**
+     * Gets deployment url.
+     *
+     * @return the deployment url
+     */
+    public URL getDeploymentUrl() {
+<span class="fc" id="L50">        return GitHubClient.parseURL(deploymentUrl);</span>
+    }
+
+    /**
+     * Gets deployment environment url.
+     *
+     * @return the deployment environment url
+     */
+    public URL getEnvironmentUrl() {
+<span class="fc" id="L59">        return GitHubClient.parseURL(environmentUrl);</span>
+    }
+
+    /**
+     * Gets target url.
+     *
+     * @return the target url
+     */
+    public URL getLogUrl() {
+<span class="fc" id="L68">        return GitHubClient.parseURL(logUrl);</span>
+    }
+
+    /**
+     * Gets repository url.
+     *
+     * @return the repository url
+     */
+    public URL getRepositoryUrl() {
+<span class="fc" id="L77">        return GitHubClient.parseURL(repositoryUrl);</span>
+    }
+
+    /**
+     * Gets state.
+     *
+     * @return the state
+     */
+    public GHDeploymentState getState() {
+<span class="fc" id="L86">        return GHDeploymentState.valueOf(state.toUpperCase(Locale.ENGLISH));</span>
+    }
+
+    /**
+     * Gets the owner.
+     *
+     * @return the owner
+     */
+    // test only
+    GHRepository getOwner() {
+<span class="fc" id="L96">        return owner;</span>
+    }
 
     /**
      * Wrap gh deployment status.
@@ -50,63 +105,8 @@ public class GHDeploymentStatus extends GHObject {
      * @return the gh deployment status
      */
     GHDeploymentStatus lateBind(GHRepository owner) {
-<span class="fc" id="L53">        this.owner = owner;</span>
-<span class="fc" id="L54">        return this;</span>
-    }
-
-    /**
-     * Gets target url.
-     *
-     * @return the target url
-     */
-    public URL getLogUrl() {
-<span class="fc" id="L63">        return GitHubClient.parseURL(logUrl);</span>
-    }
-
-    /**
-     * Gets deployment url.
-     *
-     * @return the deployment url
-     */
-    public URL getDeploymentUrl() {
-<span class="fc" id="L72">        return GitHubClient.parseURL(deploymentUrl);</span>
-    }
-
-    /**
-     * Gets deployment environment url.
-     *
-     * @return the deployment environment url
-     */
-    public URL getEnvironmentUrl() {
-<span class="fc" id="L81">        return GitHubClient.parseURL(environmentUrl);</span>
-    }
-
-    /**
-     * Gets repository url.
-     *
-     * @return the repository url
-     */
-    public URL getRepositoryUrl() {
-<span class="fc" id="L90">        return GitHubClient.parseURL(repositoryUrl);</span>
-    }
-
-    /**
-     * Gets state.
-     *
-     * @return the state
-     */
-    public GHDeploymentState getState() {
-<span class="fc" id="L99">        return GHDeploymentState.valueOf(state.toUpperCase(Locale.ENGLISH));</span>
-    }
-
-    /**
-     * Gets the owner.
-     *
-     * @return the owner
-     */
-    // test only
-    GHRepository getOwner() {
-<span class="fc" id="L109">        return owner;</span>
+<span class="fc" id="L108">        this.owner = owner;</span>
+<span class="fc" id="L109">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -19,25 +19,25 @@ import java.util.List;
 
 @SuppressFBWarnings(value = { &quot;NP_UNWRITTEN_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot; }, justification = &quot;JSON API&quot;)
 public class GitCommit extends GitHubBridgeAdapterObject {
-    private GHRepository owner;
-    private String sha, nodeId, url, htmlUrl;
-    private GitUser author;
-    private GitUser committer;
-
-    private String message;
-
-    private GHVerification verification;
-
     /**
      * The Class Tree.
      */
-<span class="fc" id="L34">    static class Tree {</span>
+<span class="fc" id="L25">    static class Tree {</span>
+
+        /** The sha. */
+        String sha;
 
         /** The url. */
         String url;
 
-        /** The sha. */
-        String sha;
+        /**
+         * Gets the sha.
+         *
+         * @return the sha
+         */
+        public String getSha() {
+<span class="fc" id="L39">            return sha;</span>
+        }
 
         /**
          * Gets the url.
@@ -48,20 +48,20 @@ public class GitCommit extends GitHubBridgeAdapterObject {
 <span class="fc" id="L48">            return url;</span>
         }
 
-        /**
-         * Gets the sha.
-         *
-         * @return the sha
-         */
-        public String getSha() {
-<span class="fc" id="L57">            return sha;</span>
-        }
-
     }
+    private GitUser author;
+    private GitUser committer;
+    private String message;
+
+    private GHRepository owner;
+
+    private List&lt;GHCommit.Parent&gt; parents;
+
+    private String sha, nodeId, url, htmlUrl;
 
     private Tree tree;
 
-    private List&lt;GHCommit.Parent&gt; parents;
+    private GHVerification verification;
 
     /**
      * Instantiates a new git commit.
@@ -93,67 +93,12 @@ public class GitCommit extends GitHubBridgeAdapterObject {
 <span class="fc" id="L93">    }</span>
 
     /**
-     * Gets owner.
-     *
-     * @return the repository that contains the commit.
-     */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHRepository getOwner() {
-<span class="fc" id="L102">        return owner;</span>
-    }
-
-    /**
-     * Gets SHA1.
-     *
-     * @return The SHA1 of this commit
-     */
-    public String getSHA1() {
-<span class="fc" id="L111">        return sha;</span>
-    }
-
-    /**
-     * Gets SHA.
-     *
-     * @return The SHA of this commit
-     */
-    public String getSha() {
-<span class="fc" id="L120">        return sha;</span>
-    }
-
-    /**
-     * Gets node id.
-     *
-     * @return The node id of this commit
-     */
-    public String getNodeId() {
-<span class="fc" id="L129">        return nodeId;</span>
-    }
-
-    /**
-     * Gets URL.
-     *
-     * @return The URL of this commit
-     */
-    public String getUrl() {
-<span class="fc" id="L138">        return url;</span>
-    }
-
-    /**
-     * Gets HTML URL.
-     *
-     * @return The HTML URL of this commit
-     */
-    public String getHtmlUrl() {
-<span class="fc" id="L147">        return htmlUrl;</span>
-    }
-
-    /**
      * Gets author.
      *
      * @return the author
      */
     public GitUser getAuthor() {
-<span class="fc" id="L156">        return author;</span>
+<span class="fc" id="L101">        return author;</span>
     }
 
     /**
@@ -163,16 +108,7 @@ public class GitCommit extends GitHubBridgeAdapterObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
     public Instant getAuthoredDate() {
-<span class="fc" id="L166">        return author.getDate();</span>
-    }
-
-    /**
-     * Gets committer.
-     *
-     * @return the committer
-     */
-    public GitUser getCommitter() {
-<span class="fc" id="L175">        return committer;</span>
+<span class="fc" id="L111">        return author.getDate();</span>
     }
 
     /**
@@ -182,7 +118,25 @@ public class GitCommit extends GitHubBridgeAdapterObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
     public Instant getCommitDate() {
-<span class="fc" id="L185">        return committer.getDate();</span>
+<span class="fc" id="L121">        return committer.getDate();</span>
+    }
+
+    /**
+     * Gets committer.
+     *
+     * @return the committer
+     */
+    public GitUser getCommitter() {
+<span class="fc" id="L130">        return committer;</span>
+    }
+
+    /**
+     * Gets HTML URL.
+     *
+     * @return The HTML URL of this commit
+     */
+    public String getHtmlUrl() {
+<span class="fc" id="L139">        return htmlUrl;</span>
     }
 
     /**
@@ -191,25 +145,65 @@ public class GitCommit extends GitHubBridgeAdapterObject {
      * @return Commit message.
      */
     public String getMessage() {
-<span class="fc" id="L194">        return message;</span>
+<span class="fc" id="L148">        return message;</span>
     }
 
     /**
-     * Gets Verification Status.
+     * Gets node id.
      *
-     * @return the Verification status
+     * @return The node id of this commit
      */
-    public GHVerification getVerification() {
-<span class="fc" id="L203">        return verification;</span>
+    public String getNodeId() {
+<span class="fc" id="L157">        return nodeId;</span>
     }
 
     /**
-     * Gets the tree.
+     * Gets owner.
      *
-     * @return the tree
+     * @return the repository that contains the commit.
      */
-    Tree getTree() {
-<span class="fc" id="L212">        return tree;</span>
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHRepository getOwner() {
+<span class="fc" id="L167">        return owner;</span>
+    }
+
+    /**
+     * Gets the parent SHA 1 s.
+     *
+     * @return the parent SHA 1 s
+     */
+    public List&lt;String&gt; getParentSHA1s() {
+<span class="pc bpc" id="L176" title="2 of 4 branches missed.">        if (parents == null || parents.size() == 0)</span>
+<span class="nc" id="L177">            return Collections.emptyList();</span>
+<span class="fc" id="L178">        return new AbstractList&lt;String&gt;() {</span>
+            @Override
+            public String get(int index) {
+<span class="fc" id="L181">                return parents.get(index).sha;</span>
+            }
+
+            @Override
+            public int size() {
+<span class="fc" id="L186">                return parents.size();</span>
+            }
+        };
+    }
+
+    /**
+     * Gets SHA1.
+     *
+     * @return The SHA1 of this commit
+     */
+    public String getSHA1() {
+<span class="fc" id="L197">        return sha;</span>
+    }
+
+    /**
+     * Gets SHA.
+     *
+     * @return The SHA of this commit
+     */
+    public String getSha() {
+<span class="fc" id="L206">        return sha;</span>
     }
 
     /**
@@ -218,7 +212,7 @@ public class GitCommit extends GitHubBridgeAdapterObject {
      * @return the tree SHA 1
      */
     public String getTreeSHA1() {
-<span class="fc" id="L221">        return tree.getSha();</span>
+<span class="fc" id="L215">        return tree.getSha();</span>
     }
 
     /**
@@ -227,7 +221,25 @@ public class GitCommit extends GitHubBridgeAdapterObject {
      * @return the tree url
      */
     public String getTreeUrl() {
-<span class="fc" id="L230">        return tree.getUrl();</span>
+<span class="fc" id="L224">        return tree.getUrl();</span>
+    }
+
+    /**
+     * Gets URL.
+     *
+     * @return The URL of this commit
+     */
+    public String getUrl() {
+<span class="fc" id="L233">        return url;</span>
+    }
+
+    /**
+     * Gets Verification Status.
+     *
+     * @return the Verification status
+     */
+    public GHVerification getVerification() {
+<span class="fc" id="L242">        return verification;</span>
     }
 
     /**
@@ -237,28 +249,25 @@ public class GitCommit extends GitHubBridgeAdapterObject {
      */
     @SuppressFBWarnings(value = &quot;EI_EXPOSE_REP&quot;, justification = &quot;acceptable&quot;)
     List&lt;GHCommit.Parent&gt; getParents() {
-<span class="fc" id="L240">        return parents;</span>
+<span class="fc" id="L252">        return parents;</span>
     }
 
     /**
-     * Gets the parent SHA 1 s.
+     * Gets the tree.
      *
-     * @return the parent SHA 1 s
+     * @return the tree
      */
-    public List&lt;String&gt; getParentSHA1s() {
-<span class="pc bpc" id="L249" title="2 of 4 branches missed.">        if (parents == null || parents.size() == 0)</span>
-<span class="nc" id="L250">            return Collections.emptyList();</span>
-<span class="fc" id="L251">        return new AbstractList&lt;String&gt;() {</span>
-            @Override
-            public String get(int index) {
-<span class="fc" id="L254">                return parents.get(index).sha;</span>
-            }
+    Tree getTree() {
+<span class="fc" id="L261">        return tree;</span>
+    }
 
-            @Override
-            public int size() {
-<span class="fc" id="L259">                return parents.size();</span>
-            }
-        };
+    /**
+     * For test purposes only.
+     *
+     * @return Equivalent GHCommit
+     */
+    GHCommit toGHCommit() {
+<span class="fc" id="L270">        return new GHCommit(new GHCommit.ShortInfo(this));</span>
     }
 
     /**
@@ -269,17 +278,8 @@ public class GitCommit extends GitHubBridgeAdapterObject {
      * @return the git commit
      */
     GitCommit wrapUp(GHRepository owner) {
-<span class="fc" id="L272">        this.owner = owner;</span>
-<span class="fc" id="L273">        return this;</span>
-    }
-
-    /**
-     * For test purposes only.
-     *
-     * @return Equivalent GHCommit
-     */
-    GHCommit toGHCommit() {
-<span class="fc" id="L282">        return new GHCommit(new GHCommit.ShortInfo(this));</span>
+<span class="fc" id="L281">        this.owner = owner;</span>
+<span class="fc" id="L282">        return this;</span>
     }
 
 }

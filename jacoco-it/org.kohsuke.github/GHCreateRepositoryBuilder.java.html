@@ -33,32 +33,6 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder&lt;GHCreateRe
 <span class="fc" id="L33">    }</span>
 
     /**
-     * Creates a default .gitignore
-     *
-     * @param language
-     *            template to base the ignore file on
-     * @return a builder to continue with building See https://developer.github.com/v3/repos/#create
-     * @throws IOException
-     *             In case of any networking error or error from the server.
-     */
-    public GHCreateRepositoryBuilder gitignoreTemplate(String language) throws IOException {
-<span class="nc" id="L45">        return with(&quot;gitignore_template&quot;, language);</span>
-    }
-
-    /**
-     * Desired license template to apply.
-     *
-     * @param license
-     *            template to base the license file on
-     * @return a builder to continue with building See https://developer.github.com/v3/repos/#create
-     * @throws IOException
-     *             In case of any networking error or error from the server.
-     */
-    public GHCreateRepositoryBuilder licenseTemplate(String license) throws IOException {
-<span class="nc" id="L58">        return with(&quot;license_template&quot;, license);</span>
-    }
-
-    /**
      * If true, create an initial commit with empty README.
      *
      * @param enabled
@@ -68,35 +42,33 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder&lt;GHCreateRe
      *             In case of any networking error or error from the server.
      */
     public GHCreateRepositoryBuilder autoInit(boolean enabled) throws IOException {
-<span class="fc" id="L71">        return with(&quot;auto_init&quot;, enabled);</span>
+<span class="fc" id="L45">        return with(&quot;auto_init&quot;, enabled);</span>
     }
 
     /**
-     * The team that gets granted access to this repository. Only valid for creating a repository in an organization.
+     * Creates a repository with all the parameters.
      *
-     * @param team
-     *            team to grant access to
-     * @return a builder to continue with building
+     * @return the gh repository
      * @throws IOException
-     *             In case of any networking error or error from the server.
+     *             if repository cannot be created
      */
-    public GHCreateRepositoryBuilder team(GHTeam team) throws IOException {
-<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        if (team != null)</span>
-<span class="fc" id="L85">            return with(&quot;team_id&quot;, team.getId());</span>
-<span class="nc" id="L86">        return this;</span>
+    public GHRepository create() throws IOException {
+<span class="fc" id="L56">        return done();</span>
     }
 
     /**
-     * Specifies the ownership of the repository.
+     * Create repository from template repository.
      *
-     * @param owner
-     *            organization or personage
+     * @param templateRepository
+     *            the template repository as a GHRepository
      * @return a builder to continue with building
-     * @throws IOException
-     *             In case of any networking error or error from the server.
      */
-    public GHCreateRepositoryBuilder owner(String owner) throws IOException {
-<span class="fc" id="L99">        return with(&quot;owner&quot;, owner);</span>
+    public GHCreateRepositoryBuilder fromTemplateRepository(GHRepository templateRepository) {
+<span class="fc" id="L67">        Objects.requireNonNull(templateRepository, &quot;templateRepository cannot be null&quot;);</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        if (!templateRepository.isTemplate()) {</span>
+<span class="fc" id="L69">            throw new IllegalArgumentException(&quot;The provided repository is not a template repository.&quot;);</span>
+        }
+<span class="fc" id="L71">        return fromTemplateRepository(templateRepository.getOwnerName(), templateRepository.getName());</span>
     }
 
     /**
@@ -109,34 +81,62 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder&lt;GHCreateRe
      * @return a builder to continue with building
      */
     public GHCreateRepositoryBuilder fromTemplateRepository(String templateOwner, String templateRepo) {
-<span class="fc" id="L112">        requester.withUrlPath(&quot;/repos/&quot; + templateOwner + &quot;/&quot; + templateRepo + &quot;/generate&quot;);</span>
-<span class="fc" id="L113">        return this;</span>
+<span class="fc" id="L84">        requester.withUrlPath(&quot;/repos/&quot; + templateOwner + &quot;/&quot; + templateRepo + &quot;/generate&quot;);</span>
+<span class="fc" id="L85">        return this;</span>
     }
 
     /**
-     * Create repository from template repository.
+     * Creates a default .gitignore
      *
-     * @param templateRepository
-     *            the template repository as a GHRepository
-     * @return a builder to continue with building
-     */
-    public GHCreateRepositoryBuilder fromTemplateRepository(GHRepository templateRepository) {
-<span class="fc" id="L124">        Objects.requireNonNull(templateRepository, &quot;templateRepository cannot be null&quot;);</span>
-<span class="fc bfc" id="L125" title="All 2 branches covered.">        if (!templateRepository.isTemplate()) {</span>
-<span class="fc" id="L126">            throw new IllegalArgumentException(&quot;The provided repository is not a template repository.&quot;);</span>
-        }
-<span class="fc" id="L128">        return fromTemplateRepository(templateRepository.getOwnerName(), templateRepository.getName());</span>
-    }
-
-    /**
-     * Creates a repository with all the parameters.
-     *
-     * @return the gh repository
+     * @param language
+     *            template to base the ignore file on
+     * @return a builder to continue with building See https://developer.github.com/v3/repos/#create
      * @throws IOException
-     *             if repository cannot be created
+     *             In case of any networking error or error from the server.
      */
-    public GHRepository create() throws IOException {
-<span class="fc" id="L139">        return done();</span>
+    public GHCreateRepositoryBuilder gitignoreTemplate(String language) throws IOException {
+<span class="nc" id="L98">        return with(&quot;gitignore_template&quot;, language);</span>
+    }
+
+    /**
+     * Desired license template to apply.
+     *
+     * @param license
+     *            template to base the license file on
+     * @return a builder to continue with building See https://developer.github.com/v3/repos/#create
+     * @throws IOException
+     *             In case of any networking error or error from the server.
+     */
+    public GHCreateRepositoryBuilder licenseTemplate(String license) throws IOException {
+<span class="nc" id="L111">        return with(&quot;license_template&quot;, license);</span>
+    }
+
+    /**
+     * Specifies the ownership of the repository.
+     *
+     * @param owner
+     *            organization or personage
+     * @return a builder to continue with building
+     * @throws IOException
+     *             In case of any networking error or error from the server.
+     */
+    public GHCreateRepositoryBuilder owner(String owner) throws IOException {
+<span class="fc" id="L124">        return with(&quot;owner&quot;, owner);</span>
+    }
+
+    /**
+     * The team that gets granted access to this repository. Only valid for creating a repository in an organization.
+     *
+     * @param team
+     *            team to grant access to
+     * @return a builder to continue with building
+     * @throws IOException
+     *             In case of any networking error or error from the server.
+     */
+    public GHCreateRepositoryBuilder team(GHTeam team) throws IOException {
+<span class="pc bpc" id="L137" title="1 of 2 branches missed.">        if (team != null)</span>
+<span class="fc" id="L138">            return with(&quot;team_id&quot;, team.getId());</span>
+<span class="nc" id="L139">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

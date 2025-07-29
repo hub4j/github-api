@@ -15,15 +15,15 @@ import java.util.Date;
 @SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; }, justification = &quot;JSON API&quot;)
 public class GHStargazer extends GitHubBridgeAdapterObject {
 
+    private GHRepository repository;
+
+    private String starredAt;
+    private GHUser user;
     /**
      * Create default GHStargazer instance
      */
-<span class="fc" id="L21">    public GHStargazer() {</span>
-<span class="fc" id="L22">    }</span>
-
-    private GHRepository repository;
-    private String starredAt;
-    private GHUser user;
+<span class="fc" id="L25">    public GHStargazer() {</span>
+<span class="fc" id="L26">    }</span>
 
     /**
      * Gets the repository that is stargazed.

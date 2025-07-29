@@ -25,81 +25,77 @@ import static java.net.HttpURLConnection.HTTP_FORBIDDEN;
 public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErrorHandler {
 
     /**
+     * Fail immediately.
+     */
+<span class="fc" id="L30">    public static final GitHubAbuseLimitHandler FAIL = new GitHubAbuseLimitHandler() {</span>
+        @Override
+        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
+<span class="fc" id="L33">            throw new HttpException(&quot;Abuse limit reached&quot;,</span>
+<span class="fc" id="L34">                    connectorResponse.statusCode(),</span>
+<span class="fc" id="L35">                    connectorResponse.header(&quot;Status&quot;),</span>
+<span class="fc" id="L36">                    connectorResponse.request().url().toString())</span>
+<span class="fc" id="L37">                    .withResponseHeaderFields(connectorResponse.allHeaders());</span>
+        }
+    };
+
+    /**
+     * Wait until the API abuse &quot;wait time&quot; is passed.
+     */
+<span class="fc" id="L44">    public static final GitHubAbuseLimitHandler WAIT = new GitHubAbuseLimitHandler() {</span>
+        @Override
+        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
+            try {
+<span class="fc" id="L48">                Thread.sleep(parseWaitTime(connectorResponse));</span>
+<span class="nc" id="L49">            } catch (InterruptedException ex) {</span>
+<span class="nc" id="L50">                throw (InterruptedIOException) new InterruptedIOException().initCause(ex);</span>
+<span class="fc" id="L51">            }</span>
+<span class="fc" id="L52">        }</span>
+    };
+
+    /**
      * On a wait, even if the response suggests a very short wait, wait for a minimum duration.
      */
     private static final int MINIMUM_ABUSE_RETRY_MILLIS = 1000;
 
+    // If &quot;Retry-After&quot; missing, wait for unambiguously over one minute per GitHub guidance
+<span class="fc" id="L61">    static long DEFAULT_WAIT_MILLIS = Duration.ofSeconds(61).toMillis();</span>
+
+    /*
+     * Exposed for testability. Given an http response, find the retry-after header field and parse it as either a
+     * number or a date (the spec allows both). If no header is found, wait for a reasonably amount of time.
+     */
+    static long parseWaitTime(GitHubConnectorResponse connectorResponse) {
+<span class="fc" id="L68">        String v = connectorResponse.header(&quot;Retry-After&quot;);</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (v == null) {</span>
+<span class="fc" id="L70">            return DEFAULT_WAIT_MILLIS;</span>
+        }
+
+        try {
+<span class="fc" id="L74">            return Math.max(MINIMUM_ABUSE_RETRY_MILLIS, Duration.ofSeconds(Long.parseLong(v)).toMillis());</span>
+<span class="fc" id="L75">        } catch (NumberFormatException nfe) {</span>
+            // The retry-after header could be a number in seconds, or an http-date
+            // We know it was a date if we got a number format exception :)
+
+            // Don't use ZonedDateTime.now(), because the local and remote server times may not be in sync
+            // Instead, we can take advantage of the Date field in the response to see what time the remote server
+            // thinks it is
+<span class="fc" id="L82">            String dateField = connectorResponse.header(&quot;Date&quot;);</span>
+            ZonedDateTime now;
+<span class="fc bfc" id="L84" title="All 2 branches covered.">            if (dateField != null) {</span>
+<span class="fc" id="L85">                now = ZonedDateTime.parse(dateField, DateTimeFormatter.RFC_1123_DATE_TIME);</span>
+            } else {
+<span class="fc" id="L87">                now = ZonedDateTime.now();</span>
+            }
+<span class="fc" id="L89">            ZonedDateTime zdt = ZonedDateTime.parse(v, DateTimeFormatter.RFC_1123_DATE_TIME);</span>
+<span class="fc" id="L90">            return Math.max(MINIMUM_ABUSE_RETRY_MILLIS, ChronoUnit.MILLIS.between(now, zdt));</span>
+        }
+    }
+
     /**
      * Create default GitHubAbuseLimitHandler instance
      */
-<span class="fc" id="L35">    public GitHubAbuseLimitHandler() {</span>
-<span class="fc" id="L36">    }</span>
-
-    /**
-     * Checks if is error.
-     *
-     * @param connectorResponse
-     *            the connector response
-     * @return true, if is error
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Override
-    boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) {
-<span class="fc bfc" id="L49" title="All 2 branches covered.">        return isTooManyRequests(connectorResponse)</span>
-<span class="fc bfc" id="L50" title="All 4 branches covered.">                || (isForbidden(connectorResponse) &amp;&amp; hasRetryOrLimitHeader(connectorResponse));</span>
-    }
-
-    /**
-     * Checks if the response status code is TOO_MANY_REQUESTS (429).
-     *
-     * @param connectorResponse
-     *            the response from the GitHub connector
-     * @return true if the status code is TOO_MANY_REQUESTS
-     */
-    private boolean isTooManyRequests(GitHubConnectorResponse connectorResponse) {
-<span class="fc bfc" id="L61" title="All 2 branches covered.">        return connectorResponse.statusCode() == TOO_MANY_REQUESTS;</span>
-    }
-
-    /**
-     * Checks if the response status code is HTTP_FORBIDDEN (403).
-     *
-     * @param connectorResponse
-     *            the response from the GitHub connector
-     * @return true if the status code is HTTP_FORBIDDEN
-     */
-    private boolean isForbidden(GitHubConnectorResponse connectorResponse) {
-<span class="fc bfc" id="L72" title="All 2 branches covered.">        return connectorResponse.statusCode() == HTTP_FORBIDDEN;</span>
-    }
-
-    /**
-     * Checks if the response contains either &quot;Retry-After&quot; or &quot;gh-limited-by&quot; headers. GitHub does not guarantee the
-     * presence of the Retry-After header. However, the gh-limited-by header is included in the response when the error
-     * is due to rate limiting
-     *
-     * @param connectorResponse
-     *            the response from the GitHub connector
-     * @return true if either &quot;Retry-After&quot; or &quot;gh-limited-by&quot; headers are present
-     * @see &lt;a href=
-     *      &quot;https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api?apiVersion=2022-11-28#handle-rate-limit-errors-appropriately&quot;&gt;GitHub
-     *      API Rate Limiting Documentation&lt;/a&gt;
-     */
-    private boolean hasRetryOrLimitHeader(GitHubConnectorResponse connectorResponse) {
-<span class="fc bfc" id="L88" title="All 4 branches covered.">        return hasHeader(connectorResponse, &quot;Retry-After&quot;) || hasHeader(connectorResponse, &quot;gh-limited-by&quot;);</span>
-    }
-
-    /**
-     * Checks if the response contains a specific header.
-     *
-     * @param connectorResponse
-     *            the response from the GitHub connector
-     * @param headerName
-     *            the name of the header to check for
-     * @return true if the specified header is present
-     */
-    private boolean hasHeader(GitHubConnectorResponse connectorResponse, String headerName) {
-<span class="fc bfc" id="L101" title="All 2 branches covered.">        return connectorResponse.header(headerName) != null;</span>
-    }
+<span class="fc" id="L97">    public GitHubAbuseLimitHandler() {</span>
+<span class="fc" id="L98">    }</span>
 
     /**
      * Called when the library encounters HTTP error indicating that the API abuse limit is reached.
@@ -122,65 +118,69 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
     public abstract void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
 
     /**
-     * Wait until the API abuse &quot;wait time&quot; is passed.
+     * Checks if the response contains a specific header.
+     *
+     * @param connectorResponse
+     *            the response from the GitHub connector
+     * @param headerName
+     *            the name of the header to check for
+     * @return true if the specified header is present
      */
-<span class="fc" id="L127">    public static final GitHubAbuseLimitHandler WAIT = new GitHubAbuseLimitHandler() {</span>
-        @Override
-        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
-            try {
-<span class="fc" id="L131">                Thread.sleep(parseWaitTime(connectorResponse));</span>
-<span class="nc" id="L132">            } catch (InterruptedException ex) {</span>
-<span class="nc" id="L133">                throw (InterruptedIOException) new InterruptedIOException().initCause(ex);</span>
-<span class="fc" id="L134">            }</span>
-<span class="fc" id="L135">        }</span>
-    };
+    private boolean hasHeader(GitHubConnectorResponse connectorResponse, String headerName) {
+<span class="fc bfc" id="L130" title="All 2 branches covered.">        return connectorResponse.header(headerName) != null;</span>
+    }
 
     /**
-     * Fail immediately.
+     * Checks if the response contains either &quot;Retry-After&quot; or &quot;gh-limited-by&quot; headers. GitHub does not guarantee the
+     * presence of the Retry-After header. However, the gh-limited-by header is included in the response when the error
+     * is due to rate limiting
+     *
+     * @param connectorResponse
+     *            the response from the GitHub connector
+     * @return true if either &quot;Retry-After&quot; or &quot;gh-limited-by&quot; headers are present
+     * @see &lt;a href=
+     *      &quot;https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api?apiVersion=2022-11-28#handle-rate-limit-errors-appropriately&quot;&gt;GitHub
+     *      API Rate Limiting Documentation&lt;/a&gt;
      */
-<span class="fc" id="L141">    public static final GitHubAbuseLimitHandler FAIL = new GitHubAbuseLimitHandler() {</span>
-        @Override
-        public void onError(GitHubConnectorResponse connectorResponse) throws IOException {
-<span class="fc" id="L144">            throw new HttpException(&quot;Abuse limit reached&quot;,</span>
-<span class="fc" id="L145">                    connectorResponse.statusCode(),</span>
-<span class="fc" id="L146">                    connectorResponse.header(&quot;Status&quot;),</span>
-<span class="fc" id="L147">                    connectorResponse.request().url().toString())</span>
-<span class="fc" id="L148">                    .withResponseHeaderFields(connectorResponse.allHeaders());</span>
-        }
-    };
+    private boolean hasRetryOrLimitHeader(GitHubConnectorResponse connectorResponse) {
+<span class="fc bfc" id="L146" title="All 4 branches covered.">        return hasHeader(connectorResponse, &quot;Retry-After&quot;) || hasHeader(connectorResponse, &quot;gh-limited-by&quot;);</span>
+    }
 
-    // If &quot;Retry-After&quot; missing, wait for unambiguously over one minute per GitHub guidance
-<span class="fc" id="L153">    static long DEFAULT_WAIT_MILLIS = Duration.ofSeconds(61).toMillis();</span>
-
-    /*
-     * Exposed for testability. Given an http response, find the retry-after header field and parse it as either a
-     * number or a date (the spec allows both). If no header is found, wait for a reasonably amount of time.
+    /**
+     * Checks if the response status code is HTTP_FORBIDDEN (403).
+     *
+     * @param connectorResponse
+     *            the response from the GitHub connector
+     * @return true if the status code is HTTP_FORBIDDEN
      */
-    static long parseWaitTime(GitHubConnectorResponse connectorResponse) {
-<span class="fc" id="L160">        String v = connectorResponse.header(&quot;Retry-After&quot;);</span>
-<span class="fc bfc" id="L161" title="All 2 branches covered.">        if (v == null) {</span>
-<span class="fc" id="L162">            return DEFAULT_WAIT_MILLIS;</span>
-        }
+    private boolean isForbidden(GitHubConnectorResponse connectorResponse) {
+<span class="fc bfc" id="L157" title="All 2 branches covered.">        return connectorResponse.statusCode() == HTTP_FORBIDDEN;</span>
+    }
 
-        try {
-<span class="fc" id="L166">            return Math.max(MINIMUM_ABUSE_RETRY_MILLIS, Duration.ofSeconds(Long.parseLong(v)).toMillis());</span>
-<span class="fc" id="L167">        } catch (NumberFormatException nfe) {</span>
-            // The retry-after header could be a number in seconds, or an http-date
-            // We know it was a date if we got a number format exception :)
+    /**
+     * Checks if the response status code is TOO_MANY_REQUESTS (429).
+     *
+     * @param connectorResponse
+     *            the response from the GitHub connector
+     * @return true if the status code is TOO_MANY_REQUESTS
+     */
+    private boolean isTooManyRequests(GitHubConnectorResponse connectorResponse) {
+<span class="fc bfc" id="L168" title="All 2 branches covered.">        return connectorResponse.statusCode() == TOO_MANY_REQUESTS;</span>
+    }
 
-            // Don't use ZonedDateTime.now(), because the local and remote server times may not be in sync
-            // Instead, we can take advantage of the Date field in the response to see what time the remote server
-            // thinks it is
-<span class="fc" id="L174">            String dateField = connectorResponse.header(&quot;Date&quot;);</span>
-            ZonedDateTime now;
-<span class="fc bfc" id="L176" title="All 2 branches covered.">            if (dateField != null) {</span>
-<span class="fc" id="L177">                now = ZonedDateTime.parse(dateField, DateTimeFormatter.RFC_1123_DATE_TIME);</span>
-            } else {
-<span class="fc" id="L179">                now = ZonedDateTime.now();</span>
-            }
-<span class="fc" id="L181">            ZonedDateTime zdt = ZonedDateTime.parse(v, DateTimeFormatter.RFC_1123_DATE_TIME);</span>
-<span class="fc" id="L182">            return Math.max(MINIMUM_ABUSE_RETRY_MILLIS, ChronoUnit.MILLIS.between(now, zdt));</span>
-        }
+    /**
+     * Checks if is error.
+     *
+     * @param connectorResponse
+     *            the connector response
+     * @return true, if is error
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Override
+    boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) {
+<span class="fc bfc" id="L182" title="All 2 branches covered.">        return isTooManyRequests(connectorResponse)</span>
+<span class="fc bfc" id="L183" title="All 4 branches covered.">                || (isForbidden(connectorResponse) &amp;&amp; hasRetryOrLimitHeader(connectorResponse));</span>
     }
 
 }

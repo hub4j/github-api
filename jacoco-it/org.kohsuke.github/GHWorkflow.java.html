@@ -19,77 +19,22 @@ import java.util.Objects;
  */
 public class GHWorkflow extends GHObject {
 
-    /**
-     * Create default GHWorkflow instance
-     */
-<span class="fc" id="L25">    public GHWorkflow() {</span>
-<span class="fc" id="L26">    }</span>
+    private String badgeUrl;
 
+    private String htmlUrl;
+
+    private String name;
     // Not provided by the API.
     @JsonIgnore
     private GHRepository owner;
-
-    private String name;
     private String path;
+
     private String state;
-
-    private String htmlUrl;
-    private String badgeUrl;
-
     /**
-     * The name of the workflow.
-     *
-     * @return the name
+     * Create default GHWorkflow instance
      */
-    public String getName() {
-<span class="fc" id="L45">        return name;</span>
-    }
-
-    /**
-     * The path of the workflow e.g. .github/workflows/blank.yaml
-     *
-     * @return the path
-     */
-    public String getPath() {
-<span class="fc" id="L54">        return path;</span>
-    }
-
-    /**
-     * The state of the workflow.
-     *
-     * @return the state
-     */
-    public String getState() {
-<span class="fc" id="L63">        return state;</span>
-    }
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     */
-    public URL getHtmlUrl() {
-<span class="fc" id="L72">        return GitHubClient.parseURL(htmlUrl);</span>
-    }
-
-    /**
-     * Repository to which the workflow belongs.
-     *
-     * @return the repository
-     */
-    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
-    public GHRepository getRepository() {
-<span class="fc" id="L82">        return owner;</span>
-    }
-
-    /**
-     * The badge URL, like https://github.com/octo-org/octo-repo/workflows/CI/badge.svg
-     *
-     * @return the badge url
-     */
-    public URL getBadgeUrl() {
-<span class="fc" id="L91">        return GitHubClient.parseURL(badgeUrl);</span>
-    }
+<span class="fc" id="L36">    public GHWorkflow() {</span>
+<span class="fc" id="L37">    }</span>
 
     /**
      * Disable the workflow.
@@ -98,18 +43,8 @@ public class GHWorkflow extends GHObject {
      *             the io exception
      */
     public void disable() throws IOException {
-<span class="fc" id="L101">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(getApiRoute(), &quot;disable&quot;).send();</span>
-<span class="fc" id="L102">    }</span>
-
-    /**
-     * Enable the workflow.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void enable() throws IOException {
-<span class="fc" id="L111">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(getApiRoute(), &quot;enable&quot;).send();</span>
-<span class="fc" id="L112">    }</span>
+<span class="fc" id="L46">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(getApiRoute(), &quot;disable&quot;).send();</span>
+<span class="fc" id="L47">    }</span>
 
     /**
      * Create a workflow dispatch event which triggers a manual workflow run.
@@ -120,8 +55,8 @@ public class GHWorkflow extends GHObject {
      *             the io exception
      */
     public void dispatch(String ref) throws IOException {
-<span class="fc" id="L123">        dispatch(ref, Collections.emptyMap());</span>
-<span class="fc" id="L124">    }</span>
+<span class="fc" id="L58">        dispatch(ref, Collections.emptyMap());</span>
+<span class="fc" id="L59">    }</span>
 
     /**
      * Create a workflow dispatch event which triggers a manual workflow run.
@@ -135,17 +70,82 @@ public class GHWorkflow extends GHObject {
      *             the io exception
      */
     public void dispatch(String ref, Map&lt;String, Object&gt; inputs) throws IOException {
-<span class="fc" id="L138">        Requester requester = root().createRequest()</span>
-<span class="fc" id="L139">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L140">                .withUrlPath(getApiRoute(), &quot;dispatches&quot;)</span>
-<span class="fc" id="L141">                .with(&quot;ref&quot;, ref);</span>
+<span class="fc" id="L73">        Requester requester = root().createRequest()</span>
+<span class="fc" id="L74">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L75">                .withUrlPath(getApiRoute(), &quot;dispatches&quot;)</span>
+<span class="fc" id="L76">                .with(&quot;ref&quot;, ref);</span>
 
-<span class="fc bfc" id="L143" title="All 2 branches covered.">        if (!inputs.isEmpty()) {</span>
-<span class="fc" id="L144">            requester.with(&quot;inputs&quot;, inputs);</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        if (!inputs.isEmpty()) {</span>
+<span class="fc" id="L79">            requester.with(&quot;inputs&quot;, inputs);</span>
         }
 
-<span class="fc" id="L147">        requester.send();</span>
-<span class="fc" id="L148">    }</span>
+<span class="fc" id="L82">        requester.send();</span>
+<span class="fc" id="L83">    }</span>
+
+    /**
+     * Enable the workflow.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void enable() throws IOException {
+<span class="fc" id="L92">        root().createRequest().method(&quot;PUT&quot;).withUrlPath(getApiRoute(), &quot;enable&quot;).send();</span>
+<span class="fc" id="L93">    }</span>
+
+    /**
+     * The badge URL, like https://github.com/octo-org/octo-repo/workflows/CI/badge.svg
+     *
+     * @return the badge url
+     */
+    public URL getBadgeUrl() {
+<span class="fc" id="L101">        return GitHubClient.parseURL(badgeUrl);</span>
+    }
+
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
+    public URL getHtmlUrl() {
+<span class="fc" id="L110">        return GitHubClient.parseURL(htmlUrl);</span>
+    }
+
+    /**
+     * The name of the workflow.
+     *
+     * @return the name
+     */
+    public String getName() {
+<span class="fc" id="L119">        return name;</span>
+    }
+
+    /**
+     * The path of the workflow e.g. .github/workflows/blank.yaml
+     *
+     * @return the path
+     */
+    public String getPath() {
+<span class="fc" id="L128">        return path;</span>
+    }
+
+    /**
+     * Repository to which the workflow belongs.
+     *
+     * @return the repository
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public GHRepository getRepository() {
+<span class="fc" id="L138">        return owner;</span>
+    }
+
+    /**
+     * The state of the workflow.
+     *
+     * @return the state
+     */
+    public String getState() {
+<span class="fc" id="L147">        return state;</span>
+    }
 
     /**
      * Lists the workflow runs belong to this workflow.

@@ -27,6 +27,34 @@ import javax.annotation.Nonnull;
 @SuppressFBWarnings(value = { &quot;CT_CONSTRUCTOR_THROW&quot; }, justification = &quot;Basic validation&quot;)
 public class HttpClientGitHubConnector implements GitHubConnector {
 
+    /**
+     * Initial response information when a response is initially received and before the body is processed.
+     *
+     * Implementation specific to {@link HttpResponse}.
+     */
+    private static class HttpClientGitHubConnectorResponse extends GitHubConnectorResponse {
+
+        @Nonnull
+        private final HttpResponse&lt;InputStream&gt; response;
+
+        protected HttpClientGitHubConnectorResponse(@Nonnull GitHubConnectorRequest request,
+                @Nonnull HttpResponse&lt;InputStream&gt; response) {
+<span class="fc" id="L42">            super(request, response.statusCode(), response.headers().map());</span>
+<span class="fc" id="L43">            this.response = response;</span>
+<span class="fc" id="L44">        }</span>
+
+        @Override
+        public void close() throws IOException {
+<span class="fc" id="L48">            super.close();</span>
+<span class="fc" id="L49">        }</span>
+
+        @CheckForNull
+        @Override
+        protected InputStream rawBodyStream() throws IOException {
+<span class="fc" id="L54">            return response.body();</span>
+        }
+    }
+
     private final HttpClient client;
 
     /**
@@ -43,8 +71,8 @@ public class HttpClientGitHubConnector implements GitHubConnector {
         // to a different host, which is similar to what Okhttp is doing:
         // https://github.com/square/okhttp/blob/f9dfd4e8cc070ca2875a67d8f7ad939d95e7e296/okhttp/src/main/kotlin/okhttp3/internal/http/RetryAndFollowUpInterceptor.kt#L313-L318
         // See also https://github.com/arduino/report-size-deltas/pull/83 for more context
-<span class="fc" id="L46">        this(HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NEVER).build());</span>
-<span class="fc" id="L47">    }</span>
+<span class="fc" id="L74">        this(HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NEVER).build());</span>
+<span class="fc" id="L75">    }</span>
 
     /**
      * Instantiates a new HttpClientGitHubConnector.
@@ -52,68 +80,40 @@ public class HttpClientGitHubConnector implements GitHubConnector {
      * @param client
      *            the HttpClient to be used
      */
-<span class="fc" id="L55">    public HttpClientGitHubConnector(HttpClient client) {</span>
-<span class="fc" id="L56">        this.client = client;</span>
-<span class="fc" id="L57">    }</span>
+<span class="fc" id="L83">    public HttpClientGitHubConnector(HttpClient client) {</span>
+<span class="fc" id="L84">        this.client = client;</span>
+<span class="fc" id="L85">    }</span>
 
     @Override
     public GitHubConnectorResponse send(GitHubConnectorRequest connectorRequest) throws IOException {
-<span class="fc" id="L61">        HttpRequest.Builder builder = HttpRequest.newBuilder();</span>
+<span class="fc" id="L89">        HttpRequest.Builder builder = HttpRequest.newBuilder();</span>
         try {
-<span class="fc" id="L63">            builder.uri(connectorRequest.url().toURI());</span>
-<span class="nc" id="L64">        } catch (URISyntaxException e) {</span>
-<span class="nc" id="L65">            throw new IOException(&quot;Invalid URL&quot;, e);</span>
-<span class="fc" id="L66">        }</span>
+<span class="fc" id="L91">            builder.uri(connectorRequest.url().toURI());</span>
+<span class="nc" id="L92">        } catch (URISyntaxException e) {</span>
+<span class="nc" id="L93">            throw new IOException(&quot;Invalid URL&quot;, e);</span>
+<span class="fc" id="L94">        }</span>
 
-<span class="fc bfc" id="L68" title="All 2 branches covered.">        for (Map.Entry&lt;String, List&lt;String&gt;&gt; e : connectorRequest.allHeaders().entrySet()) {</span>
-<span class="fc" id="L69">            List&lt;String&gt; v = e.getValue();</span>
-<span class="pc bpc" id="L70" title="1 of 2 branches missed.">            if (v != null) {</span>
-<span class="fc" id="L71">                builder.header(e.getKey(), String.join(&quot;, &quot;, v));</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        for (Map.Entry&lt;String, List&lt;String&gt;&gt; e : connectorRequest.allHeaders().entrySet()) {</span>
+<span class="fc" id="L97">            List&lt;String&gt; v = e.getValue();</span>
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">            if (v != null) {</span>
+<span class="fc" id="L99">                builder.header(e.getKey(), String.join(&quot;, &quot;, v));</span>
             }
-<span class="fc" id="L73">        }</span>
+<span class="fc" id="L101">        }</span>
 
-<span class="fc" id="L75">        HttpRequest.BodyPublisher publisher = HttpRequest.BodyPublishers.noBody();</span>
-<span class="fc bfc" id="L76" title="All 2 branches covered.">        if (connectorRequest.hasBody()) {</span>
-<span class="fc" id="L77">            publisher = HttpRequest.BodyPublishers.ofByteArray(IOUtils.toByteArray(connectorRequest.body()));</span>
+<span class="fc" id="L103">        HttpRequest.BodyPublisher publisher = HttpRequest.BodyPublishers.noBody();</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        if (connectorRequest.hasBody()) {</span>
+<span class="fc" id="L105">            publisher = HttpRequest.BodyPublishers.ofByteArray(IOUtils.toByteArray(connectorRequest.body()));</span>
         }
-<span class="fc" id="L79">        builder.method(connectorRequest.method(), publisher);</span>
+<span class="fc" id="L107">        builder.method(connectorRequest.method(), publisher);</span>
 
-<span class="fc" id="L81">        HttpRequest request = builder.build();</span>
+<span class="fc" id="L109">        HttpRequest request = builder.build();</span>
 
         try {
-<span class="fc" id="L84">            HttpResponse&lt;InputStream&gt; httpResponse = client.send(request, HttpResponse.BodyHandlers.ofInputStream());</span>
-<span class="fc" id="L85">            return new HttpClientGitHubConnectorResponse(connectorRequest, httpResponse);</span>
-<span class="nc" id="L86">        } catch (InterruptedException e) {</span>
-<span class="nc" id="L87">            throw (InterruptedIOException) new InterruptedIOException(e.getMessage()).initCause(e);</span>
+<span class="fc" id="L112">            HttpResponse&lt;InputStream&gt; httpResponse = client.send(request, HttpResponse.BodyHandlers.ofInputStream());</span>
+<span class="fc" id="L113">            return new HttpClientGitHubConnectorResponse(connectorRequest, httpResponse);</span>
+<span class="nc" id="L114">        } catch (InterruptedException e) {</span>
+<span class="nc" id="L115">            throw (InterruptedIOException) new InterruptedIOException(e.getMessage()).initCause(e);</span>
         }
-    }
-
-    /**
-     * Initial response information when a response is initially received and before the body is processed.
-     *
-     * Implementation specific to {@link HttpResponse}.
-     */
-    private static class HttpClientGitHubConnectorResponse extends GitHubConnectorResponse {
-
-        @Nonnull
-        private final HttpResponse&lt;InputStream&gt; response;
-
-        protected HttpClientGitHubConnectorResponse(@Nonnull GitHubConnectorRequest request,
-                @Nonnull HttpResponse&lt;InputStream&gt; response) {
-<span class="fc" id="L103">            super(request, response.statusCode(), response.headers().map());</span>
-<span class="fc" id="L104">            this.response = response;</span>
-<span class="fc" id="L105">        }</span>
-
-        @CheckForNull
-        @Override
-        protected InputStream rawBodyStream() throws IOException {
-<span class="fc" id="L110">            return response.body();</span>
-        }
-
-        @Override
-        public void close() throws IOException {
-<span class="fc" id="L115">            super.close();</span>
-<span class="fc" id="L116">        }</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

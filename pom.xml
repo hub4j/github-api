@@ -73,7 +73,7 @@
     <jacoco.surefire.argLine></jacoco.surefire.argLine>
     <jjwt.suite.version>0.12.6</jjwt.suite.version>
     <!-- This project was registered before 2021, so it uses the old server. -->
-    <nexus.serverUrl>https://oss.sonatype.org</nexus.serverUrl>
+    <nexus.serverUrl>https://ossrh-staging-api.central.sonatype.com</nexus.serverUrl>
     <okhttp3.version>4.12.0</okhttp3.version>
     <okio.version>3.10.2</okio.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

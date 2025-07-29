@@ -21,11 +21,13 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Reset staging/main
+      - name: Reset staging
         id: staging
         run: |
-          git checkout -B staging/main
-          git push --set-upstream -f origin staging/main
+          git checkout -B staging/$GITHUB_REF_NAME
+          git push --set-upstream -f origin staging/$GITHUB_REF_NAME
+        env:
+          GITHUB_REF_NAME: ${{ github.ref_name }}
 
       - name: Set Release Version
         id: release
@@ -37,7 +39,7 @@ jobs:
         with:
           commit_message: "Prepare release (${{ github.actor }}): github-api-${{ steps.release.outputs.version }}" 
           tagging_message: 'github-api-${{ steps.release.outputs.version }}'
-          branch: staging/main
+          branch: staging/${{ github.ref_name }}
 
       - name: Increment Snapshot Version
         run: |
@@ -46,12 +48,12 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Prepare for next development iteration"
-          branch: staging/main
+          branch: staging/${{ github.ref_name }}
 
-      - name: pull-request to main
+      - name: Create pull-request
         uses: repo-sync/pull-request@v2
         with:
           pr_title: "Prepare release (${{ github.actor }}): github-api-${{ steps.release.outputs.version }}"
-          source_branch: "staging/main"
-          destination_branch: "main"
+          source_branch: "staging/${{ github.ref_name }}"
+          destination_branch: "${{ github.ref_name }}"
           github_token: ${{ secrets.GITHUB_TOKEN }}

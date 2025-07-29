@@ -101,6 +101,7 @@ public class GHRelease extends GHObject {
      *
      * @return the author
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHUser getAuthor() {
         return author;
     }

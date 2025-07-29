@@ -143,6 +143,7 @@ public class GHAsset extends GHObject {
      *
      * @return the uploader
      */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHPerson getUploader() {
         return uploader;
     }

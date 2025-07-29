@@ -10,14 +10,14 @@ package org.kohsuke.github;
  */
 public class GHIssueRename {
 
+    private String from = "";
+
+    private String to = "";
     /**
      * Create default GHIssueRename instance
      */
     public GHIssueRename() {
     }
-
-    private String from = "";
-    private String to = "";
 
     /**
      * Old issue name.

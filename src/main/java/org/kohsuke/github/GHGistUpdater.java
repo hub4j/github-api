@@ -60,6 +60,18 @@ public class GHGistUpdater {
     }
 
     /**
+     * Description gh gist updater.
+     *
+     * @param desc
+     *            the desc
+     * @return the gh gist updater
+     */
+    public GHGistUpdater description(String desc) {
+        builder.with("description", desc);
+        return this;
+    }
+
+    /**
      * Rename file gh gist updater.
      *
      * @param fileName
@@ -72,6 +84,18 @@ public class GHGistUpdater {
         Map<String, String> file = files.computeIfAbsent(fileName, d -> new HashMap<>());
         file.put("filename", newFileName);
         return this;
+    }
+
+    /**
+     * Updates the Gist based on the parameters specified thus far.
+     *
+     * @return the gh gist
+     * @throws IOException
+     *             the io exception
+     */
+    public GHGist update() throws IOException {
+        builder.with("files", files);
+        return builder.method("PATCH").withUrlPath(base.getApiTailUrl("")).fetch(GHGist.class);
     }
 
     /**
@@ -106,29 +130,5 @@ public class GHGistUpdater {
         file.put("filename", newFileName);
         files.put(fileName, file);
         return this;
-    }
-
-    /**
-     * Description gh gist updater.
-     *
-     * @param desc
-     *            the desc
-     * @return the gh gist updater
-     */
-    public GHGistUpdater description(String desc) {
-        builder.with("description", desc);
-        return this;
-    }
-
-    /**
-     * Updates the Gist based on the parameters specified thus far.
-     *
-     * @return the gh gist
-     * @throws IOException
-     *             the io exception
-     */
-    public GHGist update() throws IOException {
-        builder.with("files", files);
-        return builder.method("PATCH").withUrlPath(base.getApiTailUrl("")).fetch(GHGist.class);
     }
 }

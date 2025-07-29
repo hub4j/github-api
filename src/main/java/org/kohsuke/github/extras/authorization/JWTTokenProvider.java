@@ -27,17 +27,49 @@ import javax.annotation.Nonnull;
 @SuppressFBWarnings(value = { "CT_CONSTRUCTOR_THROW" }, justification = "TODO")
 public class JWTTokenProvider implements AuthorizationProvider {
 
-    private final PrivateKey privateKey;
+    /**
+     * Convert a PKCS#8 formatted private key in string format into a java PrivateKey
+     *
+     * @param key
+     *            PCKS#8 string
+     * @return private key
+     * @throws GeneralSecurityException
+     *             if we couldn't parse the string
+     */
+    private static PrivateKey getPrivateKeyFromString(final String key) throws GeneralSecurityException {
+        if (key.contains(" RSA ")) {
+            throw new InvalidKeySpecException(
+                    "Private key must be a PKCS#8 formatted string, to convert it from PKCS#1 use: "
+                            + "openssl pkcs8 -topk8 -inform PEM -outform PEM -in current-key.pem -out new-key.pem -nocrypt");
+        }
 
-    @Nonnull
-    private Instant validUntil = Instant.MIN;
+        // Remove all comments and whitespace from PEM
+        // such as "-----BEGIN PRIVATE KEY-----" and newlines
+        String privateKeyContent = key.replaceAll("(?m)^--.*", "").replaceAll("\\s", "");
 
-    private String authorization;
+        KeyFactory kf = KeyFactory.getInstance("RSA");
+
+        try {
+            byte[] decode = Base64.getDecoder().decode(privateKeyContent);
+            PKCS8EncodedKeySpec keySpecPKCS8 = new PKCS8EncodedKeySpec(decode);
+
+            return kf.generatePrivate(keySpecPKCS8);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidKeySpecException("Failed to decode private key: " + e.getMessage(), e);
+        }
+    }
 
     /**
      * The identifier for the application
      */
     private final String applicationId;
+
+    private String authorization;
+
+    private final PrivateKey privateKey;
+
+    @Nonnull
+    private Instant validUntil = Instant.MIN;
 
     /**
      * Create a JWTTokenProvider
@@ -76,13 +108,12 @@ public class JWTTokenProvider implements AuthorizationProvider {
      *
      * @param applicationId
      *            the application id
-     * @param keyString
-     *            the key string
-     * @throws GeneralSecurityException
-     *             when an error occurs
+     * @param privateKey
+     *            the private key
      */
-    public JWTTokenProvider(String applicationId, String keyString) throws GeneralSecurityException {
-        this(applicationId, getPrivateKeyFromString(keyString));
+    public JWTTokenProvider(String applicationId, PrivateKey privateKey) {
+        this.privateKey = privateKey;
+        this.applicationId = applicationId;
     }
 
     /**
@@ -90,12 +121,13 @@ public class JWTTokenProvider implements AuthorizationProvider {
      *
      * @param applicationId
      *            the application id
-     * @param privateKey
-     *            the private key
+     * @param keyString
+     *            the key string
+     * @throws GeneralSecurityException
+     *             when an error occurs
      */
-    public JWTTokenProvider(String applicationId, PrivateKey privateKey) {
-        this.privateKey = privateKey;
-        this.applicationId = applicationId;
+    public JWTTokenProvider(String applicationId, String keyString) throws GeneralSecurityException {
+        this(applicationId, getPrivateKeyFromString(keyString));
     }
 
     /** {@inheritDoc} */
@@ -107,54 +139,6 @@ public class JWTTokenProvider implements AuthorizationProvider {
                 authorization = String.format("Bearer %s", token);;
             }
             return authorization;
-        }
-    }
-
-    /**
-     * Indicates whether the token considered valid.
-     *
-     * <p>
-     * This is not the same as whether the token is expired. The token is considered not valid before it actually
-     * expires to prevent access denied errors.
-     *
-     * <p>
-     * Made internal for testing
-     *
-     * @return false if the token has been refreshed within the required window, otherwise true
-     */
-    boolean isNotValid() {
-        return Instant.now().isAfter(validUntil);
-    }
-
-    /**
-     * Convert a PKCS#8 formatted private key in string format into a java PrivateKey
-     *
-     * @param key
-     *            PCKS#8 string
-     * @return private key
-     * @throws GeneralSecurityException
-     *             if we couldn't parse the string
-     */
-    private static PrivateKey getPrivateKeyFromString(final String key) throws GeneralSecurityException {
-        if (key.contains(" RSA ")) {
-            throw new InvalidKeySpecException(
-                    "Private key must be a PKCS#8 formatted string, to convert it from PKCS#1 use: "
-                            + "openssl pkcs8 -topk8 -inform PEM -outform PEM -in current-key.pem -out new-key.pem -nocrypt");
-        }
-
-        // Remove all comments and whitespace from PEM
-        // such as "-----BEGIN PRIVATE KEY-----" and newlines
-        String privateKeyContent = key.replaceAll("(?m)^--.*", "").replaceAll("\\s", "");
-
-        KeyFactory kf = KeyFactory.getInstance("RSA");
-
-        try {
-            byte[] decode = Base64.getDecoder().decode(privateKeyContent);
-            PKCS8EncodedKeySpec keySpecPKCS8 = new PKCS8EncodedKeySpec(decode);
-
-            return kf.generatePrivate(keySpecPKCS8);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidKeySpecException("Failed to decode private key: " + e.getMessage(), e);
         }
     }
 
@@ -176,5 +160,21 @@ public class JWTTokenProvider implements AuthorizationProvider {
 
     Instant getIssuedAt(Instant now) {
         return now.minus(Duration.ofMinutes(2));
+    }
+
+    /**
+     * Indicates whether the token considered valid.
+     *
+     * <p>
+     * This is not the same as whether the token is expired. The token is considered not valid before it actually
+     * expires to prevent access denied errors.
+     *
+     * <p>
+     * Made internal for testing
+     *
+     * @return false if the token has been refreshed within the required window, otherwise true
+     */
+    boolean isNotValid() {
+        return Instant.now().isAfter(validUntil);
     }
 }

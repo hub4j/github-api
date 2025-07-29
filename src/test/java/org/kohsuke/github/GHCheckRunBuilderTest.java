@@ -48,17 +48,6 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
     }
 
     /**
-     * Gets the installation github.
-     *
-     * @return the installation github
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    protected GitHub getInstallationGithub() throws IOException {
-        return getAppInstallationWithToken(jwtProvider3.getEncodedAuthorization()).root();
-    }
-
-    /**
      * Creates the check run.
      *
      * @throws Exception
@@ -88,6 +77,28 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
         assertThat(checkRun.getOutput().getAnnotationsCount(), equalTo(1));
         assertThat(checkRun.getId(), equalTo(1424883286L));
         assertThat(checkRun.getOutput().getText(), equalTo("Hello Text!"));
+    }
+
+    /**
+     * Creates the check run err missing conclusion.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void createCheckRunErrMissingConclusion() throws Exception {
+        try {
+            getInstallationGithub().getRepository("hub4j-test-org/test-checks")
+                    .createCheckRun("outstanding", "89a9ae301e35e667756034fdc933b1fc94f63fc1")
+                    .withStatus(GHCheckRun.Status.COMPLETED)
+                    .create();
+            fail("should have been rejected");
+        } catch (HttpException x) {
+            assertThat(x.getResponseCode(), equalTo(422));
+            assertThat(x.getMessage(), containsString("\\\"conclusion\\\" wasn't supplied"));
+            assertThat(x.getUrl(), containsString("/repos/hub4j-test-org/test-checks/check-runs"));
+            assertThat(x.getResponseMessage(), containsString("Unprocessable Entity"));
+        }
     }
 
     /**
@@ -151,28 +162,6 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
         assertThat(checkRun.getStatus(), equalTo(Status.IN_PROGRESS));
         assertThat(checkRun.getConclusion(), nullValue());
         assertThat(checkRun.getId(), equalTo(1424883451L));
-    }
-
-    /**
-     * Creates the check run err missing conclusion.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    public void createCheckRunErrMissingConclusion() throws Exception {
-        try {
-            getInstallationGithub().getRepository("hub4j-test-org/test-checks")
-                    .createCheckRun("outstanding", "89a9ae301e35e667756034fdc933b1fc94f63fc1")
-                    .withStatus(GHCheckRun.Status.COMPLETED)
-                    .create();
-            fail("should have been rejected");
-        } catch (HttpException x) {
-            assertThat(x.getResponseCode(), equalTo(422));
-            assertThat(x.getMessage(), containsString("\\\"conclusion\\\" wasn't supplied"));
-            assertThat(x.getUrl(), containsString("/repos/hub4j-test-org/test-checks/check-runs"));
-            assertThat(x.getResponseMessage(), containsString("Unprocessable Entity"));
-        }
     }
 
     /**
@@ -258,5 +247,16 @@ public class GHCheckRunBuilderTest extends AbstractGHAppInstallationTest {
                         .withCompletedAt(new Date(999_999_999))
                         .withName("bar", null)
                         .create());
+    }
+
+    /**
+     * Gets the installation github.
+     *
+     * @return the installation github
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    protected GitHub getInstallationGithub() throws IOException {
+        return getAppInstallationWithToken(jwtProvider3.getEncodedAuthorization()).root();
     }
 }

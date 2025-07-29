@@ -14,25 +14,6 @@ import java.io.IOException;
 public interface GitHubConnector {
 
     /**
-     * Sends a request and retrieves a raw response for processing.
-     *
-     * Implementers of {@link GitHubConnector#send(GitHubConnectorRequest)} process the information from a
-     * {@link GitHubConnectorRequest} to open an HTTP connection and retrieve a raw response. They then return a class
-     * that extends {@link GitHubConnectorResponse} corresponding their response data.
-     *
-     * Clients should not implement their own {@link GitHubConnectorRequest}. The {@link GitHubConnectorRequest}
-     * provided by the caller of {@link GitHubConnector#send(GitHubConnectorRequest)} should be passed to the
-     * constructor of {@link GitHubConnectorResponse}.
-     *
-     * @param connectorRequest
-     *            the request data to be sent.
-     * @return a GitHubConnectorResponse for the request
-     * @throws IOException
-     *             if there is an I/O error
-     */
-    GitHubConnectorResponse send(GitHubConnectorRequest connectorRequest) throws IOException;
-
-    /**
      * Default implementation used when connector is not set by user.
      *
      * This calls {@link DefaultGitHubConnector#create()} to get the default connector instance. The output of that
@@ -51,4 +32,23 @@ public interface GitHubConnector {
             throw new GHIOException("Offline");
         }
     };
+
+    /**
+     * Sends a request and retrieves a raw response for processing.
+     *
+     * Implementers of {@link GitHubConnector#send(GitHubConnectorRequest)} process the information from a
+     * {@link GitHubConnectorRequest} to open an HTTP connection and retrieve a raw response. They then return a class
+     * that extends {@link GitHubConnectorResponse} corresponding their response data.
+     *
+     * Clients should not implement their own {@link GitHubConnectorRequest}. The {@link GitHubConnectorRequest}
+     * provided by the caller of {@link GitHubConnector#send(GitHubConnectorRequest)} should be passed to the
+     * constructor of {@link GitHubConnectorResponse}.
+     *
+     * @param connectorRequest
+     *            the request data to be sent.
+     * @return a GitHubConnectorResponse for the request
+     * @throws IOException
+     *             if there is an I/O error
+     */
+    GitHubConnectorResponse send(GitHubConnectorRequest connectorRequest) throws IOException;
 }

@@ -27,27 +27,20 @@ import java.io.IOException;
  */
 public class GitHubCachingTest extends AbstractGitHubWireMockTest {
 
-    /**
-     * Instantiates a new git hub caching test.
-     */
-    public GitHubCachingTest() {
-        useDefaultGitHub = false;
+    private static int clientCount = 0;
+
+    private static GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
     }
 
     /** The test ref name. */
     String testRefName = "heads/test/content_ref_cache";
 
     /**
-     * Gets the wire mock options.
-     *
-     * @return the wire mock options
+     * Instantiates a new git hub caching test.
      */
-    @Override
-    protected WireMockConfiguration getWireMockOptions() {
-        return super.getWireMockOptions()
-                // Use the same data files as the 2.x test
-                .usingFilesUnderDirectory(baseRecordPath.replace("/okhttp3/", "/"))
-                .extensions(templating.newResponseTransformer());
+    public GitHubCachingTest() {
+        useDefaultGitHub = false;
     }
 
     /**
@@ -185,8 +178,6 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
         repo.getRef(testRefName);
     }
 
-    private static int clientCount = 0;
-
     private OkHttpClient createClient(boolean useCache) throws IOException {
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
 
@@ -203,8 +194,17 @@ public class GitHubCachingTest extends AbstractGitHubWireMockTest {
         return builder.build();
     }
 
-    private static GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");
+    /**
+     * Gets the wire mock options.
+     *
+     * @return the wire mock options
+     */
+    @Override
+    protected WireMockConfiguration getWireMockOptions() {
+        return super.getWireMockOptions()
+                // Use the same data files as the 2.x test
+                .usingFilesUnderDirectory(baseRecordPath.replace("/okhttp3/", "/"))
+                .extensions(templating.newResponseTransformer());
     }
 
 }

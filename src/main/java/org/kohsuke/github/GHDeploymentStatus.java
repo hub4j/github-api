@@ -9,58 +9,36 @@ import java.util.Locale;
  */
 public class GHDeploymentStatus extends GHObject {
 
-    /**
-     * Create default GHDeploymentStatus instance
-     */
-    public GHDeploymentStatus() {
-    }
-
     private GHRepository owner;
 
     /** The creator. */
     protected GHUser creator;
 
-    /** The state. */
-    protected String state;
+    /** The deployment url. */
+    protected String deploymentUrl;
 
     /** The description. */
     protected String description;
 
-    /** The target url. */
-    protected String targetUrl;
+    /** The environment url. */
+    protected String environmentUrl;
 
     /** The log url. */
     protected String logUrl;
 
-    /** The deployment url. */
-    protected String deploymentUrl;
-
     /** The repository url. */
     protected String repositoryUrl;
 
-    /** The environment url. */
-    protected String environmentUrl;
+    /** The state. */
+    protected String state;
+
+    /** The target url. */
+    protected String targetUrl;
 
     /**
-     * Wrap gh deployment status.
-     *
-     * @param owner
-     *            the owner
-     *
-     * @return the gh deployment status
+     * Create default GHDeploymentStatus instance
      */
-    GHDeploymentStatus lateBind(GHRepository owner) {
-        this.owner = owner;
-        return this;
-    }
-
-    /**
-     * Gets target url.
-     *
-     * @return the target url
-     */
-    public URL getLogUrl() {
-        return GitHubClient.parseURL(logUrl);
+    public GHDeploymentStatus() {
     }
 
     /**
@@ -79,6 +57,15 @@ public class GHDeploymentStatus extends GHObject {
      */
     public URL getEnvironmentUrl() {
         return GitHubClient.parseURL(environmentUrl);
+    }
+
+    /**
+     * Gets target url.
+     *
+     * @return the target url
+     */
+    public URL getLogUrl() {
+        return GitHubClient.parseURL(logUrl);
     }
 
     /**
@@ -107,5 +94,18 @@ public class GHDeploymentStatus extends GHObject {
     // test only
     GHRepository getOwner() {
         return owner;
+    }
+
+    /**
+     * Wrap gh deployment status.
+     *
+     * @param owner
+     *            the owner
+     *
+     * @return the gh deployment status
+     */
+    GHDeploymentStatus lateBind(GHRepository owner) {
+        this.owner = owner;
+        return this;
     }
 }

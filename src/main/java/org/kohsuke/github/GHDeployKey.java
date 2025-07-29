@@ -13,21 +13,8 @@ import java.util.Date;
  */
 public class GHDeployKey {
 
-    /**
-     * Create default GHDeployKey instance
-     */
-    public GHDeployKey() {
-    }
-
-    /** The title. */
-    protected String url, key, title;
-
-    /** The verified. */
-    protected boolean verified;
-
-    /** The id. */
-    protected long id;
-    private GHRepository owner;
+    /** Name of user that added the deploy key */
+    private String addedBy;
 
     /** Creation date of the deploy key */
     private String createdAt;
@@ -35,11 +22,68 @@ public class GHDeployKey {
     /** Last used date of the deploy key */
     private String lastUsed;
 
-    /** Name of user that added the deploy key */
-    private String addedBy;
-
+    private GHRepository owner;
     /** Whether the deploykey has readonly permission or full access */
     private boolean readOnly;
+
+    /** The id. */
+    protected long id;
+
+    /** The title. */
+    protected String url, key, title;
+
+    /** The verified. */
+    protected boolean verified;
+
+    /**
+     * Create default GHDeployKey instance
+     */
+    public GHDeployKey() {
+    }
+
+    /**
+     * Delete.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+        owner.root()
+                .createRequest()
+                .method("DELETE")
+                .withUrlPath(String.format("/repos/%s/%s/keys/%d", owner.getOwnerName(), owner.getName(), id))
+                .send();
+    }
+
+    /**
+     * Gets added_by
+     *
+     * @return the added_by
+     */
+    public String getAddedBy() {
+        return addedBy;
+    }
+
+    /**
+     * Gets added_by
+     *
+     * @return the added_by
+     * @deprecated Use {@link #getAddedBy()}
+     */
+    @Deprecated
+    public String getAdded_by() {
+        return getAddedBy();
+    }
+
+    /**
+     * Gets createdAt.
+     *
+     * @return the createdAt
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getCreatedAt() {
+        return GitHubClient.parseInstant(createdAt);
+    }
 
     /**
      * Gets id.
@@ -57,6 +101,16 @@ public class GHDeployKey {
      */
     public String getKey() {
         return key;
+    }
+
+    /**
+     * Gets last_used.
+     *
+     * @return the last_used
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getLastUsedAt() {
+        return GitHubClient.parseInstant(lastUsed);
     }
 
     /**
@@ -78,52 +132,12 @@ public class GHDeployKey {
     }
 
     /**
-     * Is verified boolean.
+     * Is read_only
      *
-     * @return the boolean
+     * @return true if the key can only read. False if the key has write permission as well.
      */
-    public boolean isVerified() {
-        return verified;
-    }
-
-    /**
-     * Gets createdAt.
-     *
-     * @return the createdAt
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getCreatedAt() {
-        return GitHubClient.parseInstant(createdAt);
-    }
-
-    /**
-     * Gets last_used.
-     *
-     * @return the last_used
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getLastUsedAt() {
-        return GitHubClient.parseInstant(lastUsed);
-    }
-
-    /**
-     * Gets added_by
-     *
-     * @return the added_by
-     * @deprecated Use {@link #getAddedBy()}
-     */
-    @Deprecated
-    public String getAdded_by() {
-        return getAddedBy();
-    }
-
-    /**
-     * Gets added_by
-     *
-     * @return the added_by
-     */
-    public String getAddedBy() {
-        return addedBy;
+    public boolean isReadOnly() {
+        return readOnly;
     }
 
     /**
@@ -138,24 +152,12 @@ public class GHDeployKey {
     }
 
     /**
-     * Is read_only
+     * Is verified boolean.
      *
-     * @return true if the key can only read. False if the key has write permission as well.
+     * @return the boolean
      */
-    public boolean isReadOnly() {
-        return readOnly;
-    }
-
-    /**
-     * Wrap gh deploy key.
-     *
-     * @param repo
-     *            the repo
-     * @return the gh deploy key
-     */
-    GHDeployKey lateBind(GHRepository repo) {
-        this.owner = repo;
-        return this;
+    public boolean isVerified() {
+        return verified;
     }
 
     /**
@@ -175,16 +177,14 @@ public class GHDeployKey {
     }
 
     /**
-     * Delete.
+     * Wrap gh deploy key.
      *
-     * @throws IOException
-     *             the io exception
+     * @param repo
+     *            the repo
+     * @return the gh deploy key
      */
-    public void delete() throws IOException {
-        owner.root()
-                .createRequest()
-                .method("DELETE")
-                .withUrlPath(String.format("/repos/%s/%s/keys/%d", owner.getOwnerName(), owner.getName(), id))
-                .send();
+    GHDeployKey lateBind(GHRepository repo) {
+        this.owner = repo;
+        return this;
     }
 }

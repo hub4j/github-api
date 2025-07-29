@@ -14,9 +14,6 @@ import org.kohsuke.github.extras.okhttp3.OkHttpGitHubConnector;
  */
 public final class DefaultGitHubConnector {
 
-    private DefaultGitHubConnector() {
-    }
-
     /**
      * Creates a {@link GitHubConnector} that will be used as the default connector.
      *
@@ -46,5 +43,8 @@ public final class DefaultGitHubConnector {
             throw new IllegalStateException(
                     "Property 'test.github.connector' must reference a valid built-in connector - okhttp, httpclient, or default.");
         }
+    }
+
+    private DefaultGitHubConnector() {
     }
 }

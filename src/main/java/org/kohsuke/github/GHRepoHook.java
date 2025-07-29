@@ -11,15 +11,13 @@ class GHRepoHook extends GHHook {
     transient GHRepository repository;
 
     /**
-     * Wrap.
+     * Gets the api route.
      *
-     * @param owner
-     *            the owner
-     * @return the GH repo hook
+     * @return the api route
      */
-    GHRepoHook wrap(GHRepository owner) {
-        this.repository = owner;
-        return this;
+    @Override
+    String getApiRoute() {
+        return String.format("/repos/%s/%s/hooks/%d", repository.getOwnerName(), repository.getName(), getId());
     }
 
     /**
@@ -33,12 +31,14 @@ class GHRepoHook extends GHHook {
     }
 
     /**
-     * Gets the api route.
+     * Wrap.
      *
-     * @return the api route
+     * @param owner
+     *            the owner
+     * @return the GH repo hook
      */
-    @Override
-    String getApiRoute() {
-        return String.format("/repos/%s/%s/hooks/%d", repository.getOwnerName(), repository.getName(), getId());
+    GHRepoHook wrap(GHRepository owner) {
+        this.repository = owner;
+        return this;
     }
 }

@@ -27,6 +27,61 @@ import static org.hamcrest.Matchers.isA;
  */
 public class GitHubConnectorResponseTest extends AbstractGitHubWireMockTest {
 
+    // Extend ByteArrayResponse to preserve test coverage
+    private static class CustomBodyGitHubConnectorResponse extends ByteArrayResponse {
+        private final InputStream stream;
+
+        CustomBodyGitHubConnectorResponse(int statusCode, InputStream stream) {
+            super(EMPTY_REQUEST, statusCode, new HashMap<>());
+            this.stream = stream;
+        }
+
+        @Override
+        protected InputStream rawBodyStream() throws IOException {
+            return stream;
+        }
+    }
+
+    /**
+     * Empty request for response testing.
+     */
+    public static final GitHubConnectorRequest EMPTY_REQUEST = new GitHubConnectorRequest() {
+        @NotNull @Override
+        public Map<String, List<String>> allHeaders() {
+            return null;
+        }
+
+        @Nullable @Override
+        public InputStream body() {
+            return null;
+        }
+
+        @Nullable @Override
+        public String contentType() {
+            return null;
+        }
+
+        @Override
+        public boolean hasBody() {
+            return false;
+        }
+
+        @Nullable @Override
+        public String header(String name) {
+            return null;
+        }
+
+        @NotNull @Override
+        public String method() {
+            return null;
+        }
+
+        @NotNull @Override
+        public URL url() {
+            return null;
+        }
+    };
+
     /**
      * Instantiates a new GitHubConnectorResponseTest.
      */
@@ -34,27 +89,28 @@ public class GitHubConnectorResponseTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test basic body stream.
+     * Test forced rereadable body stream.
      *
      * @throws Exception
      *             for failures
      */
     @Test
-    public void testBodyStream() throws Exception {
+    public void tesBodyStream_forced() throws Exception {
         Exception e;
         GitHubConnectorResponse response = new CustomBodyGitHubConnectorResponse(200,
                 new ByteBufferBackedInputStream(ByteBuffer.wrap("Hello!".getBytes(StandardCharsets.UTF_8))));
+        // 200 status would be streamed body, force to buffered
+        response.setBodyStreamRereadable();
+
         InputStream stream = response.bodyStream();
-        assertThat(stream, isA(ByteBufferBackedInputStream.class));
+        assertThat(stream, isA(ByteArrayInputStream.class));
         String bodyString = IOUtils.toString(stream, StandardCharsets.UTF_8);
         assertThat(bodyString, equalTo("Hello!"));
 
-        // Cannot change to rereadable
-        e = Assert.assertThrows(RuntimeException.class, () -> response.setBodyStreamRereadable());
-        assertThat(e.getMessage(), equalTo("bodyStream() already called in read-once mode"));
+        // Buffered response can be read multiple times
+        bodyString = IOUtils.toString(response.bodyStream(), StandardCharsets.UTF_8);
+        assertThat(bodyString, equalTo("Hello!"));
 
-        e = Assert.assertThrows(IOException.class, () -> response.bodyStream());
-        assertThat(e.getMessage(), equalTo("Response body not rereadable"));
         response.close();
         e = Assert.assertThrows(IOException.class, () -> response.bodyStream());
         assertThat(e.getMessage(), equalTo("Response is closed"));
@@ -89,28 +145,27 @@ public class GitHubConnectorResponseTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test forced rereadable body stream.
+     * Test basic body stream.
      *
      * @throws Exception
      *             for failures
      */
     @Test
-    public void tesBodyStream_forced() throws Exception {
+    public void testBodyStream() throws Exception {
         Exception e;
         GitHubConnectorResponse response = new CustomBodyGitHubConnectorResponse(200,
                 new ByteBufferBackedInputStream(ByteBuffer.wrap("Hello!".getBytes(StandardCharsets.UTF_8))));
-        // 200 status would be streamed body, force to buffered
-        response.setBodyStreamRereadable();
-
         InputStream stream = response.bodyStream();
-        assertThat(stream, isA(ByteArrayInputStream.class));
+        assertThat(stream, isA(ByteBufferBackedInputStream.class));
         String bodyString = IOUtils.toString(stream, StandardCharsets.UTF_8);
         assertThat(bodyString, equalTo("Hello!"));
 
-        // Buffered response can be read multiple times
-        bodyString = IOUtils.toString(response.bodyStream(), StandardCharsets.UTF_8);
-        assertThat(bodyString, equalTo("Hello!"));
+        // Cannot change to rereadable
+        e = Assert.assertThrows(RuntimeException.class, () -> response.setBodyStreamRereadable());
+        assertThat(e.getMessage(), equalTo("bodyStream() already called in read-once mode"));
 
+        e = Assert.assertThrows(IOException.class, () -> response.bodyStream());
+        assertThat(e.getMessage(), equalTo("Response body not rereadable"));
         response.close();
         e = Assert.assertThrows(IOException.class, () -> response.bodyStream());
         assertThat(e.getMessage(), equalTo("Response is closed"));
@@ -164,66 +219,5 @@ public class GitHubConnectorResponseTest extends AbstractGitHubWireMockTest {
         e = Assert.assertThrows(IOException.class, () -> response.bodyStream());
         assertThat(e.getMessage(), equalTo("Response is closed"));
     }
-
-    // Extend ByteArrayResponse to preserve test coverage
-    private static class CustomBodyGitHubConnectorResponse extends ByteArrayResponse {
-        private final InputStream stream;
-
-        CustomBodyGitHubConnectorResponse(int statusCode, InputStream stream) {
-            super(EMPTY_REQUEST, statusCode, new HashMap<>());
-            this.stream = stream;
-        }
-
-        @Override
-        protected InputStream rawBodyStream() throws IOException {
-            return stream;
-        }
-    }
-
-    /**
-     * Empty request for response testing.
-     */
-    public static final GitHubConnectorRequest EMPTY_REQUEST = new GitHubConnectorRequest() {
-        @NotNull
-        @Override
-        public String method() {
-            return null;
-        }
-
-        @NotNull
-        @Override
-        public Map<String, List<String>> allHeaders() {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public String header(String name) {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public String contentType() {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public InputStream body() {
-            return null;
-        }
-
-        @NotNull
-        @Override
-        public URL url() {
-            return null;
-        }
-
-        @Override
-        public boolean hasBody() {
-            return false;
-        }
-    };
 
 }

@@ -17,16 +17,55 @@ import static org.hamcrest.Matchers.*;
  */
 public class GHProjectCardTest extends AbstractGitHubWireMockTest {
 
+    private GHProjectCard card;
+
+    private GHProjectColumn column;
+    private GHOrganization org;
+    private GHProject project;
     /**
      * Create default GHProjectCardTest instance
      */
     public GHProjectCardTest() {
     }
 
-    private GHOrganization org;
-    private GHProject project;
-    private GHProjectColumn column;
-    private GHProjectCard card;
+    /**
+     * After.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @After
+    public void after() throws IOException {
+        if (mockGitHub.isUseProxy()) {
+            if (card != null) {
+                card = getNonRecordingGitHub().getProjectCard(card.getId());
+                try {
+                    card.delete();
+                    card = null;
+                } catch (FileNotFoundException e) {
+                    card = null;
+                }
+            }
+            if (column != null) {
+                column = getNonRecordingGitHub().getProjectColumn(column.getId());
+                try {
+                    column.delete();
+                    column = null;
+                } catch (FileNotFoundException e) {
+                    column = null;
+                }
+            }
+            if (project != null) {
+                project = getNonRecordingGitHub().getProject(project.getId());
+                try {
+                    project.delete();
+                    project = null;
+                } catch (FileNotFoundException e) {
+                    project = null;
+                }
+            }
+        }
+    }
 
     /**
      * Sets the up.
@@ -40,29 +79,6 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
         project = org.createProject("test-project", "This is a test project");
         column = project.createColumn("column-one");
         card = column.createCard("This is a card");
-    }
-
-    /**
-     * Test created card.
-     */
-    @Test
-    public void testCreatedCard() {
-        assertThat(card.getNote(), equalTo("This is a card"));
-        assertThat(card.isArchived(), is(false));
-    }
-
-    /**
-     * Test edit card note.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void testEditCardNote() throws IOException {
-        card.setNote("New note");
-        card = gitHub.getProjectCard(card.getId());
-        assertThat(card.getNote(), equalTo("New note"));
-        assertThat(card.isArchived(), is(false));
     }
 
     /**
@@ -137,6 +153,15 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test created card.
+     */
+    @Test
+    public void testCreatedCard() {
+        assertThat(card.getNote(), equalTo("This is a card"));
+        assertThat(card.isArchived(), is(false));
+    }
+
+    /**
      * Test delete card.
      *
      * @throws IOException
@@ -154,41 +179,16 @@ public class GHProjectCardTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * After.
+     * Test edit card note.
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    @After
-    public void after() throws IOException {
-        if (mockGitHub.isUseProxy()) {
-            if (card != null) {
-                card = getNonRecordingGitHub().getProjectCard(card.getId());
-                try {
-                    card.delete();
-                    card = null;
-                } catch (FileNotFoundException e) {
-                    card = null;
-                }
-            }
-            if (column != null) {
-                column = getNonRecordingGitHub().getProjectColumn(column.getId());
-                try {
-                    column.delete();
-                    column = null;
-                } catch (FileNotFoundException e) {
-                    column = null;
-                }
-            }
-            if (project != null) {
-                project = getNonRecordingGitHub().getProject(project.getId());
-                try {
-                    project.delete();
-                    project = null;
-                } catch (FileNotFoundException e) {
-                    project = null;
-                }
-            }
-        }
+    @Test
+    public void testEditCardNote() throws IOException {
+        card.setNote("New note");
+        card = gitHub.getProjectCard(card.getId());
+        assertThat(card.getNote(), equalTo("New note"));
+        assertThat(card.isArchived(), is(false));
     }
 }

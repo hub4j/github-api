@@ -13,17 +13,54 @@ import java.net.URL;
  */
 public class GHTreeEntry {
 
+    private String path, mode, type, sha, url;
+
+    private long size;
+
+    /** The tree. */
+    /* package almost final */GHTree tree;
     /**
      * Create default GHTreeEntry instance
      */
     public GHTreeEntry() {
     }
 
-    /** The tree. */
-    /* package almost final */GHTree tree;
+    /**
+     * If this tree entry represents a file, then return its information. Otherwise null.
+     *
+     * @return the gh blob
+     * @throws IOException
+     *             the io exception
+     */
+    public GHBlob asBlob() throws IOException {
+        if (type.equals("blob"))
+            return tree.repo.getBlob(sha);
+        else
+            return null;
+    }
 
-    private String path, mode, type, sha, url;
-    private long size;
+    /**
+     * If this tree entry represents a directory, then return it. Otherwise null.
+     *
+     * @return the gh tree
+     * @throws IOException
+     *             the io exception
+     */
+    public GHTree asTree() throws IOException {
+        if (type.equals("tree"))
+            return tree.repo.getTree(sha);
+        else
+            return null;
+    }
+
+    /**
+     * Get mode such as 100644.
+     *
+     * @return the mode
+     */
+    public String getMode() {
+        return mode;
+    }
 
     /**
      * Get the path such as "subdir/file.txt"
@@ -35,12 +72,12 @@ public class GHTreeEntry {
     }
 
     /**
-     * Get mode such as 100644.
+     * SHA1 of this object.
      *
-     * @return the mode
+     * @return the sha
      */
-    public String getMode() {
-        return mode;
+    public String getSha() {
+        return sha;
     }
 
     /**
@@ -62,15 +99,6 @@ public class GHTreeEntry {
     }
 
     /**
-     * SHA1 of this object.
-     *
-     * @return the sha
-     */
-    public String getSha() {
-        return sha;
-    }
-
-    /**
      * API URL to this Git data, such as https://api.github.com/repos/jenkinsci
      * /jenkins/git/commits/b72322675eb0114363a9a86e9ad5a170d1d07ac0
      *
@@ -78,20 +106,6 @@ public class GHTreeEntry {
      */
     public URL getUrl() {
         return GitHubClient.parseURL(url);
-    }
-
-    /**
-     * If this tree entry represents a file, then return its information. Otherwise null.
-     *
-     * @return the gh blob
-     * @throws IOException
-     *             the io exception
-     */
-    public GHBlob asBlob() throws IOException {
-        if (type.equals("blob"))
-            return tree.repo.getBlob(sha);
-        else
-            return null;
     }
 
     /**
@@ -104,20 +118,6 @@ public class GHTreeEntry {
     public InputStream readAsBlob() throws IOException {
         if (type.equals("blob"))
             return tree.repo.readBlob(sha);
-        else
-            return null;
-    }
-
-    /**
-     * If this tree entry represents a directory, then return it. Otherwise null.
-     *
-     * @return the gh tree
-     * @throws IOException
-     *             the io exception
-     */
-    public GHTree asTree() throws IOException {
-        if (type.equals("tree"))
-            return tree.repo.getTree(sha);
         else
             return null;
     }

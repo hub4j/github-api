@@ -19,31 +19,41 @@ import java.util.Map;
         justification = "JSON API")
 public abstract class GHHook extends GHObject {
 
-    /**
-     * Create default GHHook instance
-     */
-    public GHHook() {
-    }
-
-    /** The name. */
-    String name;
-
-    /** The events. */
-    List<String> events;
-
     /** The active. */
     boolean active;
 
     /** The config. */
     Map<String, String> config;
 
+    /** The events. */
+    List<String> events;
+
+    /** The name. */
+    String name;
+
     /**
-     * Gets name.
-     *
-     * @return the name
+     * Create default GHHook instance
      */
-    public String getName() {
-        return name;
+    public GHHook() {
+    }
+
+    /**
+     * Deletes this hook.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
+    }
+
+    /**
+     * Gets config.
+     *
+     * @return the config
+     */
+    public Map<String, String> getConfig() {
+        return Collections.unmodifiableMap(config);
     }
 
     /**
@@ -60,21 +70,21 @@ public abstract class GHHook extends GHObject {
     }
 
     /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
      * Is active boolean.
      *
      * @return the boolean
      */
     public boolean isActive() {
         return active;
-    }
-
-    /**
-     * Gets config.
-     *
-     * @return the config
-     */
-    public Map<String, String> getConfig() {
-        return Collections.unmodifiableMap(config);
     }
 
     /**
@@ -89,14 +99,11 @@ public abstract class GHHook extends GHObject {
     }
 
     /**
-     * Deletes this hook.
+     * Gets the api route.
      *
-     * @throws IOException
-     *             the io exception
+     * @return the api route
      */
-    public void delete() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
-    }
+    abstract String getApiRoute();
 
     /**
      * Root.
@@ -104,11 +111,4 @@ public abstract class GHHook extends GHObject {
      * @return the git hub
      */
     abstract GitHub root();
-
-    /**
-     * Gets the api route.
-     *
-     * @return the api route
-     */
-    abstract String getApiRoute();
 }

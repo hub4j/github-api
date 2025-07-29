@@ -25,20 +25,20 @@ public class GHAppInstallationTest extends AbstractGHAppInstallationTest {
     }
 
     /**
-     * Test list repositories two repos.
+     * Test list repositories no permissions.
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
     @Test
-    public void testListRepositoriesTwoRepos() throws IOException {
-        GHAppInstallation appInstallation = getAppInstallationWithToken(jwtProvider1.getEncodedAuthorization());
+    public void testGetMarketplaceAccount() throws IOException {
+        GHAppInstallation appInstallation = getAppInstallationWithToken(jwtProvider3.getEncodedAuthorization());
 
-        List<GHRepository> repositories = appInstallation.listRepositories().toList();
+        GHMarketplaceAccountPlan marketplaceAccount = appInstallation.getMarketplaceAccount();
+        GHMarketplacePlanTest.testMarketplaceAccount(marketplaceAccount);
 
-        assertThat(repositories.size(), equalTo(2));
-        assertThat(repositories.stream().map(GHRepository::getName).toArray(),
-                arrayContainingInAnyOrder("empty", "test-readme"));
+        GHMarketplaceAccountPlan plan = marketplaceAccount.getPlan();
+        assertThat(plan.getType(), equalTo(GHMarketplaceAccountType.ORGANIZATION));
     }
 
     /**
@@ -56,20 +56,20 @@ public class GHAppInstallationTest extends AbstractGHAppInstallationTest {
     }
 
     /**
-     * Test list repositories no permissions.
+     * Test list repositories two repos.
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
     @Test
-    public void testGetMarketplaceAccount() throws IOException {
-        GHAppInstallation appInstallation = getAppInstallationWithToken(jwtProvider3.getEncodedAuthorization());
+    public void testListRepositoriesTwoRepos() throws IOException {
+        GHAppInstallation appInstallation = getAppInstallationWithToken(jwtProvider1.getEncodedAuthorization());
 
-        GHMarketplaceAccountPlan marketplaceAccount = appInstallation.getMarketplaceAccount();
-        GHMarketplacePlanTest.testMarketplaceAccount(marketplaceAccount);
+        List<GHRepository> repositories = appInstallation.listRepositories().toList();
 
-        GHMarketplaceAccountPlan plan = marketplaceAccount.getPlan();
-        assertThat(plan.getType(), equalTo(GHMarketplaceAccountType.ORGANIZATION));
+        assertThat(repositories.size(), equalTo(2));
+        assertThat(repositories.stream().map(GHRepository::getName).toArray(),
+                arrayContainingInAnyOrder("empty", "test-readme"));
     }
 
     /**

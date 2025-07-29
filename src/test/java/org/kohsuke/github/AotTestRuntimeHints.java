@@ -20,11 +20,11 @@ import java.util.logging.Logger;
  */
 public class AotTestRuntimeHints implements RuntimeHintsRegistrar {
 
-    private static final Logger LOGGER = Logger.getLogger(AotTestRuntimeHints.class.getName());
-
     private static final String CLASSPATH_IDENTIFIER = "/target/classes";
 
     private static final String LOCATION_PATTERN_OF_ORG_KOHSUKE_GITHUB_CLASSES = "classpath*:org/kohsuke/github/**/*.class";
+
+    private static final Logger LOGGER = Logger.getLogger(AotTestRuntimeHints.class.getName());
 
     /**
      * Default constructor.

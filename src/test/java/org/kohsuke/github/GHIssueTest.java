@@ -36,6 +36,67 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Adds the labels.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    // Requires push access to the test repo to pass
+    public void addLabels() throws Exception {
+        GHIssue issue = getRepository().createIssue("addLabels").body("## test").create();
+        String addedLabel1 = "addLabels_label_name_1";
+        String addedLabel2 = "addLabels_label_name_2";
+        String addedLabel3 = "addLabels_label_name_3";
+
+        List<GHLabel> resultingLabels = issue.addLabels(addedLabel1);
+        assertThat(resultingLabels.size(), equalTo(1));
+        GHLabel ghLabel = resultingLabels.get(0);
+        assertThat(ghLabel.getName(), equalTo(addedLabel1));
+
+        int requestCount = mockGitHub.getRequestCount();
+        resultingLabels = issue.addLabels(addedLabel2, addedLabel3);
+        // multiple labels can be added with one api call
+        assertThat(mockGitHub.getRequestCount(), equalTo(requestCount + 1));
+
+        assertThat(resultingLabels.size(), equalTo(3));
+        assertThat(resultingLabels,
+                containsInAnyOrder(hasProperty("name", equalTo(addedLabel1)),
+                        hasProperty("name", equalTo(addedLabel2)),
+                        hasProperty("name", equalTo(addedLabel3))));
+
+        // Adding a label which is already present does not throw an error
+        resultingLabels = issue.addLabels(ghLabel);
+        assertThat(resultingLabels.size(), equalTo(3));
+    }
+
+    /**
+     * Adds the labels concurrency issue.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    // Requires push access to the test repo to pass
+    public void addLabelsConcurrencyIssue() throws Exception {
+        String addedLabel1 = "addLabelsConcurrencyIssue_label_name_1";
+        String addedLabel2 = "addLabelsConcurrencyIssue_label_name_2";
+
+        GHIssue issue1 = getRepository().createIssue("addLabelsConcurrencyIssue").body("## test").create();
+        issue1.getLabels();
+
+        GHIssue issue2 = getRepository().getIssue(issue1.getNumber());
+        issue2.addLabels(addedLabel2);
+
+        Collection<GHLabel> labels = issue1.addLabels(addedLabel1);
+
+        assertThat(labels.size(), equalTo(2));
+        assertThat(labels,
+                containsInAnyOrder(hasProperty("name", equalTo(addedLabel1)),
+                        hasProperty("name", equalTo(addedLabel2))));
+    }
+
+    /**
      * Clean up.
      *
      * @throws Exception
@@ -55,6 +116,48 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Close issue.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void closeIssue() throws Exception {
+        String name = "closeIssue";
+        GHIssue issue = getRepository().createIssue(name).body("## test").create();
+        assertThat(issue.getTitle(), equalTo(name));
+        assertThat(getRepository().getIssue(issue.getNumber()).getState(), equalTo(GHIssueState.OPEN));
+        issue.close();
+        GHIssue closedIssued = getRepository().getIssue(issue.getNumber());
+        assertThat(closedIssued.getState(), equalTo(GHIssueState.CLOSED));
+        assertThat(closedIssued.getStateReason(), equalTo(GHIssueStateReason.COMPLETED));
+    }
+
+    /**
+     * Close issue as not planned.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void closeIssueNotPlanned() throws Exception {
+        String name = "closeIssueNotPlanned";
+        GHIssue issue = getRepository().createIssue(name).body("## test").create();
+        assertThat(issue.getTitle(), equalTo(name));
+
+        GHIssue createdIssue = issue.getRepository().getIssue(issue.getNumber());
+
+        assertThat(createdIssue.getState(), equalTo(GHIssueState.OPEN));
+        assertThat(createdIssue.getStateReason(), nullValue());
+
+        issue.close(GHIssueStateReason.NOT_PLANNED);
+
+        GHIssue closedIssued = getRepository().getIssue(issue.getNumber());
+        assertThat(closedIssued.getState(), equalTo(GHIssueState.CLOSED));
+        assertThat(closedIssued.getStateReason(), equalTo(GHIssueStateReason.NOT_PLANNED));
+    }
+
+    /**
      * Creates the issue.
      *
      * @throws Exception
@@ -66,6 +169,24 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
         GHRepository repo = getRepository();
         GHIssue issue = repo.createIssue(name).body("## test").create();
         assertThat(issue.getTitle(), equalTo(name));
+    }
+
+    /**
+     * Gets the user test.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void getUserTest() throws IOException {
+        GHIssue issue = getRepository().createIssue("getUserTest").create();
+        GHIssue issueSingle = getRepository().getIssue(issue.getNumber());
+        assertThat(issueSingle.getUser().root(), notNullValue());
+
+        PagedIterable<GHIssue> ghIssues = getRepository().queryIssues().state(GHIssueState.OPEN).list();
+        for (GHIssue otherIssue : ghIssues) {
+            assertThat(otherIssue.getUser().root(), notNullValue());
+        }
     }
 
     /**
@@ -152,131 +273,6 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Close issue.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    public void closeIssue() throws Exception {
-        String name = "closeIssue";
-        GHIssue issue = getRepository().createIssue(name).body("## test").create();
-        assertThat(issue.getTitle(), equalTo(name));
-        assertThat(getRepository().getIssue(issue.getNumber()).getState(), equalTo(GHIssueState.OPEN));
-        issue.close();
-        GHIssue closedIssued = getRepository().getIssue(issue.getNumber());
-        assertThat(closedIssued.getState(), equalTo(GHIssueState.CLOSED));
-        assertThat(closedIssued.getStateReason(), equalTo(GHIssueStateReason.COMPLETED));
-    }
-
-    /**
-     * Close issue as not planned.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    public void closeIssueNotPlanned() throws Exception {
-        String name = "closeIssueNotPlanned";
-        GHIssue issue = getRepository().createIssue(name).body("## test").create();
-        assertThat(issue.getTitle(), equalTo(name));
-
-        GHIssue createdIssue = issue.getRepository().getIssue(issue.getNumber());
-
-        assertThat(createdIssue.getState(), equalTo(GHIssueState.OPEN));
-        assertThat(createdIssue.getStateReason(), nullValue());
-
-        issue.close(GHIssueStateReason.NOT_PLANNED);
-
-        GHIssue closedIssued = getRepository().getIssue(issue.getNumber());
-        assertThat(closedIssued.getState(), equalTo(GHIssueState.CLOSED));
-        assertThat(closedIssued.getStateReason(), equalTo(GHIssueStateReason.NOT_PLANNED));
-    }
-
-    /**
-     * Sets the labels.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    // Requires push access to the test repo to pass
-    public void setLabels() throws Exception {
-        GHIssue issue = getRepository().createIssue("setLabels").body("## test").create();
-        String label = "setLabels_label_name";
-        issue.setLabels(label);
-
-        Collection<GHLabel> labels = getRepository().getIssue(issue.getNumber()).getLabels();
-        assertThat(labels.size(), equalTo(1));
-        GHLabel savedLabel = labels.iterator().next();
-        assertThat(savedLabel.getName(), equalTo(label));
-        assertThat(savedLabel.getId(), notNullValue());
-        assertThat(savedLabel.getNodeId(), notNullValue());
-        assertThat(savedLabel.isDefault(), is(false));
-    }
-
-    /**
-     * Adds the labels.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    // Requires push access to the test repo to pass
-    public void addLabels() throws Exception {
-        GHIssue issue = getRepository().createIssue("addLabels").body("## test").create();
-        String addedLabel1 = "addLabels_label_name_1";
-        String addedLabel2 = "addLabels_label_name_2";
-        String addedLabel3 = "addLabels_label_name_3";
-
-        List<GHLabel> resultingLabels = issue.addLabels(addedLabel1);
-        assertThat(resultingLabels.size(), equalTo(1));
-        GHLabel ghLabel = resultingLabels.get(0);
-        assertThat(ghLabel.getName(), equalTo(addedLabel1));
-
-        int requestCount = mockGitHub.getRequestCount();
-        resultingLabels = issue.addLabels(addedLabel2, addedLabel3);
-        // multiple labels can be added with one api call
-        assertThat(mockGitHub.getRequestCount(), equalTo(requestCount + 1));
-
-        assertThat(resultingLabels.size(), equalTo(3));
-        assertThat(resultingLabels,
-                containsInAnyOrder(hasProperty("name", equalTo(addedLabel1)),
-                        hasProperty("name", equalTo(addedLabel2)),
-                        hasProperty("name", equalTo(addedLabel3))));
-
-        // Adding a label which is already present does not throw an error
-        resultingLabels = issue.addLabels(ghLabel);
-        assertThat(resultingLabels.size(), equalTo(3));
-    }
-
-    /**
-     * Adds the labels concurrency issue.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    // Requires push access to the test repo to pass
-    public void addLabelsConcurrencyIssue() throws Exception {
-        String addedLabel1 = "addLabelsConcurrencyIssue_label_name_1";
-        String addedLabel2 = "addLabelsConcurrencyIssue_label_name_2";
-
-        GHIssue issue1 = getRepository().createIssue("addLabelsConcurrencyIssue").body("## test").create();
-        issue1.getLabels();
-
-        GHIssue issue2 = getRepository().getIssue(issue1.getNumber());
-        issue2.addLabels(addedLabel2);
-
-        Collection<GHLabel> labels = issue1.addLabels(addedLabel1);
-
-        assertThat(labels.size(), equalTo(2));
-        assertThat(labels,
-                containsInAnyOrder(hasProperty("name", equalTo(addedLabel1)),
-                        hasProperty("name", equalTo(addedLabel2))));
-    }
-
-    /**
      * Removes the labels.
      *
      * @throws Exception
@@ -333,21 +329,29 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Gets the user test.
+     * Sets the labels.
      *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
+     * @throws Exception
+     *             the exception
      */
     @Test
-    public void getUserTest() throws IOException {
-        GHIssue issue = getRepository().createIssue("getUserTest").create();
-        GHIssue issueSingle = getRepository().getIssue(issue.getNumber());
-        assertThat(issueSingle.getUser().root(), notNullValue());
+    // Requires push access to the test repo to pass
+    public void setLabels() throws Exception {
+        GHIssue issue = getRepository().createIssue("setLabels").body("## test").create();
+        String label = "setLabels_label_name";
+        issue.setLabels(label);
 
-        PagedIterable<GHIssue> ghIssues = getRepository().queryIssues().state(GHIssueState.OPEN).list();
-        for (GHIssue otherIssue : ghIssues) {
-            assertThat(otherIssue.getUser().root(), notNullValue());
-        }
+        Collection<GHLabel> labels = getRepository().getIssue(issue.getNumber()).getLabels();
+        assertThat(labels.size(), equalTo(1));
+        GHLabel savedLabel = labels.iterator().next();
+        assertThat(savedLabel.getName(), equalTo(label));
+        assertThat(savedLabel.getId(), notNullValue());
+        assertThat(savedLabel.getNodeId(), notNullValue());
+        assertThat(savedLabel.isDefault(), is(false));
+    }
+
+    private GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization(GITHUB_API_TEST_ORG).getRepository("GHIssueTest");
     }
 
     /**
@@ -359,10 +363,6 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
      */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);
-    }
-
-    private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization(GITHUB_API_TEST_ORG).getRepository("GHIssueTest");
     }
 
 }

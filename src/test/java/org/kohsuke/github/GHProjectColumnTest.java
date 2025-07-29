@@ -18,63 +18,13 @@ import static org.hamcrest.Matchers.nullValue;
  */
 public class GHProjectColumnTest extends AbstractGitHubWireMockTest {
 
+    private GHProjectColumn column;
+
+    private GHProject project;
     /**
      * Create default GHProjectColumnTest instance
      */
     public GHProjectColumnTest() {
-    }
-
-    private GHProject project;
-    private GHProjectColumn column;
-
-    /**
-     * Sets the up.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        project = gitHub.getOrganization(GITHUB_API_TEST_ORG).createProject("test-project", "This is a test project");
-        column = project.createColumn("column-one");
-    }
-
-    /**
-     * Test created column.
-     */
-    @Test
-    public void testCreatedColumn() {
-        assertThat(column.getName(), equalTo("column-one"));
-    }
-
-    /**
-     * Test edit column name.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void testEditColumnName() throws IOException {
-        column.setName("new-name");
-        column = gitHub.getProjectColumn(column.getId());
-        assertThat(column.getName(), equalTo("new-name"));
-    }
-
-    /**
-     * Test delete column.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void testDeleteColumn() throws IOException {
-        column.delete();
-        try {
-            column = gitHub.getProjectColumn(column.getId());
-            assertThat(column, nullValue());
-        } catch (FileNotFoundException e) {
-            column = null;
-        }
     }
 
     /**
@@ -105,5 +55,55 @@ public class GHProjectColumnTest extends AbstractGitHubWireMockTest {
                 }
             }
         }
+    }
+
+    /**
+     * Sets the up.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Before
+    public void setUp() throws Exception {
+        project = gitHub.getOrganization(GITHUB_API_TEST_ORG).createProject("test-project", "This is a test project");
+        column = project.createColumn("column-one");
+    }
+
+    /**
+     * Test created column.
+     */
+    @Test
+    public void testCreatedColumn() {
+        assertThat(column.getName(), equalTo("column-one"));
+    }
+
+    /**
+     * Test delete column.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testDeleteColumn() throws IOException {
+        column.delete();
+        try {
+            column = gitHub.getProjectColumn(column.getId());
+            assertThat(column, nullValue());
+        } catch (FileNotFoundException e) {
+            column = null;
+        }
+    }
+
+    /**
+     * Test edit column name.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testEditColumnName() throws IOException {
+        column.setName("new-name");
+        column = gitHub.getProjectColumn(column.getId());
+        assertThat(column.getName(), equalTo("new-name"));
     }
 }

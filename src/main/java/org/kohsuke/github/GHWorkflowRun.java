@@ -29,50 +29,331 @@ import static java.util.Objects.requireNonNull;
 public class GHWorkflowRun extends GHObject {
 
     /**
+     * The Enum Conclusion.
+     */
+    public static enum Conclusion {
+
+        /** The action required. */
+        ACTION_REQUIRED,
+        /** The cancelled. */
+        CANCELLED,
+        /** The failure. */
+        FAILURE,
+        /** The neutral. */
+        NEUTRAL,
+        /** The skipped. */
+        SKIPPED,
+        /** The stale. */
+        STALE,
+        /** Start up fail */
+        STARTUP_FAILURE,
+        /** The success. */
+        SUCCESS,
+        /** The timed out. */
+        TIMED_OUT,
+        /** The unknown. */
+        UNKNOWN;
+
+        /**
+         * From.
+         *
+         * @param value
+         *            the value
+         * @return the conclusion
+         */
+        public static Conclusion from(String value) {
+            return EnumUtils.getNullableEnumOrDefault(Conclusion.class, value, Conclusion.UNKNOWN);
+        }
+
+        /**
+         * To string.
+         *
+         * @return the string
+         */
+        @Override
+        public String toString() {
+            return name().toLowerCase(Locale.ROOT);
+        }
+    }
+
+    /**
+     * The Class HeadCommit.
+     */
+    public static class HeadCommit extends GitHubBridgeAdapterObject {
+
+        private GitUser author;
+
+        private GitUser committer;
+        private String id;
+        private String message;
+        private String timestamp;
+        private String treeId;
+        /**
+         * Create default HeadCommit instance
+         */
+        public HeadCommit() {
+        }
+
+        /**
+         * Gets author.
+         *
+         * @return the author
+         */
+        public GitUser getAuthor() {
+            return author;
+        }
+
+        /**
+         * Gets committer.
+         *
+         * @return the committer
+         */
+        public GitUser getCommitter() {
+            return committer;
+        }
+
+        /**
+         * Gets id of the commit.
+         *
+         * @return id of the commit
+         */
+        public String getId() {
+            return id;
+        }
+
+        /**
+         * Gets message.
+         *
+         * @return commit message.
+         */
+        public String getMessage() {
+            return message;
+        }
+
+        /**
+         * Gets timestamp of the commit.
+         *
+         * @return timestamp of the commit
+         */
+        @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+        public Instant getTimestamp() {
+            return GitHubClient.parseInstant(timestamp);
+        }
+
+        /**
+         * Gets id of the tree.
+         *
+         * @return id of the tree
+         */
+        public String getTreeId() {
+            return treeId;
+        }
+    }
+
+    /**
+     * The Enum Status.
+     */
+    public static enum Status {
+
+        /** The action required. */
+        ACTION_REQUIRED,
+        /** The cancelled. */
+        CANCELLED,
+        /** The completed. */
+        COMPLETED,
+        /** The failure. */
+        FAILURE,
+        /** The in progress. */
+        IN_PROGRESS,
+        /** The neutral. */
+        NEUTRAL,
+        /** The pending. */
+        PENDING,
+        /** The queued. */
+        QUEUED,
+        /** The requested. */
+        REQUESTED,
+        /** The skipped. */
+        SKIPPED,
+        /** The stale. */
+        STALE,
+        /** The success. */
+        SUCCESS,
+        /** The timed out. */
+        TIMED_OUT,
+        /** The unknown. */
+        UNKNOWN,
+        /** The waiting. */
+        WAITING;
+
+        /**
+         * From.
+         *
+         * @param value
+         *            the value
+         * @return the status
+         */
+        public static Status from(String value) {
+            return EnumUtils.getNullableEnumOrDefault(Status.class, value, Status.UNKNOWN);
+        }
+
+        /**
+         * To string.
+         *
+         * @return the string
+         */
+        @Override
+        public String toString() {
+            return name().toLowerCase(Locale.ROOT);
+        }
+    }
+    private GHUser actor;
+    private String artifactsUrl;
+    private String cancelUrl;
+    private String checkSuiteUrl;
+
+    private String conclusion;
+    private String displayTitle;
+    private String event;
+
+    private String headBranch;
+    private HeadCommit headCommit;
+    private GHRepository headRepository;
+    private String headSha;
+    private String htmlUrl;
+    private String jobsUrl;
+    private String logsUrl;
+    private String name;
+
+    @JsonProperty("repository")
+    private GHRepository owner;
+    private GHPullRequest[] pullRequests;
+    private String rerunUrl;
+    private long runAttempt;
+
+    private long runNumber;
+    private String runStartedAt;
+    private String status;
+
+    private GHUser triggeringActor;
+
+    private long workflowId;
+
+    private String workflowUrl;
+
+    /**
      * Create default GHWorkflowRun instance
      */
     public GHWorkflowRun() {
     }
 
-    @JsonProperty("repository")
-    private GHRepository owner;
-
-    private String name;
-    private String displayTitle;
-    private long runNumber;
-    private long workflowId;
-
-    private long runAttempt;
-    private String runStartedAt;
-    private GHUser triggeringActor;
-
-    private String htmlUrl;
-    private String jobsUrl;
-    private String logsUrl;
-    private String checkSuiteUrl;
-    private String artifactsUrl;
-    private String cancelUrl;
-    private String rerunUrl;
-    private String workflowUrl;
-
-    private String headBranch;
-    private String headSha;
-    private GHRepository headRepository;
-    private HeadCommit headCommit;
-
-    private String event;
-    private String status;
-    private String conclusion;
-
-    private GHPullRequest[] pullRequests;
+    /**
+     * Approve the workflow run.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void approve() throws IOException {
+        root().createRequest().method("POST").withUrlPath(getApiRoute(), "approve").send();
+    }
 
     /**
-     * The name of the workflow run.
+     * Cancel the workflow run.
      *
-     * @return the name
+     * @throws IOException
+     *             the io exception
      */
-    public String getName() {
-        return name;
+    public void cancel() throws IOException {
+        root().createRequest().method("POST").withUrlPath(getApiRoute(), "cancel").send();
+    }
+
+    /**
+     * Delete the workflow run.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
+    }
+
+    /**
+     * Delete the logs.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void deleteLogs() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute(), "logs").send();
+    }
+
+    /**
+     * Downloads the logs.
+     * <p>
+     * The logs are in the form of a zip archive.
+     * <p>
+     * Note that the archive is the same as the one downloaded from a workflow run so it contains the logs for all jobs.
+     *
+     * @param <T>
+     *            the type of result
+     * @param streamFunction
+     *            The {@link InputStreamFunction} that will process the stream
+     * @return the result of reading the stream.
+     * @throws IOException
+     *             The IO exception.
+     */
+    public <T> T downloadLogs(InputStreamFunction<T> streamFunction) throws IOException {
+        requireNonNull(streamFunction, "Stream function must not be null");
+
+        return root().createRequest().method("GET").withUrlPath(getApiRoute(), "logs").fetchStream(streamFunction);
+    }
+
+    /**
+     * The actor which triggered the initial run.
+     *
+     * @return the triggering actor
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHUser getActor() {
+        return actor;
+    }
+
+    /**
+     * The artifacts URL, like https://api.github.com/repos/octo-org/octo-repo/actions/runs/30433642/artifacts
+     *
+     * @return the artifacts url
+     */
+    public URL getArtifactsUrl() {
+        return GitHubClient.parseURL(artifactsUrl);
+    }
+
+    /**
+     * The cancel URL, like https://api.github.com/repos/octo-org/octo-repo/actions/runs/30433642/cancel
+     *
+     * @return the cancel url
+     */
+    public URL getCancelUrl() {
+        return GitHubClient.parseURL(cancelUrl);
+    }
+
+    /**
+     * The check suite URL, like https://api.github.com/repos/octo-org/octo-repo/check-suites/414944374
+     *
+     * @return the check suite url
+     */
+    public URL getCheckSuiteUrl() {
+        return GitHubClient.parseURL(checkSuiteUrl);
+    }
+
+    /**
+     * Gets the conclusion of the workflow run.
+     * <p>
+     * Can be {@code UNKNOWN} if the value returned by GitHub is unknown from the API.
+     *
+     * @return conclusion of the workflow run
+     */
+    public Conclusion getConclusion() {
+        return Conclusion.from(conclusion);
     }
 
     /**
@@ -85,50 +366,49 @@ public class GHWorkflowRun extends GHObject {
     }
 
     /**
-     * The run number.
+     * The type of event that triggered the build.
      *
-     * @return the run number
+     * @return type of event
      */
-    public long getRunNumber() {
-        return runNumber;
+    public GHEvent getEvent() {
+        return EnumUtils.getNullableEnumOrDefault(GHEvent.class, event, GHEvent.UNKNOWN);
     }
 
     /**
-     * The workflow id.
+     * The head branch name the changes are on.
      *
-     * @return the workflow id
+     * @return head branch name
      */
-    public long getWorkflowId() {
-        return workflowId;
+    public String getHeadBranch() {
+        return headBranch;
     }
 
     /**
-     * The run attempt.
+     * The commit of current head.
      *
-     * @return the run attempt
+     * @return head commit
      */
-    public long getRunAttempt() {
-        return runAttempt;
+    public HeadCommit getHeadCommit() {
+        return headCommit;
     }
 
     /**
-     * When was this run triggered?.
+     * The repository of current head.
      *
-     * @return run triggered
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getRunStartedAt() {
-        return GitHubClient.parseInstant(runStartedAt);
-    }
-
-    /**
-     * The actor which triggered the run.
-     *
-     * @return the triggering actor
+     * @return head repository
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHUser getTriggeringActor() {
-        return triggeringActor;
+    public GHRepository getHeadRepository() {
+        return headRepository;
+    }
+
+    /**
+     * Gets the HEAD SHA.
+     *
+     * @return sha for the HEAD commit
+     */
+    public String getHeadSha() {
+        return headSha;
     }
 
     /**
@@ -159,126 +439,12 @@ public class GHWorkflowRun extends GHObject {
     }
 
     /**
-     * The check suite URL, like https://api.github.com/repos/octo-org/octo-repo/check-suites/414944374
+     * The name of the workflow run.
      *
-     * @return the check suite url
+     * @return the name
      */
-    public URL getCheckSuiteUrl() {
-        return GitHubClient.parseURL(checkSuiteUrl);
-    }
-
-    /**
-     * The artifacts URL, like https://api.github.com/repos/octo-org/octo-repo/actions/runs/30433642/artifacts
-     *
-     * @return the artifacts url
-     */
-    public URL getArtifactsUrl() {
-        return GitHubClient.parseURL(artifactsUrl);
-    }
-
-    /**
-     * The cancel URL, like https://api.github.com/repos/octo-org/octo-repo/actions/runs/30433642/cancel
-     *
-     * @return the cancel url
-     */
-    public URL getCancelUrl() {
-        return GitHubClient.parseURL(cancelUrl);
-    }
-
-    /**
-     * The rerun URL, like https://api.github.com/repos/octo-org/octo-repo/actions/runs/30433642/rerun
-     *
-     * @return the rerun url
-     */
-    public URL getRerunUrl() {
-        return GitHubClient.parseURL(rerunUrl);
-    }
-
-    /**
-     * The workflow URL, like https://api.github.com/repos/octo-org/octo-repo/actions/workflows/159038
-     *
-     * @return the workflow url
-     */
-    public URL getWorkflowUrl() {
-        return GitHubClient.parseURL(workflowUrl);
-    }
-
-    /**
-     * The head branch name the changes are on.
-     *
-     * @return head branch name
-     */
-    public String getHeadBranch() {
-        return headBranch;
-    }
-
-    /**
-     * Gets the HEAD SHA.
-     *
-     * @return sha for the HEAD commit
-     */
-    public String getHeadSha() {
-        return headSha;
-    }
-
-    /**
-     * The commit of current head.
-     *
-     * @return head commit
-     */
-    public HeadCommit getHeadCommit() {
-        return headCommit;
-    }
-
-    /**
-     * The repository of current head.
-     *
-     * @return head repository
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHRepository getHeadRepository() {
-        return headRepository;
-    }
-
-    /**
-     * The type of event that triggered the build.
-     *
-     * @return type of event
-     */
-    public GHEvent getEvent() {
-        return EnumUtils.getNullableEnumOrDefault(GHEvent.class, event, GHEvent.UNKNOWN);
-    }
-
-    /**
-     * Gets status of the workflow run.
-     * <p>
-     * Can be {@code UNKNOWN} if the value returned by GitHub is unknown from the API.
-     *
-     * @return status of the workflow run
-     */
-    public Status getStatus() {
-        return Status.from(status);
-    }
-
-    /**
-     * Gets the conclusion of the workflow run.
-     * <p>
-     * Can be {@code UNKNOWN} if the value returned by GitHub is unknown from the API.
-     *
-     * @return conclusion of the workflow run
-     */
-    public Conclusion getConclusion() {
-        return Conclusion.from(conclusion);
-    }
-
-    /**
-     * Repository to which the workflow run belongs.
-     *
-     * @return the repository
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHRepository getRepository() {
-        return owner;
+    public String getName() {
+        return name;
     }
 
     /**
@@ -303,43 +469,98 @@ public class GHWorkflowRun extends GHObject {
     }
 
     /**
-     * Cancel the workflow run.
+     * Repository to which the workflow run belongs.
      *
-     * @throws IOException
-     *             the io exception
+     * @return the repository
      */
-    public void cancel() throws IOException {
-        root().createRequest().method("POST").withUrlPath(getApiRoute(), "cancel").send();
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHRepository getRepository() {
+        return owner;
     }
 
     /**
-     * Delete the workflow run.
+     * The rerun URL, like https://api.github.com/repos/octo-org/octo-repo/actions/runs/30433642/rerun
      *
-     * @throws IOException
-     *             the io exception
+     * @return the rerun url
      */
-    public void delete() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
+    public URL getRerunUrl() {
+        return GitHubClient.parseURL(rerunUrl);
     }
 
     /**
-     * Rerun the workflow run.
+     * The run attempt.
      *
-     * @throws IOException
-     *             the io exception
+     * @return the run attempt
      */
-    public void rerun() throws IOException {
-        root().createRequest().method("POST").withUrlPath(getApiRoute(), "rerun").send();
+    public long getRunAttempt() {
+        return runAttempt;
     }
 
     /**
-     * Approve the workflow run.
+     * The run number.
      *
-     * @throws IOException
-     *             the io exception
+     * @return the run number
      */
-    public void approve() throws IOException {
-        root().createRequest().method("POST").withUrlPath(getApiRoute(), "approve").send();
+    public long getRunNumber() {
+        return runNumber;
+    }
+
+    /**
+     * When was this run triggered?.
+     *
+     * @return run triggered
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getRunStartedAt() {
+        return GitHubClient.parseInstant(runStartedAt);
+    }
+
+    /**
+     * Gets status of the workflow run.
+     * <p>
+     * Can be {@code UNKNOWN} if the value returned by GitHub is unknown from the API.
+     *
+     * @return status of the workflow run
+     */
+    public Status getStatus() {
+        return Status.from(status);
+    }
+
+    /**
+     * The actor which triggered the run.
+     *
+     * @return the triggering actor
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHUser getTriggeringActor() {
+        return triggeringActor;
+    }
+
+    /**
+     * The workflow id.
+     *
+     * @return the workflow id
+     */
+    public long getWorkflowId() {
+        return workflowId;
+    }
+
+    /**
+     * The workflow URL, like https://api.github.com/repos/octo-org/octo-repo/actions/workflows/159038
+     *
+     * @return the workflow url
+     */
+    public URL getWorkflowUrl() {
+        return GitHubClient.parseURL(workflowUrl);
+    }
+
+    /**
+     * Returns the list of jobs from all the executions of this workflow run.
+     *
+     * @return list of jobs from all the executions
+     */
+    public PagedIterable<GHWorkflowJob> listAllJobs() {
+        return new GHWorkflowJobQueryBuilder(this).all().list();
     }
 
     /**
@@ -352,37 +573,6 @@ public class GHWorkflowRun extends GHObject {
     }
 
     /**
-     * Downloads the logs.
-     * <p>
-     * The logs are in the form of a zip archive.
-     * <p>
-     * Note that the archive is the same as the one downloaded from a workflow run so it contains the logs for all jobs.
-     *
-     * @param <T>
-     *            the type of result
-     * @param streamFunction
-     *            The {@link InputStreamFunction} that will process the stream
-     * @return the result of reading the stream.
-     * @throws IOException
-     *             The IO exception.
-     */
-    public <T> T downloadLogs(InputStreamFunction<T> streamFunction) throws IOException {
-        requireNonNull(streamFunction, "Stream function must not be null");
-
-        return root().createRequest().method("GET").withUrlPath(getApiRoute(), "logs").fetchStream(streamFunction);
-    }
-
-    /**
-     * Delete the logs.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void deleteLogs() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute(), "logs").send();
-    }
-
-    /**
      * Returns the list of jobs of this workflow run for the last execution.
      *
      * @return list of jobs from the last execution
@@ -392,12 +582,13 @@ public class GHWorkflowRun extends GHObject {
     }
 
     /**
-     * Returns the list of jobs from all the executions of this workflow run.
+     * Rerun the workflow run.
      *
-     * @return list of jobs from all the executions
+     * @throws IOException
+     *             the io exception
      */
-    public PagedIterable<GHWorkflowJob> listAllJobs() {
-        return new GHWorkflowJobQueryBuilder(this).all().list();
+    public void rerun() throws IOException {
+        root().createRequest().method("POST").withUrlPath(getApiRoute(), "rerun").send();
     }
 
     private String getApiRoute() {
@@ -438,185 +629,5 @@ public class GHWorkflowRun extends GHObject {
             }
         }
         return this;
-    }
-
-    /**
-     * The Class HeadCommit.
-     */
-    public static class HeadCommit extends GitHubBridgeAdapterObject {
-
-        /**
-         * Create default HeadCommit instance
-         */
-        public HeadCommit() {
-        }
-
-        private String id;
-        private String treeId;
-        private String message;
-        private String timestamp;
-        private GitUser author;
-        private GitUser committer;
-
-        /**
-         * Gets id of the commit.
-         *
-         * @return id of the commit
-         */
-        public String getId() {
-            return id;
-        }
-
-        /**
-         * Gets id of the tree.
-         *
-         * @return id of the tree
-         */
-        public String getTreeId() {
-            return treeId;
-        }
-
-        /**
-         * Gets message.
-         *
-         * @return commit message.
-         */
-        public String getMessage() {
-            return message;
-        }
-
-        /**
-         * Gets timestamp of the commit.
-         *
-         * @return timestamp of the commit
-         */
-        @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-        public Instant getTimestamp() {
-            return GitHubClient.parseInstant(timestamp);
-        }
-
-        /**
-         * Gets author.
-         *
-         * @return the author
-         */
-        public GitUser getAuthor() {
-            return author;
-        }
-
-        /**
-         * Gets committer.
-         *
-         * @return the committer
-         */
-        public GitUser getCommitter() {
-            return committer;
-        }
-    }
-
-    /**
-     * The Enum Status.
-     */
-    public static enum Status {
-
-        /** The queued. */
-        QUEUED,
-        /** The in progress. */
-        IN_PROGRESS,
-        /** The completed. */
-        COMPLETED,
-        /** The action required. */
-        ACTION_REQUIRED,
-        /** The cancelled. */
-        CANCELLED,
-        /** The failure. */
-        FAILURE,
-        /** The neutral. */
-        NEUTRAL,
-        /** The skipped. */
-        SKIPPED,
-        /** The stale. */
-        STALE,
-        /** The success. */
-        SUCCESS,
-        /** The timed out. */
-        TIMED_OUT,
-        /** The requested. */
-        REQUESTED,
-        /** The waiting. */
-        WAITING,
-        /** The pending. */
-        PENDING,
-        /** The unknown. */
-        UNKNOWN;
-
-        /**
-         * From.
-         *
-         * @param value
-         *            the value
-         * @return the status
-         */
-        public static Status from(String value) {
-            return EnumUtils.getNullableEnumOrDefault(Status.class, value, Status.UNKNOWN);
-        }
-
-        /**
-         * To string.
-         *
-         * @return the string
-         */
-        @Override
-        public String toString() {
-            return name().toLowerCase(Locale.ROOT);
-        }
-    }
-
-    /**
-     * The Enum Conclusion.
-     */
-    public static enum Conclusion {
-
-        /** The action required. */
-        ACTION_REQUIRED,
-        /** The cancelled. */
-        CANCELLED,
-        /** The failure. */
-        FAILURE,
-        /** The neutral. */
-        NEUTRAL,
-        /** The success. */
-        SUCCESS,
-        /** The skipped. */
-        SKIPPED,
-        /** The stale. */
-        STALE,
-        /** The timed out. */
-        TIMED_OUT,
-        /** Start up fail */
-        STARTUP_FAILURE,
-        /** The unknown. */
-        UNKNOWN;
-
-        /**
-         * From.
-         *
-         * @param value
-         *            the value
-         * @return the conclusion
-         */
-        public static Conclusion from(String value) {
-            return EnumUtils.getNullableEnumOrDefault(Conclusion.class, value, Conclusion.UNKNOWN);
-        }
-
-        /**
-         * To string.
-         *
-         * @return the string
-         */
-        @Override
-        public String toString() {
-            return name().toLowerCase(Locale.ROOT);
-        }
     }
 }

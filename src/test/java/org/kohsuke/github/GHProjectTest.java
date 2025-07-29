@@ -17,13 +17,34 @@ import static org.hamcrest.Matchers.*;
  */
 public class GHProjectTest extends AbstractGitHubWireMockTest {
 
+    private GHProject project;
+
     /**
      * Create default GHProjectTest instance
      */
     public GHProjectTest() {
     }
 
-    private GHProject project;
+    /**
+     * After.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @After
+    public void after() throws IOException {
+        if (mockGitHub.isUseProxy()) {
+            if (project != null) {
+                project = getNonRecordingGitHub().getProject(project.getId());
+                try {
+                    project.delete();
+                    project = null;
+                } catch (FileNotFoundException e) {
+                    project = null;
+                }
+            }
+        }
+    }
 
     /**
      * Sets the up.
@@ -52,18 +73,20 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test edit project name.
+     * Test delete project.
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
     @Test
-    public void testEditProjectName() throws IOException {
-        project.setName("new-name");
-        project = gitHub.getProject(project.getId());
-        assertThat(project.getName(), equalTo("new-name"));
-        assertThat(project.getBody(), equalTo("This is a test project"));
-        assertThat(project.getState(), equalTo(GHProject.ProjectState.OPEN));
+    public void testDeleteProject() throws IOException {
+        project.delete();
+        try {
+            project = gitHub.getProject(project.getId());
+            assertThat(project, nullValue());
+        } catch (FileNotFoundException e) {
+            project = null;
+        }
     }
 
     /**
@@ -82,6 +105,21 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test edit project name.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testEditProjectName() throws IOException {
+        project.setName("new-name");
+        project = gitHub.getProject(project.getId());
+        assertThat(project.getName(), equalTo("new-name"));
+        assertThat(project.getBody(), equalTo("This is a test project"));
+        assertThat(project.getState(), equalTo(GHProject.ProjectState.OPEN));
+    }
+
+    /**
      * Test edit project state.
      *
      * @throws IOException
@@ -94,43 +132,5 @@ public class GHProjectTest extends AbstractGitHubWireMockTest {
         assertThat(project.getName(), equalTo("test-project"));
         assertThat(project.getBody(), equalTo("This is a test project"));
         assertThat(project.getState(), equalTo(GHProject.ProjectState.CLOSED));
-    }
-
-    /**
-     * Test delete project.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void testDeleteProject() throws IOException {
-        project.delete();
-        try {
-            project = gitHub.getProject(project.getId());
-            assertThat(project, nullValue());
-        } catch (FileNotFoundException e) {
-            project = null;
-        }
-    }
-
-    /**
-     * After.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @After
-    public void after() throws IOException {
-        if (mockGitHub.isUseProxy()) {
-            if (project != null) {
-                project = getNonRecordingGitHub().getProject(project.getId());
-                try {
-                    project.delete();
-                    project = null;
-                } catch (FileNotFoundException e) {
-                    project = null;
-                }
-            }
-        }
     }
 }

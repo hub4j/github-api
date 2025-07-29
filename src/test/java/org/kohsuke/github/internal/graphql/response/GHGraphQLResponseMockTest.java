@@ -19,6 +19,17 @@ import static org.hamcrest.Matchers.is;
  */
 class GHGraphQLResponseMockTest {
 
+    private GHGraphQLResponse<Object> convertJsonToGraphQLResponse(String json) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        ObjectReader objectReader = objectMapper.reader();
+        JavaType javaType = objectReader.getTypeFactory()
+                .constructParametricType(GHGraphQLResponse.class, Object.class);
+
+        return objectReader.forType(javaType).readValue(json);
+    }
+
     /**
      * Test get data throws exception when response means error
      *
@@ -58,17 +69,6 @@ class GHGraphQLResponseMockTest {
         List<String> errorMessages = response.getErrorMessages();
 
         assertThat(errorMessages, is(empty()));
-    }
-
-    private GHGraphQLResponse<Object> convertJsonToGraphQLResponse(String json) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-        ObjectReader objectReader = objectMapper.reader();
-        JavaType javaType = objectReader.getTypeFactory()
-                .constructParametricType(GHGraphQLResponse.class, Object.class);
-
-        return objectReader.forType(javaType).readValue(json);
     }
 
 }

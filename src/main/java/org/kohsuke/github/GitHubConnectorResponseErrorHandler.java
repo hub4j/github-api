@@ -34,34 +34,6 @@ abstract class GitHubConnectorResponseErrorHandler {
      */
     public static final int TOO_MANY_REQUESTS = 429;
 
-    /**
-     * Called to detect an error handled by this handler.
-     *
-     * @param connectorResponse
-     *            the connector response
-     * @return {@code true} if there is an error and {@link #onError(GitHubConnectorResponse)} should be called
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    abstract boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
-
-    /**
-     * Called when the library encounters HTTP error matching {@link #isError(GitHubConnectorResponse)}
-     *
-     * <p>
-     * Any exception thrown from this method will cause the request to fail, and the caller of github-api will receive
-     * an exception. If this method returns normally, another request will be attempted. For that to make sense, the
-     * implementation needs to wait for some time.
-     *
-     * @param connectorResponse
-     *            Response information for this request.
-     *
-     * @throws IOException
-     *             the io exception
-     * @see <a href="https://developer.github.com/v3/#rate-limiting">API documentation from GitHub</a>
-     */
-    public abstract void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
-
     /** The status http bad request or greater. */
     static GitHubConnectorResponseErrorHandler STATUS_HTTP_BAD_REQUEST_OR_GREATER = new GitHubConnectorResponseErrorHandler() {
         private static final String CONTENT_TYPE = "Content-type";
@@ -111,4 +83,32 @@ abstract class GitHubConnectorResponseErrorHandler {
             return false;
         }
     };
+
+    /**
+     * Called when the library encounters HTTP error matching {@link #isError(GitHubConnectorResponse)}
+     *
+     * <p>
+     * Any exception thrown from this method will cause the request to fail, and the caller of github-api will receive
+     * an exception. If this method returns normally, another request will be attempted. For that to make sense, the
+     * implementation needs to wait for some time.
+     *
+     * @param connectorResponse
+     *            Response information for this request.
+     *
+     * @throws IOException
+     *             the io exception
+     * @see <a href="https://developer.github.com/v3/#rate-limiting">API documentation from GitHub</a>
+     */
+    public abstract void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
+
+    /**
+     * Called to detect an error handled by this handler.
+     *
+     * @param connectorResponse
+     *            the connector response
+     * @return {@code true} if there is an error and {@link #onError(GitHubConnectorResponse)} should be called
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    abstract boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
 }

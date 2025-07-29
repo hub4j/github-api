@@ -9,34 +9,26 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 public class GHMemberChanges {
 
     /**
-     * Create default GHMemberChanges instance
+     * Changes to role name.
      */
-    public GHMemberChanges() {
-    }
+    public static class FromRoleName {
 
-    private FromToPermission permission;
+        private String to;
 
-    private FromRoleName roleName;
+        /**
+         * Create default FromRoleName instance
+         */
+        public FromRoleName() {
+        }
 
-    /**
-     * Get changes to permission.
-     *
-     * @return changes to permission
-     */
-    public FromToPermission getPermission() {
-        return permission;
-    }
-
-    /**
-     * Get changes to the role name.
-     * <p>
-     * Apparently, it is recommended to use this rather than permission if defined. But it will only be defined when
-     * adding and not when editing.
-     *
-     * @return changes to role name
-     */
-    public FromRoleName getRoleName() {
-        return roleName;
+        /**
+         * Gets the to.
+         *
+         * @return the to
+         */
+        public String getTo() {
+            return to;
+        }
     }
 
     /**
@@ -44,15 +36,15 @@ public class GHMemberChanges {
      */
     public static class FromToPermission {
 
+        private String from;
+
+        private String to;
+
         /**
          * Create default FromToPermission instance
          */
         public FromToPermission() {
         }
-
-        private String from;
-
-        private String to;
 
         /**
          * Gets the from.
@@ -77,26 +69,34 @@ public class GHMemberChanges {
         }
     }
 
+    private FromToPermission permission;
+
+    private FromRoleName roleName;
+
     /**
-     * Changes to role name.
+     * Create default GHMemberChanges instance
      */
-    public static class FromRoleName {
+    public GHMemberChanges() {
+    }
 
-        /**
-         * Create default FromRoleName instance
-         */
-        public FromRoleName() {
-        }
+    /**
+     * Get changes to permission.
+     *
+     * @return changes to permission
+     */
+    public FromToPermission getPermission() {
+        return permission;
+    }
 
-        private String to;
-
-        /**
-         * Gets the to.
-         *
-         * @return the to
-         */
-        public String getTo() {
-            return to;
-        }
+    /**
+     * Get changes to the role name.
+     * <p>
+     * Apparently, it is recommended to use this rather than permission if defined. But it will only be defined when
+     * adding and not when editing.
+     *
+     * @return changes to role name
+     */
+    public FromRoleName getRoleName() {
+        return roleName;
     }
 }

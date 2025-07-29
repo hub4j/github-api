@@ -17,60 +17,15 @@ import java.util.List;
 public class GHExternalGroup extends GitHubInteractiveObject implements Refreshable {
 
     /**
-     * A reference of a team linked to an external group
-     *
-     * @author Miguel Esteban Gutiérrez
-     */
-    public static class GHLinkedTeam {
-
-        /**
-         * Create default GHLinkedTeam instance
-         */
-        public GHLinkedTeam() {
-        }
-
-        /**
-         * The identifier of the team
-         */
-        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
-        private long teamId;
-
-        /**
-         * The name of the team
-         */
-        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
-        private String teamName;
-
-        /**
-         * Get the linked team identifier
-         *
-         * @return the id
-         */
-        public long getId() {
-            return teamId;
-        }
-
-        /**
-         * Get the linked team name
-         *
-         * @return the name
-         */
-        public String getName() {
-            return teamName;
-        }
-
-    }
-
-    /**
      * A reference of an external member linked to an external group
      */
     public static class GHLinkedExternalMember {
 
         /**
-         * Create default GHLinkedExternalMember instance
+         * The email attached to the user
          */
-        public GHLinkedExternalMember() {
-        }
+        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
+        private String memberEmail;
 
         /**
          * The internal user ID of the identity
@@ -91,10 +46,19 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
         private String memberName;
 
         /**
-         * The email attached to the user
+         * Create default GHLinkedExternalMember instance
          */
-        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
-        private String memberEmail;
+        public GHLinkedExternalMember() {
+        }
+
+        /**
+         * Get the linked member email
+         *
+         * @return the email
+         */
+        public String getEmail() {
+            return memberEmail;
+        }
 
         /**
          * Get the linked member identifier
@@ -123,13 +87,49 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
             return memberName;
         }
 
+    }
+
+    /**
+     * A reference of a team linked to an external group
+     *
+     * @author Miguel Esteban Gutiérrez
+     */
+    public static class GHLinkedTeam {
+
         /**
-         * Get the linked member email
-         *
-         * @return the email
+         * The identifier of the team
          */
-        public String getEmail() {
-            return memberEmail;
+        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
+        private long teamId;
+
+        /**
+         * The name of the team
+         */
+        @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
+        private String teamName;
+
+        /**
+         * Create default GHLinkedTeam instance
+         */
+        public GHLinkedTeam() {
+        }
+
+        /**
+         * Get the linked team identifier
+         *
+         * @return the id
+         */
+        public long getId() {
+            return teamId;
+        }
+
+        /**
+         * Get the linked team name
+         *
+         * @return the name
+         */
+        public String getName() {
+            return teamName;
         }
 
     }
@@ -147,10 +147,12 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
     private String groupName;
 
     /**
-     * The date when the group was last updated at
+     * The external members linked to this group
      */
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
-    private String updatedAt;
+    private List<GHLinkedExternalMember> members;
+
+    private GHOrganization organization;
 
     /**
      * The teams linked to this group
@@ -159,17 +161,86 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
     private List<GHLinkedTeam> teams;
 
     /**
-     * The external members linked to this group
+     * The date when the group was last updated at
      */
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
-    private List<GHLinkedExternalMember> members;
+    private String updatedAt;
 
     GHExternalGroup() {
         this.teams = Collections.emptyList();
         this.members = Collections.emptyList();
     }
 
-    private GHOrganization organization;
+    /**
+     * Get the external group id.
+     *
+     * @return the id
+     */
+    public long getId() {
+        return groupId;
+    }
+
+    /**
+     * Get the external members linked to this group.
+     *
+     * @return the external members
+     */
+    public List<GHLinkedExternalMember> getMembers() {
+        return Collections.unmodifiableList(members);
+    }
+
+    /**
+     * Get the external group name.
+     *
+     * @return the name
+     */
+    public String getName() {
+        return groupName;
+    }
+
+    /**
+     * Gets organization.
+     *
+     * @return the organization
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHOrganization getOrganization() {
+        return organization;
+    }
+
+    /**
+     * Get the teams linked to this group.
+     *
+     * @return the teams
+     */
+    public List<GHLinkedTeam> getTeams() {
+        return Collections.unmodifiableList(teams);
+    }
+
+    /**
+     * Get the external group last update date.
+     *
+     * @return the date
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getUpdatedAt() {
+        return GitHubClient.parseInstant(updatedAt);
+    }
+
+    /**
+     * Refresh.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Override
+    public void refresh() throws IOException {
+        root().createRequest().withUrlPath(api("")).fetchInto(this).wrapUp(root());
+    }
+
+    private String api(final String tail) {
+        return "/orgs/" + organization.getLogin() + "/external-group/" + getId() + tail;
+    }
 
     /**
      * Wrap up.
@@ -190,77 +261,6 @@ public class GHExternalGroup extends GitHubInteractiveObject implements Refresha
      */
     void wrapUp(final GitHub root) { // auto-wrapUp when organization is known from GET /orgs/{org}/external-groups
         wrapUp(organization);
-    }
-
-    /**
-     * Gets organization.
-     *
-     * @return the organization
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHOrganization getOrganization() {
-        return organization;
-    }
-
-    /**
-     * Get the external group id.
-     *
-     * @return the id
-     */
-    public long getId() {
-        return groupId;
-    }
-
-    /**
-     * Get the external group name.
-     *
-     * @return the name
-     */
-    public String getName() {
-        return groupName;
-    }
-
-    /**
-     * Get the external group last update date.
-     *
-     * @return the date
-     */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getUpdatedAt() {
-        return GitHubClient.parseInstant(updatedAt);
-    }
-
-    /**
-     * Get the teams linked to this group.
-     *
-     * @return the teams
-     */
-    public List<GHLinkedTeam> getTeams() {
-        return Collections.unmodifiableList(teams);
-    }
-
-    /**
-     * Get the external members linked to this group.
-     *
-     * @return the external members
-     */
-    public List<GHLinkedExternalMember> getMembers() {
-        return Collections.unmodifiableList(members);
-    }
-
-    /**
-     * Refresh.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Override
-    public void refresh() throws IOException {
-        root().createRequest().withUrlPath(api("")).fetchInto(this).wrapUp(root());
-    }
-
-    private String api(final String tail) {
-        return "/orgs/" + organization.getLogin() + "/external-group/" + getId() + tail;
     }
 
 }

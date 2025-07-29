@@ -10,13 +10,6 @@ import java.io.IOException;
  */
 public interface Reactable {
     /**
-     * List all the reactions left to this object.
-     *
-     * @return the paged iterable
-     */
-    PagedIterable<GHReaction> listReactions();
-
-    /**
      * Leaves a reaction to this object.
      *
      * @param content
@@ -36,4 +29,11 @@ public interface Reactable {
      *             the io exception
      */
     void deleteReaction(GHReaction reaction) throws IOException;
+
+    /**
+     * List all the reactions left to this object.
+     *
+     * @return the paged iterable
+     */
+    PagedIterable<GHReaction> listReactions();
 }

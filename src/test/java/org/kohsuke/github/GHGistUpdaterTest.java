@@ -17,13 +17,29 @@ import static org.hamcrest.Matchers.*;
  */
 public class GHGistUpdaterTest extends AbstractGitHubWireMockTest {
 
+    private GHGist gist;
+
     /**
      * Create default GHGistUpdaterTest instance
      */
     public GHGistUpdaterTest() {
     }
 
-    private GHGist gist;
+    /**
+     * Clean up.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @After
+    public void cleanUp() throws Exception {
+        // Cleanup is only needed when proxying
+        if (!mockGitHub.isUseProxy()) {
+            return;
+        }
+
+        gist.delete();
+    }
 
     /**
      * Sets the up.
@@ -41,22 +57,6 @@ public class GHGistUpdaterTest extends AbstractGitHubWireMockTest {
                 .file("update-me.txt", "To be updated")
                 .public_(true)
                 .create();
-    }
-
-    /**
-     * Clean up.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @After
-    public void cleanUp() throws Exception {
-        // Cleanup is only needed when proxying
-        if (!mockGitHub.isUseProxy()) {
-            return;
-        }
-
-        gist.delete();
     }
 
     /**

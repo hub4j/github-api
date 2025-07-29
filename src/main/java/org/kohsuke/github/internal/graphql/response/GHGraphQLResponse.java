@@ -19,6 +19,38 @@ import java.util.stream.Collectors;
  */
 public class GHGraphQLResponse<T> {
 
+    /**
+     * A GraphQL response with basic Object data type.
+     */
+    public static class ObjectResponse extends GHGraphQLResponse<Object> {
+        /**
+         * ObjectResponse constructor.
+         *
+         * @param data
+         *            GraphQL success response
+         * @param errors
+         *            GraphQL failure response, This will be empty if not fail
+         */
+        @JsonCreator
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
+        public ObjectResponse(@JsonProperty("data") Object data, @JsonProperty("errors") List<GraphQLError> errors) {
+            super(data, errors);
+        }
+    }
+
+    /**
+     * A error of GraphQL response. Minimum implementation for GraphQL error.
+     */
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD", "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
+            justification = "JSON API")
+    private static class GraphQLError {
+        private String message;
+
+        public String getMessage() {
+            return message;
+        }
+    }
+
     private final T data;
 
     private final List<GraphQLError> errors;
@@ -39,15 +71,6 @@ public class GHGraphQLResponse<T> {
         }
         this.data = data;
         this.errors = Collections.unmodifiableList(errors);
-    }
-
-    /**
-     * Is response succesful.
-     *
-     * @return request is succeeded. True when error list is empty.
-     */
-    public boolean isSuccessful() {
-        return errors.isEmpty();
     }
 
     /**
@@ -73,34 +96,11 @@ public class GHGraphQLResponse<T> {
     }
 
     /**
-     * A error of GraphQL response. Minimum implementation for GraphQL error.
+     * Is response succesful.
+     *
+     * @return request is succeeded. True when error list is empty.
      */
-    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD", "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
-            justification = "JSON API")
-    private static class GraphQLError {
-        private String message;
-
-        public String getMessage() {
-            return message;
-        }
-    }
-
-    /**
-     * A GraphQL response with basic Object data type.
-     */
-    public static class ObjectResponse extends GHGraphQLResponse<Object> {
-        /**
-         * ObjectResponse constructor.
-         *
-         * @param data
-         *            GraphQL success response
-         * @param errors
-         *            GraphQL failure response, This will be empty if not fail
-         */
-        @JsonCreator
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
-        public ObjectResponse(@JsonProperty("data") Object data, @JsonProperty("errors") List<GraphQLError> errors) {
-            super(data, errors);
-        }
+    public boolean isSuccessful() {
+        return errors.isEmpty();
     }
 }

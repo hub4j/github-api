@@ -19,208 +19,6 @@ import javax.annotation.Nonnull;
 public class GHCompare {
 
     /**
-     * Create default GHCompare instance
-     */
-    public GHCompare() {
-    }
-
-    private String url, htmlUrl, permalinkUrl, diffUrl, patchUrl;
-    private Status status;
-    private int aheadBy, behindBy, totalCommits;
-    private Commit baseCommit, mergeBaseCommit;
-    private Commit[] commits;
-    private GHCommit.File[] files;
-
-    private GHRepository owner;
-
-    @JacksonInject("GHCompare_usePaginatedCommits")
-    private boolean usePaginatedCommits;
-
-    /**
-     * Gets url.
-     *
-     * @return the url
-     */
-    public URL getUrl() {
-        return GitHubClient.parseURL(url);
-    }
-
-    /**
-     * Gets html url.
-     *
-     * @return the html url
-     */
-    public URL getHtmlUrl() {
-        return GitHubClient.parseURL(htmlUrl);
-    }
-
-    /**
-     * Gets permalink url.
-     *
-     * @return the permalink url
-     */
-    public URL getPermalinkUrl() {
-        return GitHubClient.parseURL(permalinkUrl);
-    }
-
-    /**
-     * Gets diff url.
-     *
-     * @return the diff url
-     */
-    public URL getDiffUrl() {
-        return GitHubClient.parseURL(diffUrl);
-    }
-
-    /**
-     * Gets patch url.
-     *
-     * @return the patch url
-     */
-    public URL getPatchUrl() {
-        return GitHubClient.parseURL(patchUrl);
-    }
-
-    /**
-     * Gets status.
-     *
-     * @return the status
-     */
-    public Status getStatus() {
-        return status;
-    }
-
-    /**
-     * Gets ahead by.
-     *
-     * @return the ahead by
-     */
-    public int getAheadBy() {
-        return aheadBy;
-    }
-
-    /**
-     * Gets behind by.
-     *
-     * @return the behind by
-     */
-    public int getBehindBy() {
-        return behindBy;
-    }
-
-    /**
-     * Gets total commits.
-     *
-     * @return the total commits
-     */
-    public int getTotalCommits() {
-        return totalCommits;
-    }
-
-    /**
-     * Gets base commit.
-     *
-     * @return the base commit
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public Commit getBaseCommit() {
-        return baseCommit;
-    }
-
-    /**
-     * Gets merge base commit.
-     *
-     * @return the merge base commit
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public Commit getMergeBaseCommit() {
-        return mergeBaseCommit;
-    }
-
-    /**
-     * Gets an array of commits.
-     *
-     * By default, the commit list is limited to 250 results.
-     *
-     * Since
-     * <a href="https://github.blog/changelog/2021-03-22-compare-rest-api-now-supports-pagination/">2021-03-22</a>,
-     * compare supports pagination of commits. This makes the initial {@link GHCompare} response return faster and
-     * supports comparisons with more than 250 commits. To read commits progressively using pagination, set
-     * {@link GHRepository#setCompareUsePaginatedCommits(boolean)} to true before calling
-     * {@link GHRepository#getCompare(String, String)}.
-     *
-     * @return A copy of the array being stored in the class.
-     */
-    public Commit[] getCommits() {
-        try {
-            return listCommits().withPageSize(100).toArray();
-        } catch (IOException e) {
-            throw new GHException(e.getMessage(), e);
-        }
-    }
-
-    /**
-     * Iterable of commits for this comparison.
-     *
-     * By default, the commit list is limited to 250 results.
-     *
-     * Since
-     * <a href="https://github.blog/changelog/2021-03-22-compare-rest-api-now-supports-pagination/">2021-03-22</a>,
-     * compare supports pagination of commits. This makes the initial {@link GHCompare} response return faster and
-     * supports comparisons with more than 250 commits. To read commits progressively using pagination, set
-     * {@link GHRepository#setCompareUsePaginatedCommits(boolean)} to true before calling
-     * {@link GHRepository#getCompare(String, String)}.
-     *
-     * @return iterable of commits
-     */
-    public PagedIterable<Commit> listCommits() {
-        if (usePaginatedCommits) {
-            return new GHCompareCommitsIterable();
-        } else {
-            // if not using paginated commits, adapt the returned commits array
-            return new PagedIterable<Commit>() {
-                @Nonnull
-                @Override
-                public PagedIterator<Commit> _iterator(int pageSize) {
-                    return new PagedIterator<>(Collections.singleton(commits).iterator(), null);
-                }
-            };
-        }
-    }
-
-    /**
-     * Gets an array of files.
-     *
-     * By default, the file array is limited to 300 results. To retrieve the full list of files, iterate over each
-     * commit returned by {@link GHCompare#listCommits} and use {@link GHCommit#listFiles} to get the files for each
-     * commit.
-     *
-     * @return A copy of the array being stored in the class.
-     */
-    public GHCommit.File[] getFiles() {
-        GHCommit.File[] newValue = new GHCommit.File[files.length];
-        System.arraycopy(files, 0, newValue, 0, files.length);
-        return newValue;
-    }
-
-    /**
-     * Wrap gh compare.
-     *
-     * @param owner
-     *            the owner
-     * @return the gh compare
-     */
-    GHCompare lateBind(GHRepository owner) {
-        this.owner = owner;
-        for (Commit commit : commits) {
-            commit.wrapUp(owner);
-        }
-        mergeBaseCommit.wrapUp(owner);
-        baseCommit.wrapUp(owner);
-        return this;
-    }
-
-    /**
      * Compare commits had a child commit element with additional details we want to capture. This extension of GHCommit
      * provides that.
      */
@@ -228,13 +26,13 @@ public class GHCompare {
             justification = "JSON API")
     public static class Commit extends GHCommit {
 
+        private InnerCommit commit;
+
         /**
          * Create default Commit instance
          */
         public Commit() {
         }
-
-        private InnerCommit commit;
 
         /**
          * Gets commit.
@@ -251,41 +49,14 @@ public class GHCompare {
      */
     public static class InnerCommit {
 
+        private GitUser author, committer;
+
+        private Tree tree;
+        private String url, sha, message;
         /**
          * Create default InnerCommit instance
          */
         public InnerCommit() {
-        }
-
-        private String url, sha, message;
-        private GitUser author, committer;
-        private Tree tree;
-
-        /**
-         * Gets url.
-         *
-         * @return the url
-         */
-        public String getUrl() {
-            return url;
-        }
-
-        /**
-         * Gets sha.
-         *
-         * @return the sha
-         */
-        public String getSha() {
-            return sha;
-        }
-
-        /**
-         * Gets message.
-         *
-         * @return the message
-         */
-        public String getMessage() {
-            return message;
         }
 
         /**
@@ -307,35 +78,12 @@ public class GHCompare {
         }
 
         /**
-         * Gets tree.
+         * Gets message.
          *
-         * @return the tree
+         * @return the message
          */
-        public Tree getTree() {
-            return tree;
-        }
-    }
-
-    /**
-     * The type Tree.
-     */
-    public static class Tree {
-
-        /**
-         * Create default Tree instance
-         */
-        public Tree() {
-        }
-
-        private String url, sha;
-
-        /**
-         * Gets url.
-         *
-         * @return the url
-         */
-        public String getUrl() {
-            return url;
+        public String getMessage() {
+            return message;
         }
 
         /**
@@ -346,23 +94,70 @@ public class GHCompare {
         public String getSha() {
             return sha;
         }
-    }
 
+        /**
+         * Gets tree.
+         *
+         * @return the tree
+         */
+        public Tree getTree() {
+            return tree;
+        }
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public String getUrl() {
+            return url;
+        }
+    }
     /**
      * The enum Status.
      */
     public static enum Status {
 
-        /** The behind. */
-        behind,
         /** The ahead. */
         ahead,
-        /** The identical. */
-        identical,
+        /** The behind. */
+        behind,
         /** The diverged. */
-        diverged
+        diverged,
+        /** The identical. */
+        identical
     }
+    /**
+     * The type Tree.
+     */
+    public static class Tree {
 
+        private String url, sha;
+
+        /**
+         * Create default Tree instance
+         */
+        public Tree() {
+        }
+
+        /**
+         * Gets sha.
+         *
+         * @return the sha
+         */
+        public String getSha() {
+            return sha;
+        }
+
+        /**
+         * Gets url.
+         *
+         * @return the url
+         */
+        public String getUrl() {
+            return url;
+        }
+    }
     /**
      * Iterable for commit listing.
      */
@@ -423,5 +218,210 @@ public class GHCompare {
                 }
             };
         }
+    }
+    private int aheadBy, behindBy, totalCommits;
+    private Commit baseCommit, mergeBaseCommit;
+
+    private Commit[] commits;
+
+    private GHCommit.File[] files;
+
+    private GHRepository owner;
+
+    private Status status;
+
+    private String url, htmlUrl, permalinkUrl, diffUrl, patchUrl;
+
+    @JacksonInject("GHCompare_usePaginatedCommits")
+    private boolean usePaginatedCommits;
+
+    /**
+     * Create default GHCompare instance
+     */
+    public GHCompare() {
+    }
+
+    /**
+     * Gets ahead by.
+     *
+     * @return the ahead by
+     */
+    public int getAheadBy() {
+        return aheadBy;
+    }
+
+    /**
+     * Gets base commit.
+     *
+     * @return the base commit
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public Commit getBaseCommit() {
+        return baseCommit;
+    }
+
+    /**
+     * Gets behind by.
+     *
+     * @return the behind by
+     */
+    public int getBehindBy() {
+        return behindBy;
+    }
+
+    /**
+     * Gets an array of commits.
+     *
+     * By default, the commit list is limited to 250 results.
+     *
+     * Since
+     * <a href="https://github.blog/changelog/2021-03-22-compare-rest-api-now-supports-pagination/">2021-03-22</a>,
+     * compare supports pagination of commits. This makes the initial {@link GHCompare} response return faster and
+     * supports comparisons with more than 250 commits. To read commits progressively using pagination, set
+     * {@link GHRepository#setCompareUsePaginatedCommits(boolean)} to true before calling
+     * {@link GHRepository#getCompare(String, String)}.
+     *
+     * @return A copy of the array being stored in the class.
+     */
+    public Commit[] getCommits() {
+        try {
+            return listCommits().withPageSize(100).toArray();
+        } catch (IOException e) {
+            throw new GHException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Gets diff url.
+     *
+     * @return the diff url
+     */
+    public URL getDiffUrl() {
+        return GitHubClient.parseURL(diffUrl);
+    }
+
+    /**
+     * Gets an array of files.
+     *
+     * By default, the file array is limited to 300 results. To retrieve the full list of files, iterate over each
+     * commit returned by {@link GHCompare#listCommits} and use {@link GHCommit#listFiles} to get the files for each
+     * commit.
+     *
+     * @return A copy of the array being stored in the class.
+     */
+    public GHCommit.File[] getFiles() {
+        GHCommit.File[] newValue = new GHCommit.File[files.length];
+        System.arraycopy(files, 0, newValue, 0, files.length);
+        return newValue;
+    }
+
+    /**
+     * Gets html url.
+     *
+     * @return the html url
+     */
+    public URL getHtmlUrl() {
+        return GitHubClient.parseURL(htmlUrl);
+    }
+
+    /**
+     * Gets merge base commit.
+     *
+     * @return the merge base commit
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public Commit getMergeBaseCommit() {
+        return mergeBaseCommit;
+    }
+
+    /**
+     * Gets patch url.
+     *
+     * @return the patch url
+     */
+    public URL getPatchUrl() {
+        return GitHubClient.parseURL(patchUrl);
+    }
+
+    /**
+     * Gets permalink url.
+     *
+     * @return the permalink url
+     */
+    public URL getPermalinkUrl() {
+        return GitHubClient.parseURL(permalinkUrl);
+    }
+
+    /**
+     * Gets status.
+     *
+     * @return the status
+     */
+    public Status getStatus() {
+        return status;
+    }
+
+    /**
+     * Gets total commits.
+     *
+     * @return the total commits
+     */
+    public int getTotalCommits() {
+        return totalCommits;
+    }
+
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
+    public URL getUrl() {
+        return GitHubClient.parseURL(url);
+    }
+
+    /**
+     * Iterable of commits for this comparison.
+     *
+     * By default, the commit list is limited to 250 results.
+     *
+     * Since
+     * <a href="https://github.blog/changelog/2021-03-22-compare-rest-api-now-supports-pagination/">2021-03-22</a>,
+     * compare supports pagination of commits. This makes the initial {@link GHCompare} response return faster and
+     * supports comparisons with more than 250 commits. To read commits progressively using pagination, set
+     * {@link GHRepository#setCompareUsePaginatedCommits(boolean)} to true before calling
+     * {@link GHRepository#getCompare(String, String)}.
+     *
+     * @return iterable of commits
+     */
+    public PagedIterable<Commit> listCommits() {
+        if (usePaginatedCommits) {
+            return new GHCompareCommitsIterable();
+        } else {
+            // if not using paginated commits, adapt the returned commits array
+            return new PagedIterable<Commit>() {
+                @Nonnull
+                @Override
+                public PagedIterator<Commit> _iterator(int pageSize) {
+                    return new PagedIterator<>(Collections.singleton(commits).iterator(), null);
+                }
+            };
+        }
+    }
+
+    /**
+     * Wrap gh compare.
+     *
+     * @param owner
+     *            the owner
+     * @return the gh compare
+     */
+    GHCompare lateBind(GHRepository owner) {
+        this.owner = owner;
+        for (Commit commit : commits) {
+            commit.wrapUp(owner);
+        }
+        mergeBaseCommit.wrapUp(owner);
+        baseCommit.wrapUp(owner);
+        return this;
     }
 }

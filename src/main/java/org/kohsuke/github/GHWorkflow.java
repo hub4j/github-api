@@ -153,7 +153,11 @@ public class GHWorkflow extends GHObject {
      * @return the paged iterable
      */
     public PagedIterable<GHWorkflowRun> listRuns() {
-        return new GHWorkflowRunsIterable(owner, root().createRequest().withUrlPath(getApiRoute(), "runs"));
+        return new PagedIterable<>(new PaginatedEndpoint<>(owner.root().getClient(),
+                root().createRequest().withUrlPath(getApiRoute(), "runs").build(),
+                GHWorkflowRunsPage.class,
+                GHWorkflowRun.class,
+                item -> item.wrapUp(owner)));
     }
 
     private String getApiRoute() {

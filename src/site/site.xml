@@ -2,7 +2,7 @@
 <project name="GitHub API for Java">
   <bannerLeft>
     <name>GitHub API for Java</name>
-    <href>https://github-api.kohsuke.org/</href>
+    <href>https://hub4j.github.io/github-api/</href>
   </bannerLeft>
   <skin>
     <groupId>org.kohsuke</groupId>

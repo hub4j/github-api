@@ -1,0 +1,36 @@
+[
+  {
+    "name": "branching-test",
+    "commit": {
+      "sha": "3d880c57c1ce955efc2b4d506b1e31ee133ee3a7",
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api-test/commits/3d880c57c1ce955efc2b4d506b1e31ee133ee3a7"
+    },
+    "protected": false,
+    "protection": {
+      "enabled": false,
+      "required_status_checks": {
+        "enforcement_level": "off",
+        "contexts": [],
+        "checks": []
+      }
+    },
+    "protection_url": "https://api.github.com/repos/hub4j-test-org/github-api-test/branches/branching-test/protection"
+  },
+  {
+    "name": "main",
+    "commit": {
+      "sha": "8686ca07ae2cacf0f2f6eed6211937ac7d594d30",
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api-test/commits/8686ca07ae2cacf0f2f6eed6211937ac7d594d30"
+    },
+    "protected": false,
+    "protection": {
+      "enabled": false,
+      "required_status_checks": {
+        "enforcement_level": "off",
+        "contexts": [],
+        "checks": []
+      }
+    },
+    "protection_url": "https://api.github.com/repos/hub4j-test-org/github-api-test/branches/main/protection"
+  }
+]

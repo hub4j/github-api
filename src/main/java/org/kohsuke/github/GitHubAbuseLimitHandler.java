@@ -178,7 +178,7 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
      *             Signals that an I/O exception has occurred.
      */
     @Override
-    boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) {
+    public boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) {
         return isTooManyRequests(connectorResponse)
                 || (isForbidden(connectorResponse) && hasRetryOrLimitHeader(connectorResponse));
     }

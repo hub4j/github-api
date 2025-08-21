@@ -110,5 +110,5 @@ abstract class GitHubConnectorResponseErrorHandler {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    abstract boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
+    public abstract boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
 }

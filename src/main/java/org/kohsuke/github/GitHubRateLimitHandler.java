@@ -91,7 +91,7 @@ public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErro
      *             Signals that an I/O exception has occurred.
      */
     @Override
-    boolean isError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
+    public boolean isError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
         return connectorResponse.statusCode() == HTTP_FORBIDDEN
                 && "0".equals(connectorResponse.header("X-RateLimit-Remaining"));
     }

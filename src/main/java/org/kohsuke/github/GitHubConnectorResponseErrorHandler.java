@@ -85,6 +85,17 @@ abstract class GitHubConnectorResponseErrorHandler {
     };
 
     /**
+     * Called to detect an error handled by this handler.
+     *
+     * @param connectorResponse
+     *            the connector response
+     * @return {@code true} if there is an error and {@link #onError(GitHubConnectorResponse)} should be called
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    public abstract boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
+
+    /**
      * Called when the library encounters HTTP error matching {@link #isError(GitHubConnectorResponse)}
      *
      * <p>
@@ -100,15 +111,4 @@ abstract class GitHubConnectorResponseErrorHandler {
      * @see <a href="https://developer.github.com/v3/#rate-limiting">API documentation from GitHub</a>
      */
     public abstract void onError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
-
-    /**
-     * Called to detect an error handled by this handler.
-     *
-     * @param connectorResponse
-     *            the connector response
-     * @return {@code true} if there is an error and {@link #onError(GitHubConnectorResponse)} should be called
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    public abstract boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException;
 }

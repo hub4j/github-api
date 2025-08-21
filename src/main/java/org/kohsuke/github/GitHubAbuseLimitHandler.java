@@ -98,6 +98,21 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
     }
 
     /**
+     * Checks if is error.
+     *
+     * @param connectorResponse
+     *            the connector response
+     * @return true, if is error
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Override
+    public boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) {
+        return isTooManyRequests(connectorResponse)
+                || (isForbidden(connectorResponse) && hasRetryOrLimitHeader(connectorResponse));
+    }
+
+    /**
      * Called when the library encounters HTTP error indicating that the API abuse limit is reached.
      *
      * <p>
@@ -166,21 +181,6 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
      */
     private boolean isTooManyRequests(GitHubConnectorResponse connectorResponse) {
         return connectorResponse.statusCode() == TOO_MANY_REQUESTS;
-    }
-
-    /**
-     * Checks if is error.
-     *
-     * @param connectorResponse
-     *            the connector response
-     * @return true, if is error
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Override
-    public boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) {
-        return isTooManyRequests(connectorResponse)
-                || (isForbidden(connectorResponse) && hasRetryOrLimitHeader(connectorResponse));
     }
 
 }

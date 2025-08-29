@@ -1603,7 +1603,9 @@ public class GHRepository extends GHObject {
      * @return the issues
      * @throws IOException
      *             the io exception
+     * @deprecated Use {@link #queryIssues()} instead.
      */
+    @Deprecated
     public List<GHIssue> getIssues(GHIssueState state) throws IOException {
         return queryIssues().state(state).list().toList();
     }
@@ -1618,7 +1620,9 @@ public class GHRepository extends GHObject {
      * @return the issues
      * @throws IOException
      *             the io exception
+     * @deprecated Use {@link #queryIssues()} instead.
      */
+    @Deprecated
     public List<GHIssue> getIssues(GHIssueState state, GHMilestone milestone) throws IOException {
         return queryIssues().milestone(milestone == null ? "none" : "" + milestone.getNumber())
                 .state(state)

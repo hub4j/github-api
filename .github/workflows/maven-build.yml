@@ -25,9 +25,9 @@ jobs:
     strategy:
       fail-fast: true
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Set up JDK
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
         java-version: 17
         distribution: 'temurin'
@@ -47,9 +47,9 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Set up JDK
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
         java-version: 17
         distribution: 'temurin'
@@ -68,9 +68,9 @@ jobs:
     strategy:
       fail-fast: true
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Set up JDK
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
         java-version: 17
         distribution: 'temurin'
@@ -90,9 +90,9 @@ jobs:
         os: [ ubuntu, windows ]
         java: [ 17, 21 ]
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Set up JDK
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
         java-version: ${{ matrix.java }}
         distribution: 'temurin'
@@ -120,13 +120,13 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: actions/download-artifact@v4
       with:
         name: maven-test-target-directory
         path: target
     - name: Codecov Report
-      uses: codecov/codecov-action@v5.4.3
+      uses: codecov/codecov-action@v5.5.0
       with:
         # Codecov token from https://app.codecov.io/gh/hub4j/github-api/settings
         token: ${{ secrets.CODECOV_TOKEN }}
@@ -138,13 +138,13 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: actions/download-artifact@v4
       with:
         name: maven-target-directory
         path: target
     - name: Set up JDK
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
         java-version: 11
         distribution: 'temurin'

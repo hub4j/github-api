@@ -10,22 +10,24 @@ jobs:
   create_release_tag:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       - name: Set up Maven Central Repository
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Reset staging/main
+      - name: Reset staging
         id: staging
         run: |
-          git checkout -B staging/main
-          git push --set-upstream -f origin staging/main
+          git checkout -B staging/$GITHUB_REF_NAME
+          git push --set-upstream -f origin staging/$GITHUB_REF_NAME
+        env:
+          GITHUB_REF_NAME: ${{ github.ref_name }}
 
       - name: Set Release Version
         id: release
@@ -33,25 +35,25 @@ jobs:
           mvn -B versions:set versions:commit -DremoveSnapshot 
           echo "version=$(mvn -B help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_OUTPUT
 
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "Prepare release (${{ github.actor }}): github-api-${{ steps.release.outputs.version }}" 
           tagging_message: 'github-api-${{ steps.release.outputs.version }}'
-          branch: staging/main
+          branch: staging/${{ github.ref_name }}
 
       - name: Increment Snapshot Version
         run: |
           mvn versions:set versions:commit -DnextSnapshot 
 
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "Prepare for next development iteration"
-          branch: staging/main
+          branch: staging/${{ github.ref_name }}
 
-      - name: pull-request to main
+      - name: Create pull-request
         uses: repo-sync/pull-request@v2
         with:
           pr_title: "Prepare release (${{ github.actor }}): github-api-${{ steps.release.outputs.version }}"
-          source_branch: "staging/main"
-          destination_branch: "main"
+          source_branch: "staging/${{ github.ref_name }}"
+          destination_branch: "${{ github.ref_name }}"
           github_token: ${{ secrets.GITHUB_TOKEN }}

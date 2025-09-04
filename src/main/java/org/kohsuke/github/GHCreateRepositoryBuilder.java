@@ -99,6 +99,19 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepos
     }
 
     /**
+     * Include all branches when creating from a template repository
+     *
+     * @param includeAllBranches
+     *            whether or not to include all branches from the template repository
+     * @return a builder to continue with building
+     * @throws IOException
+     *             In case of any networking error or error from the server.
+     */
+    public GHCreateRepositoryBuilder includeAllBranches(boolean includeAllBranches) throws IOException {
+        return with("include_all_branches", includeAllBranches);
+    }
+
+    /**
      * Desired license template to apply.
      *
      * @param license

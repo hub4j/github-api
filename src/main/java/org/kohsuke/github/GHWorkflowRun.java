@@ -207,6 +207,7 @@ public class GHWorkflowRun extends GHObject {
             return name().toLowerCase(Locale.ROOT);
         }
     }
+    private GHUser actor;
     private String artifactsUrl;
     private String cancelUrl;
     private String checkSuiteUrl;
@@ -305,6 +306,16 @@ public class GHWorkflowRun extends GHObject {
         requireNonNull(streamFunction, "Stream function must not be null");
 
         return root().createRequest().method("GET").withUrlPath(getApiRoute(), "logs").fetchStream(streamFunction);
+    }
+
+    /**
+     * The actor which triggered the initial run.
+     *
+     * @return the triggering actor
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHUser getActor() {
+        return actor;
     }
 
     /**

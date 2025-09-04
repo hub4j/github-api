@@ -6,6 +6,7 @@ target
 .classpath
 .project
 .settings/
+.metadata/
 .DS_Store
 
 dependency-reduced-pom.xml

@@ -259,7 +259,7 @@ class PaginatedEndpoint<Page extends GitHubPage<Item>, Item> implements Iterable
     @Nonnull
     final GitHubResponse<Item[]> toResponse() throws IOException {
         PaginatedEndpointPages<Page, Item> iterator = pages();
-        Item[] items = toArray();
+        Item[] items = toList(iterator, itemType).toArray((Item[]) Array.newInstance(itemType, 0));
         GitHubResponse<Page> lastResponse = iterator.finalResponse();
         return new GitHubResponse<>(lastResponse, items);
     }

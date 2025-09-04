@@ -99,6 +99,19 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder&lt;GHCreateRe
     }
 
     /**
+     * Include all branches when creating from a template repository
+     *
+     * @param includeAllBranches
+     *            whether or not to include all branches from the template repository
+     * @return a builder to continue with building
+     * @throws IOException
+     *             In case of any networking error or error from the server.
+     */
+    public GHCreateRepositoryBuilder includeAllBranches(boolean includeAllBranches) throws IOException {
+<span class="fc" id="L111">        return with(&quot;include_all_branches&quot;, includeAllBranches);</span>
+    }
+
+    /**
      * Desired license template to apply.
      *
      * @param license
@@ -108,7 +121,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder&lt;GHCreateRe
      *             In case of any networking error or error from the server.
      */
     public GHCreateRepositoryBuilder licenseTemplate(String license) throws IOException {
-<span class="nc" id="L111">        return with(&quot;license_template&quot;, license);</span>
+<span class="nc" id="L124">        return with(&quot;license_template&quot;, license);</span>
     }
 
     /**
@@ -121,7 +134,7 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder&lt;GHCreateRe
      *             In case of any networking error or error from the server.
      */
     public GHCreateRepositoryBuilder owner(String owner) throws IOException {
-<span class="fc" id="L124">        return with(&quot;owner&quot;, owner);</span>
+<span class="fc" id="L137">        return with(&quot;owner&quot;, owner);</span>
     }
 
     /**
@@ -134,9 +147,9 @@ public class GHCreateRepositoryBuilder extends GHRepositoryBuilder&lt;GHCreateRe
      *             In case of any networking error or error from the server.
      */
     public GHCreateRepositoryBuilder team(GHTeam team) throws IOException {
-<span class="pc bpc" id="L137" title="1 of 2 branches missed.">        if (team != null)</span>
-<span class="fc" id="L138">            return with(&quot;team_id&quot;, team.getId());</span>
-<span class="nc" id="L139">        return this;</span>
+<span class="pc bpc" id="L150" title="1 of 2 branches missed.">        if (team != null)</span>
+<span class="fc" id="L151">            return with(&quot;team_id&quot;, team.getId());</span>
+<span class="nc" id="L152">        return this;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

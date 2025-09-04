@@ -121,7 +121,7 @@ class GitHubClient {
 <span class="fc" id="L121">        MAPPER.setVisibility(new VisibilityChecker.Std(NONE, NONE, NONE, NONE, ANY));</span>
 <span class="fc" id="L122">        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);</span>
 <span class="fc" id="L123">        MAPPER.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true);</span>
-<span class="fc" id="L124">        MAPPER.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);</span>
+<span class="fc" id="L124">        MAPPER.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);</span>
 <span class="fc" id="L125">    }</span>
 
     @Nonnull
@@ -1040,4 +1040,4 @@ class GitHubClient {
                     &quot;This operation requires a credential but none is given to the GitHub constructor&quot;);
 <span class="fc" id="L1041">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

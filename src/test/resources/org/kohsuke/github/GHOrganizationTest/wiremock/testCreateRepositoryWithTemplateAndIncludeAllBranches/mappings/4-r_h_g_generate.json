@@ -1,0 +1,55 @@
+{
+  "id": "2407cebd-d3e5-4ac0-b724-7fd80d1db097",
+  "name": "repos_hub4j-test-org_github-api-template-test_generate",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api-template-test/generate",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"owner\":\"hub4j-test-org\",\"include_all_branches\":true,\"name\":\"github-api-test\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "4-r_h_g_generate.json",
+    "headers": {
+      "Date": "Tue, 05 Aug 2025 00:55:48 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
+      "ETag": "\"e29df3c395d2e6d1d91db004f4f3c0c0087ad36aa5d003fb0d6029bbf6a75f55\"",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, admin:ssh_signing_key, audit_log, codespace, copilot, delete:packages, gist, notifications, project, repo, user, workflow, write:discussion, write:network_configurations, write:packages",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2025-09-04 00:52:39 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4977",
+      "X-RateLimit-Reset": "1754358782",
+      "X-RateLimit-Used": "23",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "956A:335062:84A4C9:10D80D1:68915693",
+      "Server": "github.com",
+      "Location": "https://api.github.com/repos/hub4j-test-org/github-api-test"
+    }
+  },
+  "uuid": "2407cebd-d3e5-4ac0-b724-7fd80d1db097",
+  "persistent": true,
+  "insertionIndex": 4
+}

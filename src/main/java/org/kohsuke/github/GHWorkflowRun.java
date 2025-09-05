@@ -211,8 +211,8 @@ public class GHWorkflowRun extends GHObject {
     private String artifactsUrl;
     private String cancelUrl;
     private String checkSuiteUrl;
-
     private String conclusion;
+
     private String displayTitle;
     private String event;
 
@@ -306,6 +306,16 @@ public class GHWorkflowRun extends GHObject {
         requireNonNull(streamFunction, "Stream function must not be null");
 
         return root().createRequest().method("GET").withUrlPath(getApiRoute(), "logs").fetchStream(streamFunction);
+    }
+
+    /**
+     * Force-cancel the workflow run.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void forceCancel() throws IOException {
+        root().createRequest().method("POST").withUrlPath(getApiRoute(), "force-cancel").send();
     }
 
     /**

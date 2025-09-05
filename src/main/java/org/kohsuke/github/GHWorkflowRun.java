@@ -209,13 +209,13 @@ public class GHWorkflowRun extends GHObject {
     }
     private GHUser actor;
     private String artifactsUrl;
-    private String forceCancelUrl;
     private String cancelUrl;
     private String checkSuiteUrl;
-
     private String conclusion;
+
     private String displayTitle;
     private String event;
+    private String forceCancelUrl;
 
     private String headBranch;
     private HeadCommit headCommit;
@@ -269,16 +269,6 @@ public class GHWorkflowRun extends GHObject {
     }
 
     /**
-     * Force-cancel the workflow run.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void forceCancel() throws IOException {
-        root().createRequest().method("POST").withUrlPath(getApiRoute(), "force-cancel").send();
-    }
-
-    /**
      * Delete the workflow run.
      *
      * @throws IOException
@@ -320,6 +310,16 @@ public class GHWorkflowRun extends GHObject {
     }
 
     /**
+     * Force-cancel the workflow run.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void forceCancel() throws IOException {
+        root().createRequest().method("POST").withUrlPath(getApiRoute(), "force-cancel").send();
+    }
+
+    /**
      * The actor which triggered the initial run.
      *
      * @return the triggering actor
@@ -345,15 +345,6 @@ public class GHWorkflowRun extends GHObject {
      */
     public URL getCancelUrl() {
         return GitHubClient.parseURL(cancelUrl);
-    }
-
-    /**
-     * The cancel URL, like https://api.github.com/repos/octo-org/octo-repo/actions/runs/30433642/force-cancel
-     *
-     * @return the cancel url
-     */
-    public URL getForceCancelUrl() {
-        return GitHubClient.parseURL(forceCancelUrl);
     }
 
     /**
@@ -392,6 +383,15 @@ public class GHWorkflowRun extends GHObject {
      */
     public GHEvent getEvent() {
         return EnumUtils.getNullableEnumOrDefault(GHEvent.class, event, GHEvent.UNKNOWN);
+    }
+
+    /**
+     * The cancel URL, like https://api.github.com/repos/octo-org/octo-repo/actions/runs/30433642/force-cancel
+     *
+     * @return the cancel url
+     */
+    public URL getForceCancelUrl() {
+        return GitHubClient.parseURL(forceCancelUrl);
     }
 
     /**

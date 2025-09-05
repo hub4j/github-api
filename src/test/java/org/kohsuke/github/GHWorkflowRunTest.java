@@ -421,6 +421,44 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test delete.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testDelete() throws IOException {
+        GHWorkflow workflow = repo.getWorkflow(FAST_WORKFLOW_PATH);
+
+        long latestPreexistingWorkflowRunId = getLatestPreexistingWorkflowRunId();
+
+        workflow.dispatch(MAIN_BRANCH);
+
+        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                FAST_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId).isPresent());
+
+        GHWorkflowRun workflowRunToDelete = getWorkflowRun(FAST_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.COMPLETED,
+                latestPreexistingWorkflowRunId)
+                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
+
+        assertThat(workflowRunToDelete.getId(), notNullValue());
+
+        workflowRunToDelete.delete();
+
+        try {
+            repo.getWorkflowRun(workflowRunToDelete.getId());
+            fail("The workflow " + workflowRunToDelete.getId() + " should have been deleted.");
+        } catch (GHFileNotFoundException e) {
+            // success
+        }
+    }
+
+    /**
      * Test force cancel a run.
      *
      * @throws IOException
@@ -458,44 +496,6 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         // let's check that it has been properly cancelled
         workflowRun = repo.getWorkflowRun(cancelledWorkflowRunId);
         assertThat(workflowRun.getConclusion(), equalTo(Conclusion.CANCELLED));
-    }
-
-    /**
-     * Test delete.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void testDelete() throws IOException {
-        GHWorkflow workflow = repo.getWorkflow(FAST_WORKFLOW_PATH);
-
-        long latestPreexistingWorkflowRunId = getLatestPreexistingWorkflowRunId();
-
-        workflow.dispatch(MAIN_BRANCH);
-
-        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
-                FAST_WORKFLOW_NAME,
-                MAIN_BRANCH,
-                Status.COMPLETED,
-                latestPreexistingWorkflowRunId).isPresent());
-
-        GHWorkflowRun workflowRunToDelete = getWorkflowRun(FAST_WORKFLOW_NAME,
-                MAIN_BRANCH,
-                Status.COMPLETED,
-                latestPreexistingWorkflowRunId)
-                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
-
-        assertThat(workflowRunToDelete.getId(), notNullValue());
-
-        workflowRunToDelete.delete();
-
-        try {
-            repo.getWorkflowRun(workflowRunToDelete.getId());
-            fail("The workflow " + workflowRunToDelete.getId() + " should have been deleted.");
-        } catch (GHFileNotFoundException e) {
-            // success
-        }
     }
 
     /**

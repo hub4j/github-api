@@ -26,8 +26,9 @@ import javax.annotation.Nonnull;
  */
 class PaginatedEndpointPages<P extends GitHubPage<Item>, Item> implements java.util.Iterator<P> {
 
-    static <P extends GitHubPage<Item>, Item> PaginatedEndpointPages<P, Item> ofSingleton(final P page) {
-        return new PaginatedEndpointPages<>(page);
+    static <P extends GitHubPage<Item>, Item> PaginatedEndpointPages<P, Item> ofSinglePage(Class<P> pageType,
+            final P page) {
+        return new PaginatedEndpointPages<>(pageType, page);
     }
     /**
      * When done iterating over pages, it is on rare occasions useful to be able to get information from the final
@@ -57,8 +58,8 @@ class PaginatedEndpointPages<P extends GitHubPage<Item>, Item> implements java.u
 
     protected final Class<P> pageType;
 
-    private PaginatedEndpointPages(P page) {
-        this(null, (Class<P>) page.getClass(), null, 0, null);
+    private PaginatedEndpointPages(Class<P> pageType, P page) {
+        this(null, pageType, null, 0, null);
         this.next = page;
     }
 
@@ -75,9 +76,10 @@ class PaginatedEndpointPages<P extends GitHubPage<Item>, Item> implements java.u
             request = builder.build();
         }
 
-        if (request != null && !"GET".equals(request.method())) {
-            throw new IllegalArgumentException("Request method \"GET\" is required for page iterator.");
-        }
+        // if (request != null && !"GET".equals(request.method())) {
+        // throw new IllegalArgumentException("Request method \"GET\" is required for page iterator.");
+        // }
+        // assert (request == null || "GET".equals(request.method()));
 
         this.client = client;
         this.nextRequest = request;

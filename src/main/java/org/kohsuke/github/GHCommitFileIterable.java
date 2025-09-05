@@ -23,7 +23,7 @@ class GHCommitFileIterable extends PagedIterable<GHCommit.File> {
         PaginatedEndpoint<GHCommitFilesPage, File> iterable;
         if (files != null && files.length < GH_FILE_LIMIT_PER_COMMIT_PAGE) {
             // create a page iterator that only provides one page
-            iterable = PaginatedEndpoint.ofSingleton(new GHCommitFilesPage(files));
+            iterable = PaginatedEndpoint.ofSinglePage(new GHCommitFilesPage(files), GHCommit.File.class);
         } else {
             GitHubRequest request = owner.root()
                     .createRequest()

@@ -225,5 +225,4 @@ class Requester extends GitHubRequest.Builder<Requester> {
         GitHubRequest request = build();
         return new PagedIterable<>(PaginatedEndpoint.ofArrayEndpoint(client, request, receiverType, itemInitializer));
     }
-
 }

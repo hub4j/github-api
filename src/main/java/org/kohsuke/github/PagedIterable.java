@@ -6,7 +6,6 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-// TODO: Auto-generated Javadoc
 /**
  * {@link Iterable} that returns {@link PagedIterator}. {@link PagedIterable} is thread-safe but {@link PagedIterator}
  * is not. Any one instance of {@link PagedIterator} should only be called from a single thread.
@@ -18,6 +17,11 @@ import javax.annotation.Nonnull;
 public class PagedIterable<T> implements Iterable<T> {
 
     private final PaginatedEndpoint<?, T> paginatedEndpoint;
+
+    @Deprecated
+    public PagedIterable() {
+        this(null);
+    }
 
     /**
      * Instantiates a new git hub page contents iterable.
@@ -50,9 +54,25 @@ public class PagedIterable<T> implements Iterable<T> {
         return paginatedEndpoint.toSet();
     }
 
-    public PagedIterable<T> withPageSize(int i) {
-        paginatedEndpoint.withPageSize(i);
+    /**
+     * Sets the pagination size.
+     *
+     * <p>
+     * When set to non-zero, each API call will retrieve this many entries.
+     *
+     * @param size
+     *            the size
+     * @return the paged iterable
+     */
+    public PagedIterable<T> withPageSize(int size) {
+        paginatedEndpoint.withPageSize(size);
         return this;
+    }
+
+    @Nonnull
+    @Deprecated
+    protected T[] toArray(final PagedIterator<T> iterator) throws IOException {
+        return paginatedEndpoint.toArray();
     }
 
     GitHubResponse<T[]> toResponse() throws IOException {

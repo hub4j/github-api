@@ -2,6 +2,8 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.util.Iterator;
+
 // TODO: Auto-generated Javadoc
 /**
  * {@link PagedIterable} enhanced to report search result specific information.
@@ -44,5 +46,22 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
     public boolean isIncomplete() {
         // populate();
         return paginatedEndpoint.pages().peek().incompleteResults;
+    }
+
+    /**
+     * With page size.
+     *
+     * @param size
+     *            the size
+     * @return the paged search iterable
+     */
+    @Override
+    public PagedSearchIterable<T> withPageSize(int size) {
+        return (PagedSearchIterable<T>) super.withPageSize(size);
+    }
+
+    @Deprecated
+    protected Iterator<T[]> adapt(final Iterator<? extends SearchResult<T>> base) {
+        return null;
     }
 }

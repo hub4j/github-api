@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -22,12 +23,12 @@ import javax.annotation.Nonnull;
  */
 class PaginatedEndpoint<Page extends GitHubPage<Item>, Item> implements Iterable<Item> {
 
-    private static class ArrayIterable<I> extends PaginatedEndpoint<GitHubPage<I>, I> {
+    private static class ArrayIterable<I> extends PaginatedEndpoint<GitHubArrayPage<I>, I> {
 
-        private class ArrayIterator extends PaginatedEndpointPages<GitHubPage<I>, I> {
+        private class ArrayIterator extends PaginatedEndpointPages<GitHubArrayPage<I>, I> {
 
             ArrayIterator(GitHubClient client,
-                    Class<GitHubPage<I>> pageType,
+                    Class<GitHubArrayPage<I>> pageType,
                     GitHubRequest request,
                     int pageSize,
                     Consumer<I> itemInitializer) {
@@ -35,7 +36,7 @@ class PaginatedEndpoint<Page extends GitHubPage<Item>, Item> implements Iterable
             }
 
             @Override
-            @NotNull protected GitHubResponse<GitHubPage<I>> sendNextRequest() throws IOException {
+            @NotNull protected GitHubResponse<GitHubArrayPage<I>> sendNextRequest() throws IOException {
                 GitHubResponse<I[]> response = client.sendRequest(nextRequest,
                         (connectorResponse) -> GitHubResponse.parseBody(connectorResponse, receiverType));
                 return new GitHubResponse<>(response, new GitHubArrayPage<>(response.body()));
@@ -48,23 +49,21 @@ class PaginatedEndpoint<Page extends GitHubPage<Item>, Item> implements Iterable
         private ArrayIterable(GitHubClient client,
                 GitHubRequest request,
                 Class<I[]> receiverType,
+                Class<I> itemType,
                 Consumer<I> itemInitializer) {
-            super(client,
-                    request,
-                    GitHubArrayPage.getArrayPageClass(receiverType),
-                    (Class<I>) receiverType.getComponentType(),
-                    itemInitializer);
+            super(client, request, GitHubArrayPage.getArrayPageClass(itemType), itemType, itemInitializer);
             this.receiverType = receiverType;
         }
 
-        @NotNull @Override
-        public PaginatedEndpointPages<GitHubPage<I>, I> pages() {
+        @Nonnull
+        @Override
+        public PaginatedEndpointPages<GitHubArrayPage<I>, I> pages() {
             return new ArrayIterator(client, pageType, request, pageSize, itemInitializer);
         }
     }
 
     /**
-     * Represents the result of a search.
+     * Represents a page of results
      *
      * @author Kohsuke Kawaguchi
      * @param <I>
@@ -72,8 +71,9 @@ class PaginatedEndpoint<Page extends GitHubPage<Item>, Item> implements Iterable
      */
     private static class GitHubArrayPage<I> implements GitHubPage<I> {
 
-        private static <P extends GitHubPage<I>, I> Class<P> getArrayPageClass(Class<I[]> receiverType) {
-            return (Class<P>) new GitHubArrayPage<>(receiverType).getClass();
+        @SuppressFBWarnings(value = { "DM_NEW_FOR_GETCLASS" }, justification = "BUG?")
+        private static <P extends GitHubPage<I>, I> Class<P> getArrayPageClass(Class<I> itemType) {
+            return (Class<P>) new GitHubArrayPage<>(itemType).getClass();
         }
 
         private final I[] items;
@@ -82,8 +82,8 @@ class PaginatedEndpoint<Page extends GitHubPage<Item>, Item> implements Iterable
             this.items = items;
         }
 
-        private GitHubArrayPage(Class<I[]> receiverType) {
-            this.items = (I[]) Array.newInstance(receiverType.getComponentType(), 0);
+        private GitHubArrayPage(Class<I> itemType) {
+            this.items = null;
         }
 
         public I[] getItems() {
@@ -91,26 +91,39 @@ class PaginatedEndpoint<Page extends GitHubPage<Item>, Item> implements Iterable
         }
     }
 
-    static <I> PaginatedEndpoint<GitHubPage<I>, I> ofArrayEndpoint(GitHubClient client,
+    private static class SinglePage<P extends GitHubPage<I>, I> extends PaginatedEndpoint<P, I> {
+        private final P page;
+
+        SinglePage(P page, Class<I> itemType) {
+            super(null, null, (Class<P>) page.getClass(), itemType, null);
+            this.page = page;
+        }
+
+        @Nonnull
+        @Override
+        public PaginatedEndpointPages<P, I> pages() {
+            return PaginatedEndpointPages.ofSinglePage(pageType, page);
+        }
+
+    }
+
+    static <I> PaginatedEndpoint<GitHubArrayPage<I>, I> ofArrayEndpoint(GitHubClient client,
             GitHubRequest request,
             Class<I[]> receiverType,
             Consumer<I> itemInitializer) {
-        return new ArrayIterable<>(client, request, receiverType, itemInitializer);
+        return new ArrayIterable<I>(client,
+                request,
+                (Class<I[]>) receiverType,
+                (Class<I>) receiverType.getComponentType(),
+                itemInitializer);
     }
 
-    static <I> PaginatedEndpoint<GitHubPage<I>, I> ofSingleton(I[] array) {
-        return ofSingleton(new GitHubArrayPage<>(array));
+    static <I> PaginatedEndpoint<GitHubArrayPage<I>, I> ofSinglePage(I[] array, Class<I> itemType) {
+        return ofSinglePage(new GitHubArrayPage<>(array), itemType);
     }
 
-    static <P extends GitHubPage<I>, I> PaginatedEndpoint<P, I> ofSingleton(P page) {
-        Class<I> itemType = (Class<I>) page.getItems().getClass().getComponentType();
-        return new PaginatedEndpoint<>(null, null, (Class<P>) page.getClass(), itemType, null) {
-            @Nonnull
-            @Override
-            public PaginatedEndpointPages<P, I> pages() {
-                return PaginatedEndpointPages.ofSingleton(page);
-            }
-        };
+    static <P extends GitHubPage<I>, I> PaginatedEndpoint<P, I> ofSinglePage(P page, Class<I> itemType) {
+        return new SinglePage<>(page, itemType);
     }
 
     protected final GitHubClient client;
@@ -151,9 +164,10 @@ class PaginatedEndpoint<Page extends GitHubPage<Item>, Item> implements Iterable
     }
 
     @Nonnull
-    public final PaginatedEndpointItems<Page, Item> items() {
+    public final PaginatedEndpointItems<Item> items() {
         return new PaginatedEndpointItems<>(this.pages());
     }
+
     @Nonnull
     @Override
     public final Iterator<Item> iterator() {

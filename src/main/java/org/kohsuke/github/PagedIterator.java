@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -19,7 +21,11 @@ import java.util.List;
  */
 public class PagedIterator<T> implements Iterator<T> {
 
-    private final PaginatedEndpointItems<?, T> endpointIterator;
+    private final PaginatedEndpointItems<T> endpointIterator;
+
+    @Deprecated
+    @SuppressFBWarnings(value = { "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" }, justification = "No longer used")
+    protected Iterator<T[]> base = null;
 
     /**
      * Instantiates a new paged iterator.
@@ -27,7 +33,7 @@ public class PagedIterator<T> implements Iterator<T> {
      * @param endpointIterator
      *            the base
      */
-    PagedIterator(PaginatedEndpointItems<?, T> endpointIterator) {
+    PagedIterator(PaginatedEndpointItems<T> endpointIterator) {
         this.endpointIterator = endpointIterator;
     }
 
@@ -48,5 +54,9 @@ public class PagedIterator<T> implements Iterator<T> {
     @Deprecated
     public List<T> nextPage() {
         return endpointIterator.nextPage();
+    }
+
+    @Deprecated
+    protected void wrapUp(T[] page) {
     }
 }

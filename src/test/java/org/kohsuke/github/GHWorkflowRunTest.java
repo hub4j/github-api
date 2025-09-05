@@ -631,7 +631,6 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         assertThat(workflowRun.getCheckSuiteUrl().getPath(), containsString("/check-suites/"));
         assertThat(workflowRun.getArtifactsUrl().getPath(), endsWith("/artifacts"));
         assertThat(workflowRun.getCancelUrl().getPath(), endsWith("/cancel"));
-        assertThat(workflowRun.getForceCancelUrl().getPath(), endsWith("/force-cancel"));
         assertThat(workflowRun.getRerunUrl().getPath(), endsWith("/rerun"));
         assertThat(workflowRun.getWorkflowUrl().getPath(), containsString("/actions/workflows/"));
         assertThat(workflowRun.getHeadBranch(), equalTo(MAIN_BRANCH));

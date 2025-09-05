@@ -1795,6 +1795,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
                 is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/check-suites/2327154397"));
         assertThat(workflowRun.getArtifactsUrl().toString(),
                 is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/runs/680604745/artifacts"));
+        assertThat(workflowRun.getForceCancelUrl().toString(),
+                is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/runs/680604745/force-cancel"));
         assertThat(workflowRun.getCancelUrl().toString(),
                 is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/runs/680604745/cancel"));
         assertThat(workflowRun.getRerunUrl().toString(),

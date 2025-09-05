@@ -421,6 +421,46 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test force cancel a run.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testForceCancel() throws IOException {
+        GHWorkflow workflow = repo.getWorkflow(SLOW_WORKFLOW_PATH);
+
+        long latestPreexistingWorkflowRunId = getLatestPreexistingWorkflowRunId();
+
+        workflow.dispatch(MAIN_BRANCH);
+
+        // now that we have triggered the workflow run, we will wait until it's in progress and then force cancel it
+        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                SLOW_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.IN_PROGRESS,
+                latestPreexistingWorkflowRunId).isPresent());
+
+        GHWorkflowRun workflowRun = getWorkflowRun(SLOW_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.IN_PROGRESS,
+                latestPreexistingWorkflowRunId)
+                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
+
+        assertThat(workflowRun.getId(), notNullValue());
+
+        workflowRun.forceCancel();
+        long cancelledWorkflowRunId = workflowRun.getId();
+
+        // let's wait until it's completed
+        await((nonRecordingRepo) -> getWorkflowRunStatus(nonRecordingRepo, cancelledWorkflowRunId) == Status.COMPLETED);
+
+        // let's check that it has been properly cancelled
+        workflowRun = repo.getWorkflowRun(cancelledWorkflowRunId);
+        assertThat(workflowRun.getConclusion(), equalTo(Conclusion.CANCELLED));
+    }
+
+    /**
      * Test delete.
      *
      * @throws IOException
@@ -591,6 +631,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         assertThat(workflowRun.getCheckSuiteUrl().getPath(), containsString("/check-suites/"));
         assertThat(workflowRun.getArtifactsUrl().getPath(), endsWith("/artifacts"));
         assertThat(workflowRun.getCancelUrl().getPath(), endsWith("/cancel"));
+        assertThat(workflowRun.getForceCancelUrl().getPath(), endsWith("/force-cancel"));
         assertThat(workflowRun.getRerunUrl().getPath(), endsWith("/rerun"));
         assertThat(workflowRun.getWorkflowUrl().getPath(), containsString("/actions/workflows/"));
         assertThat(workflowRun.getHeadBranch(), equalTo(MAIN_BRANCH));

@@ -209,6 +209,7 @@ public class GHWorkflowRun extends GHObject {
     }
     private GHUser actor;
     private String artifactsUrl;
+    private String forceCancelUrl;
     private String cancelUrl;
     private String checkSuiteUrl;
 
@@ -265,6 +266,16 @@ public class GHWorkflowRun extends GHObject {
      */
     public void cancel() throws IOException {
         root().createRequest().method("POST").withUrlPath(getApiRoute(), "cancel").send();
+    }
+
+    /**
+     * Force-cancel the workflow run.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void forceCancel() throws IOException {
+        root().createRequest().method("POST").withUrlPath(getApiRoute(), "force-cancel").send();
     }
 
     /**
@@ -334,6 +345,15 @@ public class GHWorkflowRun extends GHObject {
      */
     public URL getCancelUrl() {
         return GitHubClient.parseURL(cancelUrl);
+    }
+
+    /**
+     * The cancel URL, like https://api.github.com/repos/octo-org/octo-repo/actions/runs/30433642/force-cancel
+     *
+     * @return the cancel url
+     */
+    public URL getForceCancelUrl() {
+        return GitHubClient.parseURL(forceCancelUrl);
     }
 
     /**

@@ -18,20 +18,11 @@ public class PagedIterable<T> implements Iterable<T> {
 
     private final PaginatedEndpoint<?, T> paginatedEndpoint;
 
-    @Deprecated
-    public PagedIterable() {
-        this(null);
-    }
-
     /**
      * Instantiates a new git hub page contents iterable.
      */
     PagedIterable(PaginatedEndpoint<?, T> paginatedEndpoint) {
         this.paginatedEndpoint = paginatedEndpoint;
-    }
-
-    public PagedIterator<T> _iterator(int pageSize) {
-        throw new RuntimeException("No longer used.");
     }
 
     @Nonnull
@@ -67,12 +58,6 @@ public class PagedIterable<T> implements Iterable<T> {
     public PagedIterable<T> withPageSize(int size) {
         paginatedEndpoint.withPageSize(size);
         return this;
-    }
-
-    @Nonnull
-    @Deprecated
-    protected T[] toArray(final PagedIterator<T> iterator) throws IOException {
-        return paginatedEndpoint.toArray();
     }
 
     GitHubResponse<T[]> toResponse() throws IOException {

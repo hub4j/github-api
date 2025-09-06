@@ -4,8 +4,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.Iterator;
 
-import javax.annotation.Nonnull;
-
 // TODO: Auto-generated Javadoc
 /**
  * {@link PagedIterable} enhanced to report search result specific information.
@@ -19,46 +17,15 @@ import javax.annotation.Nonnull;
                 "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
         justification = "Constructed by JSON API")
 public class PagedSearchIterable<T> extends PagedIterable<T> {
-    private final Class<? extends SearchResult<T>> receiverType;
 
-    private final GitHubRequest request;
-
-    /**
-     * As soon as we have any result fetched, it's set here so that we can report the total count.
-     */
-    private SearchResult<T> result;
-
-    private final transient GitHub root;
+    private final PaginatedEndpoint<? extends SearchResult<T>, T> paginatedEndpoint;
 
     /**
-     * Instantiates a new paged search iterable.
-     *
-     * @param root
-     *            the root
-     * @param request
-     *            the request
-     * @param receiverType
-     *            the receiver type
+     * Instantiates a new git hub page contents iterable.
      */
-    PagedSearchIterable(GitHub root, GitHubRequest request, Class<? extends SearchResult<T>> receiverType) {
-        this.root = root;
-        this.request = request;
-        this.receiverType = receiverType;
-    }
-
-    /**
-     * Iterator.
-     *
-     * @param pageSize
-     *            the page size
-     * @return the paged iterator
-     */
-    @Nonnull
-    @Override
-    public PagedIterator<T> _iterator(int pageSize) {
-        final Iterator<T[]> adapter = adapt(
-                GitHubPageIterator.create(root.getClient(), receiverType, request, pageSize));
-        return new PagedIterator<T>(adapter, null);
+    <Result extends SearchResult<T>> PagedSearchIterable(PaginatedEndpoint<Result, T> paginatedEndpoint) {
+        super(paginatedEndpoint);
+        this.paginatedEndpoint = paginatedEndpoint;
     }
 
     /**
@@ -67,8 +34,8 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
      * @return the total count
      */
     public int getTotalCount() {
-        populate();
-        return result.totalCount;
+        // populate();
+        return paginatedEndpoint.pages().peek().totalCount;
     }
 
     /**
@@ -77,8 +44,8 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
      * @return the boolean
      */
     public boolean isIncomplete() {
-        populate();
-        return result.incompleteResults;
+        // populate();
+        return paginatedEndpoint.pages().peek().incompleteResults;
     }
 
     /**
@@ -93,30 +60,8 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
         return (PagedSearchIterable<T>) super.withPageSize(size);
     }
 
-    private void populate() {
-        if (result == null)
-            iterator().hasNext();
-    }
-
-    /**
-     * Adapts {@link Iterator}.
-     *
-     * @param base
-     *            the base
-     * @return the iterator
-     */
+    @Deprecated
     protected Iterator<T[]> adapt(final Iterator<? extends SearchResult<T>> base) {
-        return new Iterator<T[]>() {
-            public boolean hasNext() {
-                return base.hasNext();
-            }
-
-            public T[] next() {
-                SearchResult<T> v = base.next();
-                if (result == null)
-                    result = v;
-                return v.getItems(root);
-            }
-        };
+        return null;
     }
 }

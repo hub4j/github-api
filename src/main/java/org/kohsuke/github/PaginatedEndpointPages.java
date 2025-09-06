@@ -26,7 +26,7 @@ import javax.annotation.Nonnull;
  */
 class PaginatedEndpointPages<P extends GitHubPage<Item>, Item> implements java.util.Iterator<P> {
 
-    static <P extends GitHubPage<Item>, Item> PaginatedEndpointPages<P, Item> ofSinglePage(Class<P> pageType,
+    static <P extends GitHubPage<Item>, Item> PaginatedEndpointPages<P, Item> fromSinglePage(Class<P> pageType,
             final P page) {
         return new PaginatedEndpointPages<>(pageType, page);
     }

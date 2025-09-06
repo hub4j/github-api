@@ -346,7 +346,7 @@ public class GHCompare implements GitHubPage<GHCompare.Commit> {
                     .withPageSize(10);
         } else {
             // if not using paginated commits, adapt the returned commits array
-            return new PagedIterable<>(PaginatedEndpoint.ofSinglePage(this.commits, Commit.class));
+            return new PagedIterable<>(PaginatedEndpoint.fromSinglePage(this.commits, Commit.class));
         }
     }
 

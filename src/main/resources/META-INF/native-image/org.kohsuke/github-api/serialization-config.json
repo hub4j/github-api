@@ -1393,5 +1393,8 @@
   },
   {
     "name": "org.kohsuke.github.PaginatedEndpointPages"
+  },
+  {
+    "name": "org.kohsuke.github.PaginatedEndpoint$SinglePageEndpoint"
   }
 ]

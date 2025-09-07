@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -26,8 +27,8 @@ public class PagedIterable<T> implements Iterable<T> {
     }
 
     @Nonnull
-    public final PagedIterator<T> iterator() {
-        return new PagedIterator<>(paginatedEndpoint.items());
+    public final Iterator<T> iterator() {
+        return paginatedEndpoint.iterator();
     }
 
     @Nonnull

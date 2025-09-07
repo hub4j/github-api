@@ -43,7 +43,7 @@ public class PagedIterator<T> implements Iterator<T> {
      * Get the next page of items.
      *
      * @return a list of the next page of items.
-     * @deprecated use PagedIterable.pageIterator().
+     * @deprecated use PagedIterable.pages().
      */
     @Deprecated
     public List<T> nextPage() {

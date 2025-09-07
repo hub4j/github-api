@@ -550,6 +550,7 @@
               <exclude>org.kohsuke.github.PagedIterable#toArray(org.kohsuke.github.PagedIterator)</exclude>
               <exclude>org.kohsuke.github.PagedIterable#PagedIterable()</exclude>
               <exclude>org.kohsuke.github.PagedIterator#base</exclude>
+              <exclude>org.kohsuke.github.PagedIterable#iterator()</exclude>
               <exclude>org.kohsuke.github.PagedIterator#wrapUp(java.lang.Object[])</exclude>
               <exclude>org.kohsuke.github.PagedSearchIterable#_iterator(int)</exclude>
               <exclude>org.kohsuke.github.PagedSearchIterable#adapt(java.util.Iterator)</exclude>

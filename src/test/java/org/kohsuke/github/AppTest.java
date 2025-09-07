@@ -362,7 +362,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 .getRepository("jenkins")
                 .getCommit("08c1c9970af4d609ae754fbe803e06186e3206f7");
         assertThat(commit.getParents().size(), equalTo(1));
-        assertThat(commit.listFiles().toList().size(), equalTo(1));
+        assertThat(commit.listFiles().withPageSize(50).toList().size(), equalTo(1));
         assertThat(commit.getHtmlUrl().toString(),
                 equalTo("https://github.com/jenkinsci/jenkins/commit/08c1c9970af4d609ae754fbe803e06186e3206f7"));
         assertThat(commit.getLinesAdded(), equalTo(40));

@@ -407,7 +407,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     public void testCommitComment() throws Exception {
         GHRepository r = gitHub.getUser("jenkinsci").getRepository("jenkins");
         PagedIterable<GHCommitComment> comments = r.listCommitComments();
-        List<GHCommitComment> batch = comments.iterator().nextPage();
+        List<GHCommitComment> batch = comments.pages().next().getItemsList();
         for (GHCommitComment comment : batch) {
             // System.out.println(comment.getBody());
             assertThat(r, sameInstance(comment.getOwner()));

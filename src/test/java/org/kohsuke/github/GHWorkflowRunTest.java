@@ -154,7 +154,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
                 .event(GHEvent.PULL_REQUEST)
                 .list()
                 .withPageSize(20)
-                .iterator()
+                .items()
                 .nextPage();
 
         for (GHWorkflowRun workflowRun : workflowRuns) {
@@ -176,7 +176,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
                 .event(GHEvent.WORKFLOW_DISPATCH)
                 .list()
                 .withPageSize(20)
-                .iterator()
+                .items()
                 .nextPage();
 
         for (GHWorkflowRun workflowRun : workflowRuns) {
@@ -347,8 +347,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         checkArtifactProperties(artifactById, "artifact2");
 
         // Test GHRepository#listArtifacts() as we are sure we have artifacts around
-        List<GHArtifact> artifactsFromRepo = new ArrayList<>(
-                repo.listArtifacts().withPageSize(2).iterator().nextPage());
+        List<GHArtifact> artifactsFromRepo = new ArrayList<>(repo.listArtifacts().withPageSize(2).items().nextPage());
         artifactsFromRepo.sort((a1, a2) -> a1.getName().compareTo(a2.getName()));
 
         // We have at least the two artifacts we just added
@@ -507,7 +506,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         checkJobProperties(workflowRun.getId(), job1ById, "job1");
 
         // Also test listAllJobs() works correctly
-        List<GHWorkflowJob> allJobs = workflowRun.listAllJobs().withPageSize(10).iterator().nextPage();
+        List<GHWorkflowJob> allJobs = workflowRun.listAllJobs().withPageSize(10).items().nextPage();
         assertThat(allJobs.size(), greaterThanOrEqualTo(2));
     }
 

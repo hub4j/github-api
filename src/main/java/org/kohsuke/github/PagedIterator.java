@@ -17,9 +17,10 @@ import java.util.List;
  * @param <T>
  *            the type parameter
  */
+@Deprecated
 public class PagedIterator<T> implements Iterator<T> {
 
-    private final PaginatedEndpointItems<T> endpointIterator;
+    private final PaginatedEndpointItems<? extends GitHubPage<T>, T> endpointIterator;
 
     /**
      * Instantiates a new paged iterator.
@@ -27,7 +28,7 @@ public class PagedIterator<T> implements Iterator<T> {
      * @param endpointIterator
      *            the base
      */
-    PagedIterator(PaginatedEndpointItems<T> endpointIterator) {
+    PagedIterator(PaginatedEndpointItems<? extends GitHubPage<T>, T> endpointIterator) {
         this.endpointIterator = endpointIterator;
     }
 

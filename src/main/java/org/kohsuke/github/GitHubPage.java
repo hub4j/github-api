@@ -1,5 +1,8 @@
 package org.kohsuke.github;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * A page of results from GitHub.
  *
@@ -13,4 +16,8 @@ interface GitHubPage<I> {
      * @return the items
      */
     I[] getItems();
+
+    default List<I> getItemsList() {
+        return Arrays.asList(this.getItems());
+    }
 }

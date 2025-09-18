@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * This class is not thread-safe. Any one instance should only be called from a single thread.
  */
-class PaginatedEndpointItems<Item> implements Iterator<Item> {
+class PaginatedEndpointItems<Page extends GitHubPage<Item>, Item> implements Iterator<Item> {
 
     /**
      * Current batch of items. Each time {@link #next()} is called the next item in this array will be returned. After
@@ -14,7 +14,7 @@ class PaginatedEndpointItems<Item> implements Iterator<Item> {
      *
      * @see #fetchNext() {@link #fetchNext()} for details on how this field is used.
      */
-    private GitHubPage<Item> currentPage;
+    private Page currentPage;
 
     /**
      * The index of the next item on the page, the item that will be returned when {@link #next()} is called.
@@ -23,10 +23,23 @@ class PaginatedEndpointItems<Item> implements Iterator<Item> {
      */
     private int nextItemIndex;
 
-    private final PaginatedEndpointPages<? extends GitHubPage<Item>, Item> pageIterator;
+    private final PaginatedEndpointPages<Page, Item> pageIterator;
 
-    PaginatedEndpointItems(PaginatedEndpointPages<? extends GitHubPage<Item>, Item> pageIterator) {
+    PaginatedEndpointItems(PaginatedEndpointPages<Page, Item> pageIterator) {
         this.pageIterator = pageIterator;
+    }
+
+    /**
+     * Get the current page.
+     *
+     * If not previously fetched, will attempt fetch the first page. Will still return the last page even after
+     * hasNext() returns false.
+     */
+    public Page getCurrentPage() {
+        if (currentPage != null) {
+            peek();
+        }
+        return currentPage;
     }
 
     /**

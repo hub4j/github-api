@@ -322,7 +322,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
                 .getRepository("github-api")
                 .getCheckRuns("78b9ff49d47daaa158eb373c4e2e040f739df8b9");
         // Check if the paging works correctly
-        assertThat(checkRuns.withPageSize(2).iterator().nextPage(), hasSize(2));
+        assertThat(checkRuns.withPageSize(2).items().nextPage(), hasSize(2));
 
         // Check if the checkruns are all succeeded and if we got all of them
         int checkRunsCount = 0;

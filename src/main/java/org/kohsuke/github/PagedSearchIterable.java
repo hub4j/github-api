@@ -16,14 +16,13 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
         justification = "Constructed by JSON API")
 public class PagedSearchIterable<T> extends PagedIterable<T> {
 
-    private final PaginatedEndpoint<? extends SearchResult<T>, T> paginatedEndpoint;
-
+    private final PaginatedEndpoint<? extends SearchResult<T>, T> searchPaginatedEndpoint;
     /**
      * Instantiates a new git hub page contents iterable.
      */
     <Result extends SearchResult<T>> PagedSearchIterable(PaginatedEndpoint<Result, T> paginatedEndpoint) {
         super(paginatedEndpoint);
-        this.paginatedEndpoint = paginatedEndpoint;
+        this.searchPaginatedEndpoint = paginatedEndpoint;
     }
 
     /**
@@ -31,9 +30,10 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
      *
      * @return the total count
      */
+    @Deprecated
     public int getTotalCount() {
         // populate();
-        return paginatedEndpoint.pages().peek().totalCount;
+        return searchPaginatedEndpoint.pages().peek().totalCount;
     }
 
     /**
@@ -41,9 +41,10 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
      *
      * @return the boolean
      */
+    @Deprecated
     public boolean isIncomplete() {
         // populate();
-        return paginatedEndpoint.pages().peek().incompleteResults;
+        return searchPaginatedEndpoint.pages().peek().incompleteResults;
     }
 
     /**
@@ -56,5 +57,17 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
     @Override
     public PagedSearchIterable<T> withPageSize(int size) {
         return (PagedSearchIterable<T>) super.withPageSize(size);
+    }
+
+    @Override
+    PaginatedEndpointItems<? extends GitHubPage<T>, T> items() {
+        // TODO Auto-generated method stub
+        return super.items();
+    }
+
+    @Override
+    PaginatedEndpointPages<? extends GitHubPage<T>, T> pages() {
+        // TODO Auto-generated method stub
+        return super.pages();
     }
 }

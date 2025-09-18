@@ -1377,16 +1377,7 @@
     "name": "org.kohsuke.github.PaginatedEndpoint"
   },
   {
-    "name": "org.kohsuke.github.PaginatedEndpoint$1"
-  },
-  {
-    "name": "org.kohsuke.github.PaginatedEndpoint$ArrayIterable"
-  },
-  {
-    "name": "org.kohsuke.github.PaginatedEndpoint$ArrayIterable$ArrayIterator"
-  },
-  {
-    "name": "org.kohsuke.github.PaginatedEndpoint$GitHubArrayPage"
+    "name": "org.kohsuke.github.GitHubPageArrayAdapter"
   },
   {
     "name": "org.kohsuke.github.PaginatedEndpointItems"
@@ -1396,5 +1387,11 @@
   },
   {
     "name": "org.kohsuke.github.PaginatedEndpoint$SinglePageEndpoint"
+  },
+  {
+    "name": "org.kohsuke.github.PaginatedArrayEndpoint"
+  },
+  {
+    "name": "org.kohsuke.github.PaginatedArrayEndpoint$ArrayPagest"
   }
 ]

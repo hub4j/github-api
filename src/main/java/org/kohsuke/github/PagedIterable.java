@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -17,18 +16,18 @@ import javax.annotation.Nonnull;
  */
 public class PagedIterable<T> implements Iterable<T> {
 
-    private final PaginatedEndpoint<?, T> paginatedEndpoint;
+    private final PaginatedEndpoint<? extends GitHubPage<T>, T> paginatedEndpoint;
 
     /**
      * Instantiates a new git hub page contents iterable.
      */
-    PagedIterable(PaginatedEndpoint<?, T> paginatedEndpoint) {
+    <Page extends GitHubPage<T>> PagedIterable(PaginatedEndpoint<Page, T> paginatedEndpoint) {
         this.paginatedEndpoint = paginatedEndpoint;
     }
 
     @Nonnull
-    public final Iterator<T> iterator() {
-        return paginatedEndpoint.iterator();
+    public final PagedIterator<T> iterator() {
+        return new PagedIterator<>(items());
     }
 
     @Nonnull
@@ -59,6 +58,14 @@ public class PagedIterable<T> implements Iterable<T> {
     public PagedIterable<T> withPageSize(int size) {
         paginatedEndpoint.withPageSize(size);
         return this;
+    }
+
+    PaginatedEndpointItems<? extends GitHubPage<T>, T> items() {
+        return paginatedEndpoint.items();
+    }
+
+    PaginatedEndpointPages<? extends GitHubPage<T>, T> pages() {
+        return paginatedEndpoint.pages();
     }
 
     GitHubResponse<T[]> toResponse() throws IOException {

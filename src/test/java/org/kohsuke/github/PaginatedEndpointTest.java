@@ -72,6 +72,31 @@ public class PaginatedEndpointTest extends AbstractGitHubWireMockTest {
      *             Signals that an I/O exception has occurred.
      */
     @Test
+    public void testIterators() throws IOException {
+        var page = new GitHubPageArrayAdapter<>(new Object[]{ 1, 2, 3 });
+
+        var endpoint = PaginatedEndpoint.fromSinglePage(page, Object.class);
+
+        var iterator = endpoint.iterator();
+        assertThat(iterator.next(), equalTo(1));
+        assertThat(iterator.next(), equalTo(2));
+        assertThat(iterator.next(), equalTo(3));
+        assertThat(iterator.hasNext(), equalTo(false));
+
+        var pagedIterator = new PagedIterator<>(endpoint.items());
+        assertThat(pagedIterator.next(), equalTo(1));
+        var nextPage = pagedIterator.nextPage();
+        assertThat(nextPage.size(), equalTo(2));
+        assertThat(iterator.hasNext(), equalTo(false));
+    }
+
+    /**
+     * Test
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
     public void testNextPageError() throws IOException {
         var page = new GitHubPageArrayAdapter<>(new Object[]{}) {
             @Override

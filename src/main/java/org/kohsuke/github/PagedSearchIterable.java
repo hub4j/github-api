@@ -60,14 +60,12 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
     }
 
     @Override
-    PaginatedEndpointItems<? extends GitHubPage<T>, T> items() {
-        // TODO Auto-generated method stub
-        return super.items();
+    PaginatedEndpointItems<? extends SearchResult<T>, T> items() {
+        return new PaginatedEndpointItems<>(pages());
     }
 
     @Override
-    PaginatedEndpointPages<? extends GitHubPage<T>, T> pages() {
-        // TODO Auto-generated method stub
-        return super.pages();
+    PaginatedEndpointPages<? extends SearchResult<T>, T> pages() {
+        return searchPaginatedEndpoint.pages();
     }
 }

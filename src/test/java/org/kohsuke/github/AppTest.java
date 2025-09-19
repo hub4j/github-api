@@ -432,6 +432,18 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
         GHCommit firstCommit = r.iterator().next();
         assertThat(firstCommit.listFiles().toList(), is(not(empty())));
+
+        GHCommitSearchBuilder builder = new GHCommitSearchBuilder(GitHub.offline());
+        GHException e = Assert.assertThrows(GHException.class, () -> builder.list().iterator().next());
+        assertThat(e.getMessage(), equalTo("Failed to retrieve https://api.github.invalid/search/commits?q="));
+
+        // Verify that this item initalizer does not throw when it otherwise would
+        builder.lateBindGHCommit(new GHCommit() {
+            @Override
+            public URL getUrl() {
+                return firstCommit.getUrl();
+            }
+        });
     }
 
     /**

@@ -173,14 +173,7 @@ public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
 
     @Override
     public PagedSearchIterable<GHCommit> list() {
-        return list(item -> {
-            String repoName = getRepoName(item.url);
-            try {
-                GHRepository repo = root().getRepository(repoName);
-                item.wrapUp(repo);
-            } catch (IOException ioe) {
-            }
-        });
+        return list(this::lateBindGHCommit);
     }
 
     /**
@@ -293,5 +286,17 @@ public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
     @Override
     protected String getApiUrl() {
         return "/search/commits";
+    }
+
+    /**
+     * Exposed internally for testing only.
+     */
+    void lateBindGHCommit(GHCommit item) {
+        String repoName = getRepoName(item.getUrl().toString());
+        try {
+            GHRepository repo = root().getRepository(repoName);
+            item.wrapUp(repo);
+        } catch (IOException ioe) {
+        }
     }
 }

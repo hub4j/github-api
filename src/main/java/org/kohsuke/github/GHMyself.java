@@ -113,11 +113,9 @@ public class GHMyself extends GHUser {
      *      app installations accessible to the user access token</a>
      */
     public PagedIterable<GHAppInstallation> getAppInstallations() {
-        return new PagedIterable<>(new PaginatedEndpoint<>(root().getClient(),
-                root().createRequest().withUrlPath(APP_INSTALLATIONS_URL).build(),
-                GHAppInstallationsPage.class,
-                GHAppInstallation.class,
-                null));
+        return root().createRequest()
+                .withUrlPath(APP_INSTALLATIONS_URL)
+                .toIterable(GHAppInstallationsPage.class, GHAppInstallation.class, null);
     }
 
     /**

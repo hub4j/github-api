@@ -77,7 +77,11 @@ public class PaginatedEndpointTest extends AbstractGitHubWireMockTest {
 
         var endpoint = PaginatedEndpoint.fromSinglePage(page, Object.class);
 
-        var iterator = endpoint.iterator();
+        // Removed Iterable<Item> from PaginatedEndpoint for simplicity.
+        // Can be added later if desired, swap in this line to cover iterator() method.
+        // var iterator = endpoint.iterator();
+        var iterator = endpoint.items();
+
         assertThat(iterator.next(), equalTo(1));
         assertThat(iterator.next(), equalTo(2));
         assertThat(iterator.next(), equalTo(3));

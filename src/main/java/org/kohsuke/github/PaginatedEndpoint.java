@@ -18,7 +18,7 @@ import javax.annotation.Nonnull;
  * @param <Item>
  *            the type of items on each page
  */
-class PaginatedEndpoint<Page extends GitHubPage<Item>, Item> implements Iterable<Item> {
+class PaginatedEndpoint<Page extends GitHubPage<Item>, Item> {
 
     static class SinglePageEndpoint<P extends GitHubPage<I>, I> extends PaginatedEndpoint<P, I> {
         private final P page;
@@ -79,6 +79,7 @@ class PaginatedEndpoint<Page extends GitHubPage<Item>, Item> implements Iterable
             }
         }
     }
+
     protected final GitHubClient client;
     protected final Consumer<Item> itemInitializer;
 
@@ -119,12 +120,6 @@ class PaginatedEndpoint<Page extends GitHubPage<Item>, Item> implements Iterable
     @Nonnull
     public final PaginatedEndpointItems<Page, Item> items() {
         return new PaginatedEndpointItems<>(this.pages());
-    }
-
-    @Nonnull
-    @Override
-    public final Iterator<Item> iterator() {
-        return this.items();
     }
 
     /**

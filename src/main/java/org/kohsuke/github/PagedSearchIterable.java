@@ -18,7 +18,7 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
 
     private final PaginatedEndpoint<? extends SearchResult<T>, T> searchPaginatedEndpoint;
     /**
-     * Instantiates a new git hub page contents iterable.
+     * Instantiates a new paged search iterable.
      */
     <Result extends SearchResult<T>> PagedSearchIterable(PaginatedEndpoint<Result, T> paginatedEndpoint) {
         super(paginatedEndpoint);

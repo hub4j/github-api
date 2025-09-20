@@ -19,11 +19,12 @@ class GHCommitFileIterable extends PagedIterable<GHCommit.File> {
 
     private static PaginatedEndpoint<GHCommitFilesPage, File> createEndpoint(GHRepository owner,
             String sha,
-            GHCommit.File[] files) {
+            List<GHCommit.File> files) {
         PaginatedEndpoint<GHCommitFilesPage, File> endpoint;
-        if (files != null && files.length < GH_FILE_LIMIT_PER_COMMIT_PAGE) {
+        if (files != null && files.size() < GH_FILE_LIMIT_PER_COMMIT_PAGE) {
             // create an endpoint that only reads one already loaded page
-            endpoint = PaginatedEndpoint.fromSinglePage(new GHCommitFilesPage(files), GHCommit.File.class);
+            endpoint = PaginatedEndpoint.fromSinglePage(new GHCommitFilesPage(files.toArray(new File[0])),
+                    GHCommit.File.class);
         } else {
             endpoint = owner.root()
                     .createRequest()
@@ -44,7 +45,7 @@ class GHCommitFileIterable extends PagedIterable<GHCommit.File> {
      *            the list of files initially populated
      */
     GHCommitFileIterable(GHRepository owner, String sha, List<GHCommit.File> files) {
-        super(createEndpoint(owner, sha, files != null ? files.toArray(new File[0]) : null));
+        super(createEndpoint(owner, sha, files));
     }
 
     @Override

@@ -36,7 +36,7 @@ class PaginatedEndpointItems<Page extends GitHubPage<Item>, Item> implements Ite
      * hasNext() returns false.
      */
     public Page getCurrentPage() {
-        if (currentPage != null) {
+        if (currentPage == null) {
             peek();
         }
         return currentPage;

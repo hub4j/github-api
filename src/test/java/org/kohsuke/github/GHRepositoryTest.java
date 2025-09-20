@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.common.collect.Sets;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.io.IOUtils;
+import org.assertj.core.util.Objects;
 import org.junit.Assert;
 import org.junit.Test;
 import org.kohsuke.github.GHCheckRun.Conclusion;
@@ -321,6 +322,12 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         PagedIterable<GHCheckRun> checkRuns = gitHub.getOrganization("hub4j")
                 .getRepository("github-api")
                 .getCheckRuns("78b9ff49d47daaa158eb373c4e2e040f739df8b9");
+
+        var endpointItems = checkRuns.withPageSize(2).items();
+        var currentPage = endpointItems.getCurrentPage();
+        var firstPage = Objects.castIfBelongsToType(currentPage, GHCheckRunsPage.class);
+        assertThat(firstPage.getTotalCount(), equalTo(8));
+
         // Check if the paging works correctly
         assertThat(checkRuns.withPageSize(2).items().nextPage(), hasSize(2));
 

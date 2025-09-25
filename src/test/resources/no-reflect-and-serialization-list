@@ -84,3 +84,8 @@ org.kohsuke.github.internal.Previews
 org.kohsuke.github.EnterpriseManagedSupport
 org.kohsuke.github.GHAutolinkBuilder
 org.kohsuke.github.GHRepositoryForkBuilder
+org.kohsuke.github.authorization.DeviceFlowGithubAppCredentialListener
+org.kohsuke.github.authorization.DeviceFlowGithubAppInputManager
+org.kohsuke.github.authorization.LoggerDeviceFlowGithubAppInputManager
+org.kohsuke.github.DeviceFlowGithubAppAuthorizationProvider
+org.kohsuke.github.DeviceFlowGithubAppAuthorizationProvider$State

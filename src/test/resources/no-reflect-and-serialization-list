@@ -89,3 +89,4 @@ org.kohsuke.github.authorization.DeviceFlowGithubAppInputManager
 org.kohsuke.github.authorization.LoggerDeviceFlowGithubAppInputManager
 org.kohsuke.github.DeviceFlowGithubAppAuthorizationProvider
 org.kohsuke.github.DeviceFlowGithubAppAuthorizationProvider$State
+org.kohsuke.github.DeviceFlowGithubAppAuthorizationProvider$1

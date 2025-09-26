@@ -8,6 +8,13 @@ import java.util.logging.Logger;
 public class LoggerDeviceFlowGithubAppInputManager implements DeviceFlowGithubAppInputManager {
     private static final Logger LOGGER = Logger.getLogger(LoggerDeviceFlowGithubAppInputManager.class.getName());
 
+    /**
+     * Default constructor for LoggerDeviceFlowGithubAppInputManager.
+     */
+    public LoggerDeviceFlowGithubAppInputManager() {
+        // empty
+    }
+
     @Override
     public void handleVerificationCodeFlow(String verificationUri, String userCode) {
         LOGGER.info("Please go to " + verificationUri + " and enter the code: " + userCode);

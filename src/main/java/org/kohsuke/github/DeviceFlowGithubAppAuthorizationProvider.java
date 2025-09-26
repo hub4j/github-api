@@ -218,7 +218,7 @@ public class DeviceFlowGithubAppAuthorizationProvider extends GitHubInteractiveO
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public String getEncodedAuthorization() throws IOException {

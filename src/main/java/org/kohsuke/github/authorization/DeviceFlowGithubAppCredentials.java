@@ -24,6 +24,13 @@ public class DeviceFlowGithubAppCredentials {
     private String tokenType;
 
     /**
+     * Default constructor for creating an empty credentials object.
+     */
+    public DeviceFlowGithubAppCredentials() {
+        // empty
+    }
+
+    /**
      * Gets the access token.
      *
      * @return The access token.

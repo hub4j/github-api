@@ -57,7 +57,7 @@ public enum GHEvent {
     /** The download. */
     DOWNLOAD,
 
-    /** Dynamic events like Dependabot auto-trigger/run  */
+    /** Dynamic events like Dependabot autotriggered.  */
     DYNAMIC,
 
     /** The follow. */

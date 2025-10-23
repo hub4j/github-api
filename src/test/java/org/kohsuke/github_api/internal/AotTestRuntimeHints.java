@@ -1,4 +1,4 @@
-package org.kohsuke.github_api.v2;
+package org.kohsuke.github_api.internal;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.aot.hint.MemberCategory;
@@ -42,7 +42,7 @@ public class AotTestRuntimeHints implements RuntimeHintsRegistrar {
             List<Resource> githubClasses = Arrays.asList(
                     pathMatchingResourcePatternResolver.getResources(LOCATION_PATTERN_OF_ORG_KOHSUKE_GITHUB_CLASSES));
             List<Resource> githubV2Classes = Arrays.asList(
-                    pathMatchingResourcePatternResolver.getResources(LOCATION_PATTERN_OF_ORG_KOHSUKE_GITHUB_CLASSES));
+                    pathMatchingResourcePatternResolver.getResources(LOCATION_PATTERN_OF_ORG_KOHSUKE_GITHUB_V2_CLASSES));
 
             List<Resource> list = Stream.concat(githubClasses.stream(), githubV2Classes.stream())
                     .collect(Collectors.toList());

@@ -50,14 +50,14 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
 class GitHubClient {
 
     private static class GHApiInfo {
-        private String rate_limit_url;
+        private String rateLimitUrl;
 
         void check(String apiUrl) throws IOException {
-            if (rate_limit_url == null)
+            if (rateLimitUrl == null)
                 throw new IOException(apiUrl + " doesn't look like GitHub API URL");
 
             // make sure that the URL is legitimate
-            new URL(rate_limit_url);
+            new URL(rateLimitUrl);
         }
     }
 
@@ -104,9 +104,9 @@ class GitHubClient {
     private static final int DEFAULT_CONNECTION_ERROR_RETRIES = 2;
 
     /** The Constant DEFAULT_MAXIMUM_RETRY_TIMEOUT_MILLIS. */
-    private static final int DEFAULT_MAXIMUM_RETRY_MILLIS = DEFAULT_MINIMUM_RETRY_MILLIS;
+    private static final int DEFAULT_MAXIMUM_RETRY_MILLIS = 100;
     /** The Constant DEFAULT_MINIMUM_RETRY_TIMEOUT_MILLIS. */
-    private static final int DEFAULT_MINIMUM_RETRY_MILLIS = 100;
+    private static final int DEFAULT_MINIMUM_RETRY_MILLIS = DEFAULT_MAXIMUM_RETRY_MILLIS;
     private static final Logger LOGGER = Logger.getLogger(GitHubClient.class.getName());
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -119,7 +119,7 @@ class GitHubClient {
         MAPPER.setVisibility(new VisibilityChecker.Std(NONE, NONE, NONE, NONE, ANY));
         MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         MAPPER.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true);
-        MAPPER.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+        MAPPER.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
     }
 
     @Nonnull

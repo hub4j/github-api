@@ -74,7 +74,7 @@
     <jjwt.suite.version>0.12.6</jjwt.suite.version>
     <!-- This project was registered before 2021, so it uses the old server. -->
     <nexus.serverUrl>https://ossrh-staging-api.central.sonatype.com</nexus.serverUrl>
-    <okhttp3.version>4.12.0</okhttp3.version>
+    <okhttp3.version>5.2.1</okhttp3.version>
     <okio.version>3.16.0</okio.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spotbugs-maven-plugin.failOnError>true</spotbugs-maven-plugin.failOnError>

@@ -11,8 +11,8 @@ import java.io.IOException;
  * @see GitHub#listMarketplacePlans()
  */
 public class GHMarketplacePlanForAccountBuilder extends GitHubInteractiveObject {
-    private final Requester builder;
     private final long accountId;
+    private final Requester builder;
 
     /**
      * Instantiates a new GH marketplace list account builder.

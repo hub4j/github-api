@@ -1,12 +1,11 @@
 package org.kohsuke.github_api.v2;
 
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import org.kohsuke.github_api.v2.internal.EnumUtils;
 
 import java.net.URL;
 import java.time.Instant;
 import java.util.Date;
-
-import org.kohsuke.github_api.v2.internal.EnumUtils;
 
 // TODO: Auto-generated Javadoc
 /**

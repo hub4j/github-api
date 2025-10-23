@@ -4,13 +4,13 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github_api.v2.internal.EnumUtils;
 
-import static org.kohsuke.github_api.v2.GitHubRequest.transformEnum;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
 import javax.annotation.Nonnull;
+
+import static org.kohsuke.github_api.v2.GitHubRequest.transformEnum;
 
 // TODO: Auto-generated Javadoc
 /**

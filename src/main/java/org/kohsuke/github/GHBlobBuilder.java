@@ -23,19 +23,6 @@ public class GHBlobBuilder {
     }
 
     /**
-     * Configures a blob with the specified text {@code content}.
-     *
-     * @param content
-     *            string text of the blob
-     * @return a GHBlobBuilder
-     */
-    public GHBlobBuilder textContent(String content) {
-        req.with("content", content);
-        req.with("encoding", "utf-8");
-        return this;
-    }
-
-    /**
      * Configures a blob with the specified binary {@code content}.
      *
      * @param content
@@ -49,10 +36,6 @@ public class GHBlobBuilder {
         return this;
     }
 
-    private String getApiTail() {
-        return String.format("/repos/%s/%s/git/blobs", repo.getOwnerName(), repo.getName());
-    }
-
     /**
      * Creates a blob based on the parameters specified thus far.
      *
@@ -62,5 +45,22 @@ public class GHBlobBuilder {
      */
     public GHBlob create() throws IOException {
         return req.method("POST").withUrlPath(getApiTail()).fetch(GHBlob.class);
+    }
+
+    /**
+     * Configures a blob with the specified text {@code content}.
+     *
+     * @param content
+     *            string text of the blob
+     * @return a GHBlobBuilder
+     */
+    public GHBlobBuilder textContent(String content) {
+        req.with("content", content);
+        req.with("encoding", "utf-8");
+        return this;
+    }
+
+    private String getApiTail() {
+        return String.format("/repos/%s/%s/git/blobs", repo.getOwnerName(), repo.getName());
     }
 }

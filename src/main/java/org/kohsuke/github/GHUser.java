@@ -34,27 +34,32 @@ import java.util.*;
  */
 public class GHUser extends GHPerson {
 
+    /** The suspended_at */
+    private String suspendedAt;
+
+    /** The ldap dn. */
+    protected String ldap_dn;
+
     /**
      * Create default GHUser instance
      */
     public GHUser() {
     }
 
-    /** The ldap dn. */
-    protected String ldap_dn;
-
-    /** The suspended_at */
-    private String suspendedAt;
-
     /**
-     * Gets keys.
+     * Equals.
      *
-     * @return the keys
-     * @throws IOException
-     *             the io exception
+     * @param obj
+     *            the obj
+     * @return true, if successful
      */
-    public List<GHKey> getKeys() throws IOException {
-        return root().createRequest().withUrlPath(getApiTailUrl("keys")).toIterable(GHKey[].class, null).toList();
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof GHUser) {
+            GHUser that = (GHUser) obj;
+            return this.login.equals(that.login);
+        }
+        return false;
     }
 
     /**
@@ -68,33 +73,12 @@ public class GHUser extends GHPerson {
     }
 
     /**
-     * Unfollow this user.
+     * Gets the bio.
      *
-     * @throws IOException
-     *             the io exception
+     * @return the bio
      */
-    public void unfollow() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath("/user/following/" + login).send();
-    }
-
-    /**
-     * Lists the users that this user is following.
-     *
-     * @return the follows
-     * @throws IOException
-     *             the io exception
-     */
-    public GHPersonSet<GHUser> getFollows() throws IOException {
-        return new GHPersonSet<GHUser>(listFollows().toList());
-    }
-
-    /**
-     * Lists the users that this user is following.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable<GHUser> listFollows() {
-        return listUser("following");
+    public String getBio() {
+        return bio;
     }
 
     /**
@@ -109,51 +93,91 @@ public class GHUser extends GHPerson {
     }
 
     /**
-     * Lists the users who are following this user.
+     * Lists the users that this user is following.
      *
-     * @return the paged iterable
+     * @return the follows
+     * @throws IOException
+     *             the io exception
      */
-    public PagedIterable<GHUser> listFollowers() {
-        return listUser("followers");
-    }
-
-    private PagedIterable<GHUser> listUser(final String suffix) {
-        return root().createRequest().withUrlPath(getApiTailUrl(suffix)).toIterable(GHUser[].class, null);
+    public GHPersonSet<GHUser> getFollows() throws IOException {
+        return new GHPersonSet<GHUser>(listFollows().toList());
     }
 
     /**
-     * Lists all the subscribed (aka watched) repositories.
-     * <p>
-     * https://developer.github.com/v3/activity/watching/
+     * Gets keys.
      *
-     * @return the paged iterable
+     * @return the keys
+     * @throws IOException
+     *             the io exception
      */
-    public PagedIterable<GHRepository> listSubscriptions() {
-        return listRepositories("subscriptions");
+    public List<GHKey> getKeys() throws IOException {
+        return root().createRequest().withUrlPath(getApiTailUrl("keys")).toIterable(GHKey[].class, null).toList();
     }
 
     /**
-     * Lists all the repositories that this user has starred.
+     * Gets LDAP information for user.
      *
-     * @return the paged iterable
+     * @return The LDAP information
+     * @throws IOException
+     *             the io exception
+     * @see <a href=
+     *      "https://docs.github.com/en/enterprise-server@3.3/admin/identity-and-access-management/authenticating-users-for-your-github-enterprise-server-instance/using-ldap">Github
+     *      LDAP</a>
      */
-    public PagedIterable<GHRepository> listStarredRepositories() {
-        return listRepositories("starred");
+    public Optional<String> getLdapDn() throws IOException {
+        super.populate();
+        return Optional.ofNullable(ldap_dn);
     }
 
     /**
-     * Lists all the projects.
-     * <p>
-     * https://docs.github.com/en/rest/reference/projects#list-user-projects
+     * Gets the organization that this user belongs to publicly.
      *
-     * @return the paged iterable
+     * @return the organizations
+     * @throws IOException
+     *             the io exception
      */
-    public PagedIterable<GHProject> listProjects() {
-        return root().createRequest().withUrlPath(getApiTailUrl("projects")).toIterable(GHProject[].class, null);
+    public GHPersonSet<GHOrganization> getOrganizations() throws IOException {
+        GHPersonSet<GHOrganization> orgs = new GHPersonSet<GHOrganization>();
+        Set<String> names = new HashSet<String>();
+        for (GHOrganization o : root().createRequest()
+                .withUrlPath("/users/" + login + "/orgs")
+                .toIterable(GHOrganization[].class, null)
+                .toArray()) {
+            if (names.add(o.getLogin())) // I've seen some duplicates in the data
+                orgs.add(root().getOrganization(o.getLogin()));
+        }
+        return orgs;
     }
 
-    private PagedIterable<GHRepository> listRepositories(final String suffix) {
-        return root().createRequest().withUrlPath(getApiTailUrl(suffix)).toIterable(GHRepository[].class, null);
+    /**
+     * When was this user suspended?.
+     *
+     * @return updated date
+     * @throws IOException
+     *             on error
+     */
+    public Date getSuspendedAt() throws IOException {
+        super.populate();
+        return GitHubClient.parseDate(suspendedAt);
+    }
+
+    /**
+     * Hash code.
+     *
+     * @return the int
+     */
+    @Override
+    public int hashCode() {
+        return login.hashCode();
+    }
+
+    /**
+     * Returns true if this user is marked as hireable, false otherwise.
+     *
+     * @return if the user is marked as hireable
+     */
+    public boolean isHireable() {
+        return hireable;
     }
 
     /**
@@ -190,44 +214,6 @@ public class GHUser extends GHPerson {
     }
 
     /**
-     * Returns true if this user is marked as hireable, false otherwise.
-     *
-     * @return if the user is marked as hireable
-     */
-    public boolean isHireable() {
-        return hireable;
-    }
-
-    /**
-     * Gets the bio.
-     *
-     * @return the bio
-     */
-    public String getBio() {
-        return bio;
-    }
-
-    /**
-     * Gets the organization that this user belongs to publicly.
-     *
-     * @return the organizations
-     * @throws IOException
-     *             the io exception
-     */
-    public GHPersonSet<GHOrganization> getOrganizations() throws IOException {
-        GHPersonSet<GHOrganization> orgs = new GHPersonSet<GHOrganization>();
-        Set<String> names = new HashSet<String>();
-        for (GHOrganization o : root().createRequest()
-                .withUrlPath("/users/" + login + "/orgs")
-                .toIterable(GHOrganization[].class, null)
-                .toArray()) {
-            if (names.add(o.getLogin())) // I've seen some duplicates in the data
-                orgs.add(root().getOrganization(o.getLogin()));
-        }
-        return orgs;
-    }
-
-    /**
      * Lists events performed by a user (this includes private events if the caller is authenticated.
      *
      * @return the paged iterable
@@ -238,6 +224,24 @@ public class GHUser extends GHPerson {
         return root().createRequest()
                 .withUrlPath(String.format("/users/%s/events", login))
                 .toIterable(GHEventInfo[].class, null);
+    }
+
+    /**
+     * Lists the users who are following this user.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable<GHUser> listFollowers() {
+        return listUser("followers");
+    }
+
+    /**
+     * Lists the users that this user is following.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable<GHUser> listFollows() {
+        return listUser("following");
     }
 
     /**
@@ -252,56 +256,52 @@ public class GHUser extends GHPerson {
     }
 
     /**
-     * Gets LDAP information for user.
+     * Lists all the projects.
+     * <p>
+     * https://docs.github.com/en/rest/reference/projects#list-user-projects
      *
-     * @return The LDAP information
+     * @return the paged iterable
+     */
+    public PagedIterable<GHProject> listProjects() {
+        return root().createRequest().withUrlPath(getApiTailUrl("projects")).toIterable(GHProject[].class, null);
+    }
+
+    /**
+     * Lists all the repositories that this user has starred.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable<GHRepository> listStarredRepositories() {
+        return listRepositories("starred");
+    }
+
+    /**
+     * Lists all the subscribed (aka watched) repositories.
+     * <p>
+     * https://developer.github.com/v3/activity/watching/
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable<GHRepository> listSubscriptions() {
+        return listRepositories("subscriptions");
+    }
+
+    /**
+     * Unfollow this user.
+     *
      * @throws IOException
      *             the io exception
-     * @see <a href=
-     *      "https://docs.github.com/en/enterprise-server@3.3/admin/identity-and-access-management/authenticating-users-for-your-github-enterprise-server-instance/using-ldap">Github
-     *      LDAP</a>
      */
-    public Optional<String> getLdapDn() throws IOException {
-        super.populate();
-        return Optional.ofNullable(ldap_dn);
+    public void unfollow() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath("/user/following/" + login).send();
     }
 
-    /**
-     * When was this user suspended?.
-     *
-     * @return updated date
-     * @throws IOException
-     *             on error
-     */
-    public Date getSuspendedAt() throws IOException {
-        super.populate();
-        return GitHubClient.parseDate(suspendedAt);
+    private PagedIterable<GHRepository> listRepositories(final String suffix) {
+        return root().createRequest().withUrlPath(getApiTailUrl(suffix)).toIterable(GHRepository[].class, null);
     }
 
-    /**
-     * Hash code.
-     *
-     * @return the int
-     */
-    @Override
-    public int hashCode() {
-        return login.hashCode();
-    }
-
-    /**
-     * Equals.
-     *
-     * @param obj
-     *            the obj
-     * @return true, if successful
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof GHUser) {
-            GHUser that = (GHUser) obj;
-            return this.login.equals(that.login);
-        }
-        return false;
+    private PagedIterable<GHUser> listUser(final String suffix) {
+        return root().createRequest().withUrlPath(getApiTailUrl(suffix)).toIterable(GHUser[].class, null);
     }
 
     /**

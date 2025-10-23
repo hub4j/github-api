@@ -12,7 +12,6 @@ import org.kohsuke.github_api.v2.AbstractGitHubWireMockTest;
 import org.kohsuke.github_api.v2.GHRateLimit;
 import org.kohsuke.github_api.v2.GHRepository;
 import org.kohsuke.github_api.v2.GitHub;
-import org.kohsuke.github_api.v2.extras.okhttp3.OkHttpGitHubConnector;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,7 +1,6 @@
 package org.kohsuke.github_api.v2.internal;
 
 import org.junit.Test;
-import org.kohsuke.github_api.v2.internal.EnumUtils;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

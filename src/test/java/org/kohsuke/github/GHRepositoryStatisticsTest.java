@@ -14,12 +14,6 @@ import static org.hamcrest.Matchers.equalTo;
  */
 public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
 
-    /**
-     * Create default GHRepositoryStatisticsTest instance
-     */
-    public GHRepositoryStatisticsTest() {
-    }
-
     /** The max iterations. */
     public static int MAX_ITERATIONS = 3;
 
@@ -27,7 +21,13 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
     public static int SLEEP_INTERVAL = 5000;
 
     /**
-     * Test contributor stats.
+     * Create default GHRepositoryStatisticsTest instance
+     */
+    public GHRepositoryStatisticsTest() {
+    }
+
+    /**
+     * Test code frequency.
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
@@ -35,10 +35,19 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
      *             the interrupted exception
      */
     @Test
-    public void testContributorStats() throws IOException, InterruptedException {
+    @SuppressWarnings("SleepWhileInLoop")
+    public void testCodeFrequency() throws IOException, InterruptedException {
         // get the statistics
-        PagedIterable<GHRepositoryStatistics.ContributorStats> stats = getRepository().getStatistics()
-                .getContributorStats();
+        List<GHRepositoryStatistics.CodeFrequency> stats = null;
+
+        for (int i = 0; i < MAX_ITERATIONS; i += 1) {
+            stats = getRepository().getStatistics().getCodeFrequency();
+            if (stats == null) {
+                Thread.sleep(SLEEP_INTERVAL);
+            } else {
+                break;
+            }
+        }
 
         // check that the statistics were eventually retrieved
         if (stats == null) {
@@ -47,40 +56,19 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
         }
 
         // check the statistics are accurate
-        List<GHRepositoryStatistics.ContributorStats> list = stats.toList();
-        assertThat(list.size(), equalTo(99));
-
-        // find a particular developer
-        // TODO: Add an accessor method for this instead of having use a loop.
-        boolean developerFound = false;
-        final String authorLogin = "kohsuke";
-        for (GHRepositoryStatistics.ContributorStats statsForAuthor : list) {
-            if (authorLogin.equals(statsForAuthor.getAuthor().getLogin())) {
-                assertThat(statsForAuthor.getTotal(), equalTo(715));
-                assertThat(statsForAuthor.toString(), equalTo("kohsuke made 715 contributions over 494 weeks"));
-
-                List<GHRepositoryStatistics.ContributorStats.Week> weeks = statsForAuthor.getWeeks();
-                assertThat(weeks.size(), equalTo(494));
-
-                try {
-                    // check a particular week
-                    // TODO: Maybe add a convenience method to get the week
-                    // containing a certain date (Java.Util.Date).
-                    GHRepositoryStatistics.ContributorStats.Week week = statsForAuthor.getWeek(1541289600);
-                    assertThat(week.getNumberOfAdditions(), equalTo(63));
-                    assertThat(week.getNumberOfDeletions(), equalTo(56));
-                    assertThat(week.getNumberOfCommits(), equalTo(5));
-                    assertThat(week.toString(),
-                            equalTo("Week starting 1541289600 - Additions: 63, Deletions: 56, Commits: 5"));
-                } catch (NoSuchElementException e) {
-                    fail("Did not find week 1546128000");
-                }
-                developerFound = true;
+        // TODO: Perhaps return this as a map with the timestamp as the key?
+        // Either that or wrap in an object with accessor methods.
+        Boolean foundWeek = false;
+        for (GHRepositoryStatistics.CodeFrequency item : stats) {
+            if (item.getWeekTimestamp() == 1535241600) {
+                assertThat(item.getAdditions(), equalTo(185L));
+                assertThat(item.getDeletions(), equalTo(-243L));
+                assertThat(item.toString(), equalTo("Week starting 1535241600 has 185 additions and 243 deletions"));
+                foundWeek = true;
                 break;
             }
         }
-
-        assertThat("Did not find author " + authorLogin, developerFound);
+        assertThat("Could not find week starting 1535241600", foundWeek);
     }
 
     /**
@@ -137,7 +125,7 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test code frequency.
+     * Test contributor stats.
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
@@ -145,19 +133,10 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
      *             the interrupted exception
      */
     @Test
-    @SuppressWarnings("SleepWhileInLoop")
-    public void testCodeFrequency() throws IOException, InterruptedException {
+    public void testContributorStats() throws IOException, InterruptedException {
         // get the statistics
-        List<GHRepositoryStatistics.CodeFrequency> stats = null;
-
-        for (int i = 0; i < MAX_ITERATIONS; i += 1) {
-            stats = getRepository().getStatistics().getCodeFrequency();
-            if (stats == null) {
-                Thread.sleep(SLEEP_INTERVAL);
-            } else {
-                break;
-            }
-        }
+        PagedIterable<GHRepositoryStatistics.ContributorStats> stats = getRepository().getStatistics()
+                .getContributorStats();
 
         // check that the statistics were eventually retrieved
         if (stats == null) {
@@ -166,19 +145,40 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
         }
 
         // check the statistics are accurate
-        // TODO: Perhaps return this as a map with the timestamp as the key?
-        // Either that or wrap in an object with accessor methods.
-        Boolean foundWeek = false;
-        for (GHRepositoryStatistics.CodeFrequency item : stats) {
-            if (item.getWeekTimestamp() == 1535241600) {
-                assertThat(item.getAdditions(), equalTo(185L));
-                assertThat(item.getDeletions(), equalTo(-243L));
-                assertThat(item.toString(), equalTo("Week starting 1535241600 has 185 additions and 243 deletions"));
-                foundWeek = true;
+        List<GHRepositoryStatistics.ContributorStats> list = stats.toList();
+        assertThat(list.size(), equalTo(99));
+
+        // find a particular developer
+        // TODO: Add an accessor method for this instead of having use a loop.
+        boolean developerFound = false;
+        final String authorLogin = "kohsuke";
+        for (GHRepositoryStatistics.ContributorStats statsForAuthor : list) {
+            if (authorLogin.equals(statsForAuthor.getAuthor().getLogin())) {
+                assertThat(statsForAuthor.getTotal(), equalTo(715));
+                assertThat(statsForAuthor.toString(), equalTo("kohsuke made 715 contributions over 494 weeks"));
+
+                List<GHRepositoryStatistics.ContributorStats.Week> weeks = statsForAuthor.getWeeks();
+                assertThat(weeks.size(), equalTo(494));
+
+                try {
+                    // check a particular week
+                    // TODO: Maybe add a convenience method to get the week
+                    // containing a certain date (Java.Util.Date).
+                    GHRepositoryStatistics.ContributorStats.Week week = statsForAuthor.getWeek(1541289600);
+                    assertThat(week.getNumberOfAdditions(), equalTo(63));
+                    assertThat(week.getNumberOfDeletions(), equalTo(56));
+                    assertThat(week.getNumberOfCommits(), equalTo(5));
+                    assertThat(week.toString(),
+                            equalTo("Week starting 1541289600 - Additions: 63, Deletions: 56, Commits: 5"));
+                } catch (NoSuchElementException e) {
+                    fail("Did not find week 1546128000");
+                }
+                developerFound = true;
                 break;
             }
         }
-        assertThat("Could not find week starting 1535241600", foundWeek);
+
+        assertThat("Did not find author " + authorLogin, developerFound);
     }
 
     /**
@@ -263,6 +263,10 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
         assertThat("Hour 10 for Day 2 not found.", hourFound);
     }
 
+    private GHRepository getRepository(GitHub gitHub) throws IOException {
+        return gitHub.getOrganization(GITHUB_API_TEST_ORG).getRepository("github-api");
+    }
+
     /**
      * Gets the repository.
      *
@@ -272,9 +276,5 @@ public class GHRepositoryStatisticsTest extends AbstractGitHubWireMockTest {
      */
     protected GHRepository getRepository() throws IOException {
         return getRepository(gitHub);
-    }
-
-    private GHRepository getRepository(GitHub gitHub) throws IOException {
-        return gitHub.getOrganization(GITHUB_API_TEST_ORG).getRepository("github-api");
     }
 }

@@ -1,5 +1,7 @@
 package org.kohsuke.github_api.v2;
 
+import org.kohsuke.github_api.v2.connector.GitHubConnectorResponse;
+
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.time.Duration;
@@ -8,8 +10,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 import javax.annotation.Nonnull;
-
-import org.kohsuke.github_api.v2.connector.GitHubConnectorResponse;
 
 import static java.net.HttpURLConnection.HTTP_FORBIDDEN;
 

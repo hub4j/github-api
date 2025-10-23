@@ -3,10 +3,6 @@ package org.kohsuke.github_api.v2;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHIOException;
-import org.kohsuke.github_api.v2.GitHubAbuseLimitHandler;
-import org.kohsuke.github_api.v2.GitHubRateLimitHandler;
-import org.kohsuke.github_api.v2.HttpException;
 import org.kohsuke.github_api.v2.connector.GitHubConnectorResponse;
 
 import java.io.IOException;

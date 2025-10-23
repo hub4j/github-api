@@ -1,10 +1,9 @@
 package org.kohsuke.github_api.v2;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github_api.v2.GHRepository.GHRepoPermission;
 import org.kohsuke.github_api.v2.GHTeam.Privacy;
 import org.kohsuke.github_api.v2.internal.EnumUtils;
-
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * Changes made to a team.

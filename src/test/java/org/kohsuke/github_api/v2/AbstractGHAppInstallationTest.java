@@ -3,9 +3,6 @@ package org.kohsuke.github_api.v2;
 import com.google.common.collect.ImmutableSet;
 import io.jsonwebtoken.Jwts;
 import org.apache.commons.io.IOUtils;
-import org.kohsuke.github_api.v2.GHApp;
-import org.kohsuke.github_api.v2.GHAppInstallation;
-import org.kohsuke.github_api.v2.GitHub;
 import org.kohsuke.github_api.v2.authorization.AuthorizationProvider;
 import org.kohsuke.github_api.v2.extras.authorization.JWTTokenProvider;
 

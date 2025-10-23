@@ -2,13 +2,6 @@ package org.kohsuke.github_api.v2;
 
 import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHRepository;
-import org.kohsuke.github_api.v2.GHRepositoryCloneTraffic;
-import org.kohsuke.github_api.v2.GHRepositoryTraffic;
-import org.kohsuke.github_api.v2.GHRepositoryViewTraffic;
-import org.kohsuke.github_api.v2.GitHub;
-import org.kohsuke.github_api.v2.GitHubClient;
-import org.kohsuke.github_api.v2.HttpException;
 import org.kohsuke.github_api.v2.GHRepositoryTraffic.DailyInfo;
 
 import java.io.IOException;

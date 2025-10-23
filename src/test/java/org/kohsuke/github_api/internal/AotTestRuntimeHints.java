@@ -1,4 +1,4 @@
-package org.kohsuke.github;
+package org.kohsuke.github_api.v2;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.aot.hint.MemberCategory;
@@ -13,18 +13,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
- * Gets all classes in the org/kohsuke/github package (and subpackages) and register them for the AOT reflection /
- * serialization.
+ * Gets all classes in the org.kohsuke.github_api.v2 package (and subpackages) and register them for the AOT reflection
+ * / serialization.
  */
 public class AotTestRuntimeHints implements RuntimeHintsRegistrar {
-
-    private static final Logger LOGGER = Logger.getLogger(AotTestRuntimeHints.class.getName());
 
     private static final String CLASSPATH_IDENTIFIER = "/target/classes";
 
     private static final String LOCATION_PATTERN_OF_ORG_KOHSUKE_GITHUB_CLASSES = "classpath*:org/kohsuke/github/**/*.class";
+    private static final String LOCATION_PATTERN_OF_ORG_KOHSUKE_GITHUB_V2_CLASSES = "classpath*:org/kohsuke/github_api/v2/**/*.class";
+
+    private static final Logger LOGGER = Logger.getLogger(AotTestRuntimeHints.class.getName());
 
     /**
      * Default constructor.
@@ -36,8 +39,14 @@ public class AotTestRuntimeHints implements RuntimeHintsRegistrar {
     public void registerHints(@NotNull RuntimeHints hints, ClassLoader classLoader) {
         try {
             PathMatchingResourcePatternResolver pathMatchingResourcePatternResolver = new PathMatchingResourcePatternResolver();
-            List<Resource> list = Arrays.asList(
+            List<Resource> githubClasses = Arrays.asList(
                     pathMatchingResourcePatternResolver.getResources(LOCATION_PATTERN_OF_ORG_KOHSUKE_GITHUB_CLASSES));
+            List<Resource> githubV2Classes = Arrays.asList(
+                    pathMatchingResourcePatternResolver.getResources(LOCATION_PATTERN_OF_ORG_KOHSUKE_GITHUB_CLASSES));
+
+            List<Resource> list = Stream.concat(githubClasses.stream(), githubV2Classes.stream())
+                    .collect(Collectors.toList());
+
             list.forEach(resource -> {
                 try {
                     String resourceUriString = resource.getURI().toASCIIString();

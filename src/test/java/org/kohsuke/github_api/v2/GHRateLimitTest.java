@@ -4,14 +4,6 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHDirection;
-import org.kohsuke.github_api.v2.GHRateLimit;
-import org.kohsuke.github_api.v2.GHRepository;
-import org.kohsuke.github_api.v2.GHRepositorySearchBuilder;
-import org.kohsuke.github_api.v2.GitHub;
-import org.kohsuke.github_api.v2.HttpException;
-import org.kohsuke.github_api.v2.PagedSearchIterable;
-import org.kohsuke.github_api.v2.RateLimitTarget;
 
 import java.io.IOException;
 import java.time.Duration;

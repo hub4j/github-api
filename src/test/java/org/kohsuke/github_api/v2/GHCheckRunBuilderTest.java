@@ -26,11 +26,6 @@ package org.kohsuke.github_api.v2;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHCheckRun;
-import org.kohsuke.github_api.v2.GHCheckRunBuilder;
-import org.kohsuke.github_api.v2.GHException;
-import org.kohsuke.github_api.v2.GitHub;
-import org.kohsuke.github_api.v2.HttpException;
 import org.kohsuke.github_api.v2.GHCheckRun.Status;
 
 import java.io.IOException;

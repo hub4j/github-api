@@ -1,7 +1,6 @@
 package org.kohsuke.github_api.v2;
 
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHOrganization;
 
 import static org.hamcrest.Matchers.*;
 

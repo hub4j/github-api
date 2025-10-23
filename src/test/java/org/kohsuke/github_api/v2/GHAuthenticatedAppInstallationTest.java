@@ -1,9 +1,6 @@
 package org.kohsuke.github_api.v2;
 
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHAuthenticatedAppInstallation;
-import org.kohsuke.github_api.v2.GHRepository;
-import org.kohsuke.github_api.v2.GitHubBuilder;
 import org.kohsuke.github_api.v2.authorization.AppInstallationAuthorizationProvider;
 
 import java.io.IOException;

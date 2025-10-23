@@ -18,12 +18,6 @@ import java.util.stream.Collectors;
 public class GHMyself extends GHUser {
 
     /**
-     * Create default GHMyself instance
-     */
-    public GHMyself() {
-    }
-
-    /**
      * Type of repositories returned during listing.
      */
     public enum RepositoryListFilter {
@@ -31,72 +25,23 @@ public class GHMyself extends GHUser {
         /** All public and private repositories that current user has access or collaborates to. */
         ALL,
 
+        /** Public and private repositories that current user is a member. */
+        MEMBER,
+
         /** Public and private repositories owned by current user. */
         OWNER,
-
-        /** Public repositories that current user has access or collaborates to. */
-        PUBLIC,
 
         /** Private repositories that current user has access or collaborates to. */
         PRIVATE,
 
-        /** Public and private repositories that current user is a member. */
-        MEMBER;
+        /** Public repositories that current user has access or collaborates to. */
+        PUBLIC;
     }
 
     /**
-     * Gets emails.
-     *
-     * @return the emails
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@link #listEmails()}
+     * Create default GHMyself instance
      */
-    @Deprecated
-    public List<String> getEmails() throws IOException {
-        return getEmails2().stream().map(email -> email.getEmail()).collect(Collectors.toList());
-    }
-
-    /**
-     * Returns the read-only list of e-mail addresses configured for you.
-     * <p>
-     * This corresponds to the stuff you configure in https://github.com/settings/emails, and not to be confused with
-     * {@link #getEmail()} that shows your public e-mail address set in https://github.com/settings/profile
-     *
-     * @return Always non-null.
-     * @throws IOException
-     *             the io exception
-     * @deprecated Use {@link #listEmails()}
-     */
-    @Deprecated
-    public List<GHEmail> getEmails2() throws IOException {
-        return listEmails().toList();
-    }
-
-    /**
-     * Returns the read-only list of e-mail addresses configured for you.
-     * <p>
-     * This corresponds to the stuff you configure in https://github.com/settings/emails, and not to be confused with
-     * {@link #getEmail()} that shows your public e-mail address set in https://github.com/settings/profile
-     *
-     * @return Always non-null.
-     */
-    public PagedIterable<GHEmail> listEmails() {
-        return root().createRequest().withUrlPath("/user/emails").toIterable(GHEmail[].class, null);
-    }
-
-    /**
-     * Returns the read-only list of all the public keys of the current user.
-     * <p>
-     * NOTE: When using OAuth authentication, the READ/WRITE User scope is required by the GitHub APIs, otherwise you
-     * will get a 404 NOT FOUND.
-     *
-     * @return Always non-null.
-     * @throws IOException
-     *             the io exception
-     */
-    public List<GHKey> getPublicKeys() throws IOException {
-        return root().createRequest().withUrlPath("/user/keys").toIterable(GHKey[].class, null).toList();
+    public GHMyself() {
     }
 
     /**
@@ -119,23 +64,6 @@ public class GHMyself extends GHUser {
                 .with("title", title)
                 .with("key", key)
                 .fetch(GHKey.class);
-    }
-
-    /**
-     * Returns the read-only list of all the public verified keys of the current user.
-     * <p>
-     * Differently from the getPublicKeys() method, the retrieval of the user's verified public keys does not require
-     * any READ/WRITE OAuth Scope to the user's profile.
-     *
-     * @return Always non-null.
-     * @throws IOException
-     *             the io exception
-     */
-    public List<GHVerifiedKey> getPublicVerifiedKeys() throws IOException {
-        return root().createRequest()
-                .withUrlPath("/users/" + getLogin() + "/keys")
-                .toIterable(GHVerifiedKey[].class, null)
-                .toList();
     }
 
     /**
@@ -172,6 +100,131 @@ public class GHMyself extends GHUser {
     }
 
     /**
+     * Lists installations of your GitHub App that the authenticated user has explicit permission to access. You must
+     * use a user-to-server OAuth access token, created for a user who has authorized your GitHub App, to access this
+     * endpoint.
+     *
+     * @return the paged iterable
+     * @see <a href=
+     *      "https://docs.github.com/en/rest/reference/apps#list-app-installations-accessible-to-the-user-access-token">List
+     *      app installations accessible to the user access token</a>
+     */
+    public PagedIterable<GHAppInstallation> getAppInstallations() {
+        return new GHAppInstallationsIterable(root());
+    }
+
+    /**
+     * Gets emails.
+     *
+     * @return the emails
+     * @throws IOException
+     *             the io exception
+     * @deprecated Use {@link #listEmails()}
+     */
+    @Deprecated
+    public List<String> getEmails() throws IOException {
+        return getEmails2().stream().map(email -> email.getEmail()).collect(Collectors.toList());
+    }
+
+    /**
+     * Returns the read-only list of e-mail addresses configured for you.
+     * <p>
+     * This corresponds to the stuff you configure in https://github.com/settings/emails, and not to be confused with
+     * {@link #getEmail()} that shows your public e-mail address set in https://github.com/settings/profile
+     *
+     * @return Always non-null.
+     * @throws IOException
+     *             the io exception
+     * @deprecated Use {@link #listEmails()}
+     */
+    @Deprecated
+    public List<GHEmail> getEmails2() throws IOException {
+        return listEmails().toList();
+    }
+
+    /**
+     * Gets your membership in a specific organization.
+     *
+     * @param o
+     *            the o
+     * @return the membership
+     * @throws IOException
+     *             the io exception
+     */
+    public GHMembership getMembership(GHOrganization o) throws IOException {
+        return root().createRequest()
+                .withUrlPath("/user/memberships/orgs/" + o.getLogin())
+                .fetch(GHMembership.class)
+                .wrap(root());
+    }
+
+    /**
+     * Returns the read-only list of all the public keys of the current user.
+     * <p>
+     * NOTE: When using OAuth authentication, the READ/WRITE User scope is required by the GitHub APIs, otherwise you
+     * will get a 404 NOT FOUND.
+     *
+     * @return Always non-null.
+     * @throws IOException
+     *             the io exception
+     */
+    public List<GHKey> getPublicKeys() throws IOException {
+        return root().createRequest().withUrlPath("/user/keys").toIterable(GHKey[].class, null).toList();
+    }
+
+    /**
+     * Returns the read-only list of all the public verified keys of the current user.
+     * <p>
+     * Differently from the getPublicKeys() method, the retrieval of the user's verified public keys does not require
+     * any READ/WRITE OAuth Scope to the user's profile.
+     *
+     * @return Always non-null.
+     * @throws IOException
+     *             the io exception
+     */
+    public List<GHVerifiedKey> getPublicVerifiedKeys() throws IOException {
+        return root().createRequest()
+                .withUrlPath("/users/" + getLogin() + "/keys")
+                .toIterable(GHVerifiedKey[].class, null)
+                .toList();
+    }
+
+    /**
+     * Returns the read-only list of e-mail addresses configured for you.
+     * <p>
+     * This corresponds to the stuff you configure in https://github.com/settings/emails, and not to be confused with
+     * {@link #getEmail()} that shows your public e-mail address set in https://github.com/settings/profile
+     *
+     * @return Always non-null.
+     */
+    public PagedIterable<GHEmail> listEmails() {
+        return root().createRequest().withUrlPath("/user/emails").toIterable(GHEmail[].class, null);
+    }
+
+    /**
+     * List your organization memberships.
+     *
+     * @return the paged iterable
+     */
+    public PagedIterable<GHMembership> listOrgMemberships() {
+        return listOrgMemberships(null);
+    }
+
+    /**
+     * List your organization memberships.
+     *
+     * @param state
+     *            Filter by a specific state
+     * @return the paged iterable
+     */
+    public PagedIterable<GHMembership> listOrgMemberships(final GHMembership.State state) {
+        return root().createRequest()
+                .with("state", state)
+                .withUrlPath("/user/memberships/orgs")
+                .toIterable(GHMembership[].class, item -> item.wrap(root()));
+    }
+
+    /**
      * Lists up all repositories this user owns (public and private).
      *
      * Unlike {@link #getAllRepositories()}, this does not wait until all the repositories are returned. Repositories
@@ -202,6 +255,11 @@ public class GHMyself extends GHUser {
         return listRepositories(pageSize, RepositoryListFilter.ALL);
     }
 
+    // public void addEmails(Collection<String> emails) throws IOException {
+    //// new Requester(root,ApiVersion.V3).withCredential().to("/user/emails");
+    // root.retrieveWithAuth3()
+    // }
+
     /**
      * List repositories of a certain type that are accessible by current authenticated user using the specified page
      * size.
@@ -218,63 +276,5 @@ public class GHMyself extends GHUser {
                 .withUrlPath("/user/repos")
                 .toIterable(GHRepository[].class, null)
                 .withPageSize(pageSize);
-    }
-
-    /**
-     * List your organization memberships.
-     *
-     * @return the paged iterable
-     */
-    public PagedIterable<GHMembership> listOrgMemberships() {
-        return listOrgMemberships(null);
-    }
-
-    /**
-     * List your organization memberships.
-     *
-     * @param state
-     *            Filter by a specific state
-     * @return the paged iterable
-     */
-    public PagedIterable<GHMembership> listOrgMemberships(final GHMembership.State state) {
-        return root().createRequest()
-                .with("state", state)
-                .withUrlPath("/user/memberships/orgs")
-                .toIterable(GHMembership[].class, item -> item.wrap(root()));
-    }
-
-    /**
-     * Gets your membership in a specific organization.
-     *
-     * @param o
-     *            the o
-     * @return the membership
-     * @throws IOException
-     *             the io exception
-     */
-    public GHMembership getMembership(GHOrganization o) throws IOException {
-        return root().createRequest()
-                .withUrlPath("/user/memberships/orgs/" + o.getLogin())
-                .fetch(GHMembership.class)
-                .wrap(root());
-    }
-
-    // public void addEmails(Collection<String> emails) throws IOException {
-    //// new Requester(root,ApiVersion.V3).withCredential().to("/user/emails");
-    // root.retrieveWithAuth3()
-    // }
-
-    /**
-     * Lists installations of your GitHub App that the authenticated user has explicit permission to access. You must
-     * use a user-to-server OAuth access token, created for a user who has authorized your GitHub App, to access this
-     * endpoint.
-     *
-     * @return the paged iterable
-     * @see <a href=
-     *      "https://docs.github.com/en/rest/reference/apps#list-app-installations-accessible-to-the-user-access-token">List
-     *      app installations accessible to the user access token</a>
-     */
-    public PagedIterable<GHAppInstallation> getAppInstallations() {
-        return new GHAppInstallationsIterable(root());
     }
 }

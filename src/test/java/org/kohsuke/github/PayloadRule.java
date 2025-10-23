@@ -24,11 +24,11 @@ import javax.annotation.Nonnull;
  */
 public class PayloadRule implements TestRule {
 
-    private final String type;
+    private String resourceName;
 
     private Class<?> testClass;
 
-    private String resourceName;
+    private final String type;
 
     /**
      * Instantiates a new payload rule.
@@ -66,6 +66,22 @@ public class PayloadRule implements TestRule {
     }
 
     /**
+     * As bytes.
+     *
+     * @return the byte[]
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    public byte[] asBytes() throws IOException {
+        InputStream input = asInputStream();
+        try {
+            return IOUtils.toByteArray(input);
+        } finally {
+            IOUtils.closeQuietly(input);
+        }
+    }
+
+    /**
      * As input stream.
      *
      * @return the input stream
@@ -84,59 +100,6 @@ public class PayloadRule implements TestRule {
     }
 
     /**
-     * As bytes.
-     *
-     * @return the byte[]
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    public byte[] asBytes() throws IOException {
-        InputStream input = asInputStream();
-        try {
-            return IOUtils.toByteArray(input);
-        } finally {
-            IOUtils.closeQuietly(input);
-        }
-    }
-
-    /**
-     * As string.
-     *
-     * @param encoding
-     *            the encoding
-     * @return the string
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    public String asString(Charset encoding) throws IOException {
-        return new String(asBytes(), encoding.name());
-    }
-
-    /**
-     * As string.
-     *
-     * @param encoding
-     *            the encoding
-     * @return the string
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    public String asString(String encoding) throws IOException {
-        return new String(asBytes(), encoding);
-    }
-
-    /**
-     * As string.
-     *
-     * @return the string
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    public String asString() throws IOException {
-        return new String(asBytes(), Charset.defaultCharset().name());
-    }
-
-    /**
      * As reader.
      *
      * @return the reader
@@ -145,6 +108,19 @@ public class PayloadRule implements TestRule {
      */
     public Reader asReader() throws FileNotFoundException {
         return new InputStreamReader(asInputStream(), Charset.defaultCharset());
+    }
+
+    /**
+     * As reader.
+     *
+     * @param encoding
+     *            the encoding
+     * @return the reader
+     * @throws FileNotFoundException
+     *             the file not found exception
+     */
+    public Reader asReader(Charset encoding) throws FileNotFoundException {
+        return new InputStreamReader(asInputStream(), encoding);
     }
 
     /**
@@ -175,15 +151,39 @@ public class PayloadRule implements TestRule {
     }
 
     /**
-     * As reader.
+     * As string.
+     *
+     * @return the string
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    public String asString() throws IOException {
+        return new String(asBytes(), Charset.defaultCharset().name());
+    }
+
+    /**
+     * As string.
      *
      * @param encoding
      *            the encoding
-     * @return the reader
-     * @throws FileNotFoundException
-     *             the file not found exception
+     * @return the string
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
-    public Reader asReader(Charset encoding) throws FileNotFoundException {
-        return new InputStreamReader(asInputStream(), encoding);
+    public String asString(Charset encoding) throws IOException {
+        return new String(asBytes(), encoding.name());
+    }
+
+    /**
+     * As string.
+     *
+     * @param encoding
+     *            the encoding
+     * @return the string
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    public String asString(String encoding) throws IOException {
+        return new String(asBytes(), encoding);
     }
 }

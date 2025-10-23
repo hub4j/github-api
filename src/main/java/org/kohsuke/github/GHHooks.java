@@ -14,6 +14,66 @@ import java.util.Map;
  */
 class GHHooks {
 
+    private static class OrgContext extends Context {
+        private final GHOrganization organization;
+
+        private OrgContext(GHOrganization organization) {
+            super(organization.root());
+            this.organization = organization;
+        }
+
+        @Override
+        Class<? extends GHHook> clazz() {
+            return GHOrgHook.class;
+        }
+
+        @Override
+        String collection() {
+            return String.format("/orgs/%s/hooks", organization.getLogin());
+        }
+
+        @Override
+        Class<? extends GHHook[]> collectionClass() {
+            return GHOrgHook[].class;
+        }
+
+        @Override
+        GHHook wrap(GHHook hook) {
+            return ((GHOrgHook) hook).wrap(organization);
+        }
+    }
+
+    private static class RepoContext extends Context {
+        private final GHUser owner;
+        private final GHRepository repository;
+
+        private RepoContext(GHRepository repository, GHUser owner) {
+            super(repository.root());
+            this.repository = repository;
+            this.owner = owner;
+        }
+
+        @Override
+        Class<? extends GHHook> clazz() {
+            return GHRepoHook.class;
+        }
+
+        @Override
+        String collection() {
+            return String.format("/repos/%s/%s/hooks", owner.getLogin(), repository.getName());
+        }
+
+        @Override
+        Class<? extends GHHook[]> collectionClass() {
+            return GHRepoHook[].class;
+        }
+
+        @Override
+        GHHook wrap(GHHook hook) {
+            return ((GHRepoHook) hook).wrap(repository);
+        }
+    }
+
     /**
      * The Class Context.
      */
@@ -21,39 +81,6 @@ class GHHooks {
 
         private Context(GitHub root) {
             super(root);
-        }
-
-        /**
-         * Gets hooks.
-         *
-         * @return the hooks
-         * @throws IOException
-         *             the io exception
-         */
-        public List<GHHook> getHooks() throws IOException {
-
-            // jdk/eclipse bug
-            GHHook[] hookArray = root().createRequest().withUrlPath(collection()).fetch(collectionClass());
-            // requires this
-            // to be on separate line
-            List<GHHook> list = new ArrayList<GHHook>(Arrays.asList(hookArray));
-            for (GHHook h : list)
-                wrap(h);
-            return list;
-        }
-
-        /**
-         * Gets hook.
-         *
-         * @param id
-         *            the id
-         * @return the hook
-         * @throws IOException
-         *             the io exception
-         */
-        public GHHook getHook(int id) throws IOException {
-            GHHook hook = root().createRequest().withUrlPath(collection() + "/" + id).fetch(clazz());
-            return wrap(hook);
         }
 
         /**
@@ -105,6 +132,46 @@ class GHHooks {
         }
 
         /**
+         * Gets hook.
+         *
+         * @param id
+         *            the id
+         * @return the hook
+         * @throws IOException
+         *             the io exception
+         */
+        public GHHook getHook(int id) throws IOException {
+            GHHook hook = root().createRequest().withUrlPath(collection() + "/" + id).fetch(clazz());
+            return wrap(hook);
+        }
+
+        /**
+         * Gets hooks.
+         *
+         * @return the hooks
+         * @throws IOException
+         *             the io exception
+         */
+        public List<GHHook> getHooks() throws IOException {
+
+            // jdk/eclipse bug
+            GHHook[] hookArray = root().createRequest().withUrlPath(collection()).fetch(collectionClass());
+            // requires this
+            // to be on separate line
+            List<GHHook> list = new ArrayList<GHHook>(Arrays.asList(hookArray));
+            for (GHHook h : list)
+                wrap(h);
+            return list;
+        }
+
+        /**
+         * Clazz.
+         *
+         * @return the class<? extends GH hook>
+         */
+        abstract Class<? extends GHHook> clazz();
+
+        /**
          * Collection.
          *
          * @return the string
@@ -119,13 +186,6 @@ class GHHooks {
         abstract Class<? extends GHHook[]> collectionClass();
 
         /**
-         * Clazz.
-         *
-         * @return the class<? extends GH hook>
-         */
-        abstract Class<? extends GHHook> clazz();
-
-        /**
          * Wrap.
          *
          * @param hook
@@ -135,64 +195,15 @@ class GHHooks {
         abstract GHHook wrap(GHHook hook);
     }
 
-    private static class RepoContext extends Context {
-        private final GHRepository repository;
-        private final GHUser owner;
-
-        private RepoContext(GHRepository repository, GHUser owner) {
-            super(repository.root());
-            this.repository = repository;
-            this.owner = owner;
-        }
-
-        @Override
-        String collection() {
-            return String.format("/repos/%s/%s/hooks", owner.getLogin(), repository.getName());
-        }
-
-        @Override
-        Class<? extends GHHook[]> collectionClass() {
-            return GHRepoHook[].class;
-        }
-
-        @Override
-        Class<? extends GHHook> clazz() {
-            return GHRepoHook.class;
-        }
-
-        @Override
-        GHHook wrap(GHHook hook) {
-            return ((GHRepoHook) hook).wrap(repository);
-        }
-    }
-
-    private static class OrgContext extends Context {
-        private final GHOrganization organization;
-
-        private OrgContext(GHOrganization organization) {
-            super(organization.root());
-            this.organization = organization;
-        }
-
-        @Override
-        String collection() {
-            return String.format("/orgs/%s/hooks", organization.getLogin());
-        }
-
-        @Override
-        Class<? extends GHHook[]> collectionClass() {
-            return GHOrgHook[].class;
-        }
-
-        @Override
-        Class<? extends GHHook> clazz() {
-            return GHOrgHook.class;
-        }
-
-        @Override
-        GHHook wrap(GHHook hook) {
-            return ((GHOrgHook) hook).wrap(organization);
-        }
+    /**
+     * Org context.
+     *
+     * @param organization
+     *            the organization
+     * @return the context
+     */
+    static Context orgContext(GHOrganization organization) {
+        return new OrgContext(organization);
     }
 
     /**
@@ -206,16 +217,5 @@ class GHHooks {
      */
     static Context repoContext(GHRepository repository, GHUser owner) {
         return new RepoContext(repository, owner);
-    }
-
-    /**
-     * Org context.
-     *
-     * @param organization
-     *            the organization
-     * @return the context
-     */
-    static Context orgContext(GHOrganization organization) {
-        return new OrgContext(organization);
     }
 }

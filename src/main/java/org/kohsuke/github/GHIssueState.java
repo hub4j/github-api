@@ -32,10 +32,10 @@ package org.kohsuke.github;
  */
 public enum GHIssueState {
 
-    /** The open. */
-    OPEN,
+    /** The all. */
+    ALL,
     /** The closed. */
     CLOSED,
-    /** The all. */
-    ALL
+    /** The open. */
+    OPEN
 }

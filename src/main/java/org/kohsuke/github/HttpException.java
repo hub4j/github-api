@@ -30,6 +30,20 @@ public class HttpException extends GHIOException {
     /**
      * Instantiates a new Http exception.
      *
+     * @param connectorResponse
+     *            the connector response to base this on
+     */
+    public HttpException(GitHubConnectorResponse connectorResponse) {
+        this(GitHubResponse.getBodyAsStringOrNull(connectorResponse),
+                connectorResponse.statusCode(),
+                connectorResponse.header("Status"),
+                connectorResponse.request().url().toString());
+        this.responseHeaderFields = connectorResponse.allHeaders();
+    }
+
+    /**
+     * Instantiates a new Http exception.
+     *
      * @param message
      *            The detail message (which is saved for later retrieval by the {@link #getMessage()} method)
      * @param responseCode
@@ -112,20 +126,6 @@ public class HttpException extends GHIOException {
      */
     public HttpException(int responseCode, String responseMessage, @CheckForNull URL url, Throwable cause) {
         this(responseCode, responseMessage, url == null ? null : url.toString(), cause);
-    }
-
-    /**
-     * Instantiates a new Http exception.
-     *
-     * @param connectorResponse
-     *            the connector response to base this on
-     */
-    public HttpException(GitHubConnectorResponse connectorResponse) {
-        this(GitHubResponse.getBodyAsStringOrNull(connectorResponse),
-                connectorResponse.statusCode(),
-                connectorResponse.header("Status"),
-                connectorResponse.request().url().toString());
-        this.responseHeaderFields = connectorResponse.allHeaders();
     }
 
     /**

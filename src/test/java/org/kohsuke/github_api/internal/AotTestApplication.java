@@ -1,4 +1,4 @@
-package org.kohsuke.github_api.v2;
+package org.kohsuke.github_api.internal;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;

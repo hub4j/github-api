@@ -5,8 +5,8 @@ package org.kohsuke.github;
  * Represents the one page of GHAppInstallations.
  */
 class GHAppInstallationsPage {
-    private int total_count;
     private GHAppInstallation[] installations;
+    private int total_count;
 
     /**
      * Gets the total count.

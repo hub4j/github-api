@@ -3,12 +3,6 @@ package org.kohsuke.github_api.v2;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.Assume;
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHAsset;
-import org.kohsuke.github_api.v2.GHIssue;
-import org.kohsuke.github_api.v2.GHMilestone;
-import org.kohsuke.github_api.v2.GHMyself;
-import org.kohsuke.github_api.v2.GHRelease;
-import org.kohsuke.github_api.v2.GHRepository;
 
 import java.io.File;
 import java.io.FileWriter;

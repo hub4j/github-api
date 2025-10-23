@@ -1,14 +1,6 @@
 package org.kohsuke.github_api.v2;
 
 import org.junit.Test;
-import org.kohsuke.github_api.v2.EnterpriseManagedSupport;
-import org.kohsuke.github_api.v2.GHError;
-import org.kohsuke.github_api.v2.GHException;
-import org.kohsuke.github_api.v2.GHIOException;
-import org.kohsuke.github_api.v2.GHNotExternallyManagedEnterpriseException;
-import org.kohsuke.github_api.v2.GHOrganization;
-import org.kohsuke.github_api.v2.GHTeamCannotBeExternallyManagedException;
-import org.kohsuke.github_api.v2.HttpException;
 
 import java.io.IOException;
 import java.util.Optional;

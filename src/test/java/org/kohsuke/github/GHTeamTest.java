@@ -29,34 +29,72 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test set description.
+     * Adds the remove member.
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
     @Test
-    public void testSetDescription() throws IOException {
-
-        String description = "Updated by API Test";
+    public void addRemoveMember() throws IOException {
         String teamSlug = "dummy-team";
 
-        // Set the description.
         GHTeam team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
-        assertThat(team.getHtmlUrl(), notNullValue());
-        team.setDescription(description);
 
-        // Check that it was set correctly.
-        team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
-        assertThat(team.getDescription(), equalTo(description));
+        List<GHUser> members = team.listMembers().toList();
 
-        description += "Modified";
+        assertThat(members, notNullValue());
+        assertThat("One admin in dummy team", members.size(), equalTo(1));
+        assertThat("Specific user in admin team",
+                members.stream().anyMatch(ghUser -> ghUser.getLogin().equals("bitwiseman")));
 
-        // Set the description.
-        team.setDescription(description);
+        GHUser user = gitHub.getUser("gsmet");
 
-        // Check that it was set correctly.
-        team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
-        assertThat(team.getDescription(), equalTo(description));
+        try {
+            team.add(user, Role.MAINTAINER);
+
+            // test all
+            members = team.listMembers().toList();
+
+            assertThat(members, notNullValue());
+            assertThat("Two members for all roles in dummy team", members.size(), equalTo(2));
+            assertThat("Specific users in team",
+                    members,
+                    containsInAnyOrder(hasProperty("login", equalTo("bitwiseman")),
+                            hasProperty("login", equalTo("gsmet"))));
+
+            // test maintainer role filter
+            members = team.listMembers(Role.MAINTAINER).toList();
+
+            assertThat(members, notNullValue());
+            assertThat("Two members for all roles in dummy team", members.size(), equalTo(2));
+            assertThat("Specific users in team",
+                    members,
+                    containsInAnyOrder(hasProperty("login", equalTo("bitwiseman")),
+                            hasProperty("login", equalTo("gsmet"))));
+
+            // test member role filter
+            // it's hard to test this as owner of the org are automatically made maintainer
+            // so let's just test that we don't have any members around
+            members = team.listMembers(Role.MEMBER).toList();
+
+            assertThat(members, notNullValue());
+            assertThat("No members in dummy team", members.size(), equalTo(0));
+
+            // test removing the user has effect
+            team.remove(user);
+
+            members = team.listMembers().toList();
+
+            assertThat(members, notNullValue());
+            assertThat("One member for all roles in dummy team", members.size(), equalTo(1));
+            assertThat("Specific user in team",
+                    members,
+                    containsInAnyOrder(hasProperty("login", equalTo("bitwiseman"))));
+        } finally {
+            if (team.hasMember(user)) {
+                team.remove(user);
+            }
+        }
     }
 
     /**
@@ -137,34 +175,115 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test set privacy.
+     * Test fail to connect to external group from other organization.
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
     @Test
-    public void testSetPrivacy() throws IOException {
-        // we need to use a team that doesn't have child teams
-        // as secret privacy is not supported for parent teams
-        String teamSlug = "simple-team";
-        Privacy privacy = Privacy.CLOSED;
+    public void testConnectToExternalGroupByGroup() throws IOException {
+        String teamSlug = "acme-developers";
 
-        // Set the privacy.
-        GHTeam team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
-        team.setPrivacy(privacy);
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam team = org.getTeamBySlug(teamSlug);
+        GHExternalGroup group = org.getExternalGroup(467431);
 
-        // Check that it was set correctly.
-        team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
-        assertThat(team.getPrivacy(), equalTo(privacy));
+        GHExternalGroup connectedGroup = team.connectToExternalGroup(group);
 
-        privacy = Privacy.SECRET;
+        assertThat(connectedGroup.getId(), equalTo(467431L));
+        assertThat(connectedGroup.getName(), equalTo("acme-developers"));
+        assertThat(connectedGroup.getUpdatedAt(), notNullValue());
 
-        // Set the privacy.
-        team.setPrivacy(privacy);
+        assertThat(connectedGroup.getMembers(), notNullValue());
+        assertThat(membersSummary(connectedGroup),
+                hasItems("158311279:john-doe_acme:John Doe:john.doe@acme.corp",
+                        "166731041:jane-doe_acme:Jane Doe:jane.doe@acme.corp"));
 
-        // Check that it was set correctly.
-        team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
-        assertThat(team.getPrivacy(), equalTo(privacy));
+        assertThat(group.getTeams(), notNullValue());
+        assertThat(teamSummary(connectedGroup), hasItems("34519919:ACME-DEVELOPERS"));
+    }
+
+    /**
+     * Test connect to external group by id.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testConnectToExternalGroupById() throws IOException {
+        String teamSlug = "acme-developers";
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam team = org.getTeamBySlug(teamSlug);
+
+        final GHExternalGroup group = team.connectToExternalGroup(467431);
+
+        assertThat(group.getId(), equalTo(467431L));
+        assertThat(group.getName(), equalTo("acme-developers"));
+        assertThat(group.getUpdatedAt(), notNullValue());
+
+        assertThat(group.getMembers(), notNullValue());
+        assertThat(membersSummary(group),
+                hasItems("158311279:john-doe_acme:John Doe:john.doe@acme.corp",
+                        "166731041:jane-doe_acme:Jane Doe:jane.doe@acme.corp"));
+
+        assertThat(group.getTeams(), notNullValue());
+        assertThat(teamSummary(group), hasItems("34519919:ACME-DEVELOPERS"));
+    }
+
+    /**
+     * Test delete connection to external group
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testDeleteExternalGroupConnection() throws IOException {
+        String teamSlug = "acme-developers";
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam team = org.getTeamBySlug(teamSlug);
+
+        team.deleteExternalGroupConnection();
+
+        mockGitHub.apiServer()
+                .verify(1,
+                        deleteRequestedFor(urlPathEqualTo("/orgs/" + team.getOrganization().getLogin() + "/teams/"
+                                + team.getSlug() + "/external-groups")));
+    }
+
+    /**
+     * Test failure when connecting to external group by id.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testFailConnectToExternalGroupTeamIsNotAvailableInOrg() throws IOException {
+        String teamSlug = "acme-developers";
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam team = org.getTeamBySlug(teamSlug);
+
+        assertThrows(GHFileNotFoundException.class, () -> team.connectToExternalGroup(12345));
+    }
+
+    /**
+     * Test failure when connecting to external group by id.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testFailConnectToExternalGroupWhenTeamHasMembers() throws IOException {
+        String teamSlug = "acme-developers";
+
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+        GHTeam team = org.getTeamBySlug(teamSlug);
+
+        final GHIOException failure = assertThrows(GHTeamCannotBeExternallyManagedException.class,
+                () -> team.connectToExternalGroup(467431));
+        assertThat(failure.getMessage(), equalTo("Could not connect team to external group"));
     }
 
     /**
@@ -200,75 +319,6 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
         Set<GHTeam> result = team.listChildTeams().toSet();
 
         assertThat(result, is(empty()));
-    }
-
-    /**
-     * Adds the remove member.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void addRemoveMember() throws IOException {
-        String teamSlug = "dummy-team";
-
-        GHTeam team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
-
-        List<GHUser> members = team.listMembers().toList();
-
-        assertThat(members, notNullValue());
-        assertThat("One admin in dummy team", members.size(), equalTo(1));
-        assertThat("Specific user in admin team",
-                members.stream().anyMatch(ghUser -> ghUser.getLogin().equals("bitwiseman")));
-
-        GHUser user = gitHub.getUser("gsmet");
-
-        try {
-            team.add(user, Role.MAINTAINER);
-
-            // test all
-            members = team.listMembers().toList();
-
-            assertThat(members, notNullValue());
-            assertThat("Two members for all roles in dummy team", members.size(), equalTo(2));
-            assertThat("Specific users in team",
-                    members,
-                    containsInAnyOrder(hasProperty("login", equalTo("bitwiseman")),
-                            hasProperty("login", equalTo("gsmet"))));
-
-            // test maintainer role filter
-            members = team.listMembers(Role.MAINTAINER).toList();
-
-            assertThat(members, notNullValue());
-            assertThat("Two members for all roles in dummy team", members.size(), equalTo(2));
-            assertThat("Specific users in team",
-                    members,
-                    containsInAnyOrder(hasProperty("login", equalTo("bitwiseman")),
-                            hasProperty("login", equalTo("gsmet"))));
-
-            // test member role filter
-            // it's hard to test this as owner of the org are automatically made maintainer
-            // so let's just test that we don't have any members around
-            members = team.listMembers(Role.MEMBER).toList();
-
-            assertThat(members, notNullValue());
-            assertThat("No members in dummy team", members.size(), equalTo(0));
-
-            // test removing the user has effect
-            team.remove(user);
-
-            members = team.listMembers().toList();
-
-            assertThat(members, notNullValue());
-            assertThat("One member for all roles in dummy team", members.size(), equalTo(1));
-            assertThat("Specific user in team",
-                    members,
-                    containsInAnyOrder(hasProperty("login", equalTo("bitwiseman"))));
-        } finally {
-            if (team.hasMember(user)) {
-                team.remove(user);
-            }
-        }
     }
 
     /**
@@ -329,115 +379,65 @@ public class GHTeamTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test connect to external group by id.
+     * Test set description.
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
     @Test
-    public void testConnectToExternalGroupById() throws IOException {
-        String teamSlug = "acme-developers";
+    public void testSetDescription() throws IOException {
 
-        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
-        GHTeam team = org.getTeamBySlug(teamSlug);
+        String description = "Updated by API Test";
+        String teamSlug = "dummy-team";
 
-        final GHExternalGroup group = team.connectToExternalGroup(467431);
+        // Set the description.
+        GHTeam team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
+        assertThat(team.getHtmlUrl(), notNullValue());
+        team.setDescription(description);
 
-        assertThat(group.getId(), equalTo(467431L));
-        assertThat(group.getName(), equalTo("acme-developers"));
-        assertThat(group.getUpdatedAt(), notNullValue());
+        // Check that it was set correctly.
+        team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
+        assertThat(team.getDescription(), equalTo(description));
 
-        assertThat(group.getMembers(), notNullValue());
-        assertThat(membersSummary(group),
-                hasItems("158311279:john-doe_acme:John Doe:john.doe@acme.corp",
-                        "166731041:jane-doe_acme:Jane Doe:jane.doe@acme.corp"));
+        description += "Modified";
 
-        assertThat(group.getTeams(), notNullValue());
-        assertThat(teamSummary(group), hasItems("34519919:ACME-DEVELOPERS"));
+        // Set the description.
+        team.setDescription(description);
+
+        // Check that it was set correctly.
+        team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
+        assertThat(team.getDescription(), equalTo(description));
     }
 
     /**
-     * Test fail to connect to external group from other organization.
+     * Test set privacy.
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
     @Test
-    public void testConnectToExternalGroupByGroup() throws IOException {
-        String teamSlug = "acme-developers";
+    public void testSetPrivacy() throws IOException {
+        // we need to use a team that doesn't have child teams
+        // as secret privacy is not supported for parent teams
+        String teamSlug = "simple-team";
+        Privacy privacy = Privacy.CLOSED;
 
-        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
-        GHTeam team = org.getTeamBySlug(teamSlug);
-        GHExternalGroup group = org.getExternalGroup(467431);
+        // Set the privacy.
+        GHTeam team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
+        team.setPrivacy(privacy);
 
-        GHExternalGroup connectedGroup = team.connectToExternalGroup(group);
+        // Check that it was set correctly.
+        team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
+        assertThat(team.getPrivacy(), equalTo(privacy));
 
-        assertThat(connectedGroup.getId(), equalTo(467431L));
-        assertThat(connectedGroup.getName(), equalTo("acme-developers"));
-        assertThat(connectedGroup.getUpdatedAt(), notNullValue());
+        privacy = Privacy.SECRET;
 
-        assertThat(connectedGroup.getMembers(), notNullValue());
-        assertThat(membersSummary(connectedGroup),
-                hasItems("158311279:john-doe_acme:John Doe:john.doe@acme.corp",
-                        "166731041:jane-doe_acme:Jane Doe:jane.doe@acme.corp"));
+        // Set the privacy.
+        team.setPrivacy(privacy);
 
-        assertThat(group.getTeams(), notNullValue());
-        assertThat(teamSummary(connectedGroup), hasItems("34519919:ACME-DEVELOPERS"));
-    }
-
-    /**
-     * Test failure when connecting to external group by id.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void testFailConnectToExternalGroupWhenTeamHasMembers() throws IOException {
-        String teamSlug = "acme-developers";
-
-        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
-        GHTeam team = org.getTeamBySlug(teamSlug);
-
-        final GHIOException failure = assertThrows(GHTeamCannotBeExternallyManagedException.class,
-                () -> team.connectToExternalGroup(467431));
-        assertThat(failure.getMessage(), equalTo("Could not connect team to external group"));
-    }
-
-    /**
-     * Test failure when connecting to external group by id.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void testFailConnectToExternalGroupTeamIsNotAvailableInOrg() throws IOException {
-        String teamSlug = "acme-developers";
-
-        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
-        GHTeam team = org.getTeamBySlug(teamSlug);
-
-        assertThrows(GHFileNotFoundException.class, () -> team.connectToExternalGroup(12345));
-    }
-
-    /**
-     * Test delete connection to external group
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void testDeleteExternalGroupConnection() throws IOException {
-        String teamSlug = "acme-developers";
-
-        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
-        GHTeam team = org.getTeamBySlug(teamSlug);
-
-        team.deleteExternalGroupConnection();
-
-        mockGitHub.apiServer()
-                .verify(1,
-                        deleteRequestedFor(urlPathEqualTo("/orgs/" + team.getOrganization().getLogin() + "/teams/"
-                                + team.getSlug() + "/external-groups")));
+        // Check that it was set correctly.
+        team = gitHub.getOrganization(GITHUB_API_TEST_ORG).getTeamBySlug(teamSlug);
+        assertThat(team.getPrivacy(), equalTo(privacy));
     }
 
 }

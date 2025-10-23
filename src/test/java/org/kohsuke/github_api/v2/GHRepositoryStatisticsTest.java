@@ -1,10 +1,6 @@
 package org.kohsuke.github_api.v2;
 
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHRepository;
-import org.kohsuke.github_api.v2.GHRepositoryStatistics;
-import org.kohsuke.github_api.v2.GitHub;
-import org.kohsuke.github_api.v2.PagedIterable;
 
 import java.io.IOException;
 import java.util.List;

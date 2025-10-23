@@ -9,23 +9,14 @@ package org.kohsuke.github;
  */
 public class GHCodeownersError {
 
+    private String kind, source, suggestion, message, path;
+
+    private int line, column;
+
     /**
      * Create default GHCodeownersError instance
      */
     public GHCodeownersError() {
-    }
-
-    private int line, column;
-
-    private String kind, source, suggestion, message, path;
-
-    /**
-     * Gets line.
-     *
-     * @return the line
-     */
-    public int getLine() {
-        return line;
     }
 
     /**
@@ -47,21 +38,12 @@ public class GHCodeownersError {
     }
 
     /**
-     * Gets source.
+     * Gets line.
      *
-     * @return the source
+     * @return the line
      */
-    public String getSource() {
-        return source;
-    }
-
-    /**
-     * Gets suggestion.
-     *
-     * @return the suggestion
-     */
-    public String getSuggestion() {
-        return suggestion;
+    public int getLine() {
+        return line;
     }
 
     /**
@@ -80,5 +62,23 @@ public class GHCodeownersError {
      */
     public String getPath() {
         return path;
+    }
+
+    /**
+     * Gets source.
+     *
+     * @return the source
+     */
+    public String getSource() {
+        return source;
+    }
+
+    /**
+     * Gets suggestion.
+     *
+     * @return the suggestion
+     */
+    public String getSuggestion() {
+        return suggestion;
     }
 }

@@ -2,12 +2,6 @@ package org.kohsuke.github_api.v2;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHOrganization;
-import org.kohsuke.github_api.v2.GHRateLimit;
-import org.kohsuke.github_api.v2.GHRepository;
-import org.kohsuke.github_api.v2.GitHub;
-import org.kohsuke.github_api.v2.GitHubRateLimitChecker;
-import org.kohsuke.github_api.v2.RateLimitChecker;
 
 import java.io.IOException;
 import java.util.Date;

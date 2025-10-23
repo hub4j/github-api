@@ -1,14 +1,6 @@
 package org.kohsuke.github_api.v2;
 
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHExternalGroup;
-import org.kohsuke.github_api.v2.GHFileNotFoundException;
-import org.kohsuke.github_api.v2.GHIOException;
-import org.kohsuke.github_api.v2.GHNotExternallyManagedEnterpriseException;
-import org.kohsuke.github_api.v2.GHOrganization;
-import org.kohsuke.github_api.v2.GHTeam;
-import org.kohsuke.github_api.v2.GHTeamCannotBeExternallyManagedException;
-import org.kohsuke.github_api.v2.GHUser;
 import org.kohsuke.github_api.v2.GHTeam.Privacy;
 import org.kohsuke.github_api.v2.GHTeam.Role;
 

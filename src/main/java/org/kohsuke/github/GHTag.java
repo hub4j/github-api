@@ -12,29 +12,34 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
         justification = "JSON API")
 public class GHTag extends GitHubInteractiveObject {
 
+    private GHCommit commit;
+
+    private String name;
+
+    private GHRepository owner;
     /**
      * Create default GHTag instance
      */
     public GHTag() {
     }
 
-    private GHRepository owner;
-
-    private String name;
-    private GHCommit commit;
+    /**
+     * Gets commit.
+     *
+     * @return the commit
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHCommit getCommit() {
+        return commit;
+    }
 
     /**
-     * Wrap.
+     * Gets name.
      *
-     * @param owner
-     *            the owner
-     * @return the GH tag
+     * @return the name
      */
-    GHTag wrap(GHRepository owner) {
-        this.owner = owner;
-        if (commit != null)
-            commit.wrapUp(owner);
-        return this;
+    public String getName() {
+        return name;
     }
 
     /**
@@ -48,21 +53,16 @@ public class GHTag extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets name.
+     * Wrap.
      *
-     * @return the name
+     * @param owner
+     *            the owner
+     * @return the GH tag
      */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Gets commit.
-     *
-     * @return the commit
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHCommit getCommit() {
-        return commit;
+    GHTag wrap(GHRepository owner) {
+        this.owner = owner;
+        if (commit != null)
+            commit.wrapUp(owner);
+        return this;
     }
 }

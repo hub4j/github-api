@@ -3,17 +3,6 @@ package org.kohsuke.github_api.v2;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHCommentAuthorAssociation;
-import org.kohsuke.github_api.v2.GHFileNotFoundException;
-import org.kohsuke.github_api.v2.GHIssue;
-import org.kohsuke.github_api.v2.GHIssueComment;
-import org.kohsuke.github_api.v2.GHIssueState;
-import org.kohsuke.github_api.v2.GHIssueStateReason;
-import org.kohsuke.github_api.v2.GHLabel;
-import org.kohsuke.github_api.v2.GHMyself;
-import org.kohsuke.github_api.v2.GHRepository;
-import org.kohsuke.github_api.v2.GitHub;
-import org.kohsuke.github_api.v2.PagedIterable;
 
 import java.io.IOException;
 import java.time.Instant;

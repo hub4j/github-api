@@ -3,13 +3,12 @@ package org.kohsuke.github_api.v2;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.kohsuke.github_api.v2.internal.EnumUtils;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import org.kohsuke.github_api.v2.internal.EnumUtils;
 
 /**
  * Represents a repository rule.

@@ -2,12 +2,6 @@ package org.kohsuke.github_api.v2;
 
 import com.google.common.collect.Iterables;
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHCommit;
-import org.kohsuke.github_api.v2.GHPullRequest;
-import org.kohsuke.github_api.v2.GHRepository;
-import org.kohsuke.github_api.v2.GHTag;
-import org.kohsuke.github_api.v2.GitHub;
-import org.kohsuke.github_api.v2.PagedIterable;
 
 import java.io.IOException;
 import java.util.ArrayList;

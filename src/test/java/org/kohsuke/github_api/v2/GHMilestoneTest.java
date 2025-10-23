@@ -3,13 +3,6 @@ package org.kohsuke.github_api.v2;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHIssue;
-import org.kohsuke.github_api.v2.GHIssueState;
-import org.kohsuke.github_api.v2.GHMilestone;
-import org.kohsuke.github_api.v2.GHPullRequest;
-import org.kohsuke.github_api.v2.GHRepository;
-import org.kohsuke.github_api.v2.GitHub;
-import org.kohsuke.github_api.v2.GitHubClient;
 
 import java.io.IOException;
 import java.time.Instant;

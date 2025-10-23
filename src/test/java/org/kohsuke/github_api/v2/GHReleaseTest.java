@@ -1,12 +1,6 @@
 package org.kohsuke.github_api.v2;
 
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHFileNotFoundException;
-import org.kohsuke.github_api.v2.GHRelease;
-import org.kohsuke.github_api.v2.GHReleaseBuilder;
-import org.kohsuke.github_api.v2.GHRepository;
-import org.kohsuke.github_api.v2.GitHubClient;
-import org.kohsuke.github_api.v2.HttpException;
 import org.kohsuke.github_api.v2.GHReleaseBuilder.MakeLatest;
 
 import java.util.Date;

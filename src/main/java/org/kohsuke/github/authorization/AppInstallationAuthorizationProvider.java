@@ -18,6 +18,23 @@ import javax.annotation.Nonnull;
  */
 public class AppInstallationAuthorizationProvider extends GitHub.DependentAuthorizationProvider {
 
+    /**
+     * Provides an interface that returns an app to be used by an AppInstallationAuthorizationProvider
+     */
+    @FunctionalInterface
+    public interface AppInstallationProvider {
+        /**
+         * Provides a GHAppInstallation for the given GHApp
+         *
+         * @param app
+         *            The GHApp to use
+         * @return The GHAppInstallation
+         * @throws IOException
+         *             on error
+         */
+        GHAppInstallation getAppInstallation(GHApp app) throws IOException;
+    }
+
     private final AppInstallationProvider appInstallationProvider;
 
     private String authorization;
@@ -59,22 +76,5 @@ public class AppInstallationAuthorizationProvider extends GitHub.DependentAuthor
         GHAppInstallationToken ghAppInstallationToken = installationByOrganization.createToken().create();
         this.validUntil = ghAppInstallationToken.getExpiresAt().toInstant().minus(Duration.ofMinutes(5));
         return Objects.requireNonNull(ghAppInstallationToken.getToken());
-    }
-
-    /**
-     * Provides an interface that returns an app to be used by an AppInstallationAuthorizationProvider
-     */
-    @FunctionalInterface
-    public interface AppInstallationProvider {
-        /**
-         * Provides a GHAppInstallation for the given GHApp
-         *
-         * @param app
-         *            The GHApp to use
-         * @return The GHAppInstallation
-         * @throws IOException
-         *             on error
-         */
-        GHAppInstallation getAppInstallation(GHApp app) throws IOException;
     }
 }

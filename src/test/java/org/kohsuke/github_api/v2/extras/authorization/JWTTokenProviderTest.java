@@ -2,7 +2,6 @@ package org.kohsuke.github_api.v2.extras.authorization;
 
 import org.junit.Test;
 import org.kohsuke.github_api.v2.*;
-import org.kohsuke.github_api.v2.extras.authorization.JWTTokenProvider;
 
 import java.io.File;
 import java.io.IOException;

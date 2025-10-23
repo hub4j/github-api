@@ -32,31 +32,13 @@ import static org.hamcrest.Matchers.*;
  */
 public class JWTTokenProviderTest extends AbstractGHAppInstallationTest {
 
+    private static String PRIVATE_KEY_FILE_APP_2 = "/ghapi-test-app-2.private-key.pem";
+
+    private static String TEST_APP_ID_2 = "83009";
     /**
      * Create default JWTTokenProviderTest instance
      */
     public JWTTokenProviderTest() {
-    }
-
-    private static String TEST_APP_ID_2 = "83009";
-    private static String PRIVATE_KEY_FILE_APP_2 = "/ghapi-test-app-2.private-key.pem";
-
-    /**
-     * Test caching valid authorization.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void testCachingValidAuthorization() throws IOException {
-        assertThat(jwtProvider1, instanceOf(JWTTokenProvider.class));
-        JWTTokenProvider provider = (JWTTokenProvider) jwtProvider1;
-
-        assertThat(provider.isNotValid(), is(true));
-        String authorization = provider.getEncodedAuthorization();
-        assertThat(provider.isNotValid(), is(false));
-        String authorizationRefresh = provider.getEncodedAuthorization();
-        assertThat(authorizationRefresh, sameInstance(authorization));
     }
 
     /**
@@ -81,6 +63,24 @@ public class JWTTokenProviderTest extends AbstractGHAppInstallationTest {
         // Request the application, the wiremock matcher will ensure that the header
         // for the authorization is present and has a the format of a valid JWT token
         gh.getApp();
+    }
+
+    /**
+     * Test caching valid authorization.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testCachingValidAuthorization() throws IOException {
+        assertThat(jwtProvider1, instanceOf(JWTTokenProvider.class));
+        JWTTokenProvider provider = (JWTTokenProvider) jwtProvider1;
+
+        assertThat(provider.isNotValid(), is(true));
+        String authorization = provider.getEncodedAuthorization();
+        assertThat(provider.isNotValid(), is(false));
+        String authorizationRefresh = provider.getEncodedAuthorization();
+        assertThat(authorizationRefresh, sameInstance(authorization));
     }
 
     /**

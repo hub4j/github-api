@@ -23,16 +23,57 @@ import java.util.logging.Logger;
 public abstract class RateLimitChecker {
 
     /**
-     * Create default RateLimitChecker instance
+     * A {@link RateLimitChecker} with a simple number as the limit.
      */
-    public RateLimitChecker() {
-    }
+    public static class LiteralValue extends RateLimitChecker {
+        private final int sleepAtOrBelow;
 
-    private static final Logger LOGGER = Logger.getLogger(RateLimitChecker.class.getName());
+        /**
+         * Instantiates a new literal value.
+         *
+         * @param sleepAtOrBelow
+         *            the sleep at or below
+         */
+        public LiteralValue(int sleepAtOrBelow) {
+            if (sleepAtOrBelow < 0) {
+                // ignore negative numbers
+                sleepAtOrBelow = 0;
+            }
+            this.sleepAtOrBelow = sleepAtOrBelow;
+        }
+
+        /**
+         * Check rate limit.
+         *
+         * @param record
+         *            the record
+         * @param count
+         *            the count
+         * @return true, if successful
+         * @throws InterruptedException
+         *             the interrupted exception
+         */
+        @Override
+        protected boolean checkRateLimit(GHRateLimit.Record record, long count) throws InterruptedException {
+            if (record.getRemaining() <= sleepAtOrBelow) {
+                return sleepUntilReset(record);
+            }
+            return false;
+        }
+
+    }
 
     /** The Constant NONE. */
     public static final RateLimitChecker NONE = new RateLimitChecker() {
     };
+
+    private static final Logger LOGGER = Logger.getLogger(RateLimitChecker.class.getName());
+
+    /**
+     * Create default RateLimitChecker instance
+     */
+    public RateLimitChecker() {
+    }
 
     /**
      * Decides whether the current request exceeds the allowed "rate limit" budget. If this determines the rate limit
@@ -93,47 +134,6 @@ public abstract class RateLimitChecker {
             return true;
         }
         return false;
-    }
-
-    /**
-     * A {@link RateLimitChecker} with a simple number as the limit.
-     */
-    public static class LiteralValue extends RateLimitChecker {
-        private final int sleepAtOrBelow;
-
-        /**
-         * Instantiates a new literal value.
-         *
-         * @param sleepAtOrBelow
-         *            the sleep at or below
-         */
-        public LiteralValue(int sleepAtOrBelow) {
-            if (sleepAtOrBelow < 0) {
-                // ignore negative numbers
-                sleepAtOrBelow = 0;
-            }
-            this.sleepAtOrBelow = sleepAtOrBelow;
-        }
-
-        /**
-         * Check rate limit.
-         *
-         * @param record
-         *            the record
-         * @param count
-         *            the count
-         * @return true, if successful
-         * @throws InterruptedException
-         *             the interrupted exception
-         */
-        @Override
-        protected boolean checkRateLimit(GHRateLimit.Record record, long count) throws InterruptedException {
-            if (record.getRemaining() <= sleepAtOrBelow) {
-                return sleepUntilReset(record);
-            }
-            return false;
-        }
-
     }
 
 }

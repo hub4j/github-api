@@ -41,145 +41,20 @@ import javax.annotation.CheckForNull;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GHPullRequestReview extends GHObject {
 
+    private String body;
+
+    private String commit_id;
+
+    private String html_url;
+    private GHPullRequestReviewState state;
+    private String submitted_at;
+    private GHUser user;
+    /** The owner. */
+    GHPullRequest owner;
     /**
      * Create default GHPullRequestReview instance
      */
     public GHPullRequestReview() {
-    }
-
-    /** The owner. */
-    GHPullRequest owner;
-
-    private String body;
-    private GHUser user;
-    private String commit_id;
-    private GHPullRequestReviewState state;
-    private String submitted_at;
-    private String html_url;
-
-    /**
-     * Wrap up.
-     *
-     * @param owner
-     *            the owner
-     * @return the GH pull request review
-     */
-    GHPullRequestReview wrapUp(GHPullRequest owner) {
-        this.owner = owner;
-        return this;
-    }
-
-    /**
-     * Gets the pull request to which this review is associated.
-     *
-     * @return the parent
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHPullRequest getParent() {
-        return owner;
-    }
-
-    /**
-     * The comment itself.
-     *
-     * @return the body
-     */
-    public String getBody() {
-        return body;
-    }
-
-    /**
-     * Gets the user who posted this review.
-     *
-     * @return the user
-     * @throws IOException
-     *             the io exception
-     */
-    public GHUser getUser() throws IOException {
-        if (user != null) {
-            return owner.root().getUser(user.getLogin());
-        }
-        return null;
-    }
-
-    /**
-     * Gets commit id.
-     *
-     * @return the commit id
-     */
-    public String getCommitId() {
-        return commit_id;
-    }
-
-    /**
-     * Gets state.
-     *
-     * @return the state
-     */
-    @CheckForNull
-    public GHPullRequestReviewState getState() {
-        return state;
-    }
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     */
-    public URL getHtmlUrl() {
-        return GitHubClient.parseURL(html_url);
-    }
-
-    /**
-     * Gets api route.
-     *
-     * @return the api route
-     */
-    protected String getApiRoute() {
-        return owner.getApiRoute() + "/reviews/" + getId();
-    }
-
-    /**
-     * When was this resource created?.
-     *
-     * @return the submitted at
-     */
-    public Date getSubmittedAt() {
-        return GitHubClient.parseDate(submitted_at);
-    }
-
-    /**
-     * Since this method does not exist, we forward this value.
-     *
-     * @return the created at
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Override
-    public Date getCreatedAt() throws IOException {
-        return getSubmittedAt();
-    }
-
-    /**
-     * Updates the comment.
-     *
-     * @param body
-     *            the body
-     * @param event
-     *            the event
-     * @throws IOException
-     *             the io exception
-     */
-    public void submit(String body, GHPullRequestReviewEvent event) throws IOException {
-        owner.root()
-                .createRequest()
-                .method("POST")
-                .with("body", body)
-                .with("event", event.action())
-                .withUrlPath(getApiRoute() + "/events")
-                .fetchInto(this);
-        this.body = body;
-        this.state = event.toState();
     }
 
     /**
@@ -211,6 +86,88 @@ public class GHPullRequestReview extends GHObject {
     }
 
     /**
+     * The comment itself.
+     *
+     * @return the body
+     */
+    public String getBody() {
+        return body;
+    }
+
+    /**
+     * Gets commit id.
+     *
+     * @return the commit id
+     */
+    public String getCommitId() {
+        return commit_id;
+    }
+
+    /**
+     * Since this method does not exist, we forward this value.
+     *
+     * @return the created at
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Override
+    public Date getCreatedAt() throws IOException {
+        return getSubmittedAt();
+    }
+
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
+    public URL getHtmlUrl() {
+        return GitHubClient.parseURL(html_url);
+    }
+
+    /**
+     * Gets the pull request to which this review is associated.
+     *
+     * @return the parent
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHPullRequest getParent() {
+        return owner;
+    }
+
+    /**
+     * Gets state.
+     *
+     * @return the state
+     */
+    @CheckForNull
+    public GHPullRequestReviewState getState() {
+        return state;
+    }
+
+    /**
+     * When was this resource created?.
+     *
+     * @return the submitted at
+     */
+    public Date getSubmittedAt() {
+        return GitHubClient.parseDate(submitted_at);
+    }
+
+    /**
+     * Gets the user who posted this review.
+     *
+     * @return the user
+     * @throws IOException
+     *             the io exception
+     */
+    public GHUser getUser() throws IOException {
+        if (user != null) {
+            return owner.root().getUser(user.getLogin());
+        }
+        return null;
+    }
+
+    /**
      * Obtains all the review comments associated with this pull request review.
      *
      * @return the paged iterable
@@ -220,5 +177,48 @@ public class GHPullRequestReview extends GHObject {
                 .createRequest()
                 .withUrlPath(getApiRoute() + "/comments")
                 .toIterable(GHPullRequestReviewComment[].class, item -> item.wrapUp(owner));
+    }
+
+    /**
+     * Updates the comment.
+     *
+     * @param body
+     *            the body
+     * @param event
+     *            the event
+     * @throws IOException
+     *             the io exception
+     */
+    public void submit(String body, GHPullRequestReviewEvent event) throws IOException {
+        owner.root()
+                .createRequest()
+                .method("POST")
+                .with("body", body)
+                .with("event", event.action())
+                .withUrlPath(getApiRoute() + "/events")
+                .fetchInto(this);
+        this.body = body;
+        this.state = event.toState();
+    }
+
+    /**
+     * Gets api route.
+     *
+     * @return the api route
+     */
+    protected String getApiRoute() {
+        return owner.getApiRoute() + "/reviews/" + getId();
+    }
+
+    /**
+     * Wrap up.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH pull request review
+     */
+    GHPullRequestReview wrapUp(GHPullRequest owner) {
+        this.owner = owner;
+        return this;
     }
 }

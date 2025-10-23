@@ -14,98 +14,19 @@ import static org.hamcrest.Matchers.*;
  */
 public class EnterpriseManagedSupportTest extends AbstractGitHubWireMockTest {
 
-    /**
-     * Create default EnterpriseManagedSupportTest instance
-     */
-    public EnterpriseManagedSupportTest() {
-    }
-
     private static final String NOT_PART_OF_EXTERNALLY_MANAGED_ENTERPRISE_ERROR = "{\"message\":\"This organization is not part of externally managed enterprise.\","
             + "\"documentation_url\": \"https://docs.github.com/rest/teams/external-groups#list-external-groups-in-an-organization\"}";
-
-    private static final String UNKNOWN_ERROR = "{\"message\":\"Unknown error\","
-            + "\"documentation_url\": \"https://docs.github.com/rest/unknown#unknown\"}";
 
     private static final String TEAM_CANNOT_BE_EXTERNALLY_MANAGED_ERROR = "{\"message\":\"This team cannot be externally managed since it has explicit members.\","
             + "\"documentation_url\": \"https://docs.github.com/rest/teams/external-groups#list-a-connection-between-an-external-group-and-a-team\"}";
 
-    /**
-     * Test to ensure that only HttpExceptions are handled
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void testIgnoreNonHttpException() throws IOException {
-        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
-
-        final GHException inputCause = new GHException("Cause");
-        final GHException inputException = new GHException("Test", inputCause);
-
-        final Optional<GHException> maybeException = EnterpriseManagedSupport.forOrganization(org)
-                .filterException(inputException);
-
-        assertThat(maybeException.isPresent(), is(false));
-    }
+    private static final String UNKNOWN_ERROR = "{\"message\":\"Unknown error\","
+            + "\"documentation_url\": \"https://docs.github.com/rest/unknown#unknown\"}";
 
     /**
-     * Test to ensure that only BadRequests HttpExceptions are handled
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
+     * Create default EnterpriseManagedSupportTest instance
      */
-    @Test
-    public void testIgnoreNonBadRequestExceptions() throws IOException {
-        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
-
-        final HttpException inputCause = new HttpException(NOT_PART_OF_EXTERNALLY_MANAGED_ENTERPRISE_ERROR,
-                404,
-                "Error",
-                org.getUrl().toString());
-        final GHException inputException = new GHException("Test", inputCause);
-
-        final Optional<GHException> maybeException = EnterpriseManagedSupport.forOrganization(org)
-                .filterException(inputException);
-
-        assertThat(maybeException.isPresent(), is(false));
-    }
-
-    /**
-     * Test to ensure that only BadRequests HttpExceptions with parseable JSON payload are handled
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void testIgnoreBadRequestsWithUnparseableJson() throws IOException {
-        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
-
-        final HttpException inputCause = new HttpException("Error", 400, "Error", org.getUrl().toString());
-        final GHException inputException = new GHException("Test", inputCause);
-
-        final Optional<GHException> maybeException = EnterpriseManagedSupport.forOrganization(org)
-                .filterException(inputException);
-
-        assertThat(maybeException.isPresent(), is(false));
-    }
-
-    /**
-     * Test to ensure that only BadRequests HttpExceptions with known error message are handled
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    @Test
-    public void testIgnoreBadRequestsWithUnknownErrorMessage() throws IOException {
-        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
-
-        final HttpException inputCause = new HttpException(UNKNOWN_ERROR, 400, "Error", org.getUrl().toString());
-        final GHException inputException = new GHException("Test", inputCause);
-
-        final Optional<GHException> maybeException = EnterpriseManagedSupport.forOrganization(org)
-                .filterException(inputException);
-
-        assertThat(maybeException.isPresent(), is(false));
+    public EnterpriseManagedSupportTest() {
     }
 
     /**
@@ -186,5 +107,84 @@ public class EnterpriseManagedSupportTest extends AbstractGitHubWireMockTest {
         assertThat(error, notNullValue());
         assertThat(error.getMessage(), equalTo(EnterpriseManagedSupport.TEAM_CANNOT_BE_EXTERNALLY_MANAGED_ERROR));
         assertThat(error.getDocumentationUrl(), notNullValue());
+    }
+
+    /**
+     * Test to ensure that only BadRequests HttpExceptions with known error message are handled
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testIgnoreBadRequestsWithUnknownErrorMessage() throws IOException {
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        final HttpException inputCause = new HttpException(UNKNOWN_ERROR, 400, "Error", org.getUrl().toString());
+        final GHException inputException = new GHException("Test", inputCause);
+
+        final Optional<GHException> maybeException = EnterpriseManagedSupport.forOrganization(org)
+                .filterException(inputException);
+
+        assertThat(maybeException.isPresent(), is(false));
+    }
+
+    /**
+     * Test to ensure that only BadRequests HttpExceptions with parseable JSON payload are handled
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testIgnoreBadRequestsWithUnparseableJson() throws IOException {
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        final HttpException inputCause = new HttpException("Error", 400, "Error", org.getUrl().toString());
+        final GHException inputException = new GHException("Test", inputCause);
+
+        final Optional<GHException> maybeException = EnterpriseManagedSupport.forOrganization(org)
+                .filterException(inputException);
+
+        assertThat(maybeException.isPresent(), is(false));
+    }
+
+    /**
+     * Test to ensure that only BadRequests HttpExceptions are handled
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testIgnoreNonBadRequestExceptions() throws IOException {
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        final HttpException inputCause = new HttpException(NOT_PART_OF_EXTERNALLY_MANAGED_ENTERPRISE_ERROR,
+                404,
+                "Error",
+                org.getUrl().toString());
+        final GHException inputException = new GHException("Test", inputCause);
+
+        final Optional<GHException> maybeException = EnterpriseManagedSupport.forOrganization(org)
+                .filterException(inputException);
+
+        assertThat(maybeException.isPresent(), is(false));
+    }
+
+    /**
+     * Test to ensure that only HttpExceptions are handled
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testIgnoreNonHttpException() throws IOException {
+        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
+
+        final GHException inputCause = new GHException("Cause");
+        final GHException inputException = new GHException("Test", inputCause);
+
+        final Optional<GHException> maybeException = EnterpriseManagedSupport.forOrganization(org)
+                .filterException(inputException);
+
+        assertThat(maybeException.isPresent(), is(false));
     }
 }

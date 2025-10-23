@@ -21,31 +21,10 @@ public class GitUser {
     private String name, email, date, username;
 
     /**
-     * Gets the git user name for an author or committer on a git commit.
-     *
-     * @return Human readable name of the user, such as "Kohsuke Kawaguchi"
+     * Instantiates a new git user.
      */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Gets the git email for an author or committer on a git commit.
-     *
-     * @return E-mail address, such as "foo@example.com"
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * Gets username. Note: it presents only in events.
-     *
-     * @return GitHub username
-     */
-    @CheckForNull
-    public String getUsername() {
-        return username;
+    public GitUser() {
+        // Empty constructor for Jackson binding
     }
 
     /**
@@ -58,9 +37,30 @@ public class GitUser {
     }
 
     /**
-     * Instantiates a new git user.
+     * Gets the git email for an author or committer on a git commit.
+     *
+     * @return E-mail address, such as "foo@example.com"
      */
-    public GitUser() {
-        // Empty constructor for Jackson binding
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * Gets the git user name for an author or committer on a git commit.
+     *
+     * @return Human readable name of the user, such as "Kohsuke Kawaguchi"
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Gets username. Note: it presents only in events.
+     *
+     * @return GitHub username
+     */
+    @CheckForNull
+    public String getUsername() {
+        return username;
     }
 }

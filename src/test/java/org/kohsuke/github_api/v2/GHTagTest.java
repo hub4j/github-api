@@ -3,11 +3,6 @@ package org.kohsuke.github_api.v2;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHRef;
-import org.kohsuke.github_api.v2.GHRepository;
-import org.kohsuke.github_api.v2.GHTagObject;
-import org.kohsuke.github_api.v2.GHVerification;
-import org.kohsuke.github_api.v2.GitHub;
 
 import java.io.IOException;
 

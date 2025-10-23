@@ -1,11 +1,6 @@
 package org.kohsuke.github_api.v2;
 
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHAppInstallation;
-import org.kohsuke.github_api.v2.GHMarketplaceAccountPlan;
-import org.kohsuke.github_api.v2.GHMarketplaceAccountType;
-import org.kohsuke.github_api.v2.GHRepository;
-import org.kohsuke.github_api.v2.GHUser;
 
 import java.io.IOException;
 import java.time.Instant;

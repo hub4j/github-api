@@ -11,10 +11,10 @@ import java.util.Locale;
  */
 public enum GHRepositorySelection {
 
-    /** The selected. */
-    SELECTED,
     /** The all. */
-    ALL;
+    ALL,
+    /** The selected. */
+    SELECTED;
 
     /**
      * Returns GitHub's internal representation of this event.

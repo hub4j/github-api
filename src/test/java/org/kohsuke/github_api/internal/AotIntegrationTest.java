@@ -1,4 +1,4 @@
-package org.kohsuke.github_api.v2;
+package org.kohsuke.github_api.internal;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

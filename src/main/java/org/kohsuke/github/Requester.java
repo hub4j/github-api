@@ -45,6 +45,25 @@ import javax.annotation.Nonnull;
  */
 class Requester extends GitHubRequest.Builder<Requester> {
 
+    /**
+     * Helper function to make it easy to pull streams.
+     *
+     * Copies an input stream to an in-memory input stream. The performance on this is not great but
+     * {@link GitHubConnectorResponse#bodyStream()} is closed at the end of every call to
+     * {@link GitHubClient#sendRequest(GitHubRequest, GitHubClient.BodyHandler)}, so any reads to the original input
+     * stream must be completed before then. There are a number of deprecated methods that return {@link InputStream}.
+     * This method keeps all of them using the same code path.
+     *
+     * @param inputStream
+     *            the input stream to be copied
+     * @return an in-memory copy of the passed input stream
+     * @throws IOException
+     *             if an error occurs while copying the stream
+     */
+    @NonNull public static InputStream copyInputStream(InputStream inputStream) throws IOException {
+        return new ByteArrayInputStream(IOUtils.toByteArray(inputStream));
+    }
+
     /** The client. */
     /* private */ final transient GitHubClient client;
 
@@ -57,18 +76,6 @@ class Requester extends GitHubRequest.Builder<Requester> {
     Requester(GitHubClient client) {
         this.client = client;
         this.withApiUrl(client.getApiUrl());
-    }
-
-    /**
-     * Sends a request to the specified URL and checks that it is successful.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void send() throws IOException {
-        // Send expects there to be some body response, but doesn't care what it is.
-        // If there isn't a body, this will throw.
-        client.sendRequest(this, (connectorResponse) -> GitHubResponse.getBodyAsString(connectorResponse));
     }
 
     /**
@@ -85,33 +92,6 @@ class Requester extends GitHubRequest.Builder<Requester> {
     public <T> T fetch(@Nonnull Class<T> type) throws IOException {
         return client.sendRequest(this, (connectorResponse) -> GitHubResponse.parseBody(connectorResponse, type))
                 .body();
-    }
-
-    /**
-     * Like {@link #fetch(Class)} but updates an existing object instead of creating a new instance.
-     *
-     * @param <T>
-     *            the type parameter
-     * @param existingInstance
-     *            the existing instance
-     * @return the updated instance
-     * @throws IOException
-     *             the io exception
-     */
-    public <T> T fetchInto(@Nonnull T existingInstance) throws IOException {
-        return client
-                .sendRequest(this, (connectorResponse) -> GitHubResponse.parseBody(connectorResponse, existingInstance))
-                .body();
-    }
-
-    /**
-     * Sends a GraphQL request with no response
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void sendGraphQL() throws IOException {
-        fetchGraphQL(GHGraphQLResponse.ObjectResponse.class);
     }
 
     /**
@@ -148,6 +128,23 @@ class Requester extends GitHubRequest.Builder<Requester> {
     }
 
     /**
+     * Like {@link #fetch(Class)} but updates an existing object instead of creating a new instance.
+     *
+     * @param <T>
+     *            the type parameter
+     * @param existingInstance
+     *            the existing instance
+     * @return the updated instance
+     * @throws IOException
+     *             the io exception
+     */
+    public <T> T fetchInto(@Nonnull T existingInstance) throws IOException {
+        return client
+                .sendRequest(this, (connectorResponse) -> GitHubResponse.parseBody(connectorResponse, existingInstance))
+                .body();
+    }
+
+    /**
      * Response input stream. There are scenarios where direct stream reading is needed, however it is better to use
      * {@link #fetch(Class)} where possible.
      *
@@ -164,23 +161,25 @@ class Requester extends GitHubRequest.Builder<Requester> {
     }
 
     /**
-     * Helper function to make it easy to pull streams.
+     * Sends a request to the specified URL and checks that it is successful.
      *
-     * Copies an input stream to an in-memory input stream. The performance on this is not great but
-     * {@link GitHubConnectorResponse#bodyStream()} is closed at the end of every call to
-     * {@link GitHubClient#sendRequest(GitHubRequest, GitHubClient.BodyHandler)}, so any reads to the original input
-     * stream must be completed before then. There are a number of deprecated methods that return {@link InputStream}.
-     * This method keeps all of them using the same code path.
-     *
-     * @param inputStream
-     *            the input stream to be copied
-     * @return an in-memory copy of the passed input stream
      * @throws IOException
-     *             if an error occurs while copying the stream
+     *             the io exception
      */
-    @NonNull
-    public static InputStream copyInputStream(InputStream inputStream) throws IOException {
-        return new ByteArrayInputStream(IOUtils.toByteArray(inputStream));
+    public void send() throws IOException {
+        // Send expects there to be some body response, but doesn't care what it is.
+        // If there isn't a body, this will throw.
+        client.sendRequest(this, (connectorResponse) -> GitHubResponse.getBodyAsString(connectorResponse));
+    }
+
+    /**
+     * Sends a GraphQL request with no response
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void sendGraphQL() throws IOException {
+        fetchGraphQL(GHGraphQLResponse.ObjectResponse.class);
     }
 
     /**

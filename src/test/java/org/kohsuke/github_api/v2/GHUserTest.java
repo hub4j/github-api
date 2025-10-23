@@ -1,15 +1,6 @@
 package org.kohsuke.github_api.v2;
 
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHKey;
-import org.kohsuke.github_api.v2.GHOrganization;
-import org.kohsuke.github_api.v2.GHProject;
-import org.kohsuke.github_api.v2.GHRepository;
-import org.kohsuke.github_api.v2.GHTeam;
-import org.kohsuke.github_api.v2.GHUser;
-import org.kohsuke.github_api.v2.GitHubClient;
-import org.kohsuke.github_api.v2.PagedIterable;
-import org.kohsuke.github_api.v2.PagedIterator;
 
 import java.io.IOException;
 import java.time.Instant;

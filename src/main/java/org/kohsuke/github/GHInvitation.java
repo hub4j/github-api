@@ -18,17 +18,17 @@ import java.net.URL;
         justification = "JSON API")
 public class GHInvitation extends GHObject {
 
+    private String html_url;
+
+    private int id;
+    private GHUser invitee, inviter;
+    private String permissions;
+    private GHRepository repository;
     /**
      * Create default GHInvitation instance
      */
     public GHInvitation() {
     }
-
-    private int id;
-    private GHRepository repository;
-    private GHUser invitee, inviter;
-    private String permissions;
-    private String html_url;
 
     /**
      * Accept a repository invitation.

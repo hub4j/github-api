@@ -15,87 +15,86 @@ import java.util.Map;
  */
 public class GHDeployment extends GHObject {
 
+    private GHRepository owner;
+
+    /** The creator. */
+    protected GHUser creator;
+
+    /** The description. */
+    protected String description;
+
+    /** The environment. */
+    protected String environment;
+
+    /** The original environment. */
+    protected String original_environment;
+
+    /** The payload. */
+    protected Object payload;
+
+    /** The production environment. */
+    protected boolean production_environment;
+
+    /** The ref. */
+    protected String ref;
+
+    /** The repository url. */
+    protected String repository_url;
+
+    /** The sha. */
+    protected String sha;
+
+    /** The statuses url. */
+    protected String statuses_url;
+
+    /** The task. */
+    protected String task;
+
+    /** The transient environment. */
+    protected boolean transient_environment;
+
     /**
      * Create default GHDeployment instance
      */
     public GHDeployment() {
     }
 
-    private GHRepository owner;
-
-    /** The sha. */
-    protected String sha;
-
-    /** The ref. */
-    protected String ref;
-
-    /** The task. */
-    protected String task;
-
-    /** The payload. */
-    protected Object payload;
-
-    /** The environment. */
-    protected String environment;
-
-    /** The description. */
-    protected String description;
-
-    /** The statuses url. */
-    protected String statuses_url;
-
-    /** The repository url. */
-    protected String repository_url;
-
-    /** The creator. */
-    protected GHUser creator;
-
-    /** The original environment. */
-    protected String original_environment;
-
-    /** The transient environment. */
-    protected boolean transient_environment;
-
-    /** The production environment. */
-    protected boolean production_environment;
-
     /**
-     * Wrap.
+     * Create status gh deployment status builder.
      *
-     * @param owner
-     *            the owner
-     * @return the GH deployment
+     * @param state
+     *            the state
+     * @return the gh deployment status builder
      */
-    GHDeployment wrap(GHRepository owner) {
-        this.owner = owner;
-        return this;
+    public GHDeploymentStatusBuilder createStatus(GHDeploymentState state) {
+        return new GHDeploymentStatusBuilder(owner, getId(), state);
     }
 
     /**
-     * Gets statuses url.
+     * Gets creator.
      *
-     * @return the statuses url
+     * @return the creator
      */
-    public URL getStatusesUrl() {
-        return GitHubClient.parseURL(statuses_url);
+    public GHUser getCreator() {
+        return root().intern(creator);
     }
 
     /**
-     * Gets repository url.
+     * Gets environment.
      *
-     * @return the repository url
+     * @return the environment
      */
-    public URL getRepositoryUrl() {
-        return GitHubClient.parseURL(repository_url);
+    public String getEnvironment() {
+        return environment;
     }
 
     /**
-     * Gets task.
+     * The environment defined when the deployment was first created.
      *
-     * @return the task
+     * @return the original deployment environment
      */
-    public String getTask() {
-        return task;
+    public String getOriginalEnvironment() {
+        return original_environment;
     }
 
     /**
@@ -128,58 +127,21 @@ public class GHDeployment extends GHObject {
     }
 
     /**
-     * The environment defined when the deployment was first created.
-     *
-     * @return the original deployment environment
-     */
-    public String getOriginalEnvironment() {
-        return original_environment;
-    }
-
-    /**
-     * Gets environment.
-     *
-     * @return the environment
-     */
-    public String getEnvironment() {
-        return environment;
-    }
-
-    /**
-     * Specifies if the given environment is specific to the deployment and will no longer exist at some point in the
-     * future.
-     *
-     * @return the environment is transient
-     */
-    public boolean isTransientEnvironment() {
-        return transient_environment;
-    }
-
-    /**
-     * Specifies if the given environment is one that end-users directly interact with.
-     *
-     * @return the environment is used by end-users directly
-     */
-    public boolean isProductionEnvironment() {
-        return production_environment;
-    }
-
-    /**
-     * Gets creator.
-     *
-     * @return the creator
-     */
-    public GHUser getCreator() {
-        return root().intern(creator);
-    }
-
-    /**
      * Gets ref.
      *
      * @return the ref
      */
     public String getRef() {
         return ref;
+    }
+
+    /**
+     * Gets repository url.
+     *
+     * @return the repository url
+     */
+    public URL getRepositoryUrl() {
+        return GitHubClient.parseURL(repository_url);
     }
 
     /**
@@ -192,14 +154,40 @@ public class GHDeployment extends GHObject {
     }
 
     /**
-     * Create status gh deployment status builder.
+     * Gets statuses url.
      *
-     * @param state
-     *            the state
-     * @return the gh deployment status builder
+     * @return the statuses url
      */
-    public GHDeploymentStatusBuilder createStatus(GHDeploymentState state) {
-        return new GHDeploymentStatusBuilder(owner, getId(), state);
+    public URL getStatusesUrl() {
+        return GitHubClient.parseURL(statuses_url);
+    }
+
+    /**
+     * Gets task.
+     *
+     * @return the task
+     */
+    public String getTask() {
+        return task;
+    }
+
+    /**
+     * Specifies if the given environment is one that end-users directly interact with.
+     *
+     * @return the environment is used by end-users directly
+     */
+    public boolean isProductionEnvironment() {
+        return production_environment;
+    }
+
+    /**
+     * Specifies if the given environment is specific to the deployment and will no longer exist at some point in the
+     * future.
+     *
+     * @return the environment is transient
+     */
+    public boolean isTransientEnvironment() {
+        return transient_environment;
     }
 
     /**
@@ -221,5 +209,17 @@ public class GHDeployment extends GHObject {
     // test only
     GHRepository getOwner() {
         return owner;
+    }
+
+    /**
+     * Wrap.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH deployment
+     */
+    GHDeployment wrap(GHRepository owner) {
+        this.owner = owner;
+        return this;
     }
 }

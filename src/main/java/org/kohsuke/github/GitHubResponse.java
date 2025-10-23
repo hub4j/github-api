@@ -35,40 +35,36 @@ class GitHubResponse<T> {
 
     private static final Logger LOGGER = Logger.getLogger(GitHubResponse.class.getName());
 
-    private final int statusCode;
-
-    @Nonnull
-    private final Map<String, List<String>> headers;
-
-    @CheckForNull
-    private final T body;
-
     /**
-     * Instantiates a new git hub response.
+     * Gets the body of the response as a {@link String}.
      *
-     * @param response
-     *            the response
-     * @param body
-     *            the body
+     * @param connectorResponse
+     *            the response to read
+     * @return the body of the response as a {@link String}.
+     * @throws IOException
+     *             if an I/O Exception occurs.
      */
-    GitHubResponse(GitHubResponse<T> response, @CheckForNull T body) {
-        this.statusCode = response.statusCode();
-        this.headers = response.headers;
-        this.body = body;
+    @Nonnull
+    static String getBodyAsString(GitHubConnectorResponse connectorResponse) throws IOException {
+        InputStream inputStream = connectorResponse.bodyStream();
+        try (InputStreamReader r = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
+            return IOUtils.toString(r);
+        }
     }
 
     /**
-     * Instantiates a new git hub response.
+     * Gets the body of the response as a {@link String}.
      *
      * @param connectorResponse
-     *            the connector response
-     * @param body
-     *            the body
+     *            the response to read
+     * @return the body of the response as a {@link String}.
      */
-    GitHubResponse(GitHubConnectorResponse connectorResponse, @CheckForNull T body) {
-        this.statusCode = connectorResponse.statusCode();
-        this.headers = connectorResponse.allHeaders();
-        this.body = body;
+    static String getBodyAsStringOrNull(GitHubConnectorResponse connectorResponse) {
+        try {
+            return getBodyAsString(connectorResponse);
+        } catch (IOException e) {
+        }
+        return null;
     }
 
     /**
@@ -136,57 +132,49 @@ class GitHubResponse<T> {
         }
     }
 
+    @CheckForNull
+    private final T body;
+
+    @Nonnull
+    private final Map<String, List<String>> headers;
+
+    private final int statusCode;
+
     /**
-     * Gets the body of the response as a {@link String}.
+     * Instantiates a new git hub response.
      *
      * @param connectorResponse
-     *            the response to read
-     * @return the body of the response as a {@link String}.
-     * @throws IOException
-     *             if an I/O Exception occurs.
+     *            the connector response
+     * @param body
+     *            the body
      */
-    @Nonnull
-    static String getBodyAsString(GitHubConnectorResponse connectorResponse) throws IOException {
-        InputStream inputStream = connectorResponse.bodyStream();
-        try (InputStreamReader r = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
-            return IOUtils.toString(r);
-        }
+    GitHubResponse(GitHubConnectorResponse connectorResponse, @CheckForNull T body) {
+        this.statusCode = connectorResponse.statusCode();
+        this.headers = connectorResponse.allHeaders();
+        this.body = body;
     }
 
     /**
-     * Gets the body of the response as a {@link String}.
+     * Instantiates a new git hub response.
      *
-     * @param connectorResponse
-     *            the response to read
-     * @return the body of the response as a {@link String}.
+     * @param response
+     *            the response
+     * @param body
+     *            the body
      */
-    static String getBodyAsStringOrNull(GitHubConnectorResponse connectorResponse) {
-        try {
-            return getBodyAsString(connectorResponse);
-        } catch (IOException e) {
-        }
-        return null;
+    GitHubResponse(GitHubResponse<T> response, @CheckForNull T body) {
+        this.statusCode = response.statusCode();
+        this.headers = response.headers;
+        this.body = body;
     }
 
     /**
-     * The status code for this response.
+     * The body of the response parsed as a {@code T}.
      *
-     * @return the status code for this response.
+     * @return body of the response
      */
-    public int statusCode() {
-        return statusCode;
-    }
-
-    /**
-     * The headers for this response.
-     *
-     * @param field
-     *            the field
-     * @return the headers for this response.
-     */
-    @Nonnull
-    public List<String> headers(String field) {
-        return headers.get(field);
+    public T body() {
+        return body;
     }
 
     /**
@@ -207,12 +195,24 @@ class GitHubResponse<T> {
     }
 
     /**
-     * The body of the response parsed as a {@code T}.
+     * The headers for this response.
      *
-     * @return body of the response
+     * @param field
+     *            the field
+     * @return the headers for this response.
      */
-    public T body() {
-        return body;
+    @Nonnull
+    public List<String> headers(String field) {
+        return headers.get(field);
+    }
+
+    /**
+     * The status code for this response.
+     *
+     * @return the status code for this response.
+     */
+    public int statusCode() {
+        return statusCode;
     }
 
 }

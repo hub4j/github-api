@@ -38,104 +38,16 @@ import java.net.URL;
  */
 public class GHIssueComment extends GHObject implements Reactable {
 
+    private String body, gravatar_id, html_url, author_association;
+
+    private GHUser user; // not fully populated. beware.
+
+    /** The owner. */
+    GHIssue owner;
     /**
      * Create default GHIssueComment instance
      */
     public GHIssueComment() {
-    }
-
-    /** The owner. */
-    GHIssue owner;
-
-    private String body, gravatar_id, html_url, author_association;
-    private GHUser user; // not fully populated. beware.
-
-    /**
-     * Wrap up.
-     *
-     * @param owner
-     *            the owner
-     * @return the GH issue comment
-     */
-    GHIssueComment wrapUp(GHIssue owner) {
-        this.owner = owner;
-        return this;
-    }
-
-    /**
-     * Gets the issue to which this comment is associated.
-     *
-     * @return the parent
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHIssue getParent() {
-        return owner;
-    }
-
-    /**
-     * The comment itself.
-     *
-     * @return the body
-     */
-    public String getBody() {
-        return body;
-    }
-
-    /**
-     * Gets the user who posted this comment.
-     *
-     * @return the user
-     * @throws IOException
-     *             the io exception
-     */
-    public GHUser getUser() throws IOException {
-        return owner == null || owner.isOffline() ? user : owner.root().getUser(user.getLogin());
-    }
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     */
-    public URL getHtmlUrl() {
-        return GitHubClient.parseURL(html_url);
-    }
-
-    /**
-     * Gets author association.
-     *
-     * @return the author association
-     */
-    public GHCommentAuthorAssociation getAuthorAssociation() {
-        return GHCommentAuthorAssociation.valueOf(author_association);
-    }
-
-    /**
-     * Updates the body of the issue comment.
-     *
-     * @param body
-     *            the body
-     * @throws IOException
-     *             the io exception
-     */
-    public void update(String body) throws IOException {
-        owner.root()
-                .createRequest()
-                .method("PATCH")
-                .with("body", body)
-                .withUrlPath(getApiRoute())
-                .fetch(GHIssueComment.class);
-        this.body = body;
-    }
-
-    /**
-     * Deletes this issue comment.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void delete() throws IOException {
-        owner.root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
 
     /**
@@ -157,6 +69,16 @@ public class GHIssueComment extends GHObject implements Reactable {
     }
 
     /**
+     * Deletes this issue comment.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+        owner.root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
+    }
+
+    /**
      * Delete reaction.
      *
      * @param reaction
@@ -173,6 +95,54 @@ public class GHIssueComment extends GHObject implements Reactable {
     }
 
     /**
+     * Gets author association.
+     *
+     * @return the author association
+     */
+    public GHCommentAuthorAssociation getAuthorAssociation() {
+        return GHCommentAuthorAssociation.valueOf(author_association);
+    }
+
+    /**
+     * The comment itself.
+     *
+     * @return the body
+     */
+    public String getBody() {
+        return body;
+    }
+
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
+    public URL getHtmlUrl() {
+        return GitHubClient.parseURL(html_url);
+    }
+
+    /**
+     * Gets the issue to which this comment is associated.
+     *
+     * @return the parent
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHIssue getParent() {
+        return owner;
+    }
+
+    /**
+     * Gets the user who posted this comment.
+     *
+     * @return the user
+     * @throws IOException
+     *             the io exception
+     */
+    public GHUser getUser() throws IOException {
+        return owner == null || owner.isOffline() ? user : owner.root().getUser(user.getLogin());
+    }
+
+    /**
      * List reactions.
      *
      * @return the paged iterable
@@ -184,8 +154,38 @@ public class GHIssueComment extends GHObject implements Reactable {
                 .toIterable(GHReaction[].class, item -> owner.root());
     }
 
+    /**
+     * Updates the body of the issue comment.
+     *
+     * @param body
+     *            the body
+     * @throws IOException
+     *             the io exception
+     */
+    public void update(String body) throws IOException {
+        owner.root()
+                .createRequest()
+                .method("PATCH")
+                .with("body", body)
+                .withUrlPath(getApiRoute())
+                .fetch(GHIssueComment.class);
+        this.body = body;
+    }
+
     private String getApiRoute() {
         return "/repos/" + owner.getRepository().getOwnerName() + "/" + owner.getRepository().getName()
                 + "/issues/comments/" + getId();
+    }
+
+    /**
+     * Wrap up.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH issue comment
+     */
+    GHIssueComment wrapUp(GHIssue owner) {
+        this.owner = owner;
+        return this;
     }
 }

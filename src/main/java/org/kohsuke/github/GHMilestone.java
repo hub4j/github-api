@@ -15,31 +15,59 @@ import java.util.Locale;
  */
 public class GHMilestone extends GHObject {
 
+    private int closed_issues, open_issues, number;
+
+    private String state, due_on, title, description, html_url;
+
+    /** The closed at. */
+    protected String closed_at;
+    /** The creator. */
+    GHUser creator;
+    /** The owner. */
+    GHRepository owner;
+
     /**
      * Create default GHMilestone instance
      */
     public GHMilestone() {
     }
 
-    /** The owner. */
-    GHRepository owner;
-
-    /** The creator. */
-    GHUser creator;
-    private String state, due_on, title, description, html_url;
-    private int closed_issues, open_issues, number;
-
-    /** The closed at. */
-    protected String closed_at;
+    /**
+     * Closes this milestone.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void close() throws IOException {
+        edit("state", "closed");
+    }
 
     /**
-     * Gets owner.
+     * Deletes this milestone.
      *
-     * @return the owner
+     * @throws IOException
+     *             the io exception
      */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHRepository getOwner() {
-        return owner;
+    public void delete() throws IOException {
+        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
+    }
+
+    /**
+     * When was this milestone closed?.
+     *
+     * @return the closed at
+     */
+    public Date getClosedAt() {
+        return GitHubClient.parseDate(closed_at);
+    }
+
+    /**
+     * Gets closed issues.
+     *
+     * @return the closed issues
+     */
+    public int getClosedIssues() {
+        return closed_issues;
     }
 
     /**
@@ -49,6 +77,15 @@ public class GHMilestone extends GHObject {
      */
     public GHUser getCreator() {
         return root().intern(creator);
+    }
+
+    /**
+     * Gets description.
+     *
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
     }
 
     /**
@@ -63,48 +100,12 @@ public class GHMilestone extends GHObject {
     }
 
     /**
-     * When was this milestone closed?.
+     * Gets the html url.
      *
-     * @return the closed at
+     * @return the html url
      */
-    public Date getClosedAt() {
-        return GitHubClient.parseDate(closed_at);
-    }
-
-    /**
-     * Gets title.
-     *
-     * @return the title
-     */
-    public String getTitle() {
-        return title;
-    }
-
-    /**
-     * Gets description.
-     *
-     * @return the description
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * Gets closed issues.
-     *
-     * @return the closed issues
-     */
-    public int getClosedIssues() {
-        return closed_issues;
-    }
-
-    /**
-     * Gets open issues.
-     *
-     * @return the open issues
-     */
-    public int getOpenIssues() {
-        return open_issues;
+    public URL getHtmlUrl() {
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -117,12 +118,22 @@ public class GHMilestone extends GHObject {
     }
 
     /**
-     * Gets the html url.
+     * Gets open issues.
      *
-     * @return the html url
+     * @return the open issues
      */
-    public URL getHtmlUrl() {
-        return GitHubClient.parseURL(html_url);
+    public int getOpenIssues() {
+        return open_issues;
+    }
+
+    /**
+     * Gets owner.
+     *
+     * @return the owner
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHRepository getOwner() {
+        return owner;
     }
 
     /**
@@ -135,13 +146,12 @@ public class GHMilestone extends GHObject {
     }
 
     /**
-     * Closes this milestone.
+     * Gets title.
      *
-     * @throws IOException
-     *             the io exception
+     * @return the title
      */
-    public void close() throws IOException {
-        edit("state", "closed");
+    public String getTitle() {
+        return title;
     }
 
     /**
@@ -152,32 +162,6 @@ public class GHMilestone extends GHObject {
      */
     public void reopen() throws IOException {
         edit("state", "open");
-    }
-
-    /**
-     * Deletes this milestone.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void delete() throws IOException {
-        root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
-    }
-
-    private void edit(String key, Object value) throws IOException {
-        root().createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
-    }
-
-    /**
-     * Sets title.
-     *
-     * @param title
-     *            the title
-     * @throws IOException
-     *             the io exception
-     */
-    public void setTitle(String title) throws IOException {
-        edit("title", title);
     }
 
     /**
@@ -202,6 +186,22 @@ public class GHMilestone extends GHObject {
      */
     public void setDueOn(Date dueOn) throws IOException {
         edit("due_on", GitHubClient.printDate(dueOn));
+    }
+
+    /**
+     * Sets title.
+     *
+     * @param title
+     *            the title
+     * @throws IOException
+     *             the io exception
+     */
+    public void setTitle(String title) throws IOException {
+        edit("title", title);
+    }
+
+    private void edit(String key, Object value) throws IOException {
+        root().createRequest().with(key, value).method("PATCH").withUrlPath(getApiRoute()).send();
     }
 
     /**

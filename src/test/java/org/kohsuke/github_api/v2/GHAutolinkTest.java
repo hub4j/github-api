@@ -3,10 +3,6 @@ package org.kohsuke.github_api.v2;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHAutolink;
-import org.kohsuke.github_api.v2.GHFileNotFoundException;
-import org.kohsuke.github_api.v2.GHRepository;
-import org.kohsuke.github_api.v2.PagedIterable;
 
 import java.util.List;
 

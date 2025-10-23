@@ -3,13 +3,6 @@ package org.kohsuke.github_api.v2;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHIssue;
-import org.kohsuke.github_api.v2.GHOrganization;
-import org.kohsuke.github_api.v2.GHProject;
-import org.kohsuke.github_api.v2.GHProjectCard;
-import org.kohsuke.github_api.v2.GHProjectColumn;
-import org.kohsuke.github_api.v2.GHPullRequest;
-import org.kohsuke.github_api.v2.GHRepository;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

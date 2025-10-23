@@ -2,14 +2,6 @@ package org.kohsuke.github_api.v2;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHException;
-import org.kohsuke.github_api.v2.GHRateLimit;
-import org.kohsuke.github_api.v2.GHRepository;
-import org.kohsuke.github_api.v2.GitHub;
-import org.kohsuke.github_api.v2.GitHubBridgeAdapterObject;
-import org.kohsuke.github_api.v2.GitHubClient;
-import org.kohsuke.github_api.v2.GitHubRequest;
-import org.kohsuke.github_api.v2.RateLimitTarget;
 import org.kohsuke.github_api.v2.connector.GitHubConnectorResponse;
 
 import java.net.MalformedURLException;

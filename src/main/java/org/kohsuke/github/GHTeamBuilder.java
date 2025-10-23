@@ -12,9 +12,9 @@ import java.io.IOException;
  */
 public class GHTeamBuilder extends GitHubInteractiveObject {
 
+    private final String orgName;
     /** The builder. */
     protected final Requester builder;
-    private final String orgName;
 
     /**
      * Instantiates a new GH team builder.
@@ -32,6 +32,17 @@ public class GHTeamBuilder extends GitHubInteractiveObject {
         this.orgName = orgName;
         this.builder = root.createRequest();
         this.builder.with("name", name);
+    }
+
+    /**
+     * Creates a team with all the parameters.
+     *
+     * @return the gh team
+     * @throws IOException
+     *             if team cannot be created
+     */
+    public GHTeam create() throws IOException {
+        return builder.method("POST").withUrlPath("/orgs/" + orgName + "/teams").fetch(GHTeam.class).wrapUp(root());
     }
 
     /**
@@ -59,14 +70,14 @@ public class GHTeamBuilder extends GitHubInteractiveObject {
     }
 
     /**
-     * Repository names to add this team to.
+     * Parent team id for this team.
      *
-     * @param repoNames
-     *            repoNames to add team to
+     * @param parentTeamId
+     *            parentTeamId of team
      * @return a builder to continue with building
      */
-    public GHTeamBuilder repositories(String... repoNames) {
-        this.builder.with("repo_names", repoNames);
+    public GHTeamBuilder parentTeamId(long parentTeamId) {
+        this.builder.with("parent_team_id", parentTeamId);
         return this;
     }
 
@@ -98,25 +109,14 @@ public class GHTeamBuilder extends GitHubInteractiveObject {
     }
 
     /**
-     * Parent team id for this team.
+     * Repository names to add this team to.
      *
-     * @param parentTeamId
-     *            parentTeamId of team
+     * @param repoNames
+     *            repoNames to add team to
      * @return a builder to continue with building
      */
-    public GHTeamBuilder parentTeamId(long parentTeamId) {
-        this.builder.with("parent_team_id", parentTeamId);
+    public GHTeamBuilder repositories(String... repoNames) {
+        this.builder.with("repo_names", repoNames);
         return this;
-    }
-
-    /**
-     * Creates a team with all the parameters.
-     *
-     * @return the gh team
-     * @throws IOException
-     *             if team cannot be created
-     */
-    public GHTeam create() throws IOException {
-        return builder.method("POST").withUrlPath("/orgs/" + orgName + "/teams").fetch(GHTeam.class).wrapUp(root());
     }
 }

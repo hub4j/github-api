@@ -3,12 +3,6 @@ package org.kohsuke.github_api.v2;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHAuthorization;
-import org.kohsuke.github_api.v2.GHEvent;
-import org.kohsuke.github_api.v2.GHFileNotFoundException;
-import org.kohsuke.github_api.v2.GHHook;
-import org.kohsuke.github_api.v2.GHRepository;
-import org.kohsuke.github_api.v2.GitHub;
 
 import java.io.IOException;
 import java.util.Arrays;

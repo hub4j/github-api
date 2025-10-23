@@ -1,18 +1,6 @@
 package org.kohsuke.github_api.v2;
 
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHApp;
-import org.kohsuke.github_api.v2.GHAppInstallation;
-import org.kohsuke.github_api.v2.GHAppInstallationRequest;
-import org.kohsuke.github_api.v2.GHAppInstallationToken;
-import org.kohsuke.github_api.v2.GHEvent;
-import org.kohsuke.github_api.v2.GHPermissionType;
-import org.kohsuke.github_api.v2.GHRepository;
-import org.kohsuke.github_api.v2.GHRepositorySelection;
-import org.kohsuke.github_api.v2.GHTargetType;
-import org.kohsuke.github_api.v2.GHUser;
-import org.kohsuke.github_api.v2.GitHubBuilder;
-import org.kohsuke.github_api.v2.GitHubClient;
 
 import java.io.IOException;
 import java.text.ParseException;

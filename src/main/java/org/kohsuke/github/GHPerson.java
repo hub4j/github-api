@@ -17,25 +17,19 @@ import java.util.TreeMap;
  */
 public abstract class GHPerson extends GHObject {
 
-    /**
-     * Create default GHPerson instance
-     */
-    public GHPerson() {
-    }
+    /** The public gists. */
+    protected int followers, following, public_repos, public_gists;
 
-    /** The avatar url. */
-    // core data fields that exist even for "small" user data (such as the user info in pull request)
-    protected String login, avatar_url;
+    /** The html url. */
+    protected String html_url;
 
     /** The twitter username. */
     // other fields (that only show up in full data)
     protected String location, blog, email, bio, name, company, type, twitter_username;
 
-    /** The html url. */
-    protected String html_url;
-
-    /** The public gists. */
-    protected int followers, following, public_repos, public_gists;
+    /** The avatar url. */
+    // core data fields that exist even for "small" user data (such as the user info in pull request)
+    protected String login, avatar_url;
 
     /** The hireable. */
     protected boolean site_admin, hireable;
@@ -45,24 +39,156 @@ public abstract class GHPerson extends GHObject {
     protected Integer total_private_repos;
 
     /**
-     * Fully populate the data by retrieving missing data.
-     * <p>
-     * Depending on the original API call where this object is created, it may not contain everything.
+     * Create default GHPerson instance
+     */
+    public GHPerson() {
+    }
+
+    /**
+     * Returns a string of the avatar image URL.
      *
+     * @return the avatar url
+     */
+    public String getAvatarUrl() {
+        return avatar_url;
+    }
+
+    /**
+     * Gets the blog URL of this user.
+     *
+     * @return the blog
      * @throws IOException
      *             the io exception
      */
-    protected synchronized void populate() throws IOException {
-        if (super.getCreatedAt() != null) {
-            return; // already populated
-        }
-        if (isOffline()) {
-            return; // cannot populate, will have to live with what we have
-        }
-        URL url = getUrl();
-        if (url != null) {
-            root().createRequest().setRawUrlPath(url.toString()).fetchInto(this);
-        }
+    public String getBlog() throws IOException {
+        populate();
+        return blog;
+    }
+
+    /**
+     * Gets the company name of this user, like "Sun Microsystems, Inc."
+     *
+     * @return the company
+     * @throws IOException
+     *             the io exception
+     */
+    public String getCompany() throws IOException {
+        populate();
+        return company;
+    }
+
+    /**
+     * Gets the created at.
+     *
+     * @return the created at
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    public Date getCreatedAt() throws IOException {
+        populate();
+        return super.getCreatedAt();
+    }
+
+    /**
+     * Gets the e-mail address of the user.
+     *
+     * @return the email
+     * @throws IOException
+     *             the io exception
+     */
+    public String getEmail() throws IOException {
+        populate();
+        return email;
+    }
+
+    /**
+     * Gets followers count.
+     *
+     * @return the followers count
+     * @throws IOException
+     *             the io exception
+     */
+    public int getFollowersCount() throws IOException {
+        populate();
+        return followers;
+    }
+
+    /**
+     * Gets following count.
+     *
+     * @return the following count
+     * @throws IOException
+     *             the io exception
+     */
+    public int getFollowingCount() throws IOException {
+        populate();
+        return following;
+    }
+
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
+    public URL getHtmlUrl() {
+        return GitHubClient.parseURL(html_url);
+    }
+
+    /**
+     * Gets the location of this user, like "Santa Clara, California".
+     *
+     * @return the location
+     * @throws IOException
+     *             the io exception
+     */
+    public String getLocation() throws IOException {
+        populate();
+        return location;
+    }
+
+    /**
+     * Gets the login ID of this user, like 'kohsuke'.
+     *
+     * @return the login
+     */
+    public String getLogin() {
+        return login;
+    }
+
+    /**
+     * Gets the human-readable name of the user, like "Kohsuke Kawaguchi".
+     *
+     * @return the name
+     * @throws IOException
+     *             the io exception
+     */
+    public String getName() throws IOException {
+        populate();
+        return name;
+    }
+
+    /**
+     * Gets public gist count.
+     *
+     * @return the public gist count
+     * @throws IOException
+     *             the io exception
+     */
+    public int getPublicGistCount() throws IOException {
+        populate();
+        return public_gists;
+    }
+
+    /**
+     * Gets public repo count.
+     *
+     * @return the public repo count
+     * @throws IOException
+     *             the io exception
+     */
+    public int getPublicRepoCount() throws IOException {
+        populate();
+        return public_repos;
     }
 
     /**
@@ -80,6 +206,94 @@ public abstract class GHPerson extends GHObject {
         }
         return Collections.unmodifiableMap(repositories);
     }
+
+    /**
+     * Gets repository.
+     *
+     * @param name
+     *            the name
+     * @return null if the repository was not found
+     * @throws IOException
+     *             the io exception
+     */
+    public GHRepository getRepository(String name) throws IOException {
+        try {
+            return GHRepository.read(root(), login, name);
+        } catch (FileNotFoundException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Gets total private repo count.
+     *
+     * @return the total private repo count
+     * @throws IOException
+     *             the io exception
+     */
+    public Optional<Integer> getTotalPrivateRepoCount() throws IOException {
+        populate();
+        return Optional.ofNullable(total_private_repos);
+    }
+
+    /**
+     * Gets the Twitter Username of this user, like "GitHub".
+     *
+     * @return the Twitter username
+     * @throws IOException
+     *             the io exception
+     */
+    public String getTwitterUsername() throws IOException {
+        populate();
+        return twitter_username;
+    }
+
+    /**
+     * Gets the type. This is either "User" or "Organization".
+     *
+     * @return the type
+     * @throws IOException
+     *             the io exception
+     */
+    public String getType() throws IOException {
+        if (type == null) {
+            populate();
+        }
+        return type;
+    }
+
+    /**
+     * Gets the updated at.
+     *
+     * @return the updated at
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    public Date getUpdatedAt() throws IOException {
+        populate();
+        return super.getUpdatedAt();
+    }
+
+    /**
+     * Gets the site_admin field.
+     *
+     * @return the site_admin field
+     * @throws IOException
+     *             the io exception
+     */
+    public boolean isSiteAdmin() throws IOException {
+        populate();
+        return site_admin;
+    }
+
+    /**
+     * Lists events for an organization or an user.
+     *
+     * @return the paged iterable
+     * @throws IOException
+     *             the io exception
+     */
+    public abstract PagedIterable<GHEventInfo> listEvents() throws IOException;
 
     /**
      * List all the repositories using a default of 30 items page size.
@@ -110,237 +324,23 @@ public abstract class GHPerson extends GHObject {
     }
 
     /**
-     * Gets repository.
+     * Fully populate the data by retrieving missing data.
+     * <p>
+     * Depending on the original API call where this object is created, it may not contain everything.
      *
-     * @param name
-     *            the name
-     * @return null if the repository was not found
      * @throws IOException
      *             the io exception
      */
-    public GHRepository getRepository(String name) throws IOException {
-        try {
-            return GHRepository.read(root(), login, name);
-        } catch (FileNotFoundException e) {
-            return null;
+    protected synchronized void populate() throws IOException {
+        if (super.getCreatedAt() != null) {
+            return; // already populated
         }
-    }
-
-    /**
-     * Lists events for an organization or an user.
-     *
-     * @return the paged iterable
-     * @throws IOException
-     *             the io exception
-     */
-    public abstract PagedIterable<GHEventInfo> listEvents() throws IOException;
-
-    /**
-     * Returns a string of the avatar image URL.
-     *
-     * @return the avatar url
-     */
-    public String getAvatarUrl() {
-        return avatar_url;
-    }
-
-    /**
-     * Gets the login ID of this user, like 'kohsuke'.
-     *
-     * @return the login
-     */
-    public String getLogin() {
-        return login;
-    }
-
-    /**
-     * Gets the human-readable name of the user, like "Kohsuke Kawaguchi".
-     *
-     * @return the name
-     * @throws IOException
-     *             the io exception
-     */
-    public String getName() throws IOException {
-        populate();
-        return name;
-    }
-
-    /**
-     * Gets the company name of this user, like "Sun Microsystems, Inc."
-     *
-     * @return the company
-     * @throws IOException
-     *             the io exception
-     */
-    public String getCompany() throws IOException {
-        populate();
-        return company;
-    }
-
-    /**
-     * Gets the location of this user, like "Santa Clara, California".
-     *
-     * @return the location
-     * @throws IOException
-     *             the io exception
-     */
-    public String getLocation() throws IOException {
-        populate();
-        return location;
-    }
-
-    /**
-     * Gets the Twitter Username of this user, like "GitHub".
-     *
-     * @return the Twitter username
-     * @throws IOException
-     *             the io exception
-     */
-    public String getTwitterUsername() throws IOException {
-        populate();
-        return twitter_username;
-    }
-
-    /**
-     * Gets the created at.
-     *
-     * @return the created at
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    public Date getCreatedAt() throws IOException {
-        populate();
-        return super.getCreatedAt();
-    }
-
-    /**
-     * Gets the updated at.
-     *
-     * @return the updated at
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
-    public Date getUpdatedAt() throws IOException {
-        populate();
-        return super.getUpdatedAt();
-    }
-
-    /**
-     * Gets the blog URL of this user.
-     *
-     * @return the blog
-     * @throws IOException
-     *             the io exception
-     */
-    public String getBlog() throws IOException {
-        populate();
-        return blog;
-    }
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     */
-    public URL getHtmlUrl() {
-        return GitHubClient.parseURL(html_url);
-    }
-
-    /**
-     * Gets the e-mail address of the user.
-     *
-     * @return the email
-     * @throws IOException
-     *             the io exception
-     */
-    public String getEmail() throws IOException {
-        populate();
-        return email;
-    }
-
-    /**
-     * Gets public gist count.
-     *
-     * @return the public gist count
-     * @throws IOException
-     *             the io exception
-     */
-    public int getPublicGistCount() throws IOException {
-        populate();
-        return public_gists;
-    }
-
-    /**
-     * Gets public repo count.
-     *
-     * @return the public repo count
-     * @throws IOException
-     *             the io exception
-     */
-    public int getPublicRepoCount() throws IOException {
-        populate();
-        return public_repos;
-    }
-
-    /**
-     * Gets following count.
-     *
-     * @return the following count
-     * @throws IOException
-     *             the io exception
-     */
-    public int getFollowingCount() throws IOException {
-        populate();
-        return following;
-    }
-
-    /**
-     * Gets followers count.
-     *
-     * @return the followers count
-     * @throws IOException
-     *             the io exception
-     */
-    public int getFollowersCount() throws IOException {
-        populate();
-        return followers;
-    }
-
-    /**
-     * Gets the type. This is either "User" or "Organization".
-     *
-     * @return the type
-     * @throws IOException
-     *             the io exception
-     */
-    public String getType() throws IOException {
-        if (type == null) {
-            populate();
+        if (isOffline()) {
+            return; // cannot populate, will have to live with what we have
         }
-        return type;
-    }
-
-    /**
-     * Gets the site_admin field.
-     *
-     * @return the site_admin field
-     * @throws IOException
-     *             the io exception
-     */
-    public boolean isSiteAdmin() throws IOException {
-        populate();
-        return site_admin;
-    }
-
-    /**
-     * Gets total private repo count.
-     *
-     * @return the total private repo count
-     * @throws IOException
-     *             the io exception
-     */
-    public Optional<Integer> getTotalPrivateRepoCount() throws IOException {
-        populate();
-        return Optional.ofNullable(total_private_repos);
+        URL url = getUrl();
+        if (url != null) {
+            root().createRequest().setRawUrlPath(url.toString()).fetchInto(this);
+        }
     }
 }

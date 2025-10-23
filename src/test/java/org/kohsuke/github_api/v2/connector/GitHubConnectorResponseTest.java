@@ -7,8 +7,6 @@ import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
 import org.junit.Test;
 import org.kohsuke.github_api.v2.AbstractGitHubWireMockTest;
-import org.kohsuke.github_api.v2.connector.GitHubConnectorRequest;
-import org.kohsuke.github_api.v2.connector.GitHubConnectorResponse;
 import org.kohsuke.github_api.v2.connector.GitHubConnectorResponse.ByteArrayResponse;
 
 import java.io.ByteArrayInputStream;

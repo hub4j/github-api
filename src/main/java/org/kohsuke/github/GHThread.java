@@ -17,32 +17,82 @@ import java.util.Date;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
 public class GHThread extends GHObject {
-    private GHRepository repository;
-    private Subject subject;
-    private String reason;
-    private boolean unread;
-    private String last_read_at;
-    private String url, subscription_url;
-
     /**
      * The Class Subject.
      */
     static class Subject {
 
-        /** The title. */
-        String title;
-
-        /** The url. */
-        String url;
-
         /** The latest comment url. */
         String latest_comment_url;
 
+        /** The title. */
+        String title;
+
         /** The type. */
         String type;
+
+        /** The url. */
+        String url;
     }
+    private String last_read_at;
+    private String reason;
+    private GHRepository repository;
+    private Subject subject;
+    private boolean unread;
+
+    private String url, subscription_url;
 
     private GHThread() {// no external construction allowed
+    }
+
+    /**
+     * If this thread is about a commit, return that commit.
+     *
+     * @return null if this thread is not about a commit.
+     * @throws IOException
+     *             the io exception
+     */
+    public GHCommit getBoundCommit() throws IOException {
+        if (!"Commit".equals(subject.type))
+            return null;
+        return repository.getCommit(subject.url.substring(subject.url.lastIndexOf('/') + 1));
+    }
+
+    /**
+     * If this thread is about an issue, return that issue.
+     *
+     * @return null if this thread is not about an issue.
+     * @throws IOException
+     *             the io exception
+     */
+    public GHIssue getBoundIssue() throws IOException {
+        if (!"Issue".equals(subject.type) && "PullRequest".equals(subject.type))
+            return null;
+        return repository.getIssue(Integer.parseInt(subject.url.substring(subject.url.lastIndexOf('/') + 1)));
+    }
+
+    /**
+     * If this thread is about a pull request, return that pull request.
+     *
+     * @return null if this thread is not about a pull request.
+     * @throws IOException
+     *             the io exception
+     */
+    public GHPullRequest getBoundPullRequest() throws IOException {
+        if (!"PullRequest".equals(subject.type))
+            return null;
+        return repository.getPullRequest(Integer.parseInt(subject.url.substring(subject.url.lastIndexOf('/') + 1)));
+    }
+
+    // TODO: how to expose the subject?
+
+    /**
+     * Gets last comment url.
+     *
+     * @return the last comment url
+     */
+    public String getLastCommentUrl() {
+        return subject.latest_comment_url;
     }
 
     /**
@@ -73,15 +123,19 @@ public class GHThread extends GHObject {
         return repository;
     }
 
-    // TODO: how to expose the subject?
-
     /**
-     * Is read boolean.
+     * Returns the current subscription for this thread.
      *
-     * @return the boolean
+     * @return null if no subscription exists.
+     * @throws IOException
+     *             the io exception
      */
-    public boolean isRead() {
-        return !unread;
+    public GHSubscription getSubscription() throws IOException {
+        try {
+            return root().createRequest().method("POST").withUrlPath(subscription_url).fetch(GHSubscription.class);
+        } catch (FileNotFoundException e) {
+            return null;
+        }
     }
 
     /**
@@ -103,51 +157,12 @@ public class GHThread extends GHObject {
     }
 
     /**
-     * Gets last comment url.
+     * Is read boolean.
      *
-     * @return the last comment url
+     * @return the boolean
      */
-    public String getLastCommentUrl() {
-        return subject.latest_comment_url;
-    }
-
-    /**
-     * If this thread is about an issue, return that issue.
-     *
-     * @return null if this thread is not about an issue.
-     * @throws IOException
-     *             the io exception
-     */
-    public GHIssue getBoundIssue() throws IOException {
-        if (!"Issue".equals(subject.type) && "PullRequest".equals(subject.type))
-            return null;
-        return repository.getIssue(Integer.parseInt(subject.url.substring(subject.url.lastIndexOf('/') + 1)));
-    }
-
-    /**
-     * If this thread is about a pull request, return that pull request.
-     *
-     * @return null if this thread is not about a pull request.
-     * @throws IOException
-     *             the io exception
-     */
-    public GHPullRequest getBoundPullRequest() throws IOException {
-        if (!"PullRequest".equals(subject.type))
-            return null;
-        return repository.getPullRequest(Integer.parseInt(subject.url.substring(subject.url.lastIndexOf('/') + 1)));
-    }
-
-    /**
-     * If this thread is about a commit, return that commit.
-     *
-     * @return null if this thread is not about a commit.
-     * @throws IOException
-     *             the io exception
-     */
-    public GHCommit getBoundCommit() throws IOException {
-        if (!"Commit".equals(subject.type))
-            return null;
-        return repository.getCommit(subject.url.substring(subject.url.lastIndexOf('/') + 1));
+    public boolean isRead() {
+        return !unread;
     }
 
     /**
@@ -178,20 +193,5 @@ public class GHThread extends GHObject {
                 .with("ignored", ignored)
                 .withUrlPath(subscription_url)
                 .fetch(GHSubscription.class);
-    }
-
-    /**
-     * Returns the current subscription for this thread.
-     *
-     * @return null if no subscription exists.
-     * @throws IOException
-     *             the io exception
-     */
-    public GHSubscription getSubscription() throws IOException {
-        try {
-            return root().createRequest().method("POST").withUrlPath(subscription_url).fetch(GHSubscription.class);
-        } catch (FileNotFoundException e) {
-            return null;
-        }
     }
 }

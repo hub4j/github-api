@@ -8,7 +8,6 @@ import org.kohsuke.github_api.v2.connector.GitHubConnector;
 import org.kohsuke.github_api.v2.connector.GitHubConnectorRequest;
 import org.kohsuke.github_api.v2.connector.GitHubConnectorResponse;
 import org.kohsuke.github_api.v2.extras.HttpClientGitHubConnector;
-import org.kohsuke.github_api.v2.internal.DefaultGitHubConnector;
 
 import java.io.IOException;
 

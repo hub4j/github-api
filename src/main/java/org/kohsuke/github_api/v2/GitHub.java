@@ -26,6 +26,10 @@ package org.kohsuke.github_api.v2;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.kohsuke.github_api.v2.authorization.AuthorizationProvider;
+import org.kohsuke.github_api.v2.authorization.ImmutableAuthorizationProvider;
+import org.kohsuke.github_api.v2.authorization.UserAuthorizationProvider;
+import org.kohsuke.github_api.v2.connector.GitHubConnector;
 
 import java.io.*;
 import java.util.*;
@@ -36,11 +40,6 @@ import java.util.logging.Logger;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-
-import org.kohsuke.github_api.v2.authorization.AuthorizationProvider;
-import org.kohsuke.github_api.v2.authorization.ImmutableAuthorizationProvider;
-import org.kohsuke.github_api.v2.authorization.UserAuthorizationProvider;
-import org.kohsuke.github_api.v2.connector.GitHubConnector;
 
 // TODO: Auto-generated Javadoc
 /**

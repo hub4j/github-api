@@ -1,7 +1,6 @@
 package org.kohsuke.github_api.v2;
 
 import org.junit.Test;
-import org.kohsuke.github_api.v2.HttpException;
 import org.kohsuke.github_api.v2.authorization.AppInstallationAuthorizationProvider;
 import org.kohsuke.github_api.v2.authorization.ImmutableAuthorizationProvider;
 import org.kohsuke.github_api.v2.authorization.OrgAppInstallationAuthorizationProvider;

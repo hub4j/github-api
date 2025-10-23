@@ -11,14 +11,6 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
-import org.kohsuke.github_api.v2.GHCreateRepositoryBuilder;
-import org.kohsuke.github_api.v2.GHFileNotFoundException;
-import org.kohsuke.github_api.v2.GHRepository;
-import org.kohsuke.github_api.v2.GHUser;
-import org.kohsuke.github_api.v2.GitHub;
-import org.kohsuke.github_api.v2.GitHubBuilder;
-import org.kohsuke.github_api.v2.GitHubRateLimitHandler;
-
 import wiremock.com.github.jknack.handlebars.Helper;
 import wiremock.com.github.jknack.handlebars.Options;
 

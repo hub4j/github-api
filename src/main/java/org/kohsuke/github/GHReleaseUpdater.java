@@ -25,18 +25,6 @@ public class GHReleaseUpdater {
     }
 
     /**
-     * Tag gh release updater.
-     *
-     * @param tag
-     *            the tag
-     * @return the gh release updater
-     */
-    public GHReleaseUpdater tag(String tag) {
-        builder.with("tag_name", tag);
-        return this;
-    }
-
-    /**
      * Body gh release updater.
      *
      * @param body
@@ -45,6 +33,18 @@ public class GHReleaseUpdater {
      */
     public GHReleaseUpdater body(String body) {
         builder.with("body", body);
+        return this;
+    }
+
+    /**
+     * Optional.
+     *
+     * @param categoryName
+     *            the category of the discussion to be created for the release. Category should already exist
+     * @return the gh release builder
+     */
+    public GHReleaseUpdater categoryName(String categoryName) {
+        builder.with("discussion_category_name", categoryName);
         return this;
     }
 
@@ -74,6 +74,18 @@ public class GHReleaseUpdater {
     }
 
     /**
+     * Optional.
+     *
+     * @param latest
+     *            Whether to make this the latest release. Default is {@code TRUE}
+     * @return the gh release builder
+     */
+    public GHReleaseUpdater makeLatest(GHReleaseBuilder.MakeLatest latest) {
+        builder.with("make_latest", latest);
+        return this;
+    }
+
+    /**
      * Name gh release updater.
      *
      * @param name
@@ -99,26 +111,14 @@ public class GHReleaseUpdater {
     }
 
     /**
-     * Optional.
+     * Tag gh release updater.
      *
-     * @param categoryName
-     *            the category of the discussion to be created for the release. Category should already exist
-     * @return the gh release builder
+     * @param tag
+     *            the tag
+     * @return the gh release updater
      */
-    public GHReleaseUpdater categoryName(String categoryName) {
-        builder.with("discussion_category_name", categoryName);
-        return this;
-    }
-
-    /**
-     * Optional.
-     *
-     * @param latest
-     *            Whether to make this the latest release. Default is {@code TRUE}
-     * @return the gh release builder
-     */
-    public GHReleaseUpdater makeLatest(GHReleaseBuilder.MakeLatest latest) {
-        builder.with("make_latest", latest);
+    public GHReleaseUpdater tag(String tag) {
+        builder.with("tag_name", tag);
         return this;
     }
 

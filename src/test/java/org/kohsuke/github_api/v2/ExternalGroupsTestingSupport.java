@@ -3,7 +3,6 @@ package org.kohsuke.github_api.v2;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
-import org.kohsuke.github_api.v2.GHExternalGroup;
 
 import java.util.List;
 import java.util.function.Function;

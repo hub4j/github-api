@@ -4,16 +4,6 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.kohsuke.github_api.v2.EnterpriseManagedSupport;
-import org.kohsuke.github_api.v2.GHError;
-import org.kohsuke.github_api.v2.GHExternalGroup;
-import org.kohsuke.github_api.v2.GHIOException;
-import org.kohsuke.github_api.v2.GHMembership;
-import org.kohsuke.github_api.v2.GHNotExternallyManagedEnterpriseException;
-import org.kohsuke.github_api.v2.GHOrganization;
-import org.kohsuke.github_api.v2.GHRepository;
-import org.kohsuke.github_api.v2.GHTeam;
-import org.kohsuke.github_api.v2.GHUser;
 import org.kohsuke.github_api.v2.GHOrganization.Permission;
 import org.kohsuke.github_api.v2.GHOrganization.RepositoryRole;
 

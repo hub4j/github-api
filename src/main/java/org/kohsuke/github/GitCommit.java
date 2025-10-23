@@ -17,34 +17,16 @@ import java.util.List;
 
 @SuppressFBWarnings(value = { "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GitCommit {
-    private GHRepository owner;
-    private String sha, node_id, url, html_url;
-    private GitUser author;
-    private GitUser committer;
-
-    private String message;
-
-    private GHVerification verification;
-
     /**
      * The Class Tree.
      */
     static class Tree {
 
-        /** The url. */
-        String url;
-
         /** The sha. */
         String sha;
 
-        /**
-         * Gets the url.
-         *
-         * @return the url
-         */
-        public String getUrl() {
-            return url;
-        }
+        /** The url. */
+        String url;
 
         /**
          * Gets the sha.
@@ -55,11 +37,29 @@ public class GitCommit {
             return sha;
         }
 
+        /**
+         * Gets the url.
+         *
+         * @return the url
+         */
+        public String getUrl() {
+            return url;
+        }
+
     }
+    private GitUser author;
+    private GitUser committer;
+    private String message;
+
+    private GHRepository owner;
+
+    private List<GHCommit.Parent> parents;
+
+    private String sha, node_id, url, html_url;
 
     private Tree tree;
 
-    private List<GHCommit.Parent> parents;
+    private GHVerification verification;
 
     /**
      * Instantiates a new git commit.
@@ -91,61 +91,6 @@ public class GitCommit {
     }
 
     /**
-     * Gets owner.
-     *
-     * @return the repository that contains the commit.
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHRepository getOwner() {
-        return owner;
-    }
-
-    /**
-     * Gets SHA1.
-     *
-     * @return The SHA1 of this commit
-     */
-    public String getSHA1() {
-        return sha;
-    }
-
-    /**
-     * Gets SHA.
-     *
-     * @return The SHA of this commit
-     */
-    public String getSha() {
-        return sha;
-    }
-
-    /**
-     * Gets node id.
-     *
-     * @return The node id of this commit
-     */
-    public String getNodeId() {
-        return node_id;
-    }
-
-    /**
-     * Gets URL.
-     *
-     * @return The URL of this commit
-     */
-    public String getUrl() {
-        return url;
-    }
-
-    /**
-     * Gets HTML URL.
-     *
-     * @return The HTML URL of this commit
-     */
-    public String getHtmlUrl() {
-        return html_url;
-    }
-
-    /**
      * Gets author.
      *
      * @return the author
@@ -164,6 +109,15 @@ public class GitCommit {
     }
 
     /**
+     * Gets commit date.
+     *
+     * @return the commit date
+     */
+    public Date getCommitDate() {
+        return committer.getDate();
+    }
+
+    /**
      * Gets committer.
      *
      * @return the committer
@@ -173,12 +127,12 @@ public class GitCommit {
     }
 
     /**
-     * Gets commit date.
+     * Gets HTML URL.
      *
-     * @return the commit date
+     * @return The HTML URL of this commit
      */
-    public Date getCommitDate() {
-        return committer.getDate();
+    public String getHtmlUrl() {
+        return html_url;
     }
 
     /**
@@ -191,49 +145,22 @@ public class GitCommit {
     }
 
     /**
-     * Gets Verification Status.
+     * Gets node id.
      *
-     * @return the Verification status
+     * @return The node id of this commit
      */
-    public GHVerification getVerification() {
-        return verification;
+    public String getNodeId() {
+        return node_id;
     }
 
     /**
-     * Gets the tree.
+     * Gets owner.
      *
-     * @return the tree
+     * @return the repository that contains the commit.
      */
-    Tree getTree() {
-        return tree;
-    }
-
-    /**
-     * Gets the tree SHA 1.
-     *
-     * @return the tree SHA 1
-     */
-    public String getTreeSHA1() {
-        return tree.getSha();
-    }
-
-    /**
-     * Gets the tree url.
-     *
-     * @return the tree url
-     */
-    public String getTreeUrl() {
-        return tree.getUrl();
-    }
-
-    /**
-     * Gets the parents.
-     *
-     * @return the parents
-     */
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "acceptable")
-    List<GHCommit.Parent> getParents() {
-        return parents;
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHRepository getOwner() {
+        return owner;
     }
 
     /**
@@ -258,15 +185,76 @@ public class GitCommit {
     }
 
     /**
-     * Wrap up.
+     * Gets SHA1.
      *
-     * @param owner
-     *            the owner
-     * @return the git commit
+     * @return The SHA1 of this commit
      */
-    GitCommit wrapUp(GHRepository owner) {
-        this.owner = owner;
-        return this;
+    public String getSHA1() {
+        return sha;
+    }
+
+    /**
+     * Gets SHA.
+     *
+     * @return The SHA of this commit
+     */
+    public String getSha() {
+        return sha;
+    }
+
+    /**
+     * Gets the tree SHA 1.
+     *
+     * @return the tree SHA 1
+     */
+    public String getTreeSHA1() {
+        return tree.getSha();
+    }
+
+    /**
+     * Gets the tree url.
+     *
+     * @return the tree url
+     */
+    public String getTreeUrl() {
+        return tree.getUrl();
+    }
+
+    /**
+     * Gets URL.
+     *
+     * @return The URL of this commit
+     */
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * Gets Verification Status.
+     *
+     * @return the Verification status
+     */
+    public GHVerification getVerification() {
+        return verification;
+    }
+
+    /**
+     * Gets the parents.
+     *
+     * @return the parents
+     */
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "acceptable")
+    List<GHCommit.Parent> getParents() {
+        return parents;
+    }
+
+    /**
+     * Gets the tree.
+     *
+     * @return the tree
+     */
+    Tree getTree() {
+        return tree;
     }
 
     /**
@@ -276,6 +264,18 @@ public class GitCommit {
      */
     GHCommit toGHCommit() {
         return new GHCommit(new GHCommit.ShortInfo(this));
+    }
+
+    /**
+     * Wrap up.
+     *
+     * @param owner
+     *            the owner
+     * @return the git commit
+     */
+    GitCommit wrapUp(GHRepository owner) {
+        this.owner = owner;
+        return this;
     }
 
 }

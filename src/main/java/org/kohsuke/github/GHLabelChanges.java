@@ -12,21 +12,35 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 public class GHLabelChanges {
 
     /**
+     * Wrapper for changed values.
+     */
+    public static class GHFrom {
+
+        private String from;
+
+        /**
+         * Create default GHFrom instance
+         */
+        public GHFrom() {
+        }
+
+        /**
+         * Previous value that was changed.
+         *
+         * @return previous value
+         */
+        public String getFrom() {
+            return from;
+        }
+    }
+
+    private GHFrom color;
+    private GHFrom name;
+
+    /**
      * Create default GHLabelChanges instance
      */
     public GHLabelChanges() {
-    }
-
-    private GHFrom name;
-    private GHFrom color;
-
-    /**
-     * Old label name.
-     *
-     * @return old label name (or null if not changed)
-     */
-    public GHFrom getName() {
-        return name;
     }
 
     /**
@@ -39,25 +53,11 @@ public class GHLabelChanges {
     }
 
     /**
-     * Wrapper for changed values.
+     * Old label name.
+     *
+     * @return old label name (or null if not changed)
      */
-    public static class GHFrom {
-
-        /**
-         * Create default GHFrom instance
-         */
-        public GHFrom() {
-        }
-
-        private String from;
-
-        /**
-         * Previous value that was changed.
-         *
-         * @return previous value
-         */
-        public String getFrom() {
-            return from;
-        }
+    public GHFrom getName() {
+        return name;
     }
 }

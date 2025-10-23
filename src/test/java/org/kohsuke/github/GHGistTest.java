@@ -21,6 +21,28 @@ public class GHGistTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Gist file.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void gistFile() throws Exception {
+        GHGist gist = gitHub.getGist("9903708");
+
+        assertThat(gist.isPublic(), is(true));
+        assertThat(gist.getId(), equalTo(9903708L));
+        assertThat(gist.getGistId(), equalTo("9903708"));
+
+        assertThat(gist.getFiles().size(), equalTo(1));
+        GHGistFile f = gist.getFile("keybase.md");
+
+        assertThat(f.getType(), equalTo("text/markdown"));
+        assertThat(f.getLanguage(), equalTo("Markdown"));
+        assertThat(f.getContent(), containsString("### Keybase proof"));
+    }
+
+    /**
      * Lifecycle test.
      *
      * @throws Exception
@@ -146,27 +168,5 @@ public class GHGistTest extends AbstractGitHubWireMockTest {
         } finally {
             newGist.delete();
         }
-    }
-
-    /**
-     * Gist file.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    public void gistFile() throws Exception {
-        GHGist gist = gitHub.getGist("9903708");
-
-        assertThat(gist.isPublic(), is(true));
-        assertThat(gist.getId(), equalTo(9903708L));
-        assertThat(gist.getGistId(), equalTo("9903708"));
-
-        assertThat(gist.getFiles().size(), equalTo(1));
-        GHGistFile f = gist.getFile("keybase.md");
-
-        assertThat(f.getType(), equalTo("text/markdown"));
-        assertThat(f.getLanguage(), equalTo("Markdown"));
-        assertThat(f.getContent(), containsString("### Keybase proof"));
     }
 }

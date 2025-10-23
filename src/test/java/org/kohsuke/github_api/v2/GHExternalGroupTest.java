@@ -1,8 +1,6 @@
 package org.kohsuke.github_api.v2;
 
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHExternalGroup;
-import org.kohsuke.github_api.v2.GHOrganization;
 
 import java.io.IOException;
 import java.util.List;

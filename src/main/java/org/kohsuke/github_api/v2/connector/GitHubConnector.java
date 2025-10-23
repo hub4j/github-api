@@ -1,9 +1,9 @@
 package org.kohsuke.github_api.v2.connector;
 
-import java.io.IOException;
-
 import org.kohsuke.github_api.v2.GHIOException;
 import org.kohsuke.github_api.v2.internal.DefaultGitHubConnector;
+
+import java.io.IOException;
 
 /**
  * Interface for customizing HTTP request behaviors or using any HTTP client library for interacting with GitHub.

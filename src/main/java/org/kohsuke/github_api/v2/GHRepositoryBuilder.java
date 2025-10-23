@@ -1,9 +1,9 @@
 package org.kohsuke.github_api.v2;
 
+import org.kohsuke.github_api.v2.GHRepository.Visibility;
+
 import java.io.IOException;
 import java.net.URL;
-
-import org.kohsuke.github_api.v2.GHRepository.Visibility;
 
 // TODO: Auto-generated Javadoc
 /**

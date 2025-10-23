@@ -2,9 +2,6 @@ package org.kohsuke.github_api.v2;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHBranch;
-import org.kohsuke.github_api.v2.GHBranchProtection;
-import org.kohsuke.github_api.v2.GHRepository;
 import org.kohsuke.github_api.v2.GHBranchProtection.AllowDeletions;
 import org.kohsuke.github_api.v2.GHBranchProtection.AllowForcePushes;
 import org.kohsuke.github_api.v2.GHBranchProtection.AllowForkSyncing;

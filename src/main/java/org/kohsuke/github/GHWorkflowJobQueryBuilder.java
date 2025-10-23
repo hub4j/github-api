@@ -22,22 +22,22 @@ public class GHWorkflowJobQueryBuilder extends GHQueryBuilder<GHWorkflowJob> {
     }
 
     /**
-     * Apply a filter to only return the jobs of the most recent execution of the workflow run.
-     *
-     * @return the workflow run job query builder
-     */
-    public GHWorkflowJobQueryBuilder latest() {
-        req.with("filter", "latest");
-        return this;
-    }
-
-    /**
      * Apply a filter to return jobs from all executions of this workflow run.
      *
      * @return the workflow run job run query builder
      */
     public GHWorkflowJobQueryBuilder all() {
         req.with("filter", "all");
+        return this;
+    }
+
+    /**
+     * Apply a filter to only return the jobs of the most recent execution of the workflow run.
+     *
+     * @return the workflow run job query builder
+     */
+    public GHWorkflowJobQueryBuilder latest() {
+        req.with("filter", "latest");
         return this;
     }
 

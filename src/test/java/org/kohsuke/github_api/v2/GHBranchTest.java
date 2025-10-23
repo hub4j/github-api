@@ -1,9 +1,6 @@
 package org.kohsuke.github_api.v2;
 
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHBranch;
-import org.kohsuke.github_api.v2.GHCommit;
-import org.kohsuke.github_api.v2.GHRepository;
 
 import static org.hamcrest.Matchers.*;
 

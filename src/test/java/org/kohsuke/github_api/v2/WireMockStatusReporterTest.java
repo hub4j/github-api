@@ -3,9 +3,6 @@ package org.kohsuke.github_api.v2;
 import org.hamcrest.Matchers;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHFileNotFoundException;
-import org.kohsuke.github_api.v2.GHRepository;
-import org.kohsuke.github_api.v2.GHUser;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assume.assumeFalse;

@@ -19,10 +19,29 @@ import javax.annotation.Nonnull;
  */
 class GitHubPageContentsIterable<T> extends PagedIterable<T> {
 
+    /**
+     * This class is not thread-safe. Any one instance should only be called from a single thread.
+     */
+    private class GitHubPageContentsIterator extends PagedIterator<T> {
+
+        public GitHubPageContentsIterator(GitHubPageIterator<T[]> iterator, Consumer<T> itemInitializer) {
+            super(iterator, itemInitializer);
+        }
+
+        /**
+         * Gets the {@link GitHubResponse} for the last page received.
+         *
+         * @return the {@link GitHubResponse} for the last page received.
+         */
+        private GitHubResponse<T[]> lastResponse() {
+            return ((GitHubPageIterator<T[]>) base).finalResponse();
+        }
+    }
     private final GitHubClient client;
-    private final GitHubRequest request;
-    private final Class<T[]> receiverType;
     private final Consumer<T> itemInitializer;
+    private final Class<T[]> receiverType;
+
+    private final GitHubRequest request;
 
     /**
      * Instantiates a new git hub page contents iterable.
@@ -70,24 +89,5 @@ class GitHubPageContentsIterable<T> extends PagedIterable<T> {
         T[] items = toArray(iterator);
         GitHubResponse<T[]> lastResponse = iterator.lastResponse();
         return new GitHubResponse<>(lastResponse, items);
-    }
-
-    /**
-     * This class is not thread-safe. Any one instance should only be called from a single thread.
-     */
-    private class GitHubPageContentsIterator extends PagedIterator<T> {
-
-        public GitHubPageContentsIterator(GitHubPageIterator<T[]> iterator, Consumer<T> itemInitializer) {
-            super(iterator, itemInitializer);
-        }
-
-        /**
-         * Gets the {@link GitHubResponse} for the last page received.
-         *
-         * @return the {@link GitHubResponse} for the last page received.
-         */
-        private GitHubResponse<T[]> lastResponse() {
-            return ((GitHubPageIterator<T[]>) base).finalResponse();
-        }
     }
 }

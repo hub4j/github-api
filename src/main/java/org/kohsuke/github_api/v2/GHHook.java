@@ -1,14 +1,13 @@
 package org.kohsuke.github_api.v2;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.kohsuke.github_api.v2.internal.EnumUtils;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
-
-import org.kohsuke.github_api.v2.internal.EnumUtils;
 
 // TODO: Auto-generated Javadoc
 /**

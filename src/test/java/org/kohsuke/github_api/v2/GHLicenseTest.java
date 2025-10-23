@@ -26,11 +26,6 @@ package org.kohsuke.github_api.v2;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHContent;
-import org.kohsuke.github_api.v2.GHLicense;
-import org.kohsuke.github_api.v2.GHRepository;
-import org.kohsuke.github_api.v2.GitHub;
-import org.kohsuke.github_api.v2.PagedIterable;
 
 import java.io.IOException;
 import java.net.URL;

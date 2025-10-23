@@ -1,12 +1,12 @@
 package org.kohsuke.github_api.v2;
 
+import org.kohsuke.github_api.v2.connector.GitHubConnectorResponse;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import javax.annotation.CheckForNull;
-
-import org.kohsuke.github_api.v2.connector.GitHubConnectorResponse;
 
 // TODO: Auto-generated Javadoc
 /**

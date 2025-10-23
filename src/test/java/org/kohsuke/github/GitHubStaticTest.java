@@ -29,111 +29,39 @@ import static org.junit.Assert.assertThrows;
 public class GitHubStaticTest extends AbstractGitHubWireMockTest {
 
     /**
+     * Format date.
+     *
+     * @param dt
+     *            the dt
+     * @param format
+     *            the format
+     * @return the string
+     */
+    static String formatDate(Date dt, String format) {
+        return formatZonedDate(dt, format, "GMT");
+    }
+
+    /**
+     * Format zoned date.
+     *
+     * @param dt
+     *            the dt
+     * @param format
+     *            the format
+     * @param timeZone
+     *            the time zone
+     * @return the string
+     */
+    static String formatZonedDate(Date dt, String format, String timeZone) {
+        SimpleDateFormat df = new SimpleDateFormat(format);
+        df.setTimeZone(TimeZone.getTimeZone(timeZone));
+        return df.format(dt);
+    }
+
+    /**
      * Create default GitHubStaticTest instance
      */
     public GitHubStaticTest() {
-    }
-
-    /**
-     * Test parse URL.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    public void testParseURL() throws Exception {
-        assertThat(GitHubClient.parseURL("https://api.github.com"), equalTo(new URL("https://api.github.com")));
-        assertThat(GitHubClient.parseURL(null), nullValue());
-
-        try {
-            GitHubClient.parseURL("bogus");
-            fail();
-        } catch (IllegalStateException e) {
-            assertThat(e.getMessage(), equalTo("Invalid URL: bogus"));
-        }
-    }
-
-    /**
-     * Test parse instant.
-     */
-    @Test
-    public void testParseInstant() {
-        assertThat(GitHubClient.parseInstant(null), nullValue());
-    }
-
-    /**
-     * Test raw url path invalid.
-     */
-    @Test
-    public void testRawUrlPathInvalid() {
-        try {
-            gitHub.createRequest().setRawUrlPath("invalid.path.com");
-            fail();
-        } catch (GHException e) {
-            assertThat(e.getMessage(), equalTo("Raw URL must start with 'http'"));
-        }
-    }
-
-    /**
-     * Time round trip.
-     */
-    @Test
-    public void timeRoundTrip() {
-        final long stableInstantEpochMilli = 1533721222255L;
-        Instant instantNow = Instant.ofEpochMilli(stableInstantEpochMilli);
-
-        Date instantSeconds = Date.from(instantNow.truncatedTo(ChronoUnit.SECONDS));
-        Date instantMillis = Date.from(instantNow.truncatedTo(ChronoUnit.MILLIS));
-
-        String instantFormatSlash = formatZonedDate(instantMillis, "yyyy/MM/dd HH:mm:ss ZZZZ", "PST");
-        assertThat(instantFormatSlash, equalTo("2018/08/08 02:40:22 -0700"));
-
-        String instantFormatDash = formatDate(instantMillis, "yyyy-MM-dd'T'HH:mm:ss'Z'");
-        assertThat(instantFormatDash, equalTo("2018-08-08T09:40:22Z"));
-
-        String instantFormatMillis = formatDate(instantMillis, "yyyy-MM-dd'T'HH:mm:ss.S'Z'");
-        assertThat(instantFormatMillis, equalTo("2018-08-08T09:40:22.255Z"));
-
-        String instantFormatMillisZoned = formatZonedDate(instantMillis, "yyyy-MM-dd'T'HH:mm:ss.SXXX", "PST");
-        assertThat(instantFormatMillisZoned, equalTo("2018-08-08T02:40:22.255-07:00"));
-
-        String instantSecondsFormatMillis = formatDate(instantSeconds, "yyyy-MM-dd'T'HH:mm:ss.S'Z'");
-        assertThat(instantSecondsFormatMillis, equalTo("2018-08-08T09:40:22.0Z"));
-
-        String instantSecondsFormatMillisZoned = formatZonedDate(instantSeconds, "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", "PST");
-        assertThat(instantSecondsFormatMillisZoned, equalTo("2018-08-08T02:40:22.000-07:00"));
-
-        String instantBadFormat = formatDate(instantMillis, "yy-MM-dd'T'HH:mm'Z'");
-        assertThat(instantBadFormat, equalTo("18-08-08T09:40Z"));
-
-        assertThat(GitHubClient.parseDate(GitHubClient.printDate(instantSeconds)),
-                equalTo(GitHubClient.parseDate(GitHubClient.printDate(instantMillis))));
-        assertThat(GitHubClient.printDate(instantSeconds), equalTo("2018-08-08T09:40:22Z"));
-        assertThat(GitHubClient.printDate(GitHubClient.parseDate(instantFormatMillisZoned)),
-                equalTo("2018-08-08T09:40:22Z"));
-
-        assertThat(instantSeconds, equalTo(GitHubClient.parseDate(GitHubClient.printDate(instantSeconds))));
-
-        // printDate will truncate to the nearest second, so it should not be equal
-        assertThat(instantMillis, not(equalTo(GitHubClient.parseDate(GitHubClient.printDate(instantMillis)))));
-
-        assertThat(instantSeconds, equalTo(GitHubClient.parseDate(instantFormatSlash)));
-
-        assertThat(instantSeconds, equalTo(GitHubClient.parseDate(instantFormatDash)));
-
-        // This parser does not truncate to the nearest second, so it will be equal
-        assertThat(instantMillis, equalTo(GitHubClient.parseDate(instantFormatMillis)));
-        assertThat(instantMillis, equalTo(GitHubClient.parseDate(instantFormatMillisZoned)));
-
-        assertThat(instantSeconds, equalTo(GitHubClient.parseDate(instantSecondsFormatMillis)));
-        assertThat(instantSeconds, equalTo(GitHubClient.parseDate(instantSecondsFormatMillisZoned)));
-
-        try {
-            GitHubClient.parseDate(instantBadFormat);
-            fail("Bad time format should throw.");
-        } catch (DateTimeParseException e) {
-            assertThat(e.getMessage(), equalTo("Text '" + instantBadFormat + "' could not be parsed at index 0"));
-        }
     }
 
     /**
@@ -339,6 +267,41 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test git hub request get api URL.
+     */
+    @Test
+    public void testGitHubRequest_getApiURL() {
+        assertThat(GitHubRequest.getApiURL("github.com", "/endpoint").toString(),
+                equalTo("https://api.github.com/endpoint"));
+
+        // This URL is completely invalid but doesn't throw
+        assertThat(GitHubRequest.getApiURL("github.com", "//endpoint&?").toString(),
+                equalTo("https://api.github.com//endpoint&?"));
+
+        assertThat(GitHubRequest.getApiURL("ftp://whoa.github.com", "/endpoint").toString(),
+                equalTo("ftp://whoa.github.com/endpoint"));
+        assertThat(GitHubRequest.getApiURL(null, "ftp://api.test.github.com/endpoint").toString(),
+                equalTo("ftp://api.test.github.com/endpoint"));
+
+        GHException e;
+        e = Assert.assertThrows(GHException.class,
+                () -> GitHubRequest.getApiURL("gopher://whoa.github.com", "/endpoint"));
+        assertThat(e.getMessage(), equalTo("Unable to build GitHub API URL"));
+        assertThat(e.getCause(), instanceOf(MalformedURLException.class));
+        assertThat(e.getCause().getMessage(), equalTo("unknown protocol: gopher"));
+
+        e = Assert.assertThrows(GHException.class, () -> GitHubRequest.getApiURL("bogus", "/endpoint"));
+        assertThat(e.getCause(), instanceOf(IllegalArgumentException.class));
+        assertThat(e.getCause().getMessage(), equalTo("URI is not absolute"));
+
+        e = Assert.assertThrows(GHException.class,
+                () -> GitHubRequest.getApiURL(null, "gopher://api.test.github.com/endpoint"));
+        assertThat(e.getCause(), instanceOf(MalformedURLException.class));
+        assertThat(e.getCause().getMessage(), equalTo("unknown protocol: gopher"));
+
+    }
+
+    /**
      * Test mapping reader writer.
      *
      * @throws Exception
@@ -382,68 +345,105 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test git hub request get api URL.
+     * Test parse instant.
      */
     @Test
-    public void testGitHubRequest_getApiURL() {
-        assertThat(GitHubRequest.getApiURL("github.com", "/endpoint").toString(),
-                equalTo("https://api.github.com/endpoint"));
-
-        // This URL is completely invalid but doesn't throw
-        assertThat(GitHubRequest.getApiURL("github.com", "//endpoint&?").toString(),
-                equalTo("https://api.github.com//endpoint&?"));
-
-        assertThat(GitHubRequest.getApiURL("ftp://whoa.github.com", "/endpoint").toString(),
-                equalTo("ftp://whoa.github.com/endpoint"));
-        assertThat(GitHubRequest.getApiURL(null, "ftp://api.test.github.com/endpoint").toString(),
-                equalTo("ftp://api.test.github.com/endpoint"));
-
-        GHException e;
-        e = Assert.assertThrows(GHException.class,
-                () -> GitHubRequest.getApiURL("gopher://whoa.github.com", "/endpoint"));
-        assertThat(e.getMessage(), equalTo("Unable to build GitHub API URL"));
-        assertThat(e.getCause(), instanceOf(MalformedURLException.class));
-        assertThat(e.getCause().getMessage(), equalTo("unknown protocol: gopher"));
-
-        e = Assert.assertThrows(GHException.class, () -> GitHubRequest.getApiURL("bogus", "/endpoint"));
-        assertThat(e.getCause(), instanceOf(IllegalArgumentException.class));
-        assertThat(e.getCause().getMessage(), equalTo("URI is not absolute"));
-
-        e = Assert.assertThrows(GHException.class,
-                () -> GitHubRequest.getApiURL(null, "gopher://api.test.github.com/endpoint"));
-        assertThat(e.getCause(), instanceOf(MalformedURLException.class));
-        assertThat(e.getCause().getMessage(), equalTo("unknown protocol: gopher"));
-
+    public void testParseInstant() {
+        assertThat(GitHubClient.parseInstant(null), nullValue());
     }
 
     /**
-     * Format date.
+     * Test parse URL.
      *
-     * @param dt
-     *            the dt
-     * @param format
-     *            the format
-     * @return the string
+     * @throws Exception
+     *             the exception
      */
-    static String formatDate(Date dt, String format) {
-        return formatZonedDate(dt, format, "GMT");
+    @Test
+    public void testParseURL() throws Exception {
+        assertThat(GitHubClient.parseURL("https://api.github.com"), equalTo(new URL("https://api.github.com")));
+        assertThat(GitHubClient.parseURL(null), nullValue());
+
+        try {
+            GitHubClient.parseURL("bogus");
+            fail();
+        } catch (IllegalStateException e) {
+            assertThat(e.getMessage(), equalTo("Invalid URL: bogus"));
+        }
     }
 
     /**
-     * Format zoned date.
-     *
-     * @param dt
-     *            the dt
-     * @param format
-     *            the format
-     * @param timeZone
-     *            the time zone
-     * @return the string
+     * Test raw url path invalid.
      */
-    static String formatZonedDate(Date dt, String format, String timeZone) {
-        SimpleDateFormat df = new SimpleDateFormat(format);
-        df.setTimeZone(TimeZone.getTimeZone(timeZone));
-        return df.format(dt);
+    @Test
+    public void testRawUrlPathInvalid() {
+        try {
+            gitHub.createRequest().setRawUrlPath("invalid.path.com");
+            fail();
+        } catch (GHException e) {
+            assertThat(e.getMessage(), equalTo("Raw URL must start with 'http'"));
+        }
+    }
+
+    /**
+     * Time round trip.
+     */
+    @Test
+    public void timeRoundTrip() {
+        final long stableInstantEpochMilli = 1533721222255L;
+        Instant instantNow = Instant.ofEpochMilli(stableInstantEpochMilli);
+
+        Date instantSeconds = Date.from(instantNow.truncatedTo(ChronoUnit.SECONDS));
+        Date instantMillis = Date.from(instantNow.truncatedTo(ChronoUnit.MILLIS));
+
+        String instantFormatSlash = formatZonedDate(instantMillis, "yyyy/MM/dd HH:mm:ss ZZZZ", "PST");
+        assertThat(instantFormatSlash, equalTo("2018/08/08 02:40:22 -0700"));
+
+        String instantFormatDash = formatDate(instantMillis, "yyyy-MM-dd'T'HH:mm:ss'Z'");
+        assertThat(instantFormatDash, equalTo("2018-08-08T09:40:22Z"));
+
+        String instantFormatMillis = formatDate(instantMillis, "yyyy-MM-dd'T'HH:mm:ss.S'Z'");
+        assertThat(instantFormatMillis, equalTo("2018-08-08T09:40:22.255Z"));
+
+        String instantFormatMillisZoned = formatZonedDate(instantMillis, "yyyy-MM-dd'T'HH:mm:ss.SXXX", "PST");
+        assertThat(instantFormatMillisZoned, equalTo("2018-08-08T02:40:22.255-07:00"));
+
+        String instantSecondsFormatMillis = formatDate(instantSeconds, "yyyy-MM-dd'T'HH:mm:ss.S'Z'");
+        assertThat(instantSecondsFormatMillis, equalTo("2018-08-08T09:40:22.0Z"));
+
+        String instantSecondsFormatMillisZoned = formatZonedDate(instantSeconds, "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", "PST");
+        assertThat(instantSecondsFormatMillisZoned, equalTo("2018-08-08T02:40:22.000-07:00"));
+
+        String instantBadFormat = formatDate(instantMillis, "yy-MM-dd'T'HH:mm'Z'");
+        assertThat(instantBadFormat, equalTo("18-08-08T09:40Z"));
+
+        assertThat(GitHubClient.parseDate(GitHubClient.printDate(instantSeconds)),
+                equalTo(GitHubClient.parseDate(GitHubClient.printDate(instantMillis))));
+        assertThat(GitHubClient.printDate(instantSeconds), equalTo("2018-08-08T09:40:22Z"));
+        assertThat(GitHubClient.printDate(GitHubClient.parseDate(instantFormatMillisZoned)),
+                equalTo("2018-08-08T09:40:22Z"));
+
+        assertThat(instantSeconds, equalTo(GitHubClient.parseDate(GitHubClient.printDate(instantSeconds))));
+
+        // printDate will truncate to the nearest second, so it should not be equal
+        assertThat(instantMillis, not(equalTo(GitHubClient.parseDate(GitHubClient.printDate(instantMillis)))));
+
+        assertThat(instantSeconds, equalTo(GitHubClient.parseDate(instantFormatSlash)));
+
+        assertThat(instantSeconds, equalTo(GitHubClient.parseDate(instantFormatDash)));
+
+        // This parser does not truncate to the nearest second, so it will be equal
+        assertThat(instantMillis, equalTo(GitHubClient.parseDate(instantFormatMillis)));
+        assertThat(instantMillis, equalTo(GitHubClient.parseDate(instantFormatMillisZoned)));
+
+        assertThat(instantSeconds, equalTo(GitHubClient.parseDate(instantSecondsFormatMillis)));
+        assertThat(instantSeconds, equalTo(GitHubClient.parseDate(instantSecondsFormatMillisZoned)));
+
+        try {
+            GitHubClient.parseDate(instantBadFormat);
+            fail("Bad time format should throw.");
+        } catch (DateTimeParseException e) {
+            assertThat(e.getMessage(), equalTo("Text '" + instantBadFormat + "' could not be parsed at index 0"));
+        }
     }
 
 }

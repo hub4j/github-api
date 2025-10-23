@@ -1,8 +1,6 @@
 package org.kohsuke.github_api.v2;
 
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHKey;
-import org.kohsuke.github_api.v2.GHMyself;
 
 /**
  * The Class GHPublicKeyTest.

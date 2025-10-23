@@ -3,10 +3,6 @@ package org.kohsuke.github_api.v2;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHGist;
-import org.kohsuke.github_api.v2.GHGistBuilder;
-import org.kohsuke.github_api.v2.GHGistFile;
-import org.kohsuke.github_api.v2.GHGistUpdater;
 
 import java.io.IOException;
 import java.util.Map;

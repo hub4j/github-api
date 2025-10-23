@@ -2,12 +2,6 @@ package org.kohsuke.github_api.v2;
 
 import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHMarketplaceAccountPlan;
-import org.kohsuke.github_api.v2.GHMarketplacePendingChange;
-import org.kohsuke.github_api.v2.GHMarketplacePlan;
-import org.kohsuke.github_api.v2.GHMarketplacePriceModel;
-import org.kohsuke.github_api.v2.GHMarketplacePurchase;
-import org.kohsuke.github_api.v2.GitHubBuilder;
 
 import java.io.IOException;
 import java.util.Arrays;

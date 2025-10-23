@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import org.junit.jupiter.api.Test;
-import org.kohsuke.github_api.v2.internal.graphql.response.GHGraphQLResponse;
 
 import java.util.List;
 

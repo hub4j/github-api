@@ -1,17 +1,17 @@
 package org.kohsuke.github_api.v2.authorization;
 
+import org.kohsuke.github_api.v2.BetaApi;
+import org.kohsuke.github_api.v2.GHApp;
+import org.kohsuke.github_api.v2.GHAppInstallation;
+import org.kohsuke.github_api.v2.GHAppInstallationToken;
+import org.kohsuke.github_api.v2.GitHub;
+
 import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
-
-import org.kohsuke.github_api.v2.BetaApi;
-import org.kohsuke.github_api.v2.GHApp;
-import org.kohsuke.github_api.v2.GHAppInstallation;
-import org.kohsuke.github_api.v2.GHAppInstallationToken;
-import org.kohsuke.github_api.v2.GitHub;
 
 /**
  * An AuthorizationProvider that performs automatic token refresh for an organization's AppInstallation.

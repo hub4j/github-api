@@ -11,19 +11,28 @@ import java.util.*;
  */
 public class GHAppInstallationToken extends GitHubInteractiveObject {
 
+    private Map<String, String> permissions;
+
+    private List<GHRepository> repositories;
+
+    private GHRepositorySelection repositorySelection;
+    private String token;
+    /** The expires at. */
+    protected String expires_at;
     /**
      * Create default GHAppInstallationToken instance
      */
     public GHAppInstallationToken() {
     }
 
-    private String token;
-
-    /** The expires at. */
-    protected String expires_at;
-    private Map<String, String> permissions;
-    private List<GHRepository> repositories;
-    private GHRepositorySelection repositorySelection;
+    /**
+     * Gets expires at.
+     *
+     * @return date when this token expires
+     */
+    public Date getExpiresAt() {
+        return GitHubClient.parseDate(expires_at);
+    }
 
     /**
      * Gets permissions.
@@ -32,15 +41,6 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
      */
     public Map<String, String> getPermissions() {
         return Collections.unmodifiableMap(permissions);
-    }
-
-    /**
-     * Gets token.
-     *
-     * @return the token
-     */
-    public String getToken() {
-        return token;
     }
 
     /**
@@ -62,11 +62,11 @@ public class GHAppInstallationToken extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets expires at.
+     * Gets token.
      *
-     * @return date when this token expires
+     * @return the token
      */
-    public Date getExpiresAt() {
-        return GitHubClient.parseDate(expires_at);
+    public String getToken() {
+        return token;
     }
 }

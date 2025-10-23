@@ -44,11 +44,27 @@ import static org.hamcrest.Matchers.greaterThan;
  */
 public class ArchTests {
 
+    private static class UnlessPredicate<T> extends DescribedPredicate<T> {
+        private final DescribedPredicate<T> current;
+        private final DescribedPredicate<? super T> other;
+
+        UnlessPredicate(DescribedPredicate<T> current, DescribedPredicate<? super T> other) {
+            super(current.getDescription() + " unless " + other.getDescription());
+            this.current = checkNotNull(current);
+            this.other = checkNotNull(other);
+        }
+
+        @Override
+        public boolean test(T input) {
+            return current.test(input) && !other.test(input);
+        }
+    }
+
+    private static final JavaClasses apacheCommons = new ClassFileImporter().importPackages("org.apache.commons.lang3");
+
     private static final JavaClasses classFiles = new ClassFileImporter()
             .withImportOption(new ImportOption.DoNotIncludeTests())
             .importPackages("org.kohsuke.github");
-
-    private static final JavaClasses apacheCommons = new ClassFileImporter().importPackages("org.apache.commons.lang3");
 
     private static final JavaClasses testClassFiles = new ClassFileImporter()
             .withImportOption(new ImportOption.OnlyIncludeTests())
@@ -56,83 +72,11 @@ public class ArchTests {
             .importPackages("org.kohsuke.github");
 
     /**
-     * Default constructor.
-     */
-    public ArchTests() {
-    }
-
-    /**
      * Before class.
      */
     @BeforeClass
     public static void beforeClass() {
         assertThat(classFiles.size(), greaterThan(0));
-    }
-
-    /**
-     * Test require use of assert that.
-     */
-    @Test
-    public void testRequireUseOfAssertThat() {
-
-        final String reason = "This project uses `assertThat(...)` or `assertThrows(...)` instead of other `assert*()` methods.";
-
-        final DescribedPredicate<HasName> assertMethodOtherThanAssertThat = nameContaining("assert")
-                .and(DescribedPredicate.not(name("assertThat")).and(DescribedPredicate.not(name("assertThrows"))));
-
-        final ArchRule onlyAssertThatRule = classes()
-                .should(not(callMethodWhere(target(assertMethodOtherThanAssertThat))))
-                .because(reason);
-
-        onlyAssertThatRule.check(testClassFiles);
-    }
-
-    /**
-     * Test require use of only specific apache commons.
-     */
-    @Test
-    public void testRequireUseOfOnlySpecificApacheCommons() {
-
-        final ArchRule onlyApprovedApacheCommonsMethods = classes()
-                .should(notCallMethodsInPackageUnless("org.apache.commons..",
-                        // unless it is one of these methods
-                        targetMethodIs(StringUtils.class, "capitalize", String.class),
-                        targetMethodIs(StringUtils.class, "defaultString", String.class, String.class),
-                        targetMethodIs(StringUtils.class, "equals", CharSequence.class, CharSequence.class),
-                        targetMethodIs(StringUtils.class, "isBlank", CharSequence.class),
-                        targetMethodIs(StringUtils.class, "isEmpty", CharSequence.class),
-                        targetMethodIs(StringUtils.class, "join", Iterable.class, String.class),
-                        targetMethodIs(StringUtils.class,
-                                "prependIfMissing",
-                                String.class,
-                                CharSequence.class,
-                                CharSequence[].class),
-                        targetMethodIs(ToStringBuilder.class, "toString"),
-                        targetMethodIs(ToStringBuilder.class, "append", String.class, Object.class),
-                        targetMethodIs(ToStringBuilder.class, "append", String.class, long.class),
-                        targetMethodIs(ToStringBuilder.class, "append", String.class, int.class),
-                        targetMethodIs(ToStringBuilder.class, "append", String.class, boolean.class),
-                        targetMethodIs(ToStringBuilder.class, "isEmpty"),
-                        targetMethodIs(ToStringBuilder.class, "equals"),
-                        targetMethodIs(ToStringBuilder.class, "capitalize"),
-                        targetMethodIs(ToStringStyle.class,
-                                "append",
-                                StringBuffer.class,
-                                String.class,
-                                Object.class,
-                                Boolean.class),
-                        targetMethodIs(ReflectionToStringBuilder.class, "accept", Field.class),
-                        targetMethodIs(IOUtils.class, "closeQuietly", InputStream.class),
-                        targetMethodIs(IOUtils.class, "closeQuietly", Closeable.class),
-                        targetMethodIs(IOUtils.class, "copyLarge", InputStream.class, OutputStream.class),
-                        targetMethodIs(IOUtils.class, "toString", InputStream.class, Charset.class),
-                        targetMethodIs(IOUtils.class, "toString", Reader.class),
-                        targetMethodIs(IOUtils.class, "toByteArray", InputStream.class),
-                        targetMethodIs(IOUtils.class, "write", byte[].class, OutputStream.class)))
-                .because(
-                        "Commons methods must be manually verified to be compatible with commons-io:2.4 or earlier and commons-lang3:3.9 or earlier.");
-
-        onlyApprovedApacheCommonsMethods.check(classFiles);
     }
 
     /**
@@ -200,19 +144,75 @@ public class ArchTests {
         return new UnlessPredicate(first, second);
     }
 
-    private static class UnlessPredicate<T> extends DescribedPredicate<T> {
-        private final DescribedPredicate<T> current;
-        private final DescribedPredicate<? super T> other;
+    /**
+     * Default constructor.
+     */
+    public ArchTests() {
+    }
 
-        UnlessPredicate(DescribedPredicate<T> current, DescribedPredicate<? super T> other) {
-            super(current.getDescription() + " unless " + other.getDescription());
-            this.current = checkNotNull(current);
-            this.other = checkNotNull(other);
-        }
+    /**
+     * Test require use of assert that.
+     */
+    @Test
+    public void testRequireUseOfAssertThat() {
 
-        @Override
-        public boolean test(T input) {
-            return current.test(input) && !other.test(input);
-        }
+        final String reason = "This project uses `assertThat(...)` or `assertThrows(...)` instead of other `assert*()` methods.";
+
+        final DescribedPredicate<HasName> assertMethodOtherThanAssertThat = nameContaining("assert")
+                .and(DescribedPredicate.not(name("assertThat")).and(DescribedPredicate.not(name("assertThrows"))));
+
+        final ArchRule onlyAssertThatRule = classes()
+                .should(not(callMethodWhere(target(assertMethodOtherThanAssertThat))))
+                .because(reason);
+
+        onlyAssertThatRule.check(testClassFiles);
+    }
+
+    /**
+     * Test require use of only specific apache commons.
+     */
+    @Test
+    public void testRequireUseOfOnlySpecificApacheCommons() {
+
+        final ArchRule onlyApprovedApacheCommonsMethods = classes()
+                .should(notCallMethodsInPackageUnless("org.apache.commons..",
+                        // unless it is one of these methods
+                        targetMethodIs(StringUtils.class, "capitalize", String.class),
+                        targetMethodIs(StringUtils.class, "defaultString", String.class, String.class),
+                        targetMethodIs(StringUtils.class, "equals", CharSequence.class, CharSequence.class),
+                        targetMethodIs(StringUtils.class, "isBlank", CharSequence.class),
+                        targetMethodIs(StringUtils.class, "isEmpty", CharSequence.class),
+                        targetMethodIs(StringUtils.class, "join", Iterable.class, String.class),
+                        targetMethodIs(StringUtils.class,
+                                "prependIfMissing",
+                                String.class,
+                                CharSequence.class,
+                                CharSequence[].class),
+                        targetMethodIs(ToStringBuilder.class, "toString"),
+                        targetMethodIs(ToStringBuilder.class, "append", String.class, Object.class),
+                        targetMethodIs(ToStringBuilder.class, "append", String.class, long.class),
+                        targetMethodIs(ToStringBuilder.class, "append", String.class, int.class),
+                        targetMethodIs(ToStringBuilder.class, "append", String.class, boolean.class),
+                        targetMethodIs(ToStringBuilder.class, "isEmpty"),
+                        targetMethodIs(ToStringBuilder.class, "equals"),
+                        targetMethodIs(ToStringBuilder.class, "capitalize"),
+                        targetMethodIs(ToStringStyle.class,
+                                "append",
+                                StringBuffer.class,
+                                String.class,
+                                Object.class,
+                                Boolean.class),
+                        targetMethodIs(ReflectionToStringBuilder.class, "accept", Field.class),
+                        targetMethodIs(IOUtils.class, "closeQuietly", InputStream.class),
+                        targetMethodIs(IOUtils.class, "closeQuietly", Closeable.class),
+                        targetMethodIs(IOUtils.class, "copyLarge", InputStream.class, OutputStream.class),
+                        targetMethodIs(IOUtils.class, "toString", InputStream.class, Charset.class),
+                        targetMethodIs(IOUtils.class, "toString", Reader.class),
+                        targetMethodIs(IOUtils.class, "toByteArray", InputStream.class),
+                        targetMethodIs(IOUtils.class, "write", byte[].class, OutputStream.class)))
+                .because(
+                        "Commons methods must be manually verified to be compatible with commons-io:2.4 or earlier and commons-lang3:3.9 or earlier.");
+
+        onlyApprovedApacheCommonsMethods.check(classFiles);
     }
 }

@@ -43,13 +43,13 @@ import javax.annotation.Nonnull;
  */
 abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject implements GitHubRequestBuilderDone<R> {
 
-    @Nonnull
-    private final Class<R> returnType;
+    @CheckForNull
+    private final R baseInstance;
 
     private final boolean commitChangesImmediately;
 
-    @CheckForNull
-    private final R baseInstance;
+    @Nonnull
+    private final Class<R> returnType;
 
     /** The requester. */
     @Nonnull
@@ -111,30 +111,6 @@ abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject implements 
     }
 
     /**
-     * Applies a value to a name for this builder.
-     *
-     * If {@code S} is the same as {@code R}, this method will commit changes after the first value change and return a
-     * {@code R} from {@link #done()}.
-     *
-     * If {@code S} is not the same as {@code R}, this method will return an {@code S} and letting the caller batch
-     * together multiple changes and call {@link #done()} when they are ready.
-     *
-     * @param name
-     *            the name of the field
-     * @param value
-     *            the value of the field
-     * @return either a continuing builder or an updated data record
-     * @throws IOException
-     *             if an I/O error occurs
-     */
-    @Nonnull
-    @BetaApi
-    protected S with(@Nonnull String name, Object value) throws IOException {
-        requester.with(name, value);
-        return continueOrDone();
-    }
-
-    /**
      * Chooses whether to return a continuing builder or an updated data record
      *
      * If {@code S} is the same as {@code R}, this method will commit changes after the first value change and return a
@@ -160,5 +136,29 @@ abstract class AbstractBuilder<R, S> extends GitHubInteractiveObject implements 
         } else {
             return (S) this;
         }
+    }
+
+    /**
+     * Applies a value to a name for this builder.
+     *
+     * If {@code S} is the same as {@code R}, this method will commit changes after the first value change and return a
+     * {@code R} from {@link #done()}.
+     *
+     * If {@code S} is not the same as {@code R}, this method will return an {@code S} and letting the caller batch
+     * together multiple changes and call {@link #done()} when they are ready.
+     *
+     * @param name
+     *            the name of the field
+     * @param value
+     *            the value of the field
+     * @return either a continuing builder or an updated data record
+     * @throws IOException
+     *             if an I/O error occurs
+     */
+    @Nonnull
+    @BetaApi
+    protected S with(@Nonnull String name, Object value) throws IOException {
+        requester.with(name, value);
+        return continueOrDone();
     }
 }

@@ -11,21 +11,8 @@ import java.util.Date;
  */
 public class GHDeployKey {
 
-    /**
-     * Create default GHDeployKey instance
-     */
-    public GHDeployKey() {
-    }
-
-    /** The title. */
-    protected String url, key, title;
-
-    /** The verified. */
-    protected boolean verified;
-
-    /** The id. */
-    protected long id;
-    private GHRepository owner;
+    /** Name of user that added the deploy key */
+    private String added_by;
 
     /** Creation date of the deploy key */
     private String created_at;
@@ -33,11 +20,56 @@ public class GHDeployKey {
     /** Last used date of the deploy key */
     private String last_used;
 
-    /** Name of user that added the deploy key */
-    private String added_by;
-
+    private GHRepository owner;
     /** Whether the deploykey has readonly permission or full access */
     private boolean read_only;
+
+    /** The id. */
+    protected long id;
+
+    /** The title. */
+    protected String url, key, title;
+
+    /** The verified. */
+    protected boolean verified;
+
+    /**
+     * Create default GHDeployKey instance
+     */
+    public GHDeployKey() {
+    }
+
+    /**
+     * Delete.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void delete() throws IOException {
+        owner.root()
+                .createRequest()
+                .method("DELETE")
+                .withUrlPath(String.format("/repos/%s/%s/keys/%d", owner.getOwnerName(), owner.getName(), id))
+                .send();
+    }
+
+    /**
+     * Gets added_by
+     *
+     * @return the added_by
+     */
+    public String getAdded_by() {
+        return added_by;
+    }
+
+    /**
+     * Gets created_at.
+     *
+     * @return the created_at
+     */
+    public Date getCreatedAt() {
+        return GitHubClient.parseDate(created_at);
+    }
 
     /**
      * Gets id.
@@ -55,6 +87,15 @@ public class GHDeployKey {
      */
     public String getKey() {
         return key;
+    }
+
+    /**
+     * Gets last_used.
+     *
+     * @return the last_used
+     */
+    public Date getLastUsedAt() {
+        return GitHubClient.parseDate(last_used);
     }
 
     /**
@@ -76,42 +117,6 @@ public class GHDeployKey {
     }
 
     /**
-     * Is verified boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isVerified() {
-        return verified;
-    }
-
-    /**
-     * Gets created_at.
-     *
-     * @return the created_at
-     */
-    public Date getCreatedAt() {
-        return GitHubClient.parseDate(created_at);
-    }
-
-    /**
-     * Gets last_used.
-     *
-     * @return the last_used
-     */
-    public Date getLastUsedAt() {
-        return GitHubClient.parseDate(last_used);
-    }
-
-    /**
-     * Gets added_by
-     *
-     * @return the added_by
-     */
-    public String getAdded_by() {
-        return added_by;
-    }
-
-    /**
      * Is read_only
      *
      * @return true if the key can only read. False if the key has write permission as well.
@@ -121,15 +126,12 @@ public class GHDeployKey {
     }
 
     /**
-     * Wrap gh deploy key.
+     * Is verified boolean.
      *
-     * @param repo
-     *            the repo
-     * @return the gh deploy key
+     * @return the boolean
      */
-    GHDeployKey lateBind(GHRepository repo) {
-        this.owner = repo;
-        return this;
+    public boolean isVerified() {
+        return verified;
     }
 
     /**
@@ -149,16 +151,14 @@ public class GHDeployKey {
     }
 
     /**
-     * Delete.
+     * Wrap gh deploy key.
      *
-     * @throws IOException
-     *             the io exception
+     * @param repo
+     *            the repo
+     * @return the gh deploy key
      */
-    public void delete() throws IOException {
-        owner.root()
-                .createRequest()
-                .method("DELETE")
-                .withUrlPath(String.format("/repos/%s/%s/keys/%d", owner.getOwnerName(), owner.getName(), id))
-                .send();
+    GHDeployKey lateBind(GHRepository repo) {
+        this.owner = repo;
+        return this;
     }
 }

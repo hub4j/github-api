@@ -21,12 +21,31 @@ import javax.annotation.CheckForNull;
                 "URF_UNREAD_FIELD" },
         justification = "JSON API")
 public class GHBranch extends GitHubInteractiveObject {
-    private GHRepository owner;
+    /**
+     * The type Commit.
+     */
+    public static class Commit {
 
-    private String name;
+        /** The sha. */
+        String sha;
+
+        /** The url. */
+        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
+        String url;
+
+        /**
+         * Create default Commit instance
+         */
+        public Commit() {
+        }
+    }
+
     private Commit commit;
+    private String name;
+    private GHRepository owner;
     @JsonProperty("protected")
     private boolean protection;
+
     private String protection_url;
 
     /**
@@ -39,82 +58,6 @@ public class GHBranch extends GitHubInteractiveObject {
     GHBranch(@JsonProperty(value = "name", required = true) String name) {
         Objects.requireNonNull(name);
         this.name = name;
-    }
-
-    /**
-     * The type Commit.
-     */
-    public static class Commit {
-
-        /**
-         * Create default Commit instance
-         */
-        public Commit() {
-        }
-
-        /** The sha. */
-        String sha;
-
-        /** The url. */
-        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
-        String url;
-    }
-
-    /**
-     * Gets owner.
-     *
-     * @return the repository that this branch is in.
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHRepository getOwner() {
-        return owner;
-    }
-
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Is protected boolean.
-     *
-     * @return true if the push to this branch is restricted via branch protection.
-     */
-    public boolean isProtected() {
-        return protection;
-    }
-
-    /**
-     * Gets protection url.
-     *
-     * @return API URL that deals with the protection of this branch.
-     */
-    public URL getProtectionUrl() {
-        return GitHubClient.parseURL(protection_url);
-    }
-
-    /**
-     * Gets protection.
-     *
-     * @return the protection
-     * @throws IOException
-     *             the io exception
-     */
-    public GHBranchProtection getProtection() throws IOException {
-        return root().createRequest().setRawUrlPath(protection_url).fetch(GHBranchProtection.class);
-    }
-
-    /**
-     * Gets sha 1.
-     *
-     * @return The SHA1 of the commit that this branch currently points to.
-     */
-    public String getSHA1() {
-        return commit.sha;
     }
 
     /**
@@ -135,6 +78,63 @@ public class GHBranch extends GitHubInteractiveObject {
      */
     public GHBranchProtectionBuilder enableProtection() {
         return new GHBranchProtectionBuilder(this);
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Gets owner.
+     *
+     * @return the repository that this branch is in.
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHRepository getOwner() {
+        return owner;
+    }
+
+    /**
+     * Gets protection.
+     *
+     * @return the protection
+     * @throws IOException
+     *             the io exception
+     */
+    public GHBranchProtection getProtection() throws IOException {
+        return root().createRequest().setRawUrlPath(protection_url).fetch(GHBranchProtection.class);
+    }
+
+    /**
+     * Gets protection url.
+     *
+     * @return API URL that deals with the protection of this branch.
+     */
+    public URL getProtectionUrl() {
+        return GitHubClient.parseURL(protection_url);
+    }
+
+    /**
+     * Gets sha 1.
+     *
+     * @return The SHA1 of the commit that this branch currently points to.
+     */
+    public String getSHA1() {
+        return commit.sha;
+    }
+
+    /**
+     * Is protected boolean.
+     *
+     * @return true if the push to this branch is restricted via branch protection.
+     */
+    public boolean isProtected() {
+        return protection;
     }
 
     /**
@@ -191,15 +191,6 @@ public class GHBranch extends GitHubInteractiveObject {
     }
 
     /**
-     * Gets the api route.
-     *
-     * @return the api route
-     */
-    String getApiRoute() {
-        return owner.getApiTailUrl("/branches/" + name);
-    }
-
-    /**
      * To string.
      *
      * @return the string
@@ -208,6 +199,15 @@ public class GHBranch extends GitHubInteractiveObject {
     public String toString() {
         final String url = owner != null ? owner.getUrl().toString() : "unknown";
         return "Branch:" + name + " in " + url;
+    }
+
+    /**
+     * Gets the api route.
+     *
+     * @return the api route
+     */
+    String getApiRoute() {
+        return owner.getApiTailUrl("/branches/" + name);
     }
 
     /**

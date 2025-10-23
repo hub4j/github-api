@@ -11,6 +11,10 @@ import static org.hamcrest.Matchers.*;
  */
 public class EnumUtilsTest {
 
+    private enum TestEnum {
+        UNKNOWN, VALUE_1, VALUE_2;
+    }
+
     /**
      * Create default EnumUtilsTest instance
      */
@@ -35,9 +39,5 @@ public class EnumUtilsTest {
                 equalTo(TestEnum.VALUE_2));
         assertThat(EnumUtils.getNullableEnumOrDefault(TestEnum.class, "vAlUe_2", TestEnum.UNKNOWN),
                 equalTo(TestEnum.VALUE_2));
-    }
-
-    private enum TestEnum {
-        VALUE_1, VALUE_2, UNKNOWN;
     }
 }

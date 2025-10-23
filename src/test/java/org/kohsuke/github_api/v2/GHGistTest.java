@@ -1,8 +1,6 @@
 package org.kohsuke.github_api.v2;
 
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHGist;
-import org.kohsuke.github_api.v2.GHGistFile;
 
 import java.io.FileNotFoundException;
 

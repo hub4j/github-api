@@ -23,25 +23,40 @@ import java.util.Date;
 public class GHProjectsV2Item extends GHObject {
 
     /**
+     * The Enum ContentType.
+     */
+    public enum ContentType {
+
+        /** The draftissue. */
+        DRAFTISSUE,
+        /** The issue. */
+        ISSUE,
+        /** The pullrequest. */
+        PULLREQUEST,
+        /** The unknown. */
+        UNKNOWN;
+    }
+
+    private String archivedAt;
+    private String contentNodeId;
+    private String contentType;
+
+    private GHUser creator;
+    private String projectNodeId;
+
+    /**
      * Create default GHProjectsV2Item instance
      */
     public GHProjectsV2Item() {
     }
 
-    private String projectNodeId;
-    private String contentNodeId;
-    private String contentType;
-
-    private GHUser creator;
-    private String archivedAt;
-
     /**
-     * Gets the project node id.
+     * Gets the archived at.
      *
-     * @return the project node id
+     * @return the archived at
      */
-    public String getProjectNodeId() {
-        return projectNodeId;
+    public Date getArchivedAt() {
+        return GitHubClient.parseDate(archivedAt);
     }
 
     /**
@@ -72,15 +87,6 @@ public class GHProjectsV2Item extends GHObject {
     }
 
     /**
-     * Gets the archived at.
-     *
-     * @return the archived at
-     */
-    public Date getArchivedAt() {
-        return GitHubClient.parseDate(archivedAt);
-    }
-
-    /**
      * Gets the html url.
      *
      * @return the html url
@@ -90,17 +96,11 @@ public class GHProjectsV2Item extends GHObject {
     }
 
     /**
-     * The Enum ContentType.
+     * Gets the project node id.
+     *
+     * @return the project node id
      */
-    public enum ContentType {
-
-        /** The issue. */
-        ISSUE,
-        /** The draftissue. */
-        DRAFTISSUE,
-        /** The pullrequest. */
-        PULLREQUEST,
-        /** The unknown. */
-        UNKNOWN;
+    public String getProjectNodeId() {
+        return projectNodeId;
     }
 }

@@ -25,77 +25,6 @@ import java.util.logging.Logger;
  */
 final class JwtBuilderUtil {
 
-    private static final Logger LOGGER = Logger.getLogger(JwtBuilderUtil.class.getName());
-
-    private static IJwtBuilder builder;
-
-    /**
-     * Build a JWT.
-     *
-     * @param issuedAt
-     *            issued at
-     * @param expiration
-     *            expiration
-     * @param applicationId
-     *            application id
-     * @param privateKey
-     *            private key
-     * @return JWT
-     */
-    static String buildJwt(Instant issuedAt, Instant expiration, String applicationId, PrivateKey privateKey) {
-        if (builder == null) {
-            createBuilderImpl(issuedAt, expiration, applicationId, privateKey);
-        }
-        return builder.buildJwt(issuedAt, expiration, applicationId, privateKey);
-    }
-
-    private static void createBuilderImpl(Instant issuedAt,
-            Instant expiration,
-            String applicationId,
-            PrivateKey privateKey) {
-        // Figure out which builder to use and cache it. We don't worry about thread safety here because we're fine if
-        // the builder is assigned multiple times. The end result will be the same.
-        try {
-            builder = new DefaultBuilderImpl();
-        } catch (NoSuchMethodError | NoClassDefFoundError e) {
-            LOGGER.warning(
-                    "You are using an outdated version of the io.jsonwebtoken:jjwt-* suite. v0.12.x or later is recommended.");
-
-            try {
-                ReflectionBuilderImpl reflectionBuider = new ReflectionBuilderImpl();
-                // Build a JWT to eagerly check for any reflection errors.
-                reflectionBuider.buildJwtWithReflection(issuedAt, expiration, applicationId, privateKey);
-
-                builder = reflectionBuider;
-            } catch (ReflectiveOperationException re) {
-                throw new GHException(
-                        "Could not build JWT using reflection on io.jsonwebtoken:jjwt-* suite."
-                                + "The minimum supported version is v0.11.x, v0.12.x or later is recommended.",
-                        re);
-            }
-        }
-    }
-
-    /**
-     * IJwtBuilder interface to isolate loading of JWT classes allowing us to catch and handle linkage errors.
-     */
-    interface IJwtBuilder {
-        /**
-         * Build a JWT.
-         *
-         * @param issuedAt
-         *            issued at
-         * @param expiration
-         *            expiration
-         * @param applicationId
-         *            application id
-         * @param privateKey
-         *            private key
-         * @return JWT
-         */
-        String buildJwt(Instant issuedAt, Instant expiration, String applicationId, PrivateKey privateKey);
-    }
-
     /**
      * A class to isolate loading of JWT classes allowing us to catch and handle linkage errors.
      *
@@ -137,12 +66,17 @@ final class JwtBuilderUtil {
      */
     private static final class ReflectionBuilderImpl implements IJwtBuilder {
 
-        private Method setIssuedAtMethod;
-        private Method setExpirationMethod;
-        private Method setIssuerMethod;
+        @SuppressWarnings("unchecked")
+        private static <T extends Enum<T>> T createEnumInstance(Class<?> type, String name) {
+            return Enum.valueOf((Class<T>) type, name);
+        }
         private Enum<?> rs256SignatureAlgorithm;
-        private Method signWithMethod;
         private Method serializeToJsonMethod;
+        private Method setExpirationMethod;
+        private Method setIssuedAtMethod;
+        private Method setIssuerMethod;
+
+        private Method signWithMethod;
 
         ReflectionBuilderImpl() throws ReflectiveOperationException {
             JwtBuilder jwtBuilder = Jwts.builder();
@@ -193,10 +127,76 @@ final class JwtBuilderUtil {
             builderObj = serializeToJsonMethod.invoke(builderObj, new JacksonSerializer<>());
             return ((JwtBuilder) builderObj).compact();
         }
+    }
 
-        @SuppressWarnings("unchecked")
-        private static <T extends Enum<T>> T createEnumInstance(Class<?> type, String name) {
-            return Enum.valueOf((Class<T>) type, name);
+    /**
+     * IJwtBuilder interface to isolate loading of JWT classes allowing us to catch and handle linkage errors.
+     */
+    interface IJwtBuilder {
+        /**
+         * Build a JWT.
+         *
+         * @param issuedAt
+         *            issued at
+         * @param expiration
+         *            expiration
+         * @param applicationId
+         *            application id
+         * @param privateKey
+         *            private key
+         * @return JWT
+         */
+        String buildJwt(Instant issuedAt, Instant expiration, String applicationId, PrivateKey privateKey);
+    }
+
+    private static final Logger LOGGER = Logger.getLogger(JwtBuilderUtil.class.getName());
+
+    private static IJwtBuilder builder;
+
+    private static void createBuilderImpl(Instant issuedAt,
+            Instant expiration,
+            String applicationId,
+            PrivateKey privateKey) {
+        // Figure out which builder to use and cache it. We don't worry about thread safety here because we're fine if
+        // the builder is assigned multiple times. The end result will be the same.
+        try {
+            builder = new DefaultBuilderImpl();
+        } catch (NoSuchMethodError | NoClassDefFoundError e) {
+            LOGGER.warning(
+                    "You are using an outdated version of the io.jsonwebtoken:jjwt-* suite. v0.12.x or later is recommended.");
+
+            try {
+                ReflectionBuilderImpl reflectionBuider = new ReflectionBuilderImpl();
+                // Build a JWT to eagerly check for any reflection errors.
+                reflectionBuider.buildJwtWithReflection(issuedAt, expiration, applicationId, privateKey);
+
+                builder = reflectionBuider;
+            } catch (ReflectiveOperationException re) {
+                throw new GHException(
+                        "Could not build JWT using reflection on io.jsonwebtoken:jjwt-* suite."
+                                + "The minimum supported version is v0.11.x, v0.12.x or later is recommended.",
+                        re);
+            }
         }
+    }
+
+    /**
+     * Build a JWT.
+     *
+     * @param issuedAt
+     *            issued at
+     * @param expiration
+     *            expiration
+     * @param applicationId
+     *            application id
+     * @param privateKey
+     *            private key
+     * @return JWT
+     */
+    static String buildJwt(Instant issuedAt, Instant expiration, String applicationId, PrivateKey privateKey) {
+        if (builder == null) {
+            createBuilderImpl(issuedAt, expiration, applicationId, privateKey);
+        }
+        return builder.buildJwt(issuedAt, expiration, applicationId, privateKey);
     }
 }

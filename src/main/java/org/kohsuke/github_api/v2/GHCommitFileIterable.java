@@ -1,12 +1,12 @@
 package org.kohsuke.github_api.v2;
 
+import org.kohsuke.github_api.v2.GHCommit.File;
+
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-
-import org.kohsuke.github_api.v2.GHCommit.File;
 
 /**
  * Iterable for commit listing.

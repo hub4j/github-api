@@ -26,258 +26,44 @@ import static java.util.Objects.requireNonNull;
 public class GHWorkflowJob extends GHObject {
 
     /**
-     * Create default GHWorkflowJob instance
-     */
-    public GHWorkflowJob() {
-    }
-
-    // Not provided by the API.
-    @JsonIgnore
-    private GHRepository owner;
-
-    private String name;
-
-    private String headSha;
-
-    private String startedAt;
-    private String completedAt;
-
-    private String status;
-    private String conclusion;
-
-    private long runId;
-    private int runAttempt;
-
-    private String htmlUrl;
-    private String checkRunUrl;
-
-    private int runnerId;
-    private String runnerName;
-    private int runnerGroupId;
-    private String runnerGroupName;
-
-    private List<Step> steps = new ArrayList<>();
-
-    private List<String> labels = new ArrayList<>();
-
-    /**
-     * The name of the job.
-     *
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Gets the HEAD SHA.
-     *
-     * @return sha for the HEAD commit
-     */
-    public String getHeadSha() {
-        return headSha;
-    }
-
-    /**
-     * When was this job started?.
-     *
-     * @return start date
-     */
-    public Date getStartedAt() {
-        return GitHubClient.parseDate(startedAt);
-    }
-
-    /**
-     * When was this job completed?.
-     *
-     * @return completion date
-     */
-    public Date getCompletedAt() {
-        return GitHubClient.parseDate(completedAt);
-    }
-
-    /**
-     * Gets status of the job.
-     * <p>
-     * Can be {@code UNKNOWN} if the value returned by GitHub is unknown from the API.
-     *
-     * @return status of the job
-     */
-    public Status getStatus() {
-        return Status.from(status);
-    }
-
-    /**
-     * Gets the conclusion of the job.
-     * <p>
-     * Can be {@code UNKNOWN} if the value returned by GitHub is unknown from the API.
-     *
-     * @return conclusion of the job
-     */
-    public Conclusion getConclusion() {
-        return Conclusion.from(conclusion);
-    }
-
-    /**
-     * The run id.
-     *
-     * @return the run id
-     */
-    public long getRunId() {
-        return runId;
-    }
-
-    /**
-     * Attempt number of the associated workflow run, 1 for first attempt and higher if the workflow was re-run.
-     *
-     * @return attempt number
-     */
-    public int getRunAttempt() {
-        return runAttempt;
-    }
-
-    /**
-     * Gets the html url.
-     *
-     * @return the html url
-     */
-    public URL getHtmlUrl() {
-        return GitHubClient.parseURL(htmlUrl);
-    }
-
-    /**
-     * The check run URL.
-     *
-     * @return the check run url
-     */
-    public URL getCheckRunUrl() {
-        return GitHubClient.parseURL(checkRunUrl);
-    }
-
-    /**
-     * Gets the execution steps of this job.
-     *
-     * @return the execution steps
-     */
-    public List<Step> getSteps() {
-        return Collections.unmodifiableList(steps);
-    }
-
-    /**
-     * Gets the labels of the job.
-     *
-     * @return the labels
-     */
-    public List<String> getLabels() {
-        return Collections.unmodifiableList(labels);
-    }
-
-    /**
-     * the runner id.
-     *
-     * @return runnerId
-     */
-    public int getRunnerId() {
-        return runnerId;
-    }
-
-    /**
-     * the runner name.
-     *
-     * @return runnerName
-     */
-    public String getRunnerName() {
-        return runnerName;
-    }
-
-    /**
-     * the runner group id.
-     *
-     * @return runnerGroupId
-     */
-    public int getRunnerGroupId() {
-        return runnerGroupId;
-    }
-
-    /**
-     * the runner group name.
-     *
-     * @return runnerGroupName
-     */
-    public String getRunnerGroupName() {
-        return runnerGroupName;
-    }
-
-    /**
-     * Repository to which the job belongs.
-     *
-     * @return the repository
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHRepository getRepository() {
-        return owner;
-    }
-
-    /**
-     * Downloads the logs.
-     * <p>
-     * The logs are returned as a text file.
-     *
-     * @param <T>
-     *            the type of result
-     * @param streamFunction
-     *            The {@link InputStreamFunction} that will process the stream
-     * @return the result of reading the stream.
-     * @throws IOException
-     *             The IO exception.
-     */
-    public <T> T downloadLogs(InputStreamFunction<T> streamFunction) throws IOException {
-        requireNonNull(streamFunction, "Stream function must not be null");
-
-        return root().createRequest().method("GET").withUrlPath(getApiRoute(), "logs").fetchStream(streamFunction);
-    }
-
-    private String getApiRoute() {
-        if (owner == null) {
-            // Workflow runs returned from search to do not have an owner. Attempt to use url.
-            final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
-            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/");
-
-        }
-        return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/actions/jobs/" + getId();
-    }
-
-    /**
-     * Wrap up.
-     *
-     * @param owner
-     *            the owner
-     * @return the GH workflow job
-     */
-    GHWorkflowJob wrapUp(GHRepository owner) {
-        this.owner = owner;
-        return this;
-    }
-
-    /**
      * The Class Step.
      */
     public static class Step {
 
+        private String completedAt;
+
+        private String conclusion;
+        private String name;
+
+        private int number;
+        private String startedAt;
+
+        private String status;
         /**
          * Create default Step instance
          */
         public Step() {
         }
 
-        private String name;
-        private int number;
+        /**
+         * When was this step completed?.
+         *
+         * @return completion date
+         */
+        public Date getCompletedAt() {
+            return GitHubClient.parseDate(completedAt);
+        }
 
-        private String startedAt;
-        private String completedAt;
-
-        private String status;
-        private String conclusion;
+        /**
+         * Gets the conclusion of the step.
+         * <p>
+         * Can be {@code UNKNOWN} if the value returned by GitHub is unknown from the API.
+         *
+         * @return conclusion of the step
+         */
+        public Conclusion getConclusion() {
+            return Conclusion.from(conclusion);
+        }
 
         /**
          * Gets the name of the step.
@@ -307,15 +93,6 @@ public class GHWorkflowJob extends GHObject {
         }
 
         /**
-         * When was this step completed?.
-         *
-         * @return completion date
-         */
-        public Date getCompletedAt() {
-            return GitHubClient.parseDate(completedAt);
-        }
-
-        /**
          * Gets status of the step.
          * <p>
          * Can be {@code UNKNOWN} if the value returned by GitHub is unknown from the API.
@@ -325,16 +102,239 @@ public class GHWorkflowJob extends GHObject {
         public Status getStatus() {
             return Status.from(status);
         }
+    }
 
-        /**
-         * Gets the conclusion of the step.
-         * <p>
-         * Can be {@code UNKNOWN} if the value returned by GitHub is unknown from the API.
-         *
-         * @return conclusion of the step
-         */
-        public Conclusion getConclusion() {
-            return Conclusion.from(conclusion);
+    private String checkRunUrl;
+
+    private String completedAt;
+
+    private String conclusion;
+
+    private String headSha;
+    private String htmlUrl;
+
+    private List<String> labels = new ArrayList<>();
+    private String name;
+
+    // Not provided by the API.
+    @JsonIgnore
+    private GHRepository owner;
+    private int runAttempt;
+
+    private long runId;
+    private int runnerGroupId;
+
+    private String runnerGroupName;
+    private int runnerId;
+    private String runnerName;
+    private String startedAt;
+
+    private String status;
+
+    private List<Step> steps = new ArrayList<>();
+
+    /**
+     * Create default GHWorkflowJob instance
+     */
+    public GHWorkflowJob() {
+    }
+
+    /**
+     * Downloads the logs.
+     * <p>
+     * The logs are returned as a text file.
+     *
+     * @param <T>
+     *            the type of result
+     * @param streamFunction
+     *            The {@link InputStreamFunction} that will process the stream
+     * @return the result of reading the stream.
+     * @throws IOException
+     *             The IO exception.
+     */
+    public <T> T downloadLogs(InputStreamFunction<T> streamFunction) throws IOException {
+        requireNonNull(streamFunction, "Stream function must not be null");
+
+        return root().createRequest().method("GET").withUrlPath(getApiRoute(), "logs").fetchStream(streamFunction);
+    }
+
+    /**
+     * The check run URL.
+     *
+     * @return the check run url
+     */
+    public URL getCheckRunUrl() {
+        return GitHubClient.parseURL(checkRunUrl);
+    }
+
+    /**
+     * When was this job completed?.
+     *
+     * @return completion date
+     */
+    public Date getCompletedAt() {
+        return GitHubClient.parseDate(completedAt);
+    }
+
+    /**
+     * Gets the conclusion of the job.
+     * <p>
+     * Can be {@code UNKNOWN} if the value returned by GitHub is unknown from the API.
+     *
+     * @return conclusion of the job
+     */
+    public Conclusion getConclusion() {
+        return Conclusion.from(conclusion);
+    }
+
+    /**
+     * Gets the HEAD SHA.
+     *
+     * @return sha for the HEAD commit
+     */
+    public String getHeadSha() {
+        return headSha;
+    }
+
+    /**
+     * Gets the html url.
+     *
+     * @return the html url
+     */
+    public URL getHtmlUrl() {
+        return GitHubClient.parseURL(htmlUrl);
+    }
+
+    /**
+     * Gets the labels of the job.
+     *
+     * @return the labels
+     */
+    public List<String> getLabels() {
+        return Collections.unmodifiableList(labels);
+    }
+
+    /**
+     * The name of the job.
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Repository to which the job belongs.
+     *
+     * @return the repository
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHRepository getRepository() {
+        return owner;
+    }
+
+    /**
+     * Attempt number of the associated workflow run, 1 for first attempt and higher if the workflow was re-run.
+     *
+     * @return attempt number
+     */
+    public int getRunAttempt() {
+        return runAttempt;
+    }
+
+    /**
+     * The run id.
+     *
+     * @return the run id
+     */
+    public long getRunId() {
+        return runId;
+    }
+
+    /**
+     * the runner group id.
+     *
+     * @return runnerGroupId
+     */
+    public int getRunnerGroupId() {
+        return runnerGroupId;
+    }
+
+    /**
+     * the runner group name.
+     *
+     * @return runnerGroupName
+     */
+    public String getRunnerGroupName() {
+        return runnerGroupName;
+    }
+
+    /**
+     * the runner id.
+     *
+     * @return runnerId
+     */
+    public int getRunnerId() {
+        return runnerId;
+    }
+
+    /**
+     * the runner name.
+     *
+     * @return runnerName
+     */
+    public String getRunnerName() {
+        return runnerName;
+    }
+
+    /**
+     * When was this job started?.
+     *
+     * @return start date
+     */
+    public Date getStartedAt() {
+        return GitHubClient.parseDate(startedAt);
+    }
+
+    /**
+     * Gets status of the job.
+     * <p>
+     * Can be {@code UNKNOWN} if the value returned by GitHub is unknown from the API.
+     *
+     * @return status of the job
+     */
+    public Status getStatus() {
+        return Status.from(status);
+    }
+
+    /**
+     * Gets the execution steps of this job.
+     *
+     * @return the execution steps
+     */
+    public List<Step> getSteps() {
+        return Collections.unmodifiableList(steps);
+    }
+
+    private String getApiRoute() {
+        if (owner == null) {
+            // Workflow runs returned from search to do not have an owner. Attempt to use url.
+            final URL url = Objects.requireNonNull(getUrl(), "Missing instance URL!");
+            return StringUtils.prependIfMissing(url.toString().replace(root().getApiUrl(), ""), "/");
+
         }
+        return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/actions/jobs/" + getId();
+    }
+
+    /**
+     * Wrap up.
+     *
+     * @param owner
+     *            the owner
+     * @return the GH workflow job
+     */
+    GHWorkflowJob wrapUp(GHRepository owner) {
+        this.owner = owner;
+        return this;
     }
 }

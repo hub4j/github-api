@@ -4,15 +4,6 @@ import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHCommit;
-import org.kohsuke.github_api.v2.GHContent;
-import org.kohsuke.github_api.v2.GHContentBuilder;
-import org.kohsuke.github_api.v2.GHContentUpdateResponse;
-import org.kohsuke.github_api.v2.GHException;
-import org.kohsuke.github_api.v2.GHFileNotFoundException;
-import org.kohsuke.github_api.v2.GHRepository;
-import org.kohsuke.github_api.v2.GitCommit;
-import org.kohsuke.github_api.v2.GitHubClient;
 
 import java.io.BufferedReader;
 import java.io.IOException;

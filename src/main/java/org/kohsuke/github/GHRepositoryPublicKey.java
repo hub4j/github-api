@@ -10,26 +10,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 public class GHRepositoryPublicKey extends GHObject {
 
-    /**
-     * Create default GHRepositoryPublicKey instance
-     */
-    public GHRepositoryPublicKey() {
-    }
+    private String key;
+
+    private String keyId;
 
     // Not provided by the API.
     @JsonIgnore
     private GHRepository owner;
-
-    private String keyId;
-    private String key;
-
     /**
-     * Gets the key id.
-     *
-     * @return the key id
+     * Create default GHRepositoryPublicKey instance
      */
-    public String getKeyId() {
-        return keyId;
+    public GHRepositoryPublicKey() {
     }
 
     /**
@@ -39,6 +30,15 @@ public class GHRepositoryPublicKey extends GHObject {
      */
     public String getKey() {
         return key;
+    }
+
+    /**
+     * Gets the key id.
+     *
+     * @return the key id
+     */
+    public String getKeyId() {
+        return keyId;
     }
 
     /**

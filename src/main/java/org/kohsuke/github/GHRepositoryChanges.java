@@ -9,42 +9,24 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 public class GHRepositoryChanges {
 
     /**
-     * Create default GHRepositoryChanges instance
+     * Repository name that was changed.
      */
-    public GHRepositoryChanges() {
-    }
+    public static class FromName {
 
-    private FromRepository repository;
-    private Owner owner;
-
-    /**
-     * Get outer owner object.
-     *
-     * @return Owner
-     */
-    public Owner getOwner() {
-        return owner;
-    }
-
-    /**
-     * Outer object of owner from whom this repository was transferred.
-     */
-    public static class Owner {
+        private String from;
 
         /**
-         * Create default Owner instance
+         * Create default FromName instance
          */
-        public Owner() {
+        public FromName() {
         }
 
-        private FromOwner from;
-
         /**
-         * Get in owner object.
+         * Get previous name of the repository before rename.
          *
-         * @return FromOwner
+         * @return String
          */
-        public FromOwner getFrom() {
+        public String getFrom() {
             return from;
         }
     }
@@ -54,23 +36,13 @@ public class GHRepositoryChanges {
      */
     public static class FromOwner {
 
+        private GHOrganization organization;
+
+        private GHUser user;
         /**
          * Create default FromOwner instance
          */
         public FromOwner() {
-        }
-
-        private GHUser user;
-        private GHOrganization organization;
-
-        /**
-         * Get user from which this repository was transferred.
-         *
-         * @return user
-         */
-        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
-        public GHUser getUser() {
-            return user;
         }
 
         /**
@@ -82,29 +54,29 @@ public class GHRepositoryChanges {
         public GHOrganization getOrganization() {
             return organization;
         }
-    }
 
-    /**
-     * Get repository.
-     *
-     * @return FromRepository
-     */
-    public FromRepository getRepository() {
-        return repository;
+        /**
+         * Get user from which this repository was transferred.
+         *
+         * @return user
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
+        public GHUser getUser() {
+            return user;
+        }
     }
-
     /**
      * Repository object from which the name was changed.
      */
     public static class FromRepository {
+
+        private FromName name;
 
         /**
          * Create default FromRepository instance
          */
         public FromRepository() {
         }
-
-        private FromName name;
 
         /**
          * Get top level object for the previous name of the repository.
@@ -117,25 +89,53 @@ public class GHRepositoryChanges {
     }
 
     /**
-     * Repository name that was changed.
+     * Outer object of owner from whom this repository was transferred.
      */
-    public static class FromName {
+    public static class Owner {
+
+        private FromOwner from;
 
         /**
-         * Create default FromName instance
+         * Create default Owner instance
          */
-        public FromName() {
+        public Owner() {
         }
 
-        private String from;
-
         /**
-         * Get previous name of the repository before rename.
+         * Get in owner object.
          *
-         * @return String
+         * @return FromOwner
          */
-        public String getFrom() {
+        public FromOwner getFrom() {
             return from;
         }
+    }
+
+    private Owner owner;
+
+    private FromRepository repository;
+
+    /**
+     * Create default GHRepositoryChanges instance
+     */
+    public GHRepositoryChanges() {
+    }
+
+    /**
+     * Get outer owner object.
+     *
+     * @return Owner
+     */
+    public Owner getOwner() {
+        return owner;
+    }
+
+    /**
+     * Get repository.
+     *
+     * @return FromRepository
+     */
+    public FromRepository getRepository() {
+        return repository;
     }
 }

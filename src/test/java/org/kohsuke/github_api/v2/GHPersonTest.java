@@ -1,9 +1,6 @@
 package org.kohsuke.github_api.v2;
 
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHRepository;
-import org.kohsuke.github_api.v2.GHUser;
-import org.kohsuke.github_api.v2.GitHub;
 
 import java.io.IOException;
 

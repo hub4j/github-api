@@ -418,37 +418,37 @@
                     </limits>
                     <excludes>
                       <!-- V2.x changes -->
-                      <exclude>org.kohsuke.github.GHRepositorySearchBuilder.Fork</exclude>
+                      <exclude>org.kohsuke.github_api.v2.GHRepositorySearchBuilder.Fork</exclude>
 
                       <!-- Sample only -->
-                      <exclude>org.kohsuke.github.example.*</exclude>
+                      <exclude>org.kohsuke.github_api.v2.example.*</exclude>
 
                       <!-- Unbridged test changes -->
-                      <exclude>org.kohsuke.github.GHCommit.GHAuthor</exclude>
+                      <exclude>org.kohsuke.github_api.v2.GHCommit.GHAuthor</exclude>
 
                       <!-- TODO: Some coverage, but more needed -->
-                      <exclude>org.kohsuke.github.GHIssue.PullRequest</exclude>
-                      <exclude>org.kohsuke.github.GHCommitSearchBuilder</exclude>
-                      <exclude>org.kohsuke.github.GHRepositorySearchBuilder</exclude>
-                      <exclude>org.kohsuke.github.GHUserSearchBuilder</exclude>
+                      <exclude>org.kohsuke.github_api.v2.GHIssue.PullRequest</exclude>
+                      <exclude>org.kohsuke.github_api.v2.GHCommitSearchBuilder</exclude>
+                      <exclude>org.kohsuke.github_api.v2.GHRepositorySearchBuilder</exclude>
+                      <exclude>org.kohsuke.github_api.v2.GHUserSearchBuilder</exclude>
 
                       <!-- TODO: These still need test coverage -->
-                      <exclude>org.kohsuke.github.GHBranchProtection.RequiredSignatures</exclude>
-                      <exclude>org.kohsuke.github.GHBranchProtectionBuilder.Restrictions</exclude>
-                      <exclude>org.kohsuke.github.GHBranchProtection.Restrictions</exclude>
-                      <exclude>org.kohsuke.github.GHCommentAuthorAssociation</exclude>
-                      <exclude>org.kohsuke.github.GHDeployKey</exclude>
-                      <exclude>org.kohsuke.github.GHEmail</exclude>
-                      <exclude>org.kohsuke.github.GHInvitation</exclude>
-                      <exclude>org.kohsuke.github.GHPullRequestCommitDetail.Authorship</exclude>
-                      <exclude>org.kohsuke.github.GHPullRequestCommitDetail.Commit</exclude>
-                      <exclude>org.kohsuke.github.GHPullRequestCommitDetail.CommitPointer</exclude>
-                      <exclude>org.kohsuke.github.GHPullRequestCommitDetail.Tree</exclude>
-                      <exclude>org.kohsuke.github.GHPullRequestCommitDetail</exclude>
-                      <exclude>org.kohsuke.github.GHPullRequestFileDetail</exclude>
-                      <exclude>org.kohsuke.github.GHReleaseUpdater</exclude>
-                      <exclude>org.kohsuke.github.GHRequestedAction</exclude>
-                      <exclude>org.kohsuke.github.GHVerifiedKey</exclude>
+                      <exclude>org.kohsuke.github_api.v2.GHBranchProtection.RequiredSignatures</exclude>
+                      <exclude>org.kohsuke.github_api.v2.GHBranchProtectionBuilder.Restrictions</exclude>
+                      <exclude>org.kohsuke.github_api.v2.GHBranchProtection.Restrictions</exclude>
+                      <exclude>org.kohsuke.github_api.v2.GHCommentAuthorAssociation</exclude>
+                      <exclude>org.kohsuke.github_api.v2.GHDeployKey</exclude>
+                      <exclude>org.kohsuke.github_api.v2.GHEmail</exclude>
+                      <exclude>org.kohsuke.github_api.v2.GHInvitation</exclude>
+                      <exclude>org.kohsuke.github_api.v2.GHPullRequestCommitDetail.Authorship</exclude>
+                      <exclude>org.kohsuke.github_api.v2.GHPullRequestCommitDetail.Commit</exclude>
+                      <exclude>org.kohsuke.github_api.v2.GHPullRequestCommitDetail.CommitPointer</exclude>
+                      <exclude>org.kohsuke.github_api.v2.GHPullRequestCommitDetail.Tree</exclude>
+                      <exclude>org.kohsuke.github_api.v2.GHPullRequestCommitDetail</exclude>
+                      <exclude>org.kohsuke.github_api.v2.GHPullRequestFileDetail</exclude>
+                      <exclude>org.kohsuke.github_api.v2.GHReleaseUpdater</exclude>
+                      <exclude>org.kohsuke.github_api.v2.GHRequestedAction</exclude>
+                      <exclude>org.kohsuke.github_api.v2.GHVerifiedKey</exclude>
                     </excludes>
                   </rule>
                 </rules>
@@ -544,7 +544,7 @@
             <includeSynthetic>true</includeSynthetic>
             <excludes>
               <!-- Classes in internal are public but are considered private for API stability purposes -->
-              <exclude>org.kohsuke.github.internal</exclude>
+              <exclude>org.kohsuke.github_api.v2.internal</exclude>
             </excludes>
           </parameter>
         </configuration>
@@ -606,7 +606,7 @@
         <configuration>
           <archive>
             <manifestEntries>
-              <Automatic-Module-Name>org.kohsuke.github.api</Automatic-Module-Name>
+              <Automatic-Module-Name>org.kohsuke.github_api.v2.api</Automatic-Module-Name>
             </manifestEntries>
           </archive>
         </configuration>

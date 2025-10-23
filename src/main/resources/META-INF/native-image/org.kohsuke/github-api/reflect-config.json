@@ -1,6 +1,6 @@
 [
   {
-    "name": "org.kohsuke.github.AbstractBuilder",
+    "name": "org.kohsuke.github_api.v2.AbstractBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -15,7 +15,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.BetaApi",
+    "name": "org.kohsuke.github_api.v2.BetaApi",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -30,7 +30,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.EnforcementLevel",
+    "name": "org.kohsuke.github_api.v2.EnforcementLevel",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -45,7 +45,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -60,7 +60,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$AlertsThreshold",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$AlertsThreshold",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -75,7 +75,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$BooleanParameter",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$BooleanParameter",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -90,7 +90,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$BooleanParameter$1",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$BooleanParameter$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -105,7 +105,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$CodeScanningTool",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$CodeScanningTool",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -120,7 +120,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$IntegerParameter",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$IntegerParameter",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -135,7 +135,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$IntegerParameter$1",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$IntegerParameter$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -150,7 +150,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$ListParameter",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$ListParameter",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -165,7 +165,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Operator",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Operator",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -180,7 +180,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameter",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameter",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -195,7 +195,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameters",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameters",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -210,7 +210,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$1",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameters$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -225,7 +225,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$1$1",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameters$1$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -240,7 +240,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$2",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameters$2",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -255,7 +255,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$2$1",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameters$2$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -270,7 +270,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$3",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameters$3",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -285,7 +285,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$3$1",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameters$3$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -300,7 +300,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$4",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameters$4",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -315,7 +315,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$4$1",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameters$4$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -330,7 +330,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$5",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameters$5",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -345,7 +345,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$5$1",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameters$5$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -360,7 +360,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$RulesetSourceType",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$RulesetSourceType",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -375,7 +375,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$SecurityAlertsThreshold",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$SecurityAlertsThreshold",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -390,7 +390,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$StatusCheckConfiguration",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$StatusCheckConfiguration",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -405,7 +405,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$StringParameter",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$StringParameter",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -420,7 +420,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$StringParameter$1",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$StringParameter$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -435,7 +435,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Type",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Type",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -450,7 +450,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$WorkflowFileReference",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$WorkflowFileReference",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -465,7 +465,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBranchSync",
+    "name": "org.kohsuke.github_api.v2.GHBranchSync",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -480,7 +480,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHApp",
+    "name": "org.kohsuke.github_api.v2.GHApp",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -495,7 +495,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHAppCreateTokenBuilder",
+    "name": "org.kohsuke.github_api.v2.GHAppCreateTokenBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -510,7 +510,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHAppFromManifest",
+    "name": "org.kohsuke.github_api.v2.GHAppFromManifest",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -525,7 +525,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHAppInstallation",
+    "name": "org.kohsuke.github_api.v2.GHAppInstallation",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -540,7 +540,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHAppInstallation$GHAppInstallationRepositoryResult",
+    "name": "org.kohsuke.github_api.v2.GHAppInstallation$GHAppInstallationRepositoryResult",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -555,7 +555,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHAppInstallationsIterable",
+    "name": "org.kohsuke.github_api.v2.GHAppInstallationsIterable",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -570,7 +570,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHAppInstallationsIterable$1",
+    "name": "org.kohsuke.github_api.v2.GHAppInstallationsIterable$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -585,7 +585,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHAppInstallationsPage",
+    "name": "org.kohsuke.github_api.v2.GHAppInstallationsPage",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -600,7 +600,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHAppInstallationToken",
+    "name": "org.kohsuke.github_api.v2.GHAppInstallationToken",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -615,7 +615,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHArtifact",
+    "name": "org.kohsuke.github_api.v2.GHArtifact",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -630,7 +630,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHArtifactsIterable",
+    "name": "org.kohsuke.github_api.v2.GHArtifactsIterable",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -645,7 +645,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHArtifactsIterable$1",
+    "name": "org.kohsuke.github_api.v2.GHArtifactsIterable$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -660,7 +660,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHArtifactsPage",
+    "name": "org.kohsuke.github_api.v2.GHArtifactsPage",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -675,7 +675,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHAsset",
+    "name": "org.kohsuke.github_api.v2.GHAsset",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -690,7 +690,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHAuthenticatedAppInstallation",
+    "name": "org.kohsuke.github_api.v2.GHAuthenticatedAppInstallation",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -705,7 +705,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHAuthenticatedAppInstallation$GHAuthenticatedAppInstallationRepositoryResult",
+    "name": "org.kohsuke.github_api.v2.GHAuthenticatedAppInstallation$GHAuthenticatedAppInstallationRepositoryResult",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -720,7 +720,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHAuthorization",
+    "name": "org.kohsuke.github_api.v2.GHAuthorization",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -735,7 +735,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHAuthorization$App",
+    "name": "org.kohsuke.github_api.v2.GHAuthorization$App",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -750,7 +750,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBlob",
+    "name": "org.kohsuke.github_api.v2.GHBlob",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -765,7 +765,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBlobBuilder",
+    "name": "org.kohsuke.github_api.v2.GHBlobBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -780,7 +780,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBranch",
+    "name": "org.kohsuke.github_api.v2.GHBranch",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -795,7 +795,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBranch$1",
+    "name": "org.kohsuke.github_api.v2.GHBranch$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -810,7 +810,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBranch$Commit",
+    "name": "org.kohsuke.github_api.v2.GHBranch$Commit",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -825,7 +825,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection",
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -840,7 +840,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$AllowDeletions",
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$AllowDeletions",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -855,7 +855,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$AllowForcePushes",
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$AllowForcePushes",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -870,7 +870,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$AllowForkSyncing",
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$AllowForkSyncing",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -885,7 +885,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$BlockCreations",
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$BlockCreations",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -900,7 +900,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$Check",
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$Check",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -915,7 +915,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$EnforceAdmins",
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$EnforceAdmins",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -930,7 +930,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$LockBranch",
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$LockBranch",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -945,7 +945,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$RequiredConversationResolution",
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$RequiredConversationResolution",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -960,7 +960,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$RequiredLinearHistory",
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$RequiredLinearHistory",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -975,7 +975,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$RequiredReviews",
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$RequiredReviews",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -990,7 +990,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$RequiredSignatures",
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$RequiredSignatures",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1005,7 +1005,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$RequiredStatusChecks",
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$RequiredStatusChecks",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1020,7 +1020,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$Restrictions",
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$Restrictions",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1035,7 +1035,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtectionBuilder",
+    "name": "org.kohsuke.github_api.v2.GHBranchProtectionBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1050,7 +1050,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtectionBuilder$1",
+    "name": "org.kohsuke.github_api.v2.GHBranchProtectionBuilder$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1065,7 +1065,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtectionBuilder$Restrictions",
+    "name": "org.kohsuke.github_api.v2.GHBranchProtectionBuilder$Restrictions",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1080,7 +1080,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtectionBuilder$StatusChecks",
+    "name": "org.kohsuke.github_api.v2.GHBranchProtectionBuilder$StatusChecks",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1095,7 +1095,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCheckRun",
+    "name": "org.kohsuke.github_api.v2.GHCheckRun",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1110,7 +1110,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCheckRun$AnnotationLevel",
+    "name": "org.kohsuke.github_api.v2.GHCheckRun$AnnotationLevel",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1125,7 +1125,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCheckRun$Conclusion",
+    "name": "org.kohsuke.github_api.v2.GHCheckRun$Conclusion",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1140,7 +1140,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCheckRun$Output",
+    "name": "org.kohsuke.github_api.v2.GHCheckRun$Output",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1155,7 +1155,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCheckRun$Status",
+    "name": "org.kohsuke.github_api.v2.GHCheckRun$Status",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1170,7 +1170,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCheckRunBuilder",
+    "name": "org.kohsuke.github_api.v2.GHCheckRunBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1185,7 +1185,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCheckRunBuilder$Action",
+    "name": "org.kohsuke.github_api.v2.GHCheckRunBuilder$Action",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1200,7 +1200,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCheckRunBuilder$Annotation",
+    "name": "org.kohsuke.github_api.v2.GHCheckRunBuilder$Annotation",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1215,7 +1215,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCheckRunBuilder$Image",
+    "name": "org.kohsuke.github_api.v2.GHCheckRunBuilder$Image",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1230,7 +1230,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCheckRunBuilder$Output",
+    "name": "org.kohsuke.github_api.v2.GHCheckRunBuilder$Output",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1245,7 +1245,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCheckRunsIterable",
+    "name": "org.kohsuke.github_api.v2.GHCheckRunsIterable",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1260,7 +1260,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCheckRunsIterable$1",
+    "name": "org.kohsuke.github_api.v2.GHCheckRunsIterable$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1275,7 +1275,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCheckRunsPage",
+    "name": "org.kohsuke.github_api.v2.GHCheckRunsPage",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1290,7 +1290,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCheckSuite",
+    "name": "org.kohsuke.github_api.v2.GHCheckSuite",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1305,7 +1305,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCheckSuite$HeadCommit",
+    "name": "org.kohsuke.github_api.v2.GHCheckSuite$HeadCommit",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1320,7 +1320,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCodeownersError",
+    "name": "org.kohsuke.github_api.v2.GHCodeownersError",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1335,7 +1335,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCommentAuthorAssociation",
+    "name": "org.kohsuke.github_api.v2.GHCommentAuthorAssociation",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1350,7 +1350,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCommit",
+    "name": "org.kohsuke.github_api.v2.GHCommit",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1365,7 +1365,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCommit$1",
+    "name": "org.kohsuke.github_api.v2.GHCommit$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1380,7 +1380,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCommit$File",
+    "name": "org.kohsuke.github_api.v2.GHCommit$File",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1395,7 +1395,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCommit$GHAuthor",
+    "name": "org.kohsuke.github_api.v2.GHCommit$GHAuthor",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1410,7 +1410,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCommit$Parent",
+    "name": "org.kohsuke.github_api.v2.GHCommit$Parent",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1425,7 +1425,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCommit$ShortInfo",
+    "name": "org.kohsuke.github_api.v2.GHCommit$ShortInfo",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1440,7 +1440,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCommit$Stats",
+    "name": "org.kohsuke.github_api.v2.GHCommit$Stats",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1455,7 +1455,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCommit$User",
+    "name": "org.kohsuke.github_api.v2.GHCommit$User",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1470,7 +1470,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCommitBuilder",
+    "name": "org.kohsuke.github_api.v2.GHCommitBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1485,7 +1485,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCommitBuilder$1",
+    "name": "org.kohsuke.github_api.v2.GHCommitBuilder$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1500,7 +1500,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCommitBuilder$UserInfo",
+    "name": "org.kohsuke.github_api.v2.GHCommitBuilder$UserInfo",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1515,7 +1515,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCommitComment",
+    "name": "org.kohsuke.github_api.v2.GHCommitComment",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1530,7 +1530,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCommitFileIterable",
+    "name": "org.kohsuke.github_api.v2.GHCommitFileIterable",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1545,7 +1545,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCommitFileIterable$1",
+    "name": "org.kohsuke.github_api.v2.GHCommitFileIterable$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1560,7 +1560,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCommitFilesPage",
+    "name": "org.kohsuke.github_api.v2.GHCommitFilesPage",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1575,7 +1575,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCommitPointer",
+    "name": "org.kohsuke.github_api.v2.GHCommitPointer",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1590,7 +1590,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCommitQueryBuilder",
+    "name": "org.kohsuke.github_api.v2.GHCommitQueryBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1605,7 +1605,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCommitSearchBuilder",
+    "name": "org.kohsuke.github_api.v2.GHCommitSearchBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1620,7 +1620,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCommitSearchBuilder$CommitSearchResult",
+    "name": "org.kohsuke.github_api.v2.GHCommitSearchBuilder$CommitSearchResult",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1635,7 +1635,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCommitSearchBuilder$Sort",
+    "name": "org.kohsuke.github_api.v2.GHCommitSearchBuilder$Sort",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1650,7 +1650,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCommitState",
+    "name": "org.kohsuke.github_api.v2.GHCommitState",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1665,7 +1665,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCommitStatus",
+    "name": "org.kohsuke.github_api.v2.GHCommitStatus",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1680,7 +1680,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCompare",
+    "name": "org.kohsuke.github_api.v2.GHCompare",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1695,7 +1695,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCompare$1",
+    "name": "org.kohsuke.github_api.v2.GHCompare$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1710,7 +1710,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCompare$Commit",
+    "name": "org.kohsuke.github_api.v2.GHCompare$Commit",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1725,7 +1725,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCompare$GHCompareCommitsIterable",
+    "name": "org.kohsuke.github_api.v2.GHCompare$GHCompareCommitsIterable",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1740,7 +1740,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCompare$GHCompareCommitsIterable$1",
+    "name": "org.kohsuke.github_api.v2.GHCompare$GHCompareCommitsIterable$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1755,7 +1755,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCompare$InnerCommit",
+    "name": "org.kohsuke.github_api.v2.GHCompare$InnerCommit",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1770,7 +1770,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCompare$Status",
+    "name": "org.kohsuke.github_api.v2.GHCompare$Status",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1785,7 +1785,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCompare$Tree",
+    "name": "org.kohsuke.github_api.v2.GHCompare$Tree",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1800,7 +1800,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCompare$User",
+    "name": "org.kohsuke.github_api.v2.GHCompare$User",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1815,7 +1815,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHContent",
+    "name": "org.kohsuke.github_api.v2.GHContent",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1830,7 +1830,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHContentBuilder",
+    "name": "org.kohsuke.github_api.v2.GHContentBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1845,7 +1845,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHContentSearchBuilder",
+    "name": "org.kohsuke.github_api.v2.GHContentSearchBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1860,7 +1860,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHContentSearchBuilder$ContentSearchResult",
+    "name": "org.kohsuke.github_api.v2.GHContentSearchBuilder$ContentSearchResult",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1875,7 +1875,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHContentSearchBuilder$Sort",
+    "name": "org.kohsuke.github_api.v2.GHContentSearchBuilder$Sort",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1890,7 +1890,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHContentUpdateResponse",
+    "name": "org.kohsuke.github_api.v2.GHContentUpdateResponse",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1905,7 +1905,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHContentWithLicense",
+    "name": "org.kohsuke.github_api.v2.GHContentWithLicense",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1920,7 +1920,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHCreateRepositoryBuilder",
+    "name": "org.kohsuke.github_api.v2.GHCreateRepositoryBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1935,7 +1935,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHDeployKey",
+    "name": "org.kohsuke.github_api.v2.GHDeployKey",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1950,7 +1950,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHDeployment",
+    "name": "org.kohsuke.github_api.v2.GHDeployment",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1965,7 +1965,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHDeploymentBuilder",
+    "name": "org.kohsuke.github_api.v2.GHDeploymentBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1980,7 +1980,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHDeploymentState",
+    "name": "org.kohsuke.github_api.v2.GHDeploymentState",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -1995,7 +1995,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHDeploymentStatus",
+    "name": "org.kohsuke.github_api.v2.GHDeploymentStatus",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2010,7 +2010,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHDeploymentStatusBuilder",
+    "name": "org.kohsuke.github_api.v2.GHDeploymentStatusBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2025,7 +2025,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHDirection",
+    "name": "org.kohsuke.github_api.v2.GHDirection",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2040,7 +2040,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHDiscussion",
+    "name": "org.kohsuke.github_api.v2.GHDiscussion",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2055,7 +2055,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHDiscussion$1",
+    "name": "org.kohsuke.github_api.v2.GHDiscussion$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2070,7 +2070,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHDiscussionBuilder",
+    "name": "org.kohsuke.github_api.v2.GHDiscussionBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2085,7 +2085,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEmail",
+    "name": "org.kohsuke.github_api.v2.GHEmail",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2100,7 +2100,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEnterpriseManagedUsersException",
+    "name": "org.kohsuke.github_api.v2.GHEnterpriseManagedUsersException",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2115,7 +2115,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHError",
+    "name": "org.kohsuke.github_api.v2.GHError",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2130,7 +2130,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEvent",
+    "name": "org.kohsuke.github_api.v2.GHEvent",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2145,7 +2145,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventInfo",
+    "name": "org.kohsuke.github_api.v2.GHEventInfo",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2160,7 +2160,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventInfo$GHEventRepository",
+    "name": "org.kohsuke.github_api.v2.GHEventInfo$GHEventRepository",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2175,7 +2175,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2190,7 +2190,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$CheckRun",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$CheckRun",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2205,7 +2205,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$CheckSuite",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$CheckSuite",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2220,7 +2220,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$CommentChanges",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$CommentChanges",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2235,7 +2235,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$CommentChanges$GHFrom",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$CommentChanges$GHFrom",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2250,7 +2250,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$CommitComment",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$CommitComment",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2265,7 +2265,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Create",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Create",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2280,7 +2280,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Delete",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Delete",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2295,7 +2295,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Deployment",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Deployment",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2310,7 +2310,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$DeploymentStatus",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$DeploymentStatus",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2325,7 +2325,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Discussion",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Discussion",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2340,7 +2340,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$DiscussionComment",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$DiscussionComment",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2355,7 +2355,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Fork",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Fork",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2370,7 +2370,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Installation",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Installation",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2385,7 +2385,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Installation$Repository",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Installation$Repository",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2400,7 +2400,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$InstallationRepositories",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$InstallationRepositories",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2415,7 +2415,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Issue",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Issue",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2430,7 +2430,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$IssueComment",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$IssueComment",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2445,7 +2445,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Label",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Label",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2460,7 +2460,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Member",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Member",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2475,7 +2475,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Membership",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Membership",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2490,7 +2490,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Ping",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Ping",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2505,7 +2505,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$ProjectsV2Item",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$ProjectsV2Item",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2520,7 +2520,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Public",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Public",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2535,7 +2535,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$PullRequest",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$PullRequest",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2550,7 +2550,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$PullRequestReview",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$PullRequestReview",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2565,7 +2565,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$PullRequestReviewComment",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$PullRequestReviewComment",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2580,7 +2580,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Push",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Push",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2595,7 +2595,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Push$PushCommit",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Push$PushCommit",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2610,7 +2610,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Push$Pusher",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Push$Pusher",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2625,7 +2625,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Release",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Release",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2640,7 +2640,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Repository",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Repository",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2655,7 +2655,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Star",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Star",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2670,7 +2670,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Status",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Status",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2685,7 +2685,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Team",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Team",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2700,7 +2700,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$TeamAdd",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$TeamAdd",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2715,7 +2715,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$WorkflowDispatch",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$WorkflowDispatch",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2730,7 +2730,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$WorkflowJob",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$WorkflowJob",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2745,7 +2745,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$WorkflowRun",
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$WorkflowRun",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2760,7 +2760,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHExternalGroup",
+    "name": "org.kohsuke.github_api.v2.GHExternalGroup",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2775,7 +2775,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHExternalGroup$GHLinkedExternalMember",
+    "name": "org.kohsuke.github_api.v2.GHExternalGroup$GHLinkedExternalMember",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2790,7 +2790,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHExternalGroup$GHLinkedTeam",
+    "name": "org.kohsuke.github_api.v2.GHExternalGroup$GHLinkedTeam",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2805,7 +2805,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHExternalGroupIterable",
+    "name": "org.kohsuke.github_api.v2.GHExternalGroupIterable",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2820,7 +2820,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHExternalGroupIterable$1",
+    "name": "org.kohsuke.github_api.v2.GHExternalGroupIterable$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2835,7 +2835,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHExternalGroupPage",
+    "name": "org.kohsuke.github_api.v2.GHExternalGroupPage",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2850,7 +2850,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHFork",
+    "name": "org.kohsuke.github_api.v2.GHFork",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2865,7 +2865,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHGist",
+    "name": "org.kohsuke.github_api.v2.GHGist",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2880,7 +2880,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHGistBuilder",
+    "name": "org.kohsuke.github_api.v2.GHGistBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2895,7 +2895,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHGistFile",
+    "name": "org.kohsuke.github_api.v2.GHGistFile",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2910,7 +2910,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHHook",
+    "name": "org.kohsuke.github_api.v2.GHHook",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2925,7 +2925,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHHooks$1",
+    "name": "org.kohsuke.github_api.v2.GHHooks$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2940,7 +2940,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHInvitation",
+    "name": "org.kohsuke.github_api.v2.GHInvitation",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2955,7 +2955,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHIssue",
+    "name": "org.kohsuke.github_api.v2.GHIssue",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2970,7 +2970,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHIssue$PullRequest",
+    "name": "org.kohsuke.github_api.v2.GHIssue$PullRequest",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -2985,7 +2985,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHIssueBuilder",
+    "name": "org.kohsuke.github_api.v2.GHIssueBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3000,7 +3000,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHIssueChanges",
+    "name": "org.kohsuke.github_api.v2.GHIssueChanges",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3015,7 +3015,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHIssueChanges$GHFrom",
+    "name": "org.kohsuke.github_api.v2.GHIssueChanges$GHFrom",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3030,7 +3030,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHIssueComment",
+    "name": "org.kohsuke.github_api.v2.GHIssueComment",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3045,7 +3045,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHIssueCommentQueryBuilder",
+    "name": "org.kohsuke.github_api.v2.GHIssueCommentQueryBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3060,7 +3060,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHIssueEvent",
+    "name": "org.kohsuke.github_api.v2.GHIssueEvent",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3075,7 +3075,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHIssueQueryBuilder",
+    "name": "org.kohsuke.github_api.v2.GHIssueQueryBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3090,7 +3090,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHIssueQueryBuilder$ForRepository",
+    "name": "org.kohsuke.github_api.v2.GHIssueQueryBuilder$ForRepository",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3105,7 +3105,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHIssueQueryBuilder$Sort",
+    "name": "org.kohsuke.github_api.v2.GHIssueQueryBuilder$Sort",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3120,7 +3120,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHIssueRename",
+    "name": "org.kohsuke.github_api.v2.GHIssueRename",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3135,7 +3135,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHIssueSearchBuilder",
+    "name": "org.kohsuke.github_api.v2.GHIssueSearchBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3150,7 +3150,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHIssueSearchBuilder$IssueSearchResult",
+    "name": "org.kohsuke.github_api.v2.GHIssueSearchBuilder$IssueSearchResult",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3165,7 +3165,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHIssueSearchBuilder$Sort",
+    "name": "org.kohsuke.github_api.v2.GHIssueSearchBuilder$Sort",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3180,7 +3180,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHIssueState",
+    "name": "org.kohsuke.github_api.v2.GHIssueState",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3195,7 +3195,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHIssueStateReason",
+    "name": "org.kohsuke.github_api.v2.GHIssueStateReason",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3210,7 +3210,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHKey",
+    "name": "org.kohsuke.github_api.v2.GHKey",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3225,7 +3225,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHLabel",
+    "name": "org.kohsuke.github_api.v2.GHLabel",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3240,7 +3240,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHLabel$1",
+    "name": "org.kohsuke.github_api.v2.GHLabel$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3255,7 +3255,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHLabel$Creator",
+    "name": "org.kohsuke.github_api.v2.GHLabel$Creator",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3270,7 +3270,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHLabel$Setter",
+    "name": "org.kohsuke.github_api.v2.GHLabel$Setter",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3285,7 +3285,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHLabel$Updater",
+    "name": "org.kohsuke.github_api.v2.GHLabel$Updater",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3300,7 +3300,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHLabelBuilder",
+    "name": "org.kohsuke.github_api.v2.GHLabelBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3315,7 +3315,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHLabelChanges",
+    "name": "org.kohsuke.github_api.v2.GHLabelChanges",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3330,7 +3330,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHLabelChanges$GHFrom",
+    "name": "org.kohsuke.github_api.v2.GHLabelChanges$GHFrom",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3345,7 +3345,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHLicense",
+    "name": "org.kohsuke.github_api.v2.GHLicense",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3360,7 +3360,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHMarketplaceAccount",
+    "name": "org.kohsuke.github_api.v2.GHMarketplaceAccount",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3375,7 +3375,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHMarketplaceAccountPlan",
+    "name": "org.kohsuke.github_api.v2.GHMarketplaceAccountPlan",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3390,7 +3390,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHMarketplaceAccountType",
+    "name": "org.kohsuke.github_api.v2.GHMarketplaceAccountType",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3405,7 +3405,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHMarketplaceListAccountBuilder",
+    "name": "org.kohsuke.github_api.v2.GHMarketplaceListAccountBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3420,7 +3420,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHMarketplaceListAccountBuilder$Sort",
+    "name": "org.kohsuke.github_api.v2.GHMarketplaceListAccountBuilder$Sort",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3435,7 +3435,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHMarketplacePendingChange",
+    "name": "org.kohsuke.github_api.v2.GHMarketplacePendingChange",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3450,7 +3450,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHMarketplacePlan",
+    "name": "org.kohsuke.github_api.v2.GHMarketplacePlan",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3465,7 +3465,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHMarketplacePlanForAccountBuilder",
+    "name": "org.kohsuke.github_api.v2.GHMarketplacePlanForAccountBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3480,7 +3480,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHMarketplacePriceModel",
+    "name": "org.kohsuke.github_api.v2.GHMarketplacePriceModel",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3495,7 +3495,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHMarketplacePurchase",
+    "name": "org.kohsuke.github_api.v2.GHMarketplacePurchase",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3510,7 +3510,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHMarketplaceUserPurchase",
+    "name": "org.kohsuke.github_api.v2.GHMarketplaceUserPurchase",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3525,7 +3525,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHMemberChanges",
+    "name": "org.kohsuke.github_api.v2.GHMemberChanges",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3540,7 +3540,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHMemberChanges$FromRoleName",
+    "name": "org.kohsuke.github_api.v2.GHMemberChanges$FromRoleName",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3555,7 +3555,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHMemberChanges$FromToPermission",
+    "name": "org.kohsuke.github_api.v2.GHMemberChanges$FromToPermission",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3570,7 +3570,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHMembership",
+    "name": "org.kohsuke.github_api.v2.GHMembership",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3585,7 +3585,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHMembership$Role",
+    "name": "org.kohsuke.github_api.v2.GHMembership$Role",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3600,7 +3600,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHMembership$State",
+    "name": "org.kohsuke.github_api.v2.GHMembership$State",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3615,7 +3615,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHMeta",
+    "name": "org.kohsuke.github_api.v2.GHMeta",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3630,7 +3630,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHMilestone",
+    "name": "org.kohsuke.github_api.v2.GHMilestone",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3645,7 +3645,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHMilestoneState",
+    "name": "org.kohsuke.github_api.v2.GHMilestoneState",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3660,7 +3660,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHMyself",
+    "name": "org.kohsuke.github_api.v2.GHMyself",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3675,7 +3675,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHMyself$RepositoryListFilter",
+    "name": "org.kohsuke.github_api.v2.GHMyself$RepositoryListFilter",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3690,7 +3690,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHNotExternallyManagedEnterpriseException",
+    "name": "org.kohsuke.github_api.v2.GHNotExternallyManagedEnterpriseException",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3705,7 +3705,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHNotificationStream",
+    "name": "org.kohsuke.github_api.v2.GHNotificationStream",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3720,7 +3720,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHNotificationStream$1",
+    "name": "org.kohsuke.github_api.v2.GHNotificationStream$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3735,7 +3735,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHObject",
+    "name": "org.kohsuke.github_api.v2.GHObject",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3750,7 +3750,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHObject$1",
+    "name": "org.kohsuke.github_api.v2.GHObject$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3765,7 +3765,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHObject$2",
+    "name": "org.kohsuke.github_api.v2.GHObject$2",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3780,7 +3780,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHOrganization",
+    "name": "org.kohsuke.github_api.v2.GHOrganization",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3795,7 +3795,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHOrganization$Permission",
+    "name": "org.kohsuke.github_api.v2.GHOrganization$Permission",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3810,7 +3810,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHOrganization$RepositoryRole",
+    "name": "org.kohsuke.github_api.v2.GHOrganization$RepositoryRole",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3825,7 +3825,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHOrganization$Role",
+    "name": "org.kohsuke.github_api.v2.GHOrganization$Role",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3840,7 +3840,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHOrgHook",
+    "name": "org.kohsuke.github_api.v2.GHOrgHook",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3855,7 +3855,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHOTPRequiredException",
+    "name": "org.kohsuke.github_api.v2.GHOTPRequiredException",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3870,7 +3870,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPermission",
+    "name": "org.kohsuke.github_api.v2.GHPermission",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3885,7 +3885,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPermissionType",
+    "name": "org.kohsuke.github_api.v2.GHPermissionType",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3900,7 +3900,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPerson",
+    "name": "org.kohsuke.github_api.v2.GHPerson",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3915,7 +3915,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPerson$1",
+    "name": "org.kohsuke.github_api.v2.GHPerson$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3930,7 +3930,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHProject",
+    "name": "org.kohsuke.github_api.v2.GHProject",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3945,7 +3945,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHProject$ProjectState",
+    "name": "org.kohsuke.github_api.v2.GHProject$ProjectState",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3960,7 +3960,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHProject$ProjectStateFilter",
+    "name": "org.kohsuke.github_api.v2.GHProject$ProjectStateFilter",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3975,7 +3975,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHProjectCard",
+    "name": "org.kohsuke.github_api.v2.GHProjectCard",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -3990,7 +3990,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHProjectColumn",
+    "name": "org.kohsuke.github_api.v2.GHProjectColumn",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4005,7 +4005,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHProjectsV2Item",
+    "name": "org.kohsuke.github_api.v2.GHProjectsV2Item",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4020,7 +4020,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHProjectsV2Item$ContentType",
+    "name": "org.kohsuke.github_api.v2.GHProjectsV2Item$ContentType",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4035,7 +4035,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHProjectsV2ItemChanges",
+    "name": "org.kohsuke.github_api.v2.GHProjectsV2ItemChanges",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4050,7 +4050,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHProjectsV2ItemChanges$FieldType",
+    "name": "org.kohsuke.github_api.v2.GHProjectsV2ItemChanges$FieldType",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4065,7 +4065,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHProjectsV2ItemChanges$FieldValue",
+    "name": "org.kohsuke.github_api.v2.GHProjectsV2ItemChanges$FieldValue",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4080,7 +4080,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHProjectsV2ItemChanges$FromTo",
+    "name": "org.kohsuke.github_api.v2.GHProjectsV2ItemChanges$FromTo",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4095,7 +4095,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHProjectsV2ItemChanges$FromToDate",
+    "name": "org.kohsuke.github_api.v2.GHProjectsV2ItemChanges$FromToDate",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4110,7 +4110,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequest",
+    "name": "org.kohsuke.github_api.v2.GHPullRequest",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4125,7 +4125,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequest$AutoMerge",
+    "name": "org.kohsuke.github_api.v2.GHPullRequest$AutoMerge",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4140,7 +4140,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequest$MergeMethod",
+    "name": "org.kohsuke.github_api.v2.GHPullRequest$MergeMethod",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4155,7 +4155,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestChanges",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestChanges",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4170,7 +4170,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestChanges$GHCommitPointer",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestChanges$GHCommitPointer",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4185,7 +4185,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestChanges$GHFrom",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestChanges$GHFrom",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4200,7 +4200,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestCommitDetail",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestCommitDetail",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4215,7 +4215,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestCommitDetail$Authorship",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestCommitDetail$Authorship",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4230,7 +4230,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestCommitDetail$Commit",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestCommitDetail$Commit",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4245,7 +4245,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestCommitDetail$CommitPointer",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestCommitDetail$CommitPointer",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4260,7 +4260,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestCommitDetail$Tree",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestCommitDetail$Tree",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4275,7 +4275,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestFileDetail",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestFileDetail",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4290,7 +4290,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestQueryBuilder",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestQueryBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4305,7 +4305,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestQueryBuilder$Sort",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestQueryBuilder$Sort",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4320,7 +4320,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReview",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReview",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4335,7 +4335,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewBuilder",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4350,7 +4350,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewBuilder$DraftReviewComment",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewBuilder$DraftReviewComment",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4365,7 +4365,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewBuilder$MultilineDraftReviewComment",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewBuilder$MultilineDraftReviewComment",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4380,7 +4380,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewBuilder$ReviewComment",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewBuilder$ReviewComment",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4395,7 +4395,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewBuilder$SingleLineDraftReviewComment",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewBuilder$SingleLineDraftReviewComment",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4410,7 +4410,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewComment",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewComment",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4425,7 +4425,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewComment$Side",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewComment$Side",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4440,7 +4440,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewCommentBuilder",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewCommentBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4455,7 +4455,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewCommentReactions",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewCommentReactions",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4470,7 +4470,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewEvent",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewEvent",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4485,7 +4485,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewEvent$1",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewEvent$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4500,7 +4500,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewState",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewState",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4515,7 +4515,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewState$1",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewState$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4530,7 +4530,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestSearchBuilder",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestSearchBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4545,7 +4545,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestSearchBuilder$PullRequestSearchResult",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestSearchBuilder$PullRequestSearchResult",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4560,7 +4560,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestSearchBuilder$Sort",
+    "name": "org.kohsuke.github_api.v2.GHPullRequestSearchBuilder$Sort",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4575,7 +4575,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHQueryBuilder",
+    "name": "org.kohsuke.github_api.v2.GHQueryBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4590,7 +4590,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRateLimit",
+    "name": "org.kohsuke.github_api.v2.GHRateLimit",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4605,7 +4605,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRateLimit$Record",
+    "name": "org.kohsuke.github_api.v2.GHRateLimit$Record",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4620,7 +4620,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRateLimit$UnknownLimitRecord",
+    "name": "org.kohsuke.github_api.v2.GHRateLimit$UnknownLimitRecord",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4635,7 +4635,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHReaction",
+    "name": "org.kohsuke.github_api.v2.GHReaction",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4650,7 +4650,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRef",
+    "name": "org.kohsuke.github_api.v2.GHRef",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4665,7 +4665,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRef$GHObject",
+    "name": "org.kohsuke.github_api.v2.GHRef$GHObject",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4680,7 +4680,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRelease",
+    "name": "org.kohsuke.github_api.v2.GHRelease",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4695,7 +4695,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHReleaseBuilder",
+    "name": "org.kohsuke.github_api.v2.GHReleaseBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4710,7 +4710,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHReleaseBuilder$MakeLatest",
+    "name": "org.kohsuke.github_api.v2.GHReleaseBuilder$MakeLatest",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4725,7 +4725,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepoHook",
+    "name": "org.kohsuke.github_api.v2.GHRepoHook",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4740,7 +4740,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepository",
+    "name": "org.kohsuke.github_api.v2.GHRepository",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4755,7 +4755,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepository$1",
+    "name": "org.kohsuke.github_api.v2.GHRepository$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4770,7 +4770,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepository$CollaboratorAffiliation",
+    "name": "org.kohsuke.github_api.v2.GHRepository$CollaboratorAffiliation",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4785,7 +4785,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepository$Contributor",
+    "name": "org.kohsuke.github_api.v2.GHRepository$Contributor",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4800,7 +4800,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepository$ForkSort",
+    "name": "org.kohsuke.github_api.v2.GHRepository$ForkSort",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4815,7 +4815,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepository$GHCodeownersErrors",
+    "name": "org.kohsuke.github_api.v2.GHRepository$GHCodeownersErrors",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4830,7 +4830,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepository$GHRepoPermission",
+    "name": "org.kohsuke.github_api.v2.GHRepository$GHRepoPermission",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4845,7 +4845,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepository$Setter",
+    "name": "org.kohsuke.github_api.v2.GHRepository$Setter",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4860,7 +4860,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepository$Topics",
+    "name": "org.kohsuke.github_api.v2.GHRepository$Topics",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4875,7 +4875,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepository$Updater",
+    "name": "org.kohsuke.github_api.v2.GHRepository$Updater",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4890,7 +4890,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepository$Visibility",
+    "name": "org.kohsuke.github_api.v2.GHRepository$Visibility",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4905,7 +4905,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryBuilder",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4920,7 +4920,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryChanges",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryChanges",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4935,7 +4935,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryChanges$FromName",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryChanges$FromName",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4950,7 +4950,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryChanges$FromOwner",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryChanges$FromOwner",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4965,7 +4965,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryChanges$FromRepository",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryChanges$FromRepository",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4980,7 +4980,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryChanges$Owner",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryChanges$Owner",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -4995,7 +4995,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryCloneTraffic",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryCloneTraffic",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5010,7 +5010,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryCloneTraffic$DailyInfo",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryCloneTraffic$DailyInfo",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5025,7 +5025,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryDiscussion",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryDiscussion",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5040,7 +5040,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryDiscussion$Category",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryDiscussion$Category",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5055,7 +5055,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryDiscussion$State",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryDiscussion$State",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5070,7 +5070,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryDiscussionComment",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryDiscussionComment",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5085,7 +5085,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryPublicKey",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryPublicKey",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5100,7 +5100,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositorySearchBuilder",
+    "name": "org.kohsuke.github_api.v2.GHRepositorySearchBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5115,7 +5115,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositorySearchBuilder$Fork",
+    "name": "org.kohsuke.github_api.v2.GHRepositorySearchBuilder$Fork",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5130,7 +5130,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositorySearchBuilder$RepositorySearchResult",
+    "name": "org.kohsuke.github_api.v2.GHRepositorySearchBuilder$RepositorySearchResult",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5145,7 +5145,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositorySearchBuilder$Sort",
+    "name": "org.kohsuke.github_api.v2.GHRepositorySearchBuilder$Sort",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5160,7 +5160,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositorySelection",
+    "name": "org.kohsuke.github_api.v2.GHRepositorySelection",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5175,7 +5175,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryStatistics",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryStatistics",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5190,7 +5190,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryStatistics$CodeFrequency",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryStatistics$CodeFrequency",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5205,7 +5205,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryStatistics$CommitActivity",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryStatistics$CommitActivity",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5220,7 +5220,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryStatistics$ContributorStats",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryStatistics$ContributorStats",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5235,7 +5235,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryStatistics$ContributorStats$Week",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryStatistics$ContributorStats$Week",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5250,7 +5250,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryStatistics$Participation",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryStatistics$Participation",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5265,7 +5265,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryStatistics$PunchCardItem",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryStatistics$PunchCardItem",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5280,7 +5280,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryTraffic",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryTraffic",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5295,7 +5295,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryTraffic$DailyInfo",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryTraffic$DailyInfo",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5310,7 +5310,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryTrafficReferralBase",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryTrafficReferralBase",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5325,7 +5325,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryTrafficTopReferralPath",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryTrafficTopReferralPath",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5340,7 +5340,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryTrafficTopReferralSources",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryTrafficTopReferralSources",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5355,7 +5355,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryVariable",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryVariable",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5370,7 +5370,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryVariable$1",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryVariable$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5385,7 +5385,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryVariable$Creator",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryVariable$Creator",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5400,7 +5400,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryVariable$Setter",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryVariable$Setter",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5415,7 +5415,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryVariableBuilder",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryVariableBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5430,7 +5430,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryViewTraffic",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryViewTraffic",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5445,7 +5445,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryViewTraffic$DailyInfo",
+    "name": "org.kohsuke.github_api.v2.GHRepositoryViewTraffic$DailyInfo",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5460,7 +5460,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHRequestedAction",
+    "name": "org.kohsuke.github_api.v2.GHRequestedAction",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5475,7 +5475,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHSearchBuilder",
+    "name": "org.kohsuke.github_api.v2.GHSearchBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5490,7 +5490,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHStargazer",
+    "name": "org.kohsuke.github_api.v2.GHStargazer",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5505,7 +5505,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHSubscription",
+    "name": "org.kohsuke.github_api.v2.GHSubscription",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5520,7 +5520,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHTag",
+    "name": "org.kohsuke.github_api.v2.GHTag",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5535,7 +5535,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHTagObject",
+    "name": "org.kohsuke.github_api.v2.GHTagObject",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5550,7 +5550,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHTargetType",
+    "name": "org.kohsuke.github_api.v2.GHTargetType",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5565,7 +5565,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHTeam",
+    "name": "org.kohsuke.github_api.v2.GHTeam",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5580,7 +5580,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHTeam$Privacy",
+    "name": "org.kohsuke.github_api.v2.GHTeam$Privacy",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5595,7 +5595,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHTeam$Role",
+    "name": "org.kohsuke.github_api.v2.GHTeam$Role",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5610,7 +5610,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHTeamBuilder",
+    "name": "org.kohsuke.github_api.v2.GHTeamBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5625,7 +5625,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHTeamCannotBeExternallyManagedException",
+    "name": "org.kohsuke.github_api.v2.GHTeamCannotBeExternallyManagedException",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5640,7 +5640,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHTeamChanges",
+    "name": "org.kohsuke.github_api.v2.GHTeamChanges",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5655,7 +5655,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHTeamChanges$FromPrivacy",
+    "name": "org.kohsuke.github_api.v2.GHTeamChanges$FromPrivacy",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5670,7 +5670,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHTeamChanges$FromRepository",
+    "name": "org.kohsuke.github_api.v2.GHTeamChanges$FromRepository",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5685,7 +5685,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHTeamChanges$FromRepositoryPermissions",
+    "name": "org.kohsuke.github_api.v2.GHTeamChanges$FromRepositoryPermissions",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5700,7 +5700,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHTeamChanges$FromString",
+    "name": "org.kohsuke.github_api.v2.GHTeamChanges$FromString",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5715,7 +5715,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHThread",
+    "name": "org.kohsuke.github_api.v2.GHThread",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5730,7 +5730,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHThread$Subject",
+    "name": "org.kohsuke.github_api.v2.GHThread$Subject",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5745,7 +5745,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHTree",
+    "name": "org.kohsuke.github_api.v2.GHTree",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5760,7 +5760,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHTreeBuilder",
+    "name": "org.kohsuke.github_api.v2.GHTreeBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5775,7 +5775,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHTreeBuilder$1",
+    "name": "org.kohsuke.github_api.v2.GHTreeBuilder$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5790,7 +5790,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHTreeBuilder$DeleteTreeEntry",
+    "name": "org.kohsuke.github_api.v2.GHTreeBuilder$DeleteTreeEntry",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5805,7 +5805,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHTreeBuilder$TreeEntry",
+    "name": "org.kohsuke.github_api.v2.GHTreeBuilder$TreeEntry",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5820,7 +5820,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHTreeEntry",
+    "name": "org.kohsuke.github_api.v2.GHTreeEntry",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5835,7 +5835,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHUser",
+    "name": "org.kohsuke.github_api.v2.GHUser",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5850,7 +5850,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHUserSearchBuilder",
+    "name": "org.kohsuke.github_api.v2.GHUserSearchBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5865,7 +5865,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHUserSearchBuilder$Sort",
+    "name": "org.kohsuke.github_api.v2.GHUserSearchBuilder$Sort",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5880,7 +5880,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHUserSearchBuilder$UserSearchResult",
+    "name": "org.kohsuke.github_api.v2.GHUserSearchBuilder$UserSearchResult",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5895,7 +5895,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHVerification",
+    "name": "org.kohsuke.github_api.v2.GHVerification",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5910,7 +5910,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHVerification$Reason",
+    "name": "org.kohsuke.github_api.v2.GHVerification$Reason",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5925,7 +5925,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHVerifiedKey",
+    "name": "org.kohsuke.github_api.v2.GHVerifiedKey",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5940,7 +5940,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHWorkflow",
+    "name": "org.kohsuke.github_api.v2.GHWorkflow",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5955,7 +5955,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowJob",
+    "name": "org.kohsuke.github_api.v2.GHWorkflowJob",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5970,7 +5970,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowJob$Step",
+    "name": "org.kohsuke.github_api.v2.GHWorkflowJob$Step",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -5985,7 +5985,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowJobQueryBuilder",
+    "name": "org.kohsuke.github_api.v2.GHWorkflowJobQueryBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6000,7 +6000,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowJobsIterable",
+    "name": "org.kohsuke.github_api.v2.GHWorkflowJobsIterable",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6015,7 +6015,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowJobsIterable$1",
+    "name": "org.kohsuke.github_api.v2.GHWorkflowJobsIterable$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6030,7 +6030,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowJobsPage",
+    "name": "org.kohsuke.github_api.v2.GHWorkflowJobsPage",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6045,7 +6045,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowRun",
+    "name": "org.kohsuke.github_api.v2.GHWorkflowRun",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6060,7 +6060,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowRun$Conclusion",
+    "name": "org.kohsuke.github_api.v2.GHWorkflowRun$Conclusion",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6075,7 +6075,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowRun$HeadCommit",
+    "name": "org.kohsuke.github_api.v2.GHWorkflowRun$HeadCommit",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6090,7 +6090,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowRun$Status",
+    "name": "org.kohsuke.github_api.v2.GHWorkflowRun$Status",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6105,7 +6105,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowRunQueryBuilder",
+    "name": "org.kohsuke.github_api.v2.GHWorkflowRunQueryBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6120,7 +6120,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowRunsIterable",
+    "name": "org.kohsuke.github_api.v2.GHWorkflowRunsIterable",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6135,7 +6135,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowRunsIterable$1",
+    "name": "org.kohsuke.github_api.v2.GHWorkflowRunsIterable$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6150,7 +6150,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowRunsPage",
+    "name": "org.kohsuke.github_api.v2.GHWorkflowRunsPage",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6165,7 +6165,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowsIterable",
+    "name": "org.kohsuke.github_api.v2.GHWorkflowsIterable",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6180,7 +6180,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowsIterable$1",
+    "name": "org.kohsuke.github_api.v2.GHWorkflowsIterable$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6195,7 +6195,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowsPage",
+    "name": "org.kohsuke.github_api.v2.GHWorkflowsPage",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6210,7 +6210,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GitCommit",
+    "name": "org.kohsuke.github_api.v2.GitCommit",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6225,7 +6225,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GitCommit$1",
+    "name": "org.kohsuke.github_api.v2.GitCommit$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6240,7 +6240,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GitCommit$Tree",
+    "name": "org.kohsuke.github_api.v2.GitCommit$Tree",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6255,7 +6255,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GitHub$1",
+    "name": "org.kohsuke.github_api.v2.GitHub$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6270,7 +6270,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GitHub$AuthorizationRefreshGitHubWrapper",
+    "name": "org.kohsuke.github_api.v2.GitHub$AuthorizationRefreshGitHubWrapper",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6285,7 +6285,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GitHubBuilder",
+    "name": "org.kohsuke.github_api.v2.GitHubBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6300,7 +6300,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GitHubConnectorResponseErrorHandler$1",
+    "name": "org.kohsuke.github_api.v2.GitHubConnectorResponseErrorHandler$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6315,7 +6315,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GitHubInteractiveObject",
+    "name": "org.kohsuke.github_api.v2.GitHubInteractiveObject",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6330,7 +6330,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GitHubPageContentsIterable",
+    "name": "org.kohsuke.github_api.v2.GitHubPageContentsIterable",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6345,7 +6345,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GitHubPageContentsIterable$GitHubPageContentsIterator",
+    "name": "org.kohsuke.github_api.v2.GitHubPageContentsIterable$GitHubPageContentsIterator",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6360,7 +6360,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GitHubPageIterator",
+    "name": "org.kohsuke.github_api.v2.GitHubPageIterator",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6375,7 +6375,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GitHubRequest",
+    "name": "org.kohsuke.github_api.v2.GitHubRequest",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6390,7 +6390,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GitHubRequest$1",
+    "name": "org.kohsuke.github_api.v2.GitHubRequest$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6405,7 +6405,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GitHubRequest$Builder",
+    "name": "org.kohsuke.github_api.v2.GitHubRequest$Builder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6420,7 +6420,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GitHubRequest$Entry",
+    "name": "org.kohsuke.github_api.v2.GitHubRequest$Entry",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6435,7 +6435,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GitHubResponse",
+    "name": "org.kohsuke.github_api.v2.GitHubResponse",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6450,7 +6450,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GitHubSanityCachedValue",
+    "name": "org.kohsuke.github_api.v2.GitHubSanityCachedValue",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6465,7 +6465,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GitUser",
+    "name": "org.kohsuke.github_api.v2.GitUser",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6480,7 +6480,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.JsonRateLimit",
+    "name": "org.kohsuke.github_api.v2.JsonRateLimit",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6495,7 +6495,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.MarkdownMode",
+    "name": "org.kohsuke.github_api.v2.MarkdownMode",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6510,7 +6510,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.PagedIterable",
+    "name": "org.kohsuke.github_api.v2.PagedIterable",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6525,7 +6525,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.PagedSearchIterable",
+    "name": "org.kohsuke.github_api.v2.PagedSearchIterable",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6540,7 +6540,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.PagedSearchIterable$1",
+    "name": "org.kohsuke.github_api.v2.PagedSearchIterable$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6555,7 +6555,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.Preview",
+    "name": "org.kohsuke.github_api.v2.Preview",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6570,7 +6570,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.RateLimitChecker$1",
+    "name": "org.kohsuke.github_api.v2.RateLimitChecker$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6585,7 +6585,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.RateLimitChecker$LiteralValue",
+    "name": "org.kohsuke.github_api.v2.RateLimitChecker$LiteralValue",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6600,7 +6600,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.RateLimitHandler$1",
+    "name": "org.kohsuke.github_api.v2.RateLimitHandler$1",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6615,7 +6615,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.RateLimitHandler$2",
+    "name": "org.kohsuke.github_api.v2.RateLimitHandler$2",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6630,7 +6630,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.RateLimitTarget",
+    "name": "org.kohsuke.github_api.v2.RateLimitTarget",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6645,7 +6645,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.ReactionContent",
+    "name": "org.kohsuke.github_api.v2.ReactionContent",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6660,7 +6660,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.SearchResult",
+    "name": "org.kohsuke.github_api.v2.SearchResult",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6675,7 +6675,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.ServiceDownException",
+    "name": "org.kohsuke.github_api.v2.ServiceDownException",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6690,7 +6690,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.SkipFromToString",
+    "name": "org.kohsuke.github_api.v2.SkipFromToString",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6705,7 +6705,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequest$EnablePullRequestAutoMergeResponse",
+    "name": "org.kohsuke.github_api.v2.GHPullRequest$EnablePullRequestAutoMergeResponse",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6720,7 +6720,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequest$EnablePullRequestAutoMergeResponse$EnablePullRequestAutoMerge",
+    "name": "org.kohsuke.github_api.v2.GHPullRequest$EnablePullRequestAutoMergeResponse$EnablePullRequestAutoMerge",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6735,7 +6735,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHPullRequest$EnablePullRequestAutoMergeResponse$EnablePullRequestAutoMerge$EnablePullRequestAutoMergePullRequest",
+    "name": "org.kohsuke.github_api.v2.GHPullRequest$EnablePullRequestAutoMergeResponse$EnablePullRequestAutoMerge$EnablePullRequestAutoMergePullRequest",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6750,7 +6750,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.internal.graphql.response.GHGraphQLResponse",
+    "name": "org.kohsuke.github_api.v2.internal.graphql.response.GHGraphQLResponse",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6765,7 +6765,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.internal.graphql.response.GHGraphQLResponse$GraphQLError",
+    "name": "org.kohsuke.github_api.v2.internal.graphql.response.GHGraphQLResponse$GraphQLError",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6780,7 +6780,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.internal.graphql.response.GHGraphQLResponse$ObjectResponse",
+    "name": "org.kohsuke.github_api.v2.internal.graphql.response.GHGraphQLResponse$ObjectResponse",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6795,7 +6795,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GHAutolink",
+    "name": "org.kohsuke.github_api.v2.GHAutolink",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6810,7 +6810,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.GitHubBridgeAdapterObject",
+    "name": "org.kohsuke.github_api.v2.GitHubBridgeAdapterObject",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,

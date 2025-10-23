@@ -8,13 +8,17 @@ package org.kohsuke.github;
  * @param <T>
  *            the generic type
  */
-abstract class SearchResult<T> {
+abstract class SearchResult<T> implements GitHubPage<T> {
 
     /** The incomplete results. */
     boolean incompleteResults;
 
     /** The total count. */
     int totalCount;
+
+    public T[] getItems() {
+        return getItems(null);
+    }
 
     /**
      * Wraps up the retrieved object and return them. Only called once.

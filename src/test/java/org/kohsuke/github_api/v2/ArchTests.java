@@ -18,9 +18,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.kohsuke.github_api.v2.GHDiscussion.Creator;
-import org.kohsuke.github_api.v2.GHPullRequestCommitDetail.Commit;
-import org.kohsuke.github_api.v2.GHPullRequestCommitDetail.CommitPointer;
+import org.kohsuke.github.GHDiscussion.Creator;
+import org.kohsuke.github.GHPullRequestCommitDetail.Commit;
+import org.kohsuke.github.GHPullRequestCommitDetail.CommitPointer;
 
 import java.io.Closeable;
 import java.io.InputStream;
@@ -37,6 +37,7 @@ import static com.tngtech.archunit.base.DescribedPredicate.or;
 import static com.tngtech.archunit.core.domain.JavaCall.Predicates.target;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.assignableTo;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.simpleNameContaining;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.type;
 import static com.tngtech.archunit.core.domain.JavaMember.Predicates.declaredIn;
 import static com.tngtech.archunit.core.domain.JavaModifier.STATIC;
@@ -90,16 +91,14 @@ public class ArchTests {
         }
     }
 
-    private static final JavaClasses apacheCommons = new ClassFileImporter().importPackages("org.apache.commons.lang3");
-
     private static final JavaClasses classFiles = new ClassFileImporter()
             .withImportOption(new ImportOption.DoNotIncludeTests())
-            .importPackages("org.kohsuke.github_api.v2");
+            .importPackages("org.kohsuke.github");
 
     private static final JavaClasses testClassFiles = new ClassFileImporter()
             .withImportOption(new ImportOption.OnlyIncludeTests())
             .withImportOption(new ImportOption.DoNotIncludeJars())
-            .importPackages("org.kohsuke.github_api.v2");
+            .importPackages("org.kohsuke.github");
 
     /**
      * Before class.
@@ -197,8 +196,6 @@ public class ArchTests {
         return new UnlessPredicate(first, second);
     }
 
-    private DescribedPredicate<JavaField> and;
-
     /**
      * Default constructor.
      */
@@ -227,12 +224,12 @@ public class ArchTests {
         var notStaticFinalFields = DescribedPredicate.<JavaField>not(modifier(STATIC).and(modifier(STATIC)));
         var notEnumOrStaticFinalFields = DescribedPredicate.<JavaField>and(not(enumConstants()), notStaticFinalFields);
 
-        final ArchRule instanceFieldsShouldNotBePublic = fields().that(notEnumOrStaticFinalFields)
-                .should(notHaveModifier(JavaModifier.PUBLIC))
+        final ArchRule instanceFieldsShouldNotBePublic = noFields().that(notEnumOrStaticFinalFields)
+                .should(haveModifier(JavaModifier.PUBLIC))
                 .because("This project does not allow public instance fields.");
 
         final ArchRule instanceFieldsShouldFollowConvention = noFields().that(notEnumOrStaticFinalFields)
-                .should(haveNamesContainingUnless("_"))
+                .should(have(nameContaining("_")))
                 .because("This project follows standard java naming conventions for fields.");
 
         @SuppressWarnings("AccessStaticViaInstance")
@@ -253,7 +250,7 @@ public class ArchTests {
                         declaredIn(GHRelease.class).and(name("getPublished_at"))))
                 .because(reason);
 
-        final ArchRule classesNotFollowingConvention = noClasses().should(haveNamesContainingUnless("_"))
+        final ArchRule classesNotFollowingConvention = noClasses().should(have(simpleNameContaining("_")))
                 .because(reason);
 
         enumsShouldFollowConvention.check(classFiles);

@@ -1,0 +1,52 @@
+{
+  "content": {
+    "name": "testBranch2",
+    "path": "refs/heads/testBranch2",
+    "sha": "e50cc9c9ec56a7c29b87c1f56881ddf3e654a700",
+    "size": 22,
+    "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/contents/refs/heads/testBranch2?ref=refs/heads/testBranch2",
+    "html_url": "https://github.com/hub4j-test-org/temp-testMergeBranch/blob/refs/heads/testBranch2/refs/heads/testBranch2",
+    "git_url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/git/blobs/e50cc9c9ec56a7c29b87c1f56881ddf3e654a700",
+    "download_url": "https://raw.githubusercontent.com/hub4j-test-org/temp-testMergeBranch/refs/heads/testBranch2/refs/heads/testBranch2",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/contents/refs/heads/testBranch2?ref=refs/heads/testBranch2",
+      "git": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/git/blobs/e50cc9c9ec56a7c29b87c1f56881ddf3e654a700",
+      "html": "https://github.com/hub4j-test-org/temp-testMergeBranch/blob/refs/heads/testBranch2/refs/heads/testBranch2"
+    }
+  },
+  "commit": {
+    "sha": "40c8528e09198f7c8f4d707f7932680befba487b",
+    "node_id": "MDY6Q29tbWl0NDA2NTE1NjIyOjQwYzg1MjhlMDkxOThmN2M4ZjRkNzA3Zjc5MzI2ODBiZWZiYTQ4N2I=",
+    "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/git/commits/40c8528e09198f7c8f4d707f7932680befba487b",
+    "html_url": "https://github.com/hub4j-test-org/temp-testMergeBranch/commit/40c8528e09198f7c8f4d707f7932680befba487b",
+    "author": {
+      "name": "Liam Newman",
+      "email": "bitwiseman@gmail.com",
+      "date": "2021-09-14T20:43:13Z"
+    },
+    "committer": {
+      "name": "Liam Newman",
+      "email": "bitwiseman@gmail.com",
+      "date": "2021-09-14T20:43:13Z"
+    },
+    "tree": {
+      "sha": "7fa66a75b5edb80c2c35a061dc7609379a347d1e",
+      "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/git/trees/7fa66a75b5edb80c2c35a061dc7609379a347d1e"
+    },
+    "message": "refs/heads/testBranch2",
+    "parents": [
+      {
+        "sha": "90bbfcb03e9ddcd9ccb4894a417e4a1cf3c8fbd5",
+        "url": "https://api.github.com/repos/hub4j-test-org/temp-testMergeBranch/git/commits/90bbfcb03e9ddcd9ccb4894a417e4a1cf3c8fbd5",
+        "html_url": "https://github.com/hub4j-test-org/temp-testMergeBranch/commit/90bbfcb03e9ddcd9ccb4894a417e4a1cf3c8fbd5"
+      }
+    ],
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null
+    }
+  }
+}

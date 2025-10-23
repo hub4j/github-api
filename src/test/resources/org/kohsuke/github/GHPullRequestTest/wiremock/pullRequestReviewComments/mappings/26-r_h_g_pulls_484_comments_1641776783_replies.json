@@ -1,0 +1,58 @@
+{
+  "id": "97c7ee1e-28e2-4cf7-a71d-25d8ab93c339",
+  "name": "repos_hub4j-test-org_github-api_pulls_484_comments_1641776783_replies",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/pulls/484/comments/1641776783/replies",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"body\":\"This is a reply.\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "26-r_h_g_pulls_484_comments_1641776783_replies.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sun, 16 Jun 2024 10:20:12 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"aeaa4945d4887a704be675d270a99ec7eac2f0679ea0c8b16fce1f6167b683dc\"",
+      "X-OAuth-Scopes": "repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2024-09-14 09:21:47 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4790",
+      "X-RateLimit-Reset": "1718536663",
+      "X-RateLimit-Used": "210",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "CABA:3AF55A:C2CE8E9:C445A85:666EBC5B",
+      "Location": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/comments/1641776796"
+    }
+  },
+  "uuid": "97c7ee1e-28e2-4cf7-a71d-25d8ab93c339",
+  "persistent": true,
+  "insertionIndex": 26
+}

@@ -1,0 +1,50 @@
+{
+  "id": "ff9bdb46-fb2a-44c2-a164-9a790e11c26c",
+  "name": "graphql",
+  "request": {
+    "url": "/graphql",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"query\":\"mutation EnableAutoMerge { enablePullRequestAutoMerge(input: { pullRequestId: \\\"PR_kwDON6BPMc6Ox8DC\\\" authorEmail: \\\"sa20207@naver.com\\\" clientMutationId: \\\"github-api\\\" commitBody: \\\"This is commit body.\\\" commitHeadline: \\\"This is commit title.\\\" expectedHeadOid: \\\"4888b44d7204dd05680e90159af839c8b1194b6d\\\" mergeMethod: MERGE}) { pullRequest { id } } }\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"data\":{\"enablePullRequestAutoMerge\":{\"pullRequest\":{\"id\":\"PR_kwDON6BPMc6Ox8DC\"}}}}",
+    "headers": {
+      "Date": "Sat, 15 Mar 2025 18:13:28 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "X-OAuth-Scopes": "admin:repo_hook, gist, notifications, read:discussion, read:org, read:project, repo, user:email",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "github.v4; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4980",
+      "X-RateLimit-Reset": "1742063501",
+      "X-RateLimit-Used": "20",
+      "X-RateLimit-Resource": "graphql",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "Server": "github.com",
+      "X-GitHub-Request-Id": "F68D:4F3EE:3B15C8:5A6881:67D5C348"
+    }
+  },
+  "uuid": "ff9bdb46-fb2a-44c2-a164-9a790e11c26c",
+  "persistent": true,
+  "insertionIndex": 5
+}

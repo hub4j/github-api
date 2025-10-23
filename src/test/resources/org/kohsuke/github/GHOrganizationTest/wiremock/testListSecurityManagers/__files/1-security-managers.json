@@ -1,0 +1,16 @@
+[
+    {
+      "name": "security team",
+      "id": 31337,
+      "node_id": "MDQ6VGVhbTMxMzM3",
+      "slug": "security-team",
+      "description": "Security manager role access to all git repositories",
+      "privacy": "closed",
+      "notification_setting": "notifications_enabled",
+      "url": "https://api.github.com/organizations/7544739/team/31337",
+      "html_url": "https://api.github.com/orgs/hub4j-test-org/teams/schibsted-data-security-team",
+      "members_url": "https://api.github.com/api/v3/organizations/7544739/team/31337/members{/member}",
+      "repositories_url": "https://api.github.com/api/v3/organizations/7544739/team/31337/repos",
+      "permission": "pull"
+    }
+]

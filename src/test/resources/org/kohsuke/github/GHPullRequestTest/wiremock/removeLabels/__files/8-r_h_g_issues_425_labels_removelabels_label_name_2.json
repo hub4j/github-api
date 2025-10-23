@@ -1,0 +1,20 @@
+[
+  {
+    "id": 2806271705,
+    "node_id": "MDU6TGFiZWwyODA2MjcxNzA1",
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/labels/removeLabels_label_name_1",
+    "name": "removeLabels_label_name_1",
+    "color": "ededed",
+    "default": false,
+    "description": null
+  },
+  {
+    "id": 2806271711,
+    "node_id": "MDU6TGFiZWwyODA2MjcxNzEx",
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/labels/removeLabels_label_name_3",
+    "name": "removeLabels_label_name_3",
+    "color": "ededed",
+    "default": false,
+    "description": null
+  }
+]

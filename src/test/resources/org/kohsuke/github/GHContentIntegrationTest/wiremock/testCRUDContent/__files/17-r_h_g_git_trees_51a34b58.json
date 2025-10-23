@@ -1,0 +1,29 @@
+{
+  "sha": "51a34b58a600b1955b3838342a46658f0694cbec",
+  "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/trees/51a34b58a600b1955b3838342a46658f0694cbec",
+  "tree": [
+    {
+      "path": "ghcontent-ro",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "afd5f48e35b8242d795bf78ca4f637523cefb0d4",
+      "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/trees/afd5f48e35b8242d795bf78ca4f637523cefb0d4"
+    },
+    {
+      "path": "passionate_arch",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8db9c31d79dfb9d0411c7af11b7ec7fabc72c5b1",
+      "size": 34,
+      "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/blobs/8db9c31d79dfb9d0411c7af11b7ec7fabc72c5b1"
+    },
+    {
+      "path": "test+directory #50",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "60454704d62206a724eed8ae9a7ac46705c2ed19",
+      "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/trees/60454704d62206a724eed8ae9a7ac46705c2ed19"
+    }
+  ],
+  "truncated": false
+}

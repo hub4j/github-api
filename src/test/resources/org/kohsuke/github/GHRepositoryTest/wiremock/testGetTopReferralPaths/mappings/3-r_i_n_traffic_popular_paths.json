@@ -1,0 +1,47 @@
+{
+  "id": "e9539f90-d4be-4c80-a4bd-6a8364eb1c91",
+  "name": "repos_ihrigb_node-doorbird_traffic_popular_paths",
+  "request": {
+    "url": "/repos/ihrigb/node-doorbird/traffic/popular/paths",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "[{\"path\":\"/ihrigb/node-doorbird\",\"title\":\"ihrigb/node-doorbird: Node client library for Doorbird's HTTP API.\",\"count\":7,\"uniques\":7}]",
+    "headers": {
+      "Server": "istio-envoy",
+      "Date": "Mon, 01 Jul 2024 08:23:11 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
+      "ETag": "W/\"006eb2ae8e15394459f8f30538923500d1c69cae53950a43dac01801004e1cb6\"",
+      "github-authentication-token-expiration": "2024-07-31 10:13:04 +0200",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-accepted-github-permissions": "administration=read",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4023",
+      "X-RateLimit-Reset": "1719823001",
+      "X-RateLimit-Used": "977",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "x-envoy-upstream-service-time": "109",
+      "X-GitHub-Request-Id": "9D4E:1DD08D:3271725:3309DBF:6682676F"
+    }
+  },
+  "uuid": "e9539f90-d4be-4c80-a4bd-6a8364eb1c91",
+  "persistent": true,
+  "insertionIndex": 3
+}

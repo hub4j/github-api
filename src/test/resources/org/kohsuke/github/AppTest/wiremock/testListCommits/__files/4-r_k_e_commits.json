@@ -1,0 +1,75 @@
+[
+  {
+    "sha": "fdfad6be4db6f96faea1f153fb447b479a7a9cb7",
+    "node_id": "MDY6Q29tbWl0MTkwODQzNDpmZGZhZDZiZTRkYjZmOTZmYWVhMWYxNTNmYjQ0N2I0NzlhN2E5Y2I3",
+    "commit": {
+      "author": {
+        "name": "Kohsuke Kawaguchi",
+        "email": "kk@kohsuke.org",
+        "date": "2011-06-16T23:03:19Z"
+      },
+      "committer": {
+        "name": "Kohsuke Kawaguchi",
+        "email": "kk@kohsuke.org",
+        "date": "2011-06-16T23:07:37Z"
+      },
+      "message": "",
+      "tree": {
+        "sha": "4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+        "url": "https://api.github.com/repos/kohsuke/empty-commit/git/trees/4b825dc642cb6eb9a060e54bf8d69288fbee4904"
+      },
+      "url": "https://api.github.com/repos/kohsuke/empty-commit/git/commits/fdfad6be4db6f96faea1f153fb447b479a7a9cb7",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/kohsuke/empty-commit/commits/fdfad6be4db6f96faea1f153fb447b479a7a9cb7",
+    "html_url": "https://github.com/kohsuke/empty-commit/commit/fdfad6be4db6f96faea1f153fb447b479a7a9cb7",
+    "comments_url": "https://api.github.com/repos/kohsuke/empty-commit/commits/fdfad6be4db6f96faea1f153fb447b479a7a9cb7/comments",
+    "author": {
+      "login": "kohsuke",
+      "id": 50003,
+      "node_id": "MDQ6VXNlcjUwMDAz",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/50003?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kohsuke",
+      "html_url": "https://github.com/kohsuke",
+      "followers_url": "https://api.github.com/users/kohsuke/followers",
+      "following_url": "https://api.github.com/users/kohsuke/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kohsuke/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kohsuke/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kohsuke/subscriptions",
+      "organizations_url": "https://api.github.com/users/kohsuke/orgs",
+      "repos_url": "https://api.github.com/users/kohsuke/repos",
+      "events_url": "https://api.github.com/users/kohsuke/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kohsuke/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "kohsuke",
+      "id": 50003,
+      "node_id": "MDQ6VXNlcjUwMDAz",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/50003?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/kohsuke",
+      "html_url": "https://github.com/kohsuke",
+      "followers_url": "https://api.github.com/users/kohsuke/followers",
+      "following_url": "https://api.github.com/users/kohsuke/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kohsuke/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/kohsuke/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kohsuke/subscriptions",
+      "organizations_url": "https://api.github.com/users/kohsuke/orgs",
+      "repos_url": "https://api.github.com/users/kohsuke/repos",
+      "events_url": "https://api.github.com/users/kohsuke/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/kohsuke/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": []
+  }
+]

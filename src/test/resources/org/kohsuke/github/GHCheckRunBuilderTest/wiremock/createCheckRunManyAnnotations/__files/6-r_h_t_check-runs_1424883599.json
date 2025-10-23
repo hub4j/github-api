@@ -1,0 +1,61 @@
+{
+  "id": 1424883599,
+  "node_id": "MDg6Q2hlY2tSdW4xNDI0ODgzNTk5",
+  "head_sha": "89a9ae301e35e667756034fdc933b1fc94f63fc1",
+  "external_id": "",
+  "url": "https://api.github.com/repos/hub4j-test-org/test-checks/check-runs/1424883599",
+  "html_url": "https://github.com/hub4j-test-org/test-checks/runs/1424883599",
+  "details_url": "http://localhost",
+  "status": "completed",
+  "conclusion": "success",
+  "started_at": "2020-11-19T15:00:21Z",
+  "completed_at": "2020-11-19T15:00:21Z",
+  "output": {
+    "title": "Big Run",
+    "summary": "Lots of stuff here »",
+    "text": "Hello Text!",
+    "annotations_count": 100,
+    "annotations_url": "https://api.github.com/repos/hub4j-test-org/test-checks/check-runs/1424883599/annotations"
+  },
+  "name": "big",
+  "check_suite": {
+    "id": 1529145983
+  },
+  "app": {
+    "id": 89368,
+    "slug": "ghapi-test-app-3",
+    "node_id": "MDM6QXBwODkzNjg=",
+    "owner": {
+      "login": "hub4j-test-org",
+      "id": 7544739,
+      "node_id": "MDEyOk9yZ2FuaXphdGlvbjc1NDQ3Mzk=",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/7544739?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/hub4j-test-org",
+      "html_url": "https://github.com/hub4j-test-org",
+      "followers_url": "https://api.github.com/users/hub4j-test-org/followers",
+      "following_url": "https://api.github.com/users/hub4j-test-org/following{/other_user}",
+      "gists_url": "https://api.github.com/users/hub4j-test-org/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/hub4j-test-org/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/hub4j-test-org/subscriptions",
+      "organizations_url": "https://api.github.com/users/hub4j-test-org/orgs",
+      "repos_url": "https://api.github.com/users/hub4j-test-org/repos",
+      "events_url": "https://api.github.com/users/hub4j-test-org/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/hub4j-test-org/received_events",
+      "type": "Organization",
+      "site_admin": false
+    },
+    "name": "GHApi Test app 3",
+    "description": "Test app for checks api testing",
+    "external_url": "http://localhost",
+    "html_url": "https://github.com/apps/ghapi-test-app-3",
+    "created_at": "2020-11-19T14:30:34Z",
+    "updated_at": "2020-11-19T14:30:34Z",
+    "permissions": {
+      "checks": "write",
+      "metadata": "read"
+    },
+    "events": []
+  },
+  "pull_requests": []
+}

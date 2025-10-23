@@ -1,0 +1,28 @@
+{
+  "sha": "4c84ff0c2e63c338a783d151d34884443269c2b7",
+  "node_id": "MDY6Q29tbWl0MjA2ODg4MjAxOjRjODRmZjBjMmU2M2MzMzhhNzgzZDE1MWQzNDg4NDQ0MzI2OWMyYjc=",
+  "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/commits/4c84ff0c2e63c338a783d151d34884443269c2b7",
+  "html_url": "https://github.com/hub4j-test-org/github-api/commit/4c84ff0c2e63c338a783d151d34884443269c2b7",
+  "author": {
+    "name": "Tadas Giniotis",
+    "email": "61763026+tginiotis-at-work@users.noreply.github.com",
+    "date": "2020-09-30T22:23:51Z"
+  },
+  "committer": {
+    "name": "Tadas Giniotis",
+    "email": "61763026+tginiotis-at-work@users.noreply.github.com",
+    "date": "2020-09-30T22:23:51Z"
+  },
+  "tree": {
+    "sha": "496d6428b9cf92981dc9495211e6e1120fb6f2ba",
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/trees/496d6428b9cf92981dc9495211e6e1120fb6f2ba"
+  },
+  "message": "test signing",
+  "parents": [],
+  "verification": {
+    "verified": false,
+    "reason": "unknown_signature_type",
+    "signature": "unknown",
+    "payload": "tree 496d6428b9cf92981dc9495211e6e1120fb6f2ba\nauthor Tadas Giniotis <61763026+tginiotis-at-work@users.noreply.github.com> 1601504631 +0300\ncommitter Tadas Giniotis <61763026+tginiotis-at-work@users.noreply.github.com> 1601504631 +0300\n\ntest signing"
+  }
+}

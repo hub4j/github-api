@@ -1,0 +1,86 @@
+[
+  {
+    "name": "Contributors",
+    "id": 4882699,
+    "node_id": "MDQ6VGVhbTQ4ODI2OTk=",
+    "slug": "contributors",
+    "description": "",
+    "privacy": "closed",
+    "url": "https://api.github.com/organizations/7544739/team/4882699",
+    "html_url": "https://github.com/orgs/hub4j-test-org/teams/contributors",
+    "members_url": "https://api.github.com/organizations/7544739/team/4882699/members{/member}",
+    "repositories_url": "https://api.github.com/organizations/7544739/team/4882699/repos",
+    "permission": "admin",
+    "permissions": {
+      "admin": true,
+      "maintain": true,
+      "push": true,
+      "triage": true,
+      "pull": true
+    },
+    "parent": null
+  },
+  {
+    "name": "create-team-test",
+    "id": 5898252,
+    "node_id": "T_kwDOAHMfo84AWgAM",
+    "slug": "create-team-test",
+    "description": null,
+    "privacy": "secret",
+    "url": "https://api.github.com/organizations/7544739/team/5898252",
+    "html_url": "https://github.com/orgs/hub4j-test-org/teams/create-team-test",
+    "members_url": "https://api.github.com/organizations/7544739/team/5898252/members{/member}",
+    "repositories_url": "https://api.github.com/organizations/7544739/team/5898252/repos",
+    "permission": "push",
+    "permissions": {
+      "admin": false,
+      "maintain": false,
+      "push": true,
+      "triage": true,
+      "pull": true
+    },
+    "parent": null
+  },
+  {
+    "name": "dummy-team",
+    "id": 3451996,
+    "node_id": "MDQ6VGVhbTM0NTE5OTY=",
+    "slug": "dummy-team",
+    "description": "Updated by API TestModified",
+    "privacy": "closed",
+    "url": "https://api.github.com/organizations/7544739/team/3451996",
+    "html_url": "https://github.com/orgs/hub4j-test-org/teams/dummy-team",
+    "members_url": "https://api.github.com/organizations/7544739/team/3451996/members{/member}",
+    "repositories_url": "https://api.github.com/organizations/7544739/team/3451996/repos",
+    "permission": "push",
+    "permissions": {
+      "admin": false,
+      "maintain": true,
+      "push": true,
+      "triage": true,
+      "pull": true
+    },
+    "parent": null
+  },
+  {
+    "name": "tricky-team",
+    "id": 3454508,
+    "node_id": "MDQ6VGVhbTM0NTQ1MDg=",
+    "slug": "tricky-team",
+    "description": "",
+    "privacy": "secret",
+    "url": "https://api.github.com/organizations/7544739/team/3454508",
+    "html_url": "https://github.com/orgs/hub4j-test-org/teams/tricky-team",
+    "members_url": "https://api.github.com/organizations/7544739/team/3454508/members{/member}",
+    "repositories_url": "https://api.github.com/organizations/7544739/team/3454508/repos",
+    "permission": "push",
+    "permissions": {
+      "admin": false,
+      "maintain": false,
+      "push": true,
+      "triage": true,
+      "pull": true
+    },
+    "parent": null
+  }
+]

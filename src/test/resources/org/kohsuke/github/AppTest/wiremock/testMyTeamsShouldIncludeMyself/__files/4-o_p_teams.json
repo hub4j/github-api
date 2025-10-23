@@ -1,0 +1,16 @@
+[
+  {
+    "name": "openwide-jenkins",
+    "id": 584242,
+    "node_id": "MDQ6VGVhbTU4NDI0Mg==",
+    "slug": "openwide-jenkins",
+    "description": null,
+    "privacy": "secret",
+    "url": "https://api.github.com/organizations/3957826/team/584242",
+    "html_url": "https://github.com/orgs/pole-numerique/teams/openwide-jenkins",
+    "members_url": "https://api.github.com/organizations/3957826/team/584242/members{/member}",
+    "repositories_url": "https://api.github.com/organizations/3957826/team/584242/repos",
+    "permission": "push",
+    "parent": null
+  }
+]

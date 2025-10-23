@@ -1,0 +1,98 @@
+{
+  "sha": "e0cef483cb2da847c7c229edea354db50f287e36",
+  "node_id": "MDY6Q29tbWl0NDA3NjM1Nzc6ZTBjZWY0ODNjYjJkYTg0N2M3YzIyOWVkZWEzNTRkYjUwZjI4N2UzNg==",
+  "commit": {
+    "author": {
+      "name": "Liam Newman",
+      "email": "bitwiseman@gmail.com",
+      "date": "2021-06-28T20:37:51Z"
+    },
+    "committer": {
+      "name": "Liam Newman",
+      "email": "bitwiseman@gmail.com",
+      "date": "2021-06-28T20:37:51Z"
+    },
+    "message": "Updated file for integration tests.",
+    "tree": {
+      "sha": "51a34b58a600b1955b3838342a46658f0694cbec",
+      "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/trees/51a34b58a600b1955b3838342a46658f0694cbec"
+    },
+    "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/e0cef483cb2da847c7c229edea354db50f287e36",
+    "comment_count": 0,
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null
+    }
+  },
+  "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/commits/e0cef483cb2da847c7c229edea354db50f287e36",
+  "html_url": "https://github.com/hub4j-test-org/GHContentIntegrationTest/commit/e0cef483cb2da847c7c229edea354db50f287e36",
+  "comments_url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/commits/e0cef483cb2da847c7c229edea354db50f287e36/comments",
+  "author": {
+    "login": "bitwiseman",
+    "id": 1958953,
+    "node_id": "MDQ6VXNlcjE5NTg5NTM=",
+    "avatar_url": "https://avatars.githubusercontent.com/u/1958953?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/bitwiseman",
+    "html_url": "https://github.com/bitwiseman",
+    "followers_url": "https://api.github.com/users/bitwiseman/followers",
+    "following_url": "https://api.github.com/users/bitwiseman/following{/other_user}",
+    "gists_url": "https://api.github.com/users/bitwiseman/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/bitwiseman/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/bitwiseman/subscriptions",
+    "organizations_url": "https://api.github.com/users/bitwiseman/orgs",
+    "repos_url": "https://api.github.com/users/bitwiseman/repos",
+    "events_url": "https://api.github.com/users/bitwiseman/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/bitwiseman/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "bitwiseman",
+    "id": 1958953,
+    "node_id": "MDQ6VXNlcjE5NTg5NTM=",
+    "avatar_url": "https://avatars.githubusercontent.com/u/1958953?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/bitwiseman",
+    "html_url": "https://github.com/bitwiseman",
+    "followers_url": "https://api.github.com/users/bitwiseman/followers",
+    "following_url": "https://api.github.com/users/bitwiseman/following{/other_user}",
+    "gists_url": "https://api.github.com/users/bitwiseman/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/bitwiseman/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/bitwiseman/subscriptions",
+    "organizations_url": "https://api.github.com/users/bitwiseman/orgs",
+    "repos_url": "https://api.github.com/users/bitwiseman/repos",
+    "events_url": "https://api.github.com/users/bitwiseman/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/bitwiseman/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "2bac2cafd8f0aa55bea135cb9b999582a0a7ebf6",
+      "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/commits/2bac2cafd8f0aa55bea135cb9b999582a0a7ebf6",
+      "html_url": "https://github.com/hub4j-test-org/GHContentIntegrationTest/commit/2bac2cafd8f0aa55bea135cb9b999582a0a7ebf6"
+    }
+  ],
+  "stats": {
+    "total": 2,
+    "additions": 1,
+    "deletions": 1
+  },
+  "files": [
+    {
+      "sha": "da2d3cc78776aec68881668775c46a53f0ee2288",
+      "filename": "test+directory #50/test file-to+create-#1.txt",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/hub4j-test-org/GHContentIntegrationTest/blob/e0cef483cb2da847c7c229edea354db50f287e36/test+directory%20#50/test%20file-to+create-%231.txt",
+      "raw_url": "https://github.com/hub4j-test-org/GHContentIntegrationTest/raw/e0cef483cb2da847c7c229edea354db50f287e36/test+directory%20#50/test%20file-to+create-%231.txt",
+      "contents_url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/contents/test+directory%20#50/test%20file-to+create-%231.txt?ref=e0cef483cb2da847c7c229edea354db50f287e36",
+      "patch": "@@ -1 +1 @@\n-this is an awesome file I created\n+this is some new content"
+    }
+  ]
+}

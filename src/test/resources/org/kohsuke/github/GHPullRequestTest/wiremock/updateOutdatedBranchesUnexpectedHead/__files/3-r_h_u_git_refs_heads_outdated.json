@@ -1,0 +1,10 @@
+{
+  "ref": "refs/heads/outdated",
+  "node_id": "MDM6UmVmMjkyNjQwMzgyOnJlZnMvaGVhZHMvb3V0ZGF0ZWQ=",
+  "url": "https://api.github.com/repos/hub4j-test-org/updateOutdatedBranches/git/refs/heads/outdated",
+  "object": {
+    "sha": "11033c5338d282a5dc36d6d79b05364e3ba4f1a1",
+    "type": "commit",
+    "url": "https://api.github.com/repos/hub4j-test-org/updateOutdatedBranches/git/commits/11033c5338d282a5dc36d6d79b05364e3ba4f1a1"
+  }
+}

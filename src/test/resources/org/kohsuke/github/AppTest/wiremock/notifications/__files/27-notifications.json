@@ -1,0 +1,5 @@
+{
+  "message": "Unable to parse If-Modified-Since request header. Please make sure value is in an acceptable format.",
+  "documentation_url": "https://docs.github.com/rest/activity/notifications#list-notifications-for-the-authenticated-user",
+  "status": "422"
+}

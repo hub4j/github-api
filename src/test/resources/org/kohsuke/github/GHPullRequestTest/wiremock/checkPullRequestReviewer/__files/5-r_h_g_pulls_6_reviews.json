@@ -1,0 +1,41 @@
+[
+  {
+    "id": 813498682,
+    "node_id": "PRR_kwDOGTtftM4wfQE6",
+    "user": {
+      "login": "sahansera-test2",
+      "id": 93847228,
+      "node_id": "U_kgDOBZf-vA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/93847228?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/sahansera-test2",
+      "html_url": "https://github.com/sahansera-test2",
+      "followers_url": "https://api.github.com/users/sahansera-test2/followers",
+      "following_url": "https://api.github.com/users/sahansera-test2/following{/other_user}",
+      "gists_url": "https://api.github.com/users/sahansera-test2/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/sahansera-test2/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/sahansera-test2/subscriptions",
+      "organizations_url": "https://api.github.com/users/sahansera-test2/orgs",
+      "repos_url": "https://api.github.com/users/sahansera-test2/repos",
+      "events_url": "https://api.github.com/users/sahansera-test2/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/sahansera-test2/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "body": "LGTM 👍 ",
+    "state": "APPROVED",
+    "html_url": "https://github.com/hub4j-test-org/github-api/pull/6#pullrequestreview-813498682",
+    "pull_request_url": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/6",
+    "author_association": "COLLABORATOR",
+    "_links": {
+      "html": {
+        "href": "https://github.com/hub4j-test-org/github-api/pull/6#pullrequestreview-813498682"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/hub4j-test-org/github-api/pulls/6"
+      }
+    },
+    "submitted_at": "2021-11-23T10:51:35Z",
+    "commit_id": "70b9fde43c4b762670022ceb64a2a234d86084ac"
+  }
+]

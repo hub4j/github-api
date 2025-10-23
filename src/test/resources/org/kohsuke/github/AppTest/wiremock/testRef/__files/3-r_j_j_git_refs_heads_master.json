@@ -1,0 +1,10 @@
+{
+  "ref": "refs/heads/master",
+  "node_id": "MDM6UmVmMTEwMzYwNzpyZWZzL2hlYWRzL21hc3Rlcg==",
+  "url": "https://api.github.com/repos/jenkinsci/jenkins/git/refs/heads/master",
+  "object": {
+    "sha": "0297870148249b5794d9bf8e9bc7879c82bf28f3",
+    "type": "commit",
+    "url": "https://api.github.com/repos/jenkinsci/jenkins/git/commits/0297870148249b5794d9bf8e9bc7879c82bf28f3"
+  }
+}

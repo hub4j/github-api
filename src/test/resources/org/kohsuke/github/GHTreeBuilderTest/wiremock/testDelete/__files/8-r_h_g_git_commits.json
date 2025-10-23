@@ -1,0 +1,34 @@
+{
+  "sha": "7e888a1cd95c3caf31a16ff21751a06a7feb039f",
+  "node_id": "MDY6Q29tbWl0NjU0OTAwMTA3OjdlODg4YTFjZDk1YzNjYWYzMWExNmZmMjE3NTFhMDZhN2ZlYjAzOWY=",
+  "url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/git/commits/7e888a1cd95c3caf31a16ff21751a06a7feb039f",
+  "html_url": "https://github.com/hub4j-test-org/GHTreeBuilderTest/commit/7e888a1cd95c3caf31a16ff21751a06a7feb039f",
+  "author": {
+    "name": "author",
+    "email": "author@author.com",
+    "date": "2021-01-23T20:20:25Z"
+  },
+  "committer": {
+    "name": "committer",
+    "email": "committer@committer.com",
+    "date": "2021-01-23T20:20:25Z"
+  },
+  "tree": {
+    "sha": "0efbfcf79def8e437d825e0116def4be6be56026",
+    "url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/git/trees/0efbfcf79def8e437d825e0116def4be6be56026"
+  },
+  "message": "Add files",
+  "parents": [
+    {
+      "sha": "172349212fb19ffa4f33dcced3263c6963dc750a",
+      "url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/git/commits/172349212fb19ffa4f33dcced3263c6963dc750a",
+      "html_url": "https://github.com/hub4j-test-org/GHTreeBuilderTest/commit/172349212fb19ffa4f33dcced3263c6963dc750a"
+    }
+  ],
+  "verification": {
+    "verified": false,
+    "reason": "unsigned",
+    "signature": null,
+    "payload": null
+  }
+}

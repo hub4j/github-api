@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Committers",
+    "id": 106459,
+    "node_id": "MDQ6VGVhbTEwNjQ1OQ==",
+    "slug": "committers",
+    "description": null,
+    "privacy": "secret",
+    "url": "https://api.github.com/organizations/951365/team/106459",
+    "html_url": "https://github.com/orgs/pressgang/teams/committers",
+    "members_url": "https://api.github.com/organizations/951365/team/106459/members{/member}",
+    "repositories_url": "https://api.github.com/organizations/951365/team/106459/repos",
+    "permission": "push",
+    "parent": null
+  }
+]

@@ -1,0 +1,284 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+
+
+<html>
+  <head>
+    <title>GitHub API for Java - Project Build Plugins</title>
+    <style type="text/css" media="all">
+      @import url("./css/maven-base.css");
+      @import url("./css/maven-theme.css");
+      @import url("./css/1024px.css");
+      @import url("./css/site.css");
+    </style>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      </head>
+  <body>
+    <div id="wrap2"><div id="wrap">
+    <div id="header">
+      <p id="toplinks">Skip to: <a href="#content">Content</a> | <a href="#sidebar">Navigation</a> | <a href="#footer">Footer</a></p>
+		
+            <h1 id="bannerLeft">
+          <a href="./">
+    
+            GitHub API for Java
+    
+            </a>
+        </h1>
+                
+      <p id="slogan">GitHub API for Java</p>
+    </div>
+    <div id="breadcrumbs">
+      <div class="xright">  </div>
+      <div class="clear">
+        <hr/>
+      </div>
+    </div>
+
+    <div id="sidebar">
+      <div id="navcolumn">
+              <h2>
+          Git Hub API for Java
+        </h2><ul>
+              
+    <li class="none">
+              <a href="index.html">Introduction</a>
+        </li>
+              
+    <li class="none">
+              <a href="http://mvnrepository.com/artifact/org.kohsuke/github-api">Download</a>
+        </li>
+              
+    <li class="none">
+              <a href="https://github.com/kohsuke/github-api">Source code</a>
+        </li>
+              
+    <li class="none">
+              <a href="https://groups.google.com/forum/#!forum/github-api">Mailing List</a>
+        </li>
+          </ul>
+      <h2>
+          References
+        </h2><ul>
+              
+    <li class="none">
+              <a href="apidocs/index.html">Javadoc</a>
+        </li>
+          </ul>
+      <h2>
+          Project Documentation
+        </h2><ul>
+              
+                
+              
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+      
+            
+            
+            
+      
+            
+      
+            
+      
+              
+            <li class="expanded">
+              <a href="project-info.html">Project Information</a>
+                <ul>
+                  
+    <li class="none">
+              <a href="dependencies.html">Dependencies</a>
+        </li>
+                  
+    <li class="none">
+              <a href="dependency-convergence.html">Dependency Convergence</a>
+        </li>
+                  
+    <li class="none">
+              <a href="dependency-info.html">Dependency Information</a>
+        </li>
+                  
+    <li class="none">
+              <a href="distribution-management.html">Distribution Management</a>
+        </li>
+                  
+    <li class="none">
+              <a href="index.html">About</a>
+        </li>
+                  
+    <li class="none">
+              <a href="license.html">Project License</a>
+        </li>
+                  
+    <li class="none">
+              <a href="mail-lists.html">Mailing Lists</a>
+        </li>
+                  
+    <li class="none">
+              <a href="plugin-management.html">Plugin Management</a>
+        </li>
+                  
+    <li class="none">
+              <strong>Project Plugins</strong>
+        </li>
+                  
+    <li class="none">
+              <a href="team-list.html">Project Team</a>
+        </li>
+                  
+    <li class="none">
+              <a href="source-repository.html">Source Repository</a>
+        </li>
+                  
+    <li class="none">
+              <a href="project-summary.html">Project Summary</a>
+        </li>
+              </ul>
+        </li>
+              
+                
+              
+      
+            
+      
+              
+        <li class="collapsed">
+              <a href="project-reports.html">Project Reports</a>
+              </li>
+          </ul>
+        </div>
+    </div>
+    <div id="content">
+      <div id="contentBox">
+        <div class="section">
+<h2>Project Build Plugins<a name="Project_Build_Plugins"></a></h2><a name="Project_Build_Plugins"></a>
+<table border="0" class="bodyTable">
+<tr class="a">
+<th>GroupId</th>
+<th>ArtifactId</th>
+<th>Version</th></tr>
+<tr class="b">
+<td>com.infradna.tool</td>
+<td><a class="externalLink" href="http://bridge-method-injector.infradna.com/bridge-method-injector/">bridge-method-injector</a></td>
+<td>1.18</td></tr>
+<tr class="a">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-clean-plugin/">maven-clean-plugin</a></td>
+<td>2.5</td></tr>
+<tr class="b">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-compiler-plugin/">maven-compiler-plugin</a></td>
+<td>3.3</td></tr>
+<tr class="a">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-deploy-plugin/">maven-deploy-plugin</a></td>
+<td>2.7</td></tr>
+<tr class="b">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-gpg-plugin/">maven-gpg-plugin</a></td>
+<td>1.6</td></tr>
+<tr class="a">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-install-plugin/">maven-install-plugin</a></td>
+<td>2.4</td></tr>
+<tr class="b">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-jar-plugin/">maven-jar-plugin</a></td>
+<td>2.4</td></tr>
+<tr class="a">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-javadoc-plugin/">maven-javadoc-plugin</a></td>
+<td>2.10.3</td></tr>
+<tr class="b">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/maven-release/maven-release-plugin/">maven-release-plugin</a></td>
+<td>2.5.1</td></tr>
+<tr class="a">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-resources-plugin/">maven-resources-plugin</a></td>
+<td>2.6</td></tr>
+<tr class="b">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-site-plugin/">maven-site-plugin</a></td>
+<td>3.3</td></tr>
+<tr class="a">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-source-plugin/">maven-source-plugin</a></td>
+<td>2.1.2</td></tr>
+<tr class="b">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="https://maven.apache.org/surefire/maven-surefire-plugin/">maven-surefire-plugin</a></td>
+<td>2.22.1</td></tr>
+<tr class="a">
+<td>org.codehaus.gmaven</td>
+<td><a class="externalLink" href="http://gmaven.codehaus.org/gmaven-plugin">gmaven-plugin</a></td>
+<td>1.4</td></tr>
+<tr class="b">
+<td>org.codehaus.mojo</td>
+<td><a class="externalLink" href="http://www.mojohaus.org/animal-sniffer/animal-sniffer-maven-plugin">animal-sniffer-maven-plugin</a></td>
+<td>1.15</td></tr>
+<tr class="a">
+<td>org.codehaus.mojo</td>
+<td><a class="externalLink" href="http://gleclaire.github.io/findbugs-maven-plugin/">findbugs-maven-plugin</a></td>
+<td>3.0.2</td></tr>
+<tr class="b">
+<td>org.sonatype.plugins</td>
+<td><a class="externalLink" href="http://www.sonatype.com/public-parent/nexus-maven-plugins/nexus-staging/nexus-staging-maven-plugin/">nexus-staging-maven-plugin</a></td>
+<td>1.6.8</td></tr></table></div>
+<div class="section">
+<h2>Project Report Plugins<a name="Project_Report_Plugins"></a></h2><a name="Project_Report_Plugins"></a>
+<table border="0" class="bodyTable">
+<tr class="a">
+<th>GroupId</th>
+<th>ArtifactId</th>
+<th>Version</th></tr>
+<tr class="b">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-javadoc-plugin/">maven-javadoc-plugin</a></td>
+<td>2.10.3</td></tr>
+<tr class="a">
+<td>org.apache.maven.plugins</td>
+<td><a class="externalLink" href="http://maven.apache.org/plugins/maven-project-info-reports-plugin/">maven-project-info-reports-plugin</a></td>
+<td>2.8.1</td></tr></table></div>
+      </div>
+    </div>
+    <div id="footer">
+      <div class="xright">&#169;  
+          2018
+    
+          <a href="http://kohsuke.org/">Kohsuke Kawaguchi</a> and other contributors
+          
+  
+
+  
+  
+  &nbsp;| Last Published: 2018-11-07
+  &nbsp;| Version: 1.95
+</div>
+      <div class="clear">
+        <hr/>
+      </div>
+    </div>
+    </div></div>
+  </body>
+</html>

@@ -1,0 +1,52 @@
+{
+  "content": {
+    "name": "updateContentSquashMerge",
+    "path": "updateContentSquashMerge",
+    "sha": "58683e978fd6342744da9933a8e77923cf3ee1a8",
+    "size": 48,
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/contents/updateContentSquashMerge?ref=test/updateContentSquashMerge",
+    "html_url": "https://github.com/hub4j-test-org/github-api/blob/test/updateContentSquashMerge/updateContentSquashMerge",
+    "git_url": "https://api.github.com/repos/hub4j-test-org/github-api/git/blobs/58683e978fd6342744da9933a8e77923cf3ee1a8",
+    "download_url": "https://raw.githubusercontent.com/hub4j-test-org/github-api/test/updateContentSquashMerge/updateContentSquashMerge",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/hub4j-test-org/github-api/contents/updateContentSquashMerge?ref=test/updateContentSquashMerge",
+      "git": "https://api.github.com/repos/hub4j-test-org/github-api/git/blobs/58683e978fd6342744da9933a8e77923cf3ee1a8",
+      "html": "https://github.com/hub4j-test-org/github-api/blob/test/updateContentSquashMerge/updateContentSquashMerge"
+    }
+  },
+  "commit": {
+    "sha": "2780805b621ad6b283fbfb7d0c5dd64c4314b2b9",
+    "node_id": "MDY6Q29tbWl0MjA2ODg4MjAxOjI3ODA4MDViNjIxYWQ2YjI4M2ZiZmI3ZDBjNWRkNjRjNDMxNGIyYjk=",
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/commits/2780805b621ad6b283fbfb7d0c5dd64c4314b2b9",
+    "html_url": "https://github.com/hub4j-test-org/github-api/commit/2780805b621ad6b283fbfb7d0c5dd64c4314b2b9",
+    "author": {
+      "name": "Liam Newman",
+      "email": "bitwiseman@gmail.com",
+      "date": "2019-09-08T07:24:21Z"
+    },
+    "committer": {
+      "name": "Liam Newman",
+      "email": "bitwiseman@gmail.com",
+      "date": "2019-09-08T07:24:21Z"
+    },
+    "tree": {
+      "sha": "3cc8e9b6c068cbaa8e190e5df58ce51ea82dc3c4",
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/trees/3cc8e9b6c068cbaa8e190e5df58ce51ea82dc3c4"
+    },
+    "message": "updateContentSquashMerge",
+    "parents": [
+      {
+        "sha": "0b60a9b8968ff83d874111635815b59a9608d1fa",
+        "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/commits/0b60a9b8968ff83d874111635815b59a9608d1fa",
+        "html_url": "https://github.com/hub4j-test-org/github-api/commit/0b60a9b8968ff83d874111635815b59a9608d1fa"
+      }
+    ],
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null
+    }
+  }
+}

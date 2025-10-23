@@ -1,0 +1,20 @@
+[
+  {
+    "id": 4563123625,
+    "node_id": "LA_kwDOIC5ExM8AAAABD_u9qQ",
+    "url": "https://api.github.com/repos/hub4j-test-org/GHIssueTest/labels/removeLabels_label_name_1",
+    "name": "removeLabels_label_name_1",
+    "color": "ededed",
+    "default": false,
+    "description": null
+  },
+  {
+    "id": 4563123629,
+    "node_id": "LA_kwDOIC5ExM8AAAABD_u9rQ",
+    "url": "https://api.github.com/repos/hub4j-test-org/GHIssueTest/labels/removeLabels_label_name_3",
+    "name": "removeLabels_label_name_3",
+    "color": "ededed",
+    "default": false,
+    "description": null
+  }
+]

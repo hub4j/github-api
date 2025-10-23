@@ -1,0 +1,28 @@
+[
+  {
+    "name": "child-team-for-dummy",
+    "id": 3903497,
+    "node_id": "MDQ6VGVhbTM5MDM0OTc=",
+    "slug": "child-team-for-dummy",
+    "description": "to test the fetching of child teams",
+    "privacy": "closed",
+    "url": "https://api.github.com/organizations/7544739/team/3903497",
+    "html_url": "https://github.com/orgs/hub4j-test-org/teams/child-team-for-dummy",
+    "members_url": "https://api.github.com/organizations/7544739/team/3903497/members{/member}",
+    "repositories_url": "https://api.github.com/organizations/7544739/team/3903497/repos",
+    "permission": "pull",
+    "parent": {
+      "name": "dummy-team",
+      "id": 3451996,
+      "node_id": "MDQ6VGVhbTM0NTE5OTY=",
+      "slug": "dummy-team",
+      "description": "Updated by API TestModified",
+      "privacy": "closed",
+      "url": "https://api.github.com/organizations/7544739/team/3451996",
+      "html_url": "https://github.com/orgs/hub4j-test-org/teams/dummy-team",
+      "members_url": "https://api.github.com/organizations/7544739/team/3451996/members{/member}",
+      "repositories_url": "https://api.github.com/organizations/7544739/team/3451996/repos",
+      "permission": "pull"
+    }
+  }
+]

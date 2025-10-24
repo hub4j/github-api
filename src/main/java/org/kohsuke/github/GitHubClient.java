@@ -2,7 +2,6 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.authorization.UserAuthorizationProvider;
@@ -117,7 +116,6 @@ class GitHubClient {
     static final String GITHUB_URL = "https://api.github.com";
 
     static {
-        MAPPER.registerModule(new JavaTimeModule());
         MAPPER.setVisibility(new VisibilityChecker.Std(NONE, NONE, NONE, NONE, ANY));
         MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         MAPPER.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true);
@@ -367,6 +365,20 @@ class GitHubClient {
     }
 
     /**
+     * Parses the date.
+     *
+     * @param timestamp
+     *            the timestamp
+     * @return the date
+     */
+    static Date parseDate(String timestamp) {
+        if (timestamp == null)
+            return null;
+
+        return Date.from(parseInstant(timestamp));
+    }
+
+    /**
      * Parses the instant.
      *
      * @param timestamp
@@ -401,28 +413,14 @@ class GitHubClient {
     }
 
     /**
-     * Prints the instant.
+     * Prints the date.
      *
-     * @param instant
-     *            the instant
+     * @param dt
+     *            the dt
      * @return the string
      */
-    static String printInstant(Instant instant) {
-        return DateTimeFormatter.ISO_INSTANT.format(instant.truncatedTo(ChronoUnit.SECONDS));
-    }
-
-    /**
-     * Convert Date to Instant or null.
-     *
-     * @param date
-     *            the date
-     * @return the date
-     */
-    static Instant toInstantOrNull(Date date) {
-        if (date == null)
-            return null;
-
-        return date.toInstant();
+    static String printDate(Date dt) {
+        return DateTimeFormatter.ISO_INSTANT.format(Instant.ofEpochMilli(dt.getTime()).truncatedTo(ChronoUnit.SECONDS));
     }
 
     /**

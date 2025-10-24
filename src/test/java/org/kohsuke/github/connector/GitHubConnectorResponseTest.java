@@ -83,12 +83,6 @@ public class GitHubConnectorResponseTest extends AbstractGitHubWireMockTest {
     };
 
     /**
-     * Instantiates a new GitHubConnectorResponseTest.
-     */
-    public GitHubConnectorResponseTest() {
-    }
-
-    /**
      * Test forced rereadable body stream.
      *
      * @throws Exception

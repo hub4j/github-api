@@ -22,7 +22,7 @@ public class GHCommitStatus extends GHObject {
     String state;
 
     /** The description. */
-    String targetUrl, description;
+    String target_url, description;
 
     /**
      * Create default GHCommitStatus instance
@@ -78,7 +78,7 @@ public class GHCommitStatus extends GHObject {
      * @return the target url
      */
     public String getTargetUrl() {
-        return targetUrl;
+        return target_url;
     }
 
 }

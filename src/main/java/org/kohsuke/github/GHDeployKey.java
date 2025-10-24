@@ -1,10 +1,8 @@
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.util.Date;
 
 // TODO: Auto-generated Javadoc
@@ -14,17 +12,17 @@ import java.util.Date;
 public class GHDeployKey {
 
     /** Name of user that added the deploy key */
-    private String addedBy;
+    private String added_by;
 
     /** Creation date of the deploy key */
-    private String createdAt;
+    private String created_at;
 
     /** Last used date of the deploy key */
-    private String lastUsed;
+    private String last_used;
 
     private GHRepository owner;
     /** Whether the deploykey has readonly permission or full access */
-    private boolean readOnly;
+    private boolean read_only;
 
     /** The id. */
     protected long id;
@@ -60,29 +58,17 @@ public class GHDeployKey {
      *
      * @return the added_by
      */
-    public String getAddedBy() {
-        return addedBy;
-    }
-
-    /**
-     * Gets added_by
-     *
-     * @return the added_by
-     * @deprecated Use {@link #getAddedBy()}
-     */
-    @Deprecated
     public String getAdded_by() {
-        return getAddedBy();
+        return added_by;
     }
 
     /**
-     * Gets createdAt.
+     * Gets created_at.
      *
-     * @return the createdAt
+     * @return the created_at
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getCreatedAt() {
-        return GitHubClient.parseInstant(createdAt);
+    public Date getCreatedAt() {
+        return GitHubClient.parseDate(created_at);
     }
 
     /**
@@ -108,9 +94,8 @@ public class GHDeployKey {
      *
      * @return the last_used
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getLastUsedAt() {
-        return GitHubClient.parseInstant(lastUsed);
+    public Date getLastUsedAt() {
+        return GitHubClient.parseDate(last_used);
     }
 
     /**
@@ -136,19 +121,8 @@ public class GHDeployKey {
      *
      * @return true if the key can only read. False if the key has write permission as well.
      */
-    public boolean isReadOnly() {
-        return readOnly;
-    }
-
-    /**
-     * Is read_only
-     *
-     * @return true if the key can only read. False if the key has write permission as well.
-     * @deprecated {@link #isReadOnly()}
-     */
-    @Deprecated
     public boolean isRead_only() {
-        return isReadOnly();
+        return read_only;
     }
 
     /**
@@ -169,10 +143,10 @@ public class GHDeployKey {
         return new ToStringBuilder(this).append("title", title)
                 .append("id", id)
                 .append("key", key)
-                .append("created_at", createdAt)
-                .append("last_used", lastUsed)
-                .append("added_by", addedBy)
-                .append("read_only", readOnly)
+                .append("created_at", created_at)
+                .append("last_used", last_used)
+                .append("added_by", added_by)
+                .append("read_only", read_only)
                 .toString();
     }
 

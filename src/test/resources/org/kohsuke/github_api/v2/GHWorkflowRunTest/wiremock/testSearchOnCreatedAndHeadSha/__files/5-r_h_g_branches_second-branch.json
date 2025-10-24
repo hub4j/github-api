@@ -1,0 +1,96 @@
+{
+  "name": "second-branch",
+  "commit": {
+    "sha": "f6a5c19a67797d64426203b8a7a05a0fd74e5037",
+    "node_id": "MDY6Q29tbWl0MzQ4Njc0MjIwOmY2YTVjMTlhNjc3OTdkNjQ0MjYyMDNiOGE3YTA1YTBmZDc0ZTUwMzc=",
+    "commit": {
+      "author": {
+        "name": "Guillaume Smet",
+        "email": "guillaume.smet@gmail.com",
+        "date": "2021-03-17T10:56:14Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2021-03-17T10:56:14Z"
+      },
+      "message": "Create failing-workflow.yml",
+      "tree": {
+        "sha": "666bb9f951306171acb21632eca28a386cb35f73",
+        "url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/git/trees/666bb9f951306171acb21632eca28a386cb35f73"
+      },
+      "url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/git/commits/f6a5c19a67797d64426203b8a7a05a0fd74e5037",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJgUeBOCRBK7hj4Ov3rIwAAdHIIAKqBgu4Ev9OInXZmLEaqwnOk\nHxjoWkWduNYP7MQeCqpwxSq0GhORQnLKOV6O7SZpjgUF8yhm2sSpImYpAbfyMJqr\nutbthw9pbvreFHZTI8GqVqWk7ANZzU9KL/Ph9UiMa9mcScdRYddW5PIeor0l+W0V\nQAO/AymHaHS6CQkmI+MbjTEVOzQZkBuxKU7J7Isj1Y6evYkA2DCs03bLzFVz3Xm+\nlZzzfqre/Lpl66wXnsMOGV/83MLTb9/oV/hfyXX7uVH74QgHkJDep9JrbyfhlHTc\nz0UZDGZZ7GF9YxA31Yq0fZSg+h0YbL8xZ7wM89FwPSuMRk+uEDdZxzE16Qz3oA8=\n=rQ6u\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 666bb9f951306171acb21632eca28a386cb35f73\nparent 277f647eb2f4b637ee694fdb99bcda753be1560b\nauthor Guillaume Smet <guillaume.smet@gmail.com> 1615978574 +0100\ncommitter GitHub <noreply@github.com> 1615978574 +0100\n\nCreate failing-workflow.yml"
+      }
+    },
+    "url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/commits/f6a5c19a67797d64426203b8a7a05a0fd74e5037",
+    "html_url": "https://github.com/hub4j-test-org/GHWorkflowRunTest/commit/f6a5c19a67797d64426203b8a7a05a0fd74e5037",
+    "comments_url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/commits/f6a5c19a67797d64426203b8a7a05a0fd74e5037/comments",
+    "author": {
+      "login": "gsmet",
+      "id": 1279749,
+      "node_id": "MDQ6VXNlcjEyNzk3NDk=",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1279749?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/gsmet",
+      "html_url": "https://github.com/gsmet",
+      "followers_url": "https://api.github.com/users/gsmet/followers",
+      "following_url": "https://api.github.com/users/gsmet/following{/other_user}",
+      "gists_url": "https://api.github.com/users/gsmet/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/gsmet/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/gsmet/subscriptions",
+      "organizations_url": "https://api.github.com/users/gsmet/orgs",
+      "repos_url": "https://api.github.com/users/gsmet/repos",
+      "events_url": "https://api.github.com/users/gsmet/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/gsmet/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "277f647eb2f4b637ee694fdb99bcda753be1560b",
+        "url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/commits/277f647eb2f4b637ee694fdb99bcda753be1560b",
+        "html_url": "https://github.com/hub4j-test-org/GHWorkflowRunTest/commit/277f647eb2f4b637ee694fdb99bcda753be1560b"
+      }
+    ]
+  },
+  "_links": {
+    "self": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/branches/second-branch",
+    "html": "https://github.com/hub4j-test-org/GHWorkflowRunTest/tree/second-branch"
+  },
+  "protected": false,
+  "protection": {
+    "enabled": false,
+    "required_status_checks": {
+      "enforcement_level": "off",
+      "contexts": [],
+      "checks": []
+    }
+  },
+  "protection_url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/branches/second-branch/protection"
+}

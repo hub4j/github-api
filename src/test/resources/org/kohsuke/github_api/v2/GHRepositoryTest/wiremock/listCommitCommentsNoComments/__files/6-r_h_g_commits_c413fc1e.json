@@ -1,0 +1,103 @@
+{
+  "sha": "c413fc1e3057332b93850ea48202627d29a37de5",
+  "node_id": "MDY6Q29tbWl0MjA2ODg4MjAxOmM0MTNmYzFlMzA1NzMzMmI5Mzg1MGVhNDgyMDI2MjdkMjlhMzdkZTU=",
+  "commit": {
+    "author": {
+      "name": "Kohsuke Kawaguchi",
+      "email": "kk@kohsuke.org",
+      "date": "2018-08-30T03:18:51Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2018-08-30T03:18:51Z"
+    },
+    "message": "Merge pull request #438 from jgangemi/jae/issue-434\n\n- added overloaded 'uploadAsset' method",
+    "tree": {
+      "sha": "206abcd4955519af0ab8a3dda58b5e613ef450ed",
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/trees/206abcd4955519af0ab8a3dda58b5e613ef450ed"
+    },
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/commits/c413fc1e3057332b93850ea48202627d29a37de5",
+    "comment_count": 0,
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJbh2IbCRBK7hj4Ov3rIwAAdHIIAI+9nu5jvc3RrkoC00zn+p/B\n1O0fYFUGgg6Tk3xtFob8iBnDTzW8fOFelKGzz6H6C+NEy3DlEbU0Dq59BqCuz0YK\n7JcOoNe7cd9sIiHelGrD6sBTFflr5aCCA7C6mZfa+ysTNsuYwJJ/HnOOptrPMqEF\nz1f5yTJWz6Npe7jSiI17d3fWYzsEy+3wsD00bb1bSN4ocV8J8FE9QtX6BI43qSvs\nLv21Prd64UyHe42WxzHrw6t2HExgUOMXMdY8AxtAz+ekxGhZ/RCIIDZ8LIstsglw\ncWpRFGT0JkHg+k3/K6/gNzs6LMJtA7HRp7QV0kZFheBJ3s+IjkROkRqb51YgcYo=\n=he4V\n-----END PGP SIGNATURE-----\n",
+      "payload": "tree 206abcd4955519af0ab8a3dda58b5e613ef450ed\nparent 7bf23eaa15b1b68a44710e6e4c457e2f665b9eaf\nparent eacdd7afe8cf25c9cd0e4ba97f914cd6e9a45800\nauthor Kohsuke Kawaguchi <kk@kohsuke.org> 1535599131 +0200\ncommitter GitHub <noreply@github.com> 1535599131 +0200\n\nMerge pull request #438 from jgangemi/jae/issue-434\n\n- added overloaded 'uploadAsset' method"
+    }
+  },
+  "url": "https://api.github.com/repos/hub4j-test-org/github-api/commits/c413fc1e3057332b93850ea48202627d29a37de5",
+  "html_url": "https://github.com/hub4j-test-org/github-api/commit/c413fc1e3057332b93850ea48202627d29a37de5",
+  "comments_url": "https://api.github.com/repos/hub4j-test-org/github-api/commits/c413fc1e3057332b93850ea48202627d29a37de5/comments",
+  "author": {
+    "login": "kohsuke",
+    "id": 50003,
+    "node_id": "MDQ6VXNlcjUwMDAz",
+    "avatar_url": "https://avatars.githubusercontent.com/u/50003?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/kohsuke",
+    "html_url": "https://github.com/kohsuke",
+    "followers_url": "https://api.github.com/users/kohsuke/followers",
+    "following_url": "https://api.github.com/users/kohsuke/following{/other_user}",
+    "gists_url": "https://api.github.com/users/kohsuke/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/kohsuke/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/kohsuke/subscriptions",
+    "organizations_url": "https://api.github.com/users/kohsuke/orgs",
+    "repos_url": "https://api.github.com/users/kohsuke/repos",
+    "events_url": "https://api.github.com/users/kohsuke/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/kohsuke/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "web-flow",
+    "id": 19864447,
+    "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+    "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/web-flow",
+    "html_url": "https://github.com/web-flow",
+    "followers_url": "https://api.github.com/users/web-flow/followers",
+    "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+    "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+    "organizations_url": "https://api.github.com/users/web-flow/orgs",
+    "repos_url": "https://api.github.com/users/web-flow/repos",
+    "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/web-flow/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "7bf23eaa15b1b68a44710e6e4c457e2f665b9eaf",
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api/commits/7bf23eaa15b1b68a44710e6e4c457e2f665b9eaf",
+      "html_url": "https://github.com/hub4j-test-org/github-api/commit/7bf23eaa15b1b68a44710e6e4c457e2f665b9eaf"
+    },
+    {
+      "sha": "eacdd7afe8cf25c9cd0e4ba97f914cd6e9a45800",
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api/commits/eacdd7afe8cf25c9cd0e4ba97f914cd6e9a45800",
+      "html_url": "https://github.com/hub4j-test-org/github-api/commit/eacdd7afe8cf25c9cd0e4ba97f914cd6e9a45800"
+    }
+  ],
+  "stats": {
+    "total": 9,
+    "additions": 7,
+    "deletions": 2
+  },
+  "files": [
+    {
+      "sha": "d49c0a289026c089ec1273503a3da90b10ba465d",
+      "filename": "src/main/java/org/kohsuke/github/GHRelease.java",
+      "status": "modified",
+      "additions": 7,
+      "deletions": 2,
+      "changes": 9,
+      "blob_url": "https://github.com/hub4j-test-org/github-api/blob/c413fc1e3057332b93850ea48202627d29a37de5/src/main/java/org/kohsuke/github/GHRelease.java",
+      "raw_url": "https://github.com/hub4j-test-org/github-api/raw/c413fc1e3057332b93850ea48202627d29a37de5/src/main/java/org/kohsuke/github/GHRelease.java",
+      "contents_url": "https://api.github.com/repos/hub4j-test-org/github-api/contents/src/main/java/org/kohsuke/github/GHRelease.java?ref=c413fc1e3057332b93850ea48202627d29a37de5",
+      "patch": "@@ -3,6 +3,7 @@\n import java.io.File;\n import java.io.FileInputStream;\n import java.io.IOException;\n+import java.io.InputStream;\n import java.net.URL;\n import java.util.Arrays;\n import java.util.Date;\n@@ -125,12 +126,16 @@ GHRelease wrap(GHRepository owner) {\n      * handling of the HTTP requests to github's API.\n          */\n     public GHAsset uploadAsset(File file, String contentType) throws IOException {\n+        return uploadAsset(file.getName(), new FileInputStream(file), contentType);\n+    }\n+    \n+    public GHAsset uploadAsset(String filename, InputStream stream, String contentType) throws IOException {\n         Requester builder = new Requester(owner.root);\n \n         String url = format(\"https://uploads.github.com%s/releases/%d/assets?name=%s\",\n-                owner.getApiTailUrl(\"\"), getId(), file.getName());\n+                owner.getApiTailUrl(\"\"), getId(), filename);\n         return builder.contentType(contentType)\n-                .with(new FileInputStream(file))\n+                .with(stream)\n                 .to(url, GHAsset.class).wrap(this);\n     }\n "
+    }
+  ]
+}

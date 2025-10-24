@@ -1,10 +1,8 @@
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.util.Date;
 
 // TODO: Auto-generated Javadoc
@@ -17,7 +15,7 @@ import java.util.Date;
  */
 public class GHSubscription extends GitHubInteractiveObject {
 
-    private String createdAt, url, repositoryUrl, reason;
+    private String created_at, url, repository_url, reason;
 
     private GHRepository repo;
     private boolean subscribed, ignored;
@@ -43,9 +41,8 @@ public class GHSubscription extends GitHubInteractiveObject {
      *
      * @return the created at
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getCreatedAt() {
-        return GitHubClient.parseInstant(createdAt);
+    public Date getCreatedAt() {
+        return GitHubClient.parseDate(created_at);
     }
 
     /**
@@ -73,7 +70,7 @@ public class GHSubscription extends GitHubInteractiveObject {
      * @return the repository url
      */
     public String getRepositoryUrl() {
-        return repositoryUrl;
+        return repository_url;
     }
 
     /**

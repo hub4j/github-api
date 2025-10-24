@@ -28,9 +28,9 @@ public class GHAsset extends GHObject {
         return assets;
     }
 
-    private String browserDownloadUrl;
-    private String contentType;
-    private long downloadCount;
+    private String browser_download_url;
+    private String content_type;
+    private long download_count;
     private String label;
     private String name;
     private long size;
@@ -60,7 +60,7 @@ public class GHAsset extends GHObject {
      * @return the browser download url
      */
     public String getBrowserDownloadUrl() {
-        return browserDownloadUrl;
+        return browser_download_url;
     }
 
     /**
@@ -69,7 +69,7 @@ public class GHAsset extends GHObject {
      * @return the content type
      */
     public String getContentType() {
-        return contentType;
+        return content_type;
     }
 
     /**
@@ -78,7 +78,7 @@ public class GHAsset extends GHObject {
      * @return the download count
      */
     public long getDownloadCount() {
-        return downloadCount;
+        return download_count;
     }
 
     /**
@@ -137,7 +137,7 @@ public class GHAsset extends GHObject {
      */
     public void setContentType(String contentType) throws IOException {
         edit("content_type", contentType);
-        this.contentType = contentType;
+        this.content_type = contentType;
     }
 
     /**

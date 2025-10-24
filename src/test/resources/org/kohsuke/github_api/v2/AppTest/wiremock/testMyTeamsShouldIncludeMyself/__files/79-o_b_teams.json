@@ -1,0 +1,58 @@
+[
+  {
+    "name": "core-dev",
+    "id": 17219,
+    "node_id": "MDQ6VGVhbTE3MjE5",
+    "slug": "core-dev",
+    "description": null,
+    "privacy": "secret",
+    "url": "https://api.github.com/organizations/420577/team/17219",
+    "html_url": "https://github.com/orgs/beanvalidation/teams/core-dev",
+    "members_url": "https://api.github.com/organizations/420577/team/17219/members{/member}",
+    "repositories_url": "https://api.github.com/organizations/420577/team/17219/repos",
+    "permission": "push",
+    "parent": null
+  },
+  {
+    "name": "Website",
+    "id": 102843,
+    "node_id": "MDQ6VGVhbTEwMjg0Mw==",
+    "slug": "website",
+    "description": null,
+    "privacy": "secret",
+    "url": "https://api.github.com/organizations/420577/team/102843",
+    "html_url": "https://github.com/orgs/beanvalidation/teams/website",
+    "members_url": "https://api.github.com/organizations/420577/team/102843/members{/member}",
+    "repositories_url": "https://api.github.com/organizations/420577/team/102843/repos",
+    "permission": "push",
+    "parent": null
+  },
+  {
+    "name": "admin",
+    "id": 1915689,
+    "node_id": "MDQ6VGVhbTE5MTU2ODk=",
+    "slug": "admin",
+    "description": "",
+    "privacy": "secret",
+    "url": "https://api.github.com/organizations/420577/team/1915689",
+    "html_url": "https://github.com/orgs/beanvalidation/teams/admin",
+    "members_url": "https://api.github.com/organizations/420577/team/1915689/members{/member}",
+    "repositories_url": "https://api.github.com/organizations/420577/team/1915689/repos",
+    "permission": "pull",
+    "parent": null
+  },
+  {
+    "name": "eg-members",
+    "id": 2115405,
+    "node_id": "MDQ6VGVhbTIxMTU0MDU=",
+    "slug": "eg-members",
+    "description": "Members of the JSR 380 expert group",
+    "privacy": "closed",
+    "url": "https://api.github.com/organizations/420577/team/2115405",
+    "html_url": "https://github.com/orgs/beanvalidation/teams/eg-members",
+    "members_url": "https://api.github.com/organizations/420577/team/2115405/members{/member}",
+    "repositories_url": "https://api.github.com/organizations/420577/team/2115405/repos",
+    "permission": "pull",
+    "parent": null
+  }
+]

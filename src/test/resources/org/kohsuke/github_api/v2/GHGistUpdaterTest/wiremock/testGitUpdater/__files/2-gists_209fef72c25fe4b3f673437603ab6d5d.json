@@ -1,0 +1,139 @@
+{
+  "url": "https://api.github.com/gists/209fef72c25fe4b3f673437603ab6d5d",
+  "forks_url": "https://api.github.com/gists/209fef72c25fe4b3f673437603ab6d5d/forks",
+  "commits_url": "https://api.github.com/gists/209fef72c25fe4b3f673437603ab6d5d/commits",
+  "id": "209fef72c25fe4b3f673437603ab6d5d",
+  "node_id": "MDQ6R2lzdDIwOWZlZjcyYzI1ZmU0YjNmNjczNDM3NjAzYWI2ZDVk",
+  "git_pull_url": "https://gist.github.com/209fef72c25fe4b3f673437603ab6d5d.git",
+  "git_push_url": "https://gist.github.com/209fef72c25fe4b3f673437603ab6d5d.git",
+  "html_url": "https://gist.github.com/209fef72c25fe4b3f673437603ab6d5d",
+  "files": {
+    "new-file.txt": {
+      "filename": "new-file.txt",
+      "type": "text/plain",
+      "language": "Text",
+      "raw_url": "https://gist.githubusercontent.com/martinvanzijl/209fef72c25fe4b3f673437603ab6d5d/raw/be732fb7a4178a55e5794e0b142b6e251545d7e4/new-file.txt",
+      "size": 16,
+      "truncated": false,
+      "content": "Added by updater"
+    },
+    "renamed.py": {
+      "filename": "renamed.py",
+      "type": "application/x-python",
+      "language": "Python",
+      "raw_url": "https://gist.githubusercontent.com/martinvanzijl/209fef72c25fe4b3f673437603ab6d5d/raw/b609dee383ab7aee026b182aa99086777a97cb77/renamed.py",
+      "size": 13,
+      "truncated": false,
+      "content": "print 'hello'"
+    },
+    "unmodified.txt": {
+      "filename": "unmodified.txt",
+      "type": "text/plain",
+      "language": "Text",
+      "raw_url": "https://gist.githubusercontent.com/martinvanzijl/209fef72c25fe4b3f673437603ab6d5d/raw/92aaf920c4873e413416e552aaad16cd79d361b7/unmodified.txt",
+      "size": 20,
+      "truncated": false,
+      "content": "Should be unmodified"
+    },
+    "update-me.txt": {
+      "filename": "update-me.txt",
+      "type": "text/plain",
+      "language": "Text",
+      "raw_url": "https://gist.githubusercontent.com/martinvanzijl/209fef72c25fe4b3f673437603ab6d5d/raw/401c618749d9904b511a478bf45934966158b5bb/update-me.txt",
+      "size": 22,
+      "truncated": false,
+      "content": "Content updated by API"
+    }
+  },
+  "public": true,
+  "created_at": "2019-10-09T18:06:38Z",
+  "updated_at": "2019-10-09T18:06:39Z",
+  "description": "Description updated by API",
+  "comments": 0,
+  "user": null,
+  "comments_url": "https://api.github.com/gists/209fef72c25fe4b3f673437603ab6d5d/comments",
+  "owner": {
+    "login": "martinvanzijl",
+    "id": 24422213,
+    "node_id": "MDQ6VXNlcjI0NDIyMjEz",
+    "avatar_url": "https://avatars0.githubusercontent.com/u/24422213?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/martinvanzijl",
+    "html_url": "https://github.com/martinvanzijl",
+    "followers_url": "https://api.github.com/users/martinvanzijl/followers",
+    "following_url": "https://api.github.com/users/martinvanzijl/following{/other_user}",
+    "gists_url": "https://api.github.com/users/martinvanzijl/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/martinvanzijl/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/martinvanzijl/subscriptions",
+    "organizations_url": "https://api.github.com/users/martinvanzijl/orgs",
+    "repos_url": "https://api.github.com/users/martinvanzijl/repos",
+    "events_url": "https://api.github.com/users/martinvanzijl/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/martinvanzijl/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "forks": [],
+  "history": [
+    {
+      "user": {
+        "login": "martinvanzijl",
+        "id": 24422213,
+        "node_id": "MDQ6VXNlcjI0NDIyMjEz",
+        "avatar_url": "https://avatars0.githubusercontent.com/u/24422213?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/martinvanzijl",
+        "html_url": "https://github.com/martinvanzijl",
+        "followers_url": "https://api.github.com/users/martinvanzijl/followers",
+        "following_url": "https://api.github.com/users/martinvanzijl/following{/other_user}",
+        "gists_url": "https://api.github.com/users/martinvanzijl/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/martinvanzijl/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/martinvanzijl/subscriptions",
+        "organizations_url": "https://api.github.com/users/martinvanzijl/orgs",
+        "repos_url": "https://api.github.com/users/martinvanzijl/repos",
+        "events_url": "https://api.github.com/users/martinvanzijl/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/martinvanzijl/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "version": "a081e0cf18f30a48b337375327d1f04d4d61b2ab",
+      "committed_at": "2019-10-09T18:06:39Z",
+      "change_status": {
+        "total": 3,
+        "additions": 2,
+        "deletions": 1
+      },
+      "url": "https://api.github.com/gists/209fef72c25fe4b3f673437603ab6d5d/a081e0cf18f30a48b337375327d1f04d4d61b2ab"
+    },
+    {
+      "user": {
+        "login": "martinvanzijl",
+        "id": 24422213,
+        "node_id": "MDQ6VXNlcjI0NDIyMjEz",
+        "avatar_url": "https://avatars0.githubusercontent.com/u/24422213?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/martinvanzijl",
+        "html_url": "https://github.com/martinvanzijl",
+        "followers_url": "https://api.github.com/users/martinvanzijl/followers",
+        "following_url": "https://api.github.com/users/martinvanzijl/following{/other_user}",
+        "gists_url": "https://api.github.com/users/martinvanzijl/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/martinvanzijl/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/martinvanzijl/subscriptions",
+        "organizations_url": "https://api.github.com/users/martinvanzijl/orgs",
+        "repos_url": "https://api.github.com/users/martinvanzijl/repos",
+        "events_url": "https://api.github.com/users/martinvanzijl/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/martinvanzijl/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "version": "3ef13d1c0c4fc4deef97527c758d1068d2ca4fe3",
+      "committed_at": "2019-10-09T18:06:37Z",
+      "change_status": {
+        "total": 3,
+        "additions": 3,
+        "deletions": 0
+      },
+      "url": "https://api.github.com/gists/209fef72c25fe4b3f673437603ab6d5d/3ef13d1c0c4fc4deef97527c758d1068d2ca4fe3"
+    }
+  ],
+  "truncated": false
+}

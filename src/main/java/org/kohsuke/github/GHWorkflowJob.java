@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.GHWorkflowRun.Conclusion;
@@ -10,7 +9,6 @@ import org.kohsuke.github.function.InputStreamFunction;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -30,7 +28,7 @@ public class GHWorkflowJob extends GHObject {
     /**
      * The Class Step.
      */
-    public static class Step extends GitHubBridgeAdapterObject {
+    public static class Step {
 
         private String completedAt;
 
@@ -52,9 +50,8 @@ public class GHWorkflowJob extends GHObject {
          *
          * @return completion date
          */
-        @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-        public Instant getCompletedAt() {
-            return GitHubClient.parseInstant(completedAt);
+        public Date getCompletedAt() {
+            return GitHubClient.parseDate(completedAt);
         }
 
         /**
@@ -91,9 +88,8 @@ public class GHWorkflowJob extends GHObject {
          *
          * @return start date
          */
-        @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-        public Instant getStartedAt() {
-            return GitHubClient.parseInstant(startedAt);
+        public Date getStartedAt() {
+            return GitHubClient.parseDate(startedAt);
         }
 
         /**
@@ -176,9 +172,8 @@ public class GHWorkflowJob extends GHObject {
      *
      * @return completion date
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getCompletedAt() {
-        return GitHubClient.parseInstant(completedAt);
+    public Date getCompletedAt() {
+        return GitHubClient.parseDate(completedAt);
     }
 
     /**
@@ -297,9 +292,8 @@ public class GHWorkflowJob extends GHObject {
      *
      * @return start date
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getStartedAt() {
-        return GitHubClient.parseInstant(startedAt);
+    public Date getStartedAt() {
+        return GitHubClient.parseDate(startedAt);
     }
 
     /**

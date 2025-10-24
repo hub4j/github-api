@@ -26,7 +26,7 @@
       "cancel_url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/actions/runs/686034992/cancel",
       "rerun_url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/actions/runs/686034992/rerun",
       "workflow_url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/actions/workflows/6820790",
-      "actor": {
+      "triggering_actor": {
         "login": "octocat",
         "id": 1,
         "node_id": "MDQ6VXNlcjE=",
@@ -43,26 +43,6 @@
         "repos_url": "https://api.github.com/users/octocat/repos",
         "events_url": "https://api.github.com/users/octocat/events{/privacy}",
         "received_events_url": "https://api.github.com/users/octocat/received_events",
-        "type": "User",
-        "site_admin": false
-      },
-      "triggering_actor": {
-        "login": "octocat_trigger",
-        "id": 1,
-        "node_id": "MDQ6VXNlcjE=",
-        "avatar_url": "https://github.com/images/error/octocat_happy.gif",
-        "gravatar_id": "",
-        "url": "https://api.github.com/users/octocat_trigger",
-        "html_url": "https://github.com/octocat_trigger",
-        "followers_url": "https://api.github.com/users/octocat_trigger/followers",
-        "following_url": "https://api.github.com/users/octocat_trigger/following{/other_user}",
-        "gists_url": "https://api.github.com/users/octocat_trigger/gists{/gist_id}",
-        "starred_url": "https://api.github.com/users/octocat_trigger/starred{/owner}{/repo}",
-        "subscriptions_url": "https://api.github.com/users/octocat_trigger/subscriptions",
-        "organizations_url": "https://api.github.com/users/octocat_trigger/orgs",
-        "repos_url": "https://api.github.com/users/octocat_trigger/repos",
-        "events_url": "https://api.github.com/users/octocat_trigger/events{/privacy}",
-        "received_events_url": "https://api.github.com/users/octocat_trigger/received_events",
         "type": "User",
         "site_admin": false
       },

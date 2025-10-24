@@ -30,7 +30,6 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
@@ -88,14 +87,14 @@ public final class GHCheckRunBuilder {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static final class Annotation {
 
-        private final String annotationLevel;
-        private Integer endColumn;
-        private final int endLine;
+        private final String annotation_level;
+        private Integer end_column;
+        private final int end_line;
         private final String message;
         private final String path;
-        private String rawDetails;
-        private Integer startColumn;
-        private final int startLine;
+        private String raw_details;
+        private Integer start_column;
+        private final int start_line;
         private String title;
 
         /**
@@ -137,9 +136,9 @@ public final class GHCheckRunBuilder {
                 @NonNull GHCheckRun.AnnotationLevel annotationLevel,
                 @NonNull String message) {
             this.path = path;
-            this.startLine = startLine;
-            this.endLine = endLine;
-            this.annotationLevel = annotationLevel.toString().toLowerCase(Locale.ROOT);
+            start_line = startLine;
+            end_line = endLine;
+            annotation_level = annotationLevel.toString().toLowerCase(Locale.ROOT);
             this.message = message;
         }
 
@@ -151,7 +150,7 @@ public final class GHCheckRunBuilder {
          * @return the annotation
          */
         public @NonNull Annotation withEndColumn(@CheckForNull Integer endColumn) {
-            this.endColumn = endColumn;
+            end_column = endColumn;
             return this;
         }
 
@@ -163,7 +162,7 @@ public final class GHCheckRunBuilder {
          * @return the annotation
          */
         public @NonNull Annotation withRawDetails(@CheckForNull String rawDetails) {
-            this.rawDetails = rawDetails;
+            raw_details = rawDetails;
             return this;
         }
 
@@ -175,7 +174,7 @@ public final class GHCheckRunBuilder {
          * @return the annotation
          */
         public @NonNull Annotation withStartColumn(@CheckForNull Integer startColumn) {
-            this.startColumn = startColumn;
+            start_column = startColumn;
             return this;
         }
 
@@ -202,7 +201,7 @@ public final class GHCheckRunBuilder {
 
         private final String alt;
         private String caption;
-        private final String imageUrl;
+        private final String image_url;
 
         /**
          * Instantiates a new image.
@@ -214,7 +213,7 @@ public final class GHCheckRunBuilder {
          */
         public Image(@NonNull String alt, @NonNull String imageURL) {
             this.alt = alt;
-            this.imageUrl = imageURL;
+            image_url = imageURL;
         }
 
         /**
@@ -419,23 +418,10 @@ public final class GHCheckRunBuilder {
      * @param completedAt
      *            the completed at
      * @return the GH check run builder
-     * @deprecated Use {@link #withCompletedAt(Instant)}
      */
-    @Deprecated
     public @NonNull GHCheckRunBuilder withCompletedAt(@CheckForNull Date completedAt) {
-        return withCompletedAt(GitHubClient.toInstantOrNull(completedAt));
-    }
-
-    /**
-     * With completed at.
-     *
-     * @param completedAt
-     *            the completed at
-     * @return the GH check run builder
-     */
-    public @NonNull GHCheckRunBuilder withCompletedAt(@CheckForNull Instant completedAt) {
         if (completedAt != null) {
-            requester.with("completed_at", GitHubClient.printInstant(completedAt));
+            requester.with("completed_at", GitHubClient.printDate(completedAt));
         }
         return this;
     }
@@ -453,7 +439,6 @@ public final class GHCheckRunBuilder {
         }
         return this;
     }
-
     /**
      * With details URL.
      *
@@ -465,6 +450,7 @@ public final class GHCheckRunBuilder {
         requester.with("details_url", detailsURL);
         return this;
     }
+
     /**
      * With external ID.
      *
@@ -500,23 +486,10 @@ public final class GHCheckRunBuilder {
      * @param startedAt
      *            the started at
      * @return the GH check run builder
-     * @deprecated Use {@link #withStartedAt(Instant)}
      */
-    @Deprecated
     public @NonNull GHCheckRunBuilder withStartedAt(@CheckForNull Date startedAt) {
-        return withStartedAt(GitHubClient.toInstantOrNull(startedAt));
-    }
-
-    /**
-     * With started at.
-     *
-     * @param startedAt
-     *            the started at
-     * @return the GH check run builder
-     */
-    public @NonNull GHCheckRunBuilder withStartedAt(@CheckForNull Instant startedAt) {
         if (startedAt != null) {
-            requester.with("started_at", GitHubClient.printInstant(startedAt));
+            requester.with("started_at", GitHubClient.printDate(startedAt));
         }
         return this;
     }

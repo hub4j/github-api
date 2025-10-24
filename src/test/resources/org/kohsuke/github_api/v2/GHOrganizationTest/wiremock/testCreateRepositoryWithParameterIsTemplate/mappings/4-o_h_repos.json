@@ -1,0 +1,58 @@
+{
+  "id": "f3cd75e7-2d0d-47c1-916d-437fcdbf7e34",
+  "name": "orgs_hub4j-test-org_repos",
+  "request": {
+    "url": "/orgs/hub4j-test-org/repos",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"auto_init\":true,\"is_template\":true,\"name\":\"github-api-template-test\",\"description\":\"a test template repository used to test kohsuke's github-api\",\"team_id\":820406,\"homepage\":\"http://github-api.kohsuke.org/\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "4-o_h_repos.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Fri, 22 Mar 2024 23:35:18 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "\"571d3f634a83d460c16674a07bfb64c7ad74b7c065d2a2f6c31181eea0c98858\"",
+      "X-OAuth-Scopes": "admin:org, admin:org_hook, admin:public_key, admin:repo_hook, repo, user, workflow",
+      "X-Accepted-OAuth-Scopes": "public_repo, repo",
+      "github-authentication-token-expiration": "2024-04-07 21:59:15 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4968",
+      "X-RateLimit-Reset": "1711153584",
+      "X-RateLimit-Used": "32",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "F8D4:30C48:5DBDED:7D9794:65FE15B5",
+      "Location": "https://api.github.com/repos/hub4j-test-org/github-api-template-test"
+    }
+  },
+  "uuid": "f3cd75e7-2d0d-47c1-916d-437fcdbf7e34",
+  "persistent": true,
+  "insertionIndex": 4
+}

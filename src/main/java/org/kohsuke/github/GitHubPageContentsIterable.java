@@ -37,10 +37,10 @@ class GitHubPageContentsIterable<T> extends PagedIterable<T> {
             return ((GitHubPageIterator<T[]>) base).finalResponse();
         }
     }
-
     private final GitHubClient client;
     private final Consumer<T> itemInitializer;
     private final Class<T[]> receiverType;
+
     private final GitHubRequest request;
 
     /**

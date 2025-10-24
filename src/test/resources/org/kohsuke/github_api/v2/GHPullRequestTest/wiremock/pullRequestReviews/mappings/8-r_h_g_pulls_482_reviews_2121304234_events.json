@@ -1,0 +1,57 @@
+{
+  "id": "5f0aa5a6-02d0-4ac0-9e2d-60b13fa2e7f9",
+  "name": "repos_hub4j-test-org_github-api_pulls_482_reviews_2121304234_events",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/pulls/482/reviews/2121304234/events",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"body\":\"Some review comment\",\"event\":\"COMMENT\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "8-r_h_g_pulls_482_reviews_2121304234_events.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Sun, 16 Jun 2024 09:55:55 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"9416a7df936948ae4a9d9fac9b6168dd4dcad4fba0ca4a7aa67f717ccddeff9f\"",
+      "X-OAuth-Scopes": "repo, user, write:discussion",
+      "X-Accepted-OAuth-Scopes": "public_repo, repo",
+      "github-authentication-token-expiration": "2024-09-14 09:21:47 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4367",
+      "X-RateLimit-Reset": "1718532974",
+      "X-RateLimit-Used": "633",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C5E0:3E2E9D:6B2C20C:6BFF3EA:666EB6AA"
+    }
+  },
+  "uuid": "5f0aa5a6-02d0-4ac0-9e2d-60b13fa2e7f9",
+  "persistent": true,
+  "insertionIndex": 8
+}

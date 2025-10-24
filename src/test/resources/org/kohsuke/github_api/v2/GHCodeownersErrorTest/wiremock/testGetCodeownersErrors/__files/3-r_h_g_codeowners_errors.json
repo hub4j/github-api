@@ -1,0 +1,13 @@
+{
+  "errors": [
+    {
+      "line": 1,
+      "column": 3,
+      "source": "* @nonexistent-user # Deliberate error to test response to repo.listCodeownersErrors()\n",
+      "kind": "Unknown owner",
+      "suggestion": "make sure @nonexistent-user exists and has write access to the repository",
+      "message": "Unknown owner on line 1: make sure @nonexistent-user exists and has write access to the repository\n\n  * @nonexistent-user # Deliberate error to test response to repo.listCodeownersErrors()\n    ^",
+      "path": ".github/CODEOWNERS"
+    }
+  ]
+}

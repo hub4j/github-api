@@ -1,0 +1,98 @@
+{
+  "sha": "efe737fa365a0187e052bc81391efbd84847a1b0",
+  "node_id": "MDY6Q29tbWl0MTU0ODUxNDplZmU3MzdmYTM2NWEwMTg3ZTA1MmJjODEzOTFlZmJkODQ4NDdhMWIw",
+  "commit": {
+    "author": {
+      "name": "Jesse Glick",
+      "email": "jglick@cloudbees.com",
+      "date": "2019-04-08T14:17:55Z"
+    },
+    "committer": {
+      "name": "Jesse Glick",
+      "email": "jglick@cloudbees.com",
+      "date": "2019-04-08T14:17:55Z"
+    },
+    "message": "#157 neglected to add incrementals-maven-plugin to pluginManagement, breaking reincrementalify during release.",
+    "tree": {
+      "sha": "109f198441d6524d99e237ac863e28e80ad77e59",
+      "url": "https://api.github.com/repos/stapler/stapler/git/trees/109f198441d6524d99e237ac863e28e80ad77e59"
+    },
+    "url": "https://api.github.com/repos/stapler/stapler/git/commits/efe737fa365a0187e052bc81391efbd84847a1b0",
+    "comment_count": 0,
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\niQEzBAABCgAdFiEEYYylhqBIUt57zhxYHdpp2UtiQxEFAlyrWBMACgkQHdpp2Uti\nQxFdngf9HAAKvEN8oIEBq5Vy45V80FMdWVjiYb21qoZ5l6KHNgLm1AmBsnQWvvpU\n1Q+VKMfdp6+492flDYrn+rjLOVAUcHwReTHtyq7YqkUP1E/4FJfT/8mi0szD9u4+\nhDUWKUs0//LLqTGHGgvLcQc4FXHNzcuZIowOfuHlCAOgWHqWuYDnb4aFhY3s8RdJ\na6E0V9MeUtmehKZBhGedfY+b/JpudFC+9dquR5rHEg8cP5jr7Gc3Ifcgx9nNMYXE\nn8qiwz02udK8pU+Z1KVzU4NbHydVHN8V4GceeDhqRbNNM0hjJ1ieBQefpJ+7E76R\nW9pTOeYzI9Xi1nA2pqHR5HVIk5OggA==\n=FmWz\n-----END PGP SIGNATURE-----",
+      "payload": "tree 109f198441d6524d99e237ac863e28e80ad77e59\nparent 08b13de864bc134fd790decd4f20db9074c7685f\nauthor Jesse Glick <jglick@cloudbees.com> 1554733075 -0400\ncommitter Jesse Glick <jglick@cloudbees.com> 1554733075 -0400\n\n#157 neglected to add incrementals-maven-plugin to pluginManagement, breaking reincrementalify during release.\n"
+    }
+  },
+  "url": "https://api.github.com/repos/stapler/stapler/commits/efe737fa365a0187e052bc81391efbd84847a1b0",
+  "html_url": "https://github.com/stapler/stapler/commit/efe737fa365a0187e052bc81391efbd84847a1b0",
+  "comments_url": "https://api.github.com/repos/stapler/stapler/commits/efe737fa365a0187e052bc81391efbd84847a1b0/comments",
+  "author": {
+    "login": "jglick",
+    "id": 154109,
+    "node_id": "MDQ6VXNlcjE1NDEwOQ==",
+    "avatar_url": "https://avatars1.githubusercontent.com/u/154109?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/jglick",
+    "html_url": "https://github.com/jglick",
+    "followers_url": "https://api.github.com/users/jglick/followers",
+    "following_url": "https://api.github.com/users/jglick/following{/other_user}",
+    "gists_url": "https://api.github.com/users/jglick/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/jglick/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/jglick/subscriptions",
+    "organizations_url": "https://api.github.com/users/jglick/orgs",
+    "repos_url": "https://api.github.com/users/jglick/repos",
+    "events_url": "https://api.github.com/users/jglick/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/jglick/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "jglick",
+    "id": 154109,
+    "node_id": "MDQ6VXNlcjE1NDEwOQ==",
+    "avatar_url": "https://avatars1.githubusercontent.com/u/154109?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/jglick",
+    "html_url": "https://github.com/jglick",
+    "followers_url": "https://api.github.com/users/jglick/followers",
+    "following_url": "https://api.github.com/users/jglick/following{/other_user}",
+    "gists_url": "https://api.github.com/users/jglick/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/jglick/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/jglick/subscriptions",
+    "organizations_url": "https://api.github.com/users/jglick/orgs",
+    "repos_url": "https://api.github.com/users/jglick/repos",
+    "events_url": "https://api.github.com/users/jglick/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/jglick/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "08b13de864bc134fd790decd4f20db9074c7685f",
+      "url": "https://api.github.com/repos/stapler/stapler/commits/08b13de864bc134fd790decd4f20db9074c7685f",
+      "html_url": "https://github.com/stapler/stapler/commit/08b13de864bc134fd790decd4f20db9074c7685f"
+    }
+  ],
+  "stats": {
+    "total": 9,
+    "additions": 9,
+    "deletions": 0
+  },
+  "files": [
+    {
+      "sha": "879f7cfd81594702efa34611f52b94c795230436",
+      "filename": "pom.xml",
+      "status": "modified",
+      "additions": 9,
+      "deletions": 0,
+      "changes": 9,
+      "blob_url": "https://github.com/stapler/stapler/blob/efe737fa365a0187e052bc81391efbd84847a1b0/pom.xml",
+      "raw_url": "https://github.com/stapler/stapler/raw/efe737fa365a0187e052bc81391efbd84847a1b0/pom.xml",
+      "contents_url": "https://api.github.com/repos/stapler/stapler/contents/pom.xml?ref=efe737fa365a0187e052bc81391efbd84847a1b0",
+      "patch": "@@ -206,6 +206,15 @@\n             <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>\n           </configuration>\n         </plugin>\n+        <plugin>\n+          <groupId>io.jenkins.tools.incrementals</groupId>\n+          <artifactId>incrementals-maven-plugin</artifactId>\n+          <version>1.0-beta-7</version>\n+          <configuration>\n+            <generateBackupPoms>false</generateBackupPoms>\n+            <updateNonincremental>false</updateNonincremental>\n+          </configuration>\n+        </plugin>\n       </plugins>\n     </pluginManagement>\n   </build>"
+    }
+  ]
+}

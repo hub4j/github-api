@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -121,13 +120,13 @@ public abstract class RateLimitChecker {
      */
     protected final boolean sleepUntilReset(GHRateLimit.Record record) throws InterruptedException {
         // Sleep until reset
-        long sleepMilliseconds = record.getResetInstant().toEpochMilli() - System.currentTimeMillis();
+        long sleepMilliseconds = record.getResetDate().getTime() - System.currentTimeMillis();
         if (sleepMilliseconds > 0) {
             String message = String.format(
                     "GitHub API - Current quota has %d remaining of %d. Waiting for quota to reset at %tT.",
                     record.getRemaining(),
                     record.getLimit(),
-                    Date.from(record.getResetInstant()));
+                    record.getResetDate());
 
             LOGGER.log(Level.INFO, message);
 

@@ -1,0 +1,50 @@
+{
+  "id": "89c6825e-6277-4ad0-a9f0-d0cb70e5a15b",
+  "name": "graphql",
+  "request": {
+    "url": "/graphql",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"query\":\"query GetPullRequestID { repository(name: \\\"for-test\\\", owner: \\\"seate\\\") { pullRequest(number: 9) { id } } }\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"data\":{\"repository\":{\"pullRequest\":{\"id\":\"PR_kwDON6BPMc6Ox8DC\"}}}}",
+    "headers": {
+      "Date": "Sat, 15 Mar 2025 18:13:28 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "X-OAuth-Scopes": "admin:repo_hook, gist, notifications, read:discussion, read:org, read:project, repo, user:email",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-GitHub-Media-Type": "github.v4; format=json",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4981",
+      "X-RateLimit-Reset": "1742063501",
+      "X-RateLimit-Used": "19",
+      "X-RateLimit-Resource": "graphql",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Vary": "Accept-Encoding, Accept, X-Requested-With",
+      "Server": "github.com",
+      "X-GitHub-Request-Id": "F68C:2403B3:120286:1B2D2F:67D5C348"
+    }
+  },
+  "uuid": "89c6825e-6277-4ad0-a9f0-d0cb70e5a15b",
+  "persistent": true,
+  "insertionIndex": 4
+}

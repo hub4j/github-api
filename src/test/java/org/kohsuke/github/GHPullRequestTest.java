@@ -6,9 +6,10 @@ import org.junit.Test;
 import org.kohsuke.github.GHPullRequest.AutoMerge;
 
 import java.io.IOException;
-import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +17,6 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
@@ -25,8 +25,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
-import static org.kohsuke.github.GHPullRequestReviewComment.Side.LEFT;
-import static org.kohsuke.github.GHPullRequestReviewComment.Side.RIGHT;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -354,39 +352,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         Optional<GHPullRequest> firstPR = builder.list().toList().stream().findFirst();
 
         try {
-            GHPullRequestCommitDetail detail = firstPR.get().listCommits().toArray()[0];
-            assertThat(detail.getApiUrl().toString(), notNullValue());
-            assertThat(detail.getSha(), equalTo("2d29c787b46ce61b98a1c13e05e21ebc21f49dbf"));
-            assertThat(detail.getCommentsUrl().toString(),
-                    endsWith(
-                            "/repos/hub4j-test-org/github-api/commits/2d29c787b46ce61b98a1c13e05e21ebc21f49dbf/comments"));
-            assertThat(detail.getUrl().toString(),
-                    equalTo("https://github.com/hub4j-test-org/github-api/commit/2d29c787b46ce61b98a1c13e05e21ebc21f49dbf"));
-
-            GHPullRequestCommitDetail.Commit commit = detail.getCommit();
-            assertThat(commit, notNullValue());
-            assertThat(commit.getAuthor().getEmail(), equalTo("bitwiseman@gmail.com"));
-            assertThat(commit.getCommitter().getEmail(), equalTo("bitwiseman@gmail.com"));
-            assertThat(commit.getMessage(), equalTo("Update README"));
-            assertThat(commit.getUrl().toString(),
-                    endsWith("/repos/hub4j-test-org/github-api/git/commits/2d29c787b46ce61b98a1c13e05e21ebc21f49dbf"));
-            assertThat(commit.getComment_count(), equalTo(0));
-
-            GHPullRequestCommitDetail.Tree tree = commit.getTree();
-            assertThat(tree, notNullValue());
-            assertThat(tree.getSha(), equalTo("ce7a1ba95aba901cf08d9f8365410d290d6c23aa"));
-            assertThat(tree.getUrl().toString(),
-                    endsWith("/repos/hub4j-test-org/github-api/git/trees/ce7a1ba95aba901cf08d9f8365410d290d6c23aa"));
-
-            GHPullRequestCommitDetail.CommitPointer[] parents = detail.getParents();
-            assertThat(parents, notNullValue());
-            assertThat(parents.length, equalTo(1));
-            assertThat(parents[0].getSha(), equalTo("3a09d2de4a9a1322a0ba2c3e2f54a919ca8fe353"));
-            assertThat(parents[0].getHtml_url().toString(),
-                    equalTo("https://github.com/hub4j-test-org/github-api/commit/3a09d2de4a9a1322a0ba2c3e2f54a919ca8fe353"));
-            assertThat(parents[0].getUrl().toString(),
-                    endsWith("/repos/hub4j-test-org/github-api/commits/3a09d2de4a9a1322a0ba2c3e2f54a919ca8fe353"));
-
+            String val = firstPR.get().listCommits().toArray()[0].getApiUrl().toString();
+            assertThat(val, notNullValue());
         } catch (GHFileNotFoundException e) {
             if (e.getMessage().contains("/issues/")) {
                 fail("Issued a request against the wrong path");
@@ -465,7 +432,6 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     public void pullRequestComment() throws Exception {
         String name = "createPullRequestComment";
         GHPullRequest p = getRepository().createPullRequest(name, "test/stable", "main", "## test");
-        assertThat(p.getIssueUrl().toString(), endsWith("/repos/hub4j-test-org/github-api/issues/461"));
 
         List<GHIssueComment> comments;
         comments = p.listComments().toList();
@@ -474,8 +440,9 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(comments, hasSize(0));
 
         GHIssueComment firstComment = p.comment("First comment");
-        Instant firstCommentCreatedAt = firstComment.getCreatedAt();
-        Instant firstCommentCreatedAtPlus1Second = firstComment.getCreatedAt().plusSeconds(1);
+        Date firstCommentCreatedAt = firstComment.getCreatedAt();
+        Date firstCommentCreatedAtPlus1Second = Date
+                .from(firstComment.getCreatedAt().toInstant().plus(1, ChronoUnit.SECONDS));
 
         comments = p.listComments().toList();
         assertThat(comments, hasSize(1));
@@ -498,12 +465,13 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         Thread.sleep(2000);
 
         GHIssueComment secondComment = p.comment("Second comment");
-        Instant secondCommentCreatedAt = secondComment.getCreatedAt();
-        Instant secondCommentCreatedAtPlus1Second = secondComment.getCreatedAt().plusSeconds(1);
+        Date secondCommentCreatedAt = secondComment.getCreatedAt();
+        Date secondCommentCreatedAtPlus1Second = Date
+                .from(secondComment.getCreatedAt().toInstant().plus(1, ChronoUnit.SECONDS));
         assertThat(
                 "There's an error in the setup of this test; please fix it."
                         + " The second comment should be created at least one second after the first one.",
-                firstCommentCreatedAtPlus1Second.isBefore(secondCommentCreatedAt));
+                firstCommentCreatedAtPlus1Second.getTime() <= secondCommentCreatedAt.getTime());
 
         comments = p.listComments().toList();
         assertThat(comments, hasSize(2));
@@ -532,7 +500,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(comments, hasSize(0));
 
         // Test "since" with timestamp instead of Date
-        comments = p.queryComments().since(secondCommentCreatedAt.toEpochMilli()).list().toList();
+        comments = p.queryComments().since(secondCommentCreatedAt.getTime()).list().toList();
         assertThat(comments, hasSize(1));
         assertThat(comments, contains(hasProperty("body", equalTo("Second comment"))));
     }
@@ -557,14 +525,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
                     .body("A single line review comment")
                     .path("README.md")
                     .line(2)
-                    .side(RIGHT)
                     .create();
             p.createReviewComment()
                     .commitId(p.getHead().getSha())
                     .body("A multiline review comment")
                     .path("README.md")
                     .lines(2, 3)
-                    .sides(RIGHT, RIGHT)
                     .create();
             List<GHPullRequestReviewComment> comments = p.listReviewComments().toList();
             assertThat(comments.size(), equalTo(3));
@@ -584,7 +550,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
             assertThat(comment.getStartSide(), equalTo(GHPullRequestReviewComment.Side.UNKNOWN));
             assertThat(comment.getLine(), equalTo(1));
             assertThat(comment.getOriginalLine(), equalTo(1));
-            assertThat(comment.getSide(), equalTo(LEFT));
+            assertThat(comment.getSide(), equalTo(GHPullRequestReviewComment.Side.LEFT));
             assertThat(comment.getPullRequestUrl(), notNullValue());
             assertThat(comment.getPullRequestUrl().toString(), containsString("hub4j-test-org/github-api/pulls/"));
             assertThat(comment.getBodyHtml(), nullValue());
@@ -597,14 +563,11 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
             comment = comments.get(1);
             assertThat(comment.getBody(), equalTo("A single line review comment"));
             assertThat(comment.getLine(), equalTo(2));
-            assertThat(comment.getSide(), equalTo(RIGHT));
 
             comment = comments.get(2);
             assertThat(comment.getBody(), equalTo("A multiline review comment"));
             assertThat(comment.getStartLine(), equalTo(2));
             assertThat(comment.getLine(), equalTo(3));
-            assertThat(comment.getStartSide(), equalTo(RIGHT));
-            assertThat(comment.getSide(), equalTo(RIGHT));
 
             comment.createReaction(ReactionContent.EYES);
             GHReaction toBeRemoved = comment.createReaction(ReactionContent.CONFUSED);

@@ -1,0 +1,33 @@
+[
+  {
+    "url": "https://api.github.com/repos/kohsuke/file-leak-detector/issues/comments/542023074",
+    "html_url": "https://github.com/kohsuke/file-leak-detector/pull/48#issuecomment-542023074",
+    "issue_url": "https://api.github.com/repos/kohsuke/file-leak-detector/issues/48",
+    "id": 542023074,
+    "node_id": "MDEyOklzc3VlQ29tbWVudDU0MjAyMzA3NA==",
+    "user": {
+      "login": "jumarko",
+      "id": 1083629,
+      "node_id": "MDQ6VXNlcjEwODM2Mjk=",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1083629?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/jumarko",
+      "html_url": "https://github.com/jumarko",
+      "followers_url": "https://api.github.com/users/jumarko/followers",
+      "following_url": "https://api.github.com/users/jumarko/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jumarko/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/jumarko/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jumarko/subscriptions",
+      "organizations_url": "https://api.github.com/users/jumarko/orgs",
+      "repos_url": "https://api.github.com/users/jumarko/repos",
+      "events_url": "https://api.github.com/users/jumarko/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/jumarko/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "created_at": "2019-10-15T03:45:06Z",
+    "updated_at": "2019-10-15T03:45:06Z",
+    "author_association": "NONE",
+    "body": "Works nicely on JDK 11, thanks a lot for this!"
+  }
+]

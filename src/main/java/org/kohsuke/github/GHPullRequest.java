@@ -23,13 +23,11 @@
  */
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -54,11 +52,11 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     public static class AutoMerge {
 
-        private String commitMessage;
+        private String commit_message;
 
-        private String commitTitle;
-        private GHUser enabledBy;
-        private MergeMethod mergeMethod;
+        private String commit_title;
+        private GHUser enabled_by;
+        private MergeMethod merge_method;
         /**
          * Create default AutoMerge instance
          */
@@ -71,7 +69,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
          * @return the message of the commit
          */
         public String getCommitMessage() {
-            return commitMessage;
+            return commit_message;
         }
 
         /**
@@ -80,7 +78,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
          * @return the title of the commit
          */
         public String getCommitTitle() {
-            return commitTitle;
+            return commit_title;
         }
 
         /**
@@ -90,7 +88,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
          */
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
         public GHUser getEnabledBy() {
-            return enabledBy;
+            return enabled_by;
         }
 
         /**
@@ -99,7 +97,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
          * @return the {@linkplain MergeMethod}
          */
         public MergeMethod getMergeMethod() {
-            return mergeMethod;
+            return merge_method;
         }
     }
 
@@ -116,27 +114,27 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     private static final String COMMENTS_ACTION = "/comments";
 
     private static final String REQUEST_REVIEWERS = "/requested_reviewers";
-    private AutoMerge autoMerge;
+    private AutoMerge auto_merge;
     private GHCommitPointer base;
-    private int changedFiles;
+    private int changed_files;
 
     private int deletions;
     private GHCommitPointer head;
-    private String mergeCommitSha;
+    private String merge_commit_sha;
 
     private Boolean mergeable;
-    private String mergeableState;
-    private boolean merged, maintainerCanModify;
-    private String mergedAt;
+    private String mergeable_state;
+    private boolean merged, maintainer_can_modify;
+    private String merged_at;
     // details that are only available when obtained from ID
-    private GHUser mergedBy;
-    private String patchUrl, diffUrl, issueUrl;
-    private GHUser[] requestedReviewers;
+    private GHUser merged_by;
+    private String patch_url, diff_url, issue_url;
+    private GHUser[] requested_reviewers;
 
     // pull request reviewers
 
-    private GHTeam[] requestedTeams;
-    private int reviewComments, additions, commits;
+    private GHTeam[] requested_teams;
+    private int review_comments, additions, commits;
 
     /** The draft. */
     // making these package private to all for testing
@@ -157,7 +155,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     public boolean canMaintainerModify() throws IOException {
         populate();
-        return maintainerCanModify;
+        return maintainer_can_modify;
     }
 
     /**
@@ -263,7 +261,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the {@linkplain AutoMerge} or {@code null} if no auto merge is set.
      */
     public AutoMerge getAutoMerge() {
-        return autoMerge;
+        return auto_merge;
     }
 
     /**
@@ -284,7 +282,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     public int getChangedFiles() throws IOException {
         populate();
-        return changedFiles;
+        return changed_files;
     }
 
     //
@@ -331,7 +329,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the diff url
      */
     public URL getDiffUrl() {
-        return GitHubClient.parseURL(diffUrl);
+        return GitHubClient.parseURL(diff_url);
     }
 
     /**
@@ -349,7 +347,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the issue url
      */
     public URL getIssueUrl() {
-        return GitHubClient.parseURL(issueUrl);
+        return GitHubClient.parseURL(issue_url);
     }
 
     /**
@@ -361,7 +359,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     public String getMergeCommitSha() throws IOException {
         populate();
-        return mergeCommitSha;
+        return merge_commit_sha;
     }
 
     /**
@@ -387,7 +385,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     public String getMergeableState() throws IOException {
         populate();
-        return mergeableState;
+        return mergeable_state;
     }
 
     /**
@@ -395,9 +393,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *
      * @return the merged at
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getMergedAt() {
-        return GitHubClient.parseInstant(mergedAt);
+    public Date getMergedAt() {
+        return GitHubClient.parseDate(merged_at);
     }
 
     /**
@@ -410,7 +407,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHUser getMergedBy() throws IOException {
         populate();
-        return mergedBy;
+        return merged_by;
     }
 
     /**
@@ -419,7 +416,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the patch url
      */
     public URL getPatchUrl() {
-        return GitHubClient.parseURL(patchUrl);
+        return GitHubClient.parseURL(patch_url);
     }
 
     /**
@@ -440,8 +437,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public List<GHUser> getRequestedReviewers() throws IOException {
-        refresh(requestedReviewers);
-        return Collections.unmodifiableList(Arrays.asList(requestedReviewers));
+        refresh(requested_reviewers);
+        return Collections.unmodifiableList(Arrays.asList(requested_reviewers));
     }
 
     /**
@@ -452,8 +449,8 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      *             the io exception
      */
     public List<GHTeam> getRequestedTeams() throws IOException {
-        refresh(requestedTeams);
-        return Collections.unmodifiableList(Arrays.asList(requestedTeams));
+        refresh(requested_teams);
+        return Collections.unmodifiableList(Arrays.asList(requested_teams));
     }
 
     /**
@@ -465,7 +462,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      */
     public int getReviewComments() throws IOException {
         populate();
-        return reviewComments;
+        return review_comments;
     }
 
     /**
@@ -703,7 +700,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * Depending on the original API call where this object is created, it may not contain everything.
      */
     private void populate() throws IOException {
-        if (mergeableState != null)
+        if (mergeable_state != null)
             return; // already populated
         refresh();
     }

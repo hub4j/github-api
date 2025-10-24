@@ -5,10 +5,6 @@ import org.junit.Test;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -58,7 +54,7 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
         assertThat(installationToken.getToken(), is("bogus"));
         assertThat(installation.getPermissions(), is(permissions));
         assertThat(installationToken.getRepositorySelection(), is(GHRepositorySelection.SELECTED));
-        assertThat(installationToken.getExpiresAt(), is(GitHubClient.parseInstant("2019-08-10T05:54:58Z")));
+        assertThat(installationToken.getExpiresAt(), is(GitHubClient.parseDate("2019-08-10T05:54:58Z")));
 
         GHRepository repository = installationToken.getRepositories().get(0);
         assertThat(installationToken.getRepositories().size(), is(1));
@@ -71,7 +67,7 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
         assertThat(installationToken2.getToken(), is("bogus"));
         assertThat(installationToken2.getPermissions().size(), is(4));
         assertThat(installationToken2.getRepositorySelection(), is(GHRepositorySelection.ALL));
-        assertThat(installationToken2.getExpiresAt(), is(GitHubClient.parseInstant("2019-12-19T12:27:59Z")));
+        assertThat(installationToken2.getExpiresAt(), is(GitHubClient.parseDate("2019-12-19T12:27:59Z")));
 
         assertThat(installationToken2.getRepositories(), nullValue());;
     }
@@ -95,7 +91,7 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
         assertThat(installationToken.getToken(), is("bogus"));
         assertThat(installationToken.getPermissions().entrySet(), hasSize(4));
         assertThat(installationToken.getRepositorySelection(), is(GHRepositorySelection.SELECTED));
-        assertThat(installationToken.getExpiresAt(), is(GitHubClient.parseInstant("2022-07-27T21:38:33Z")));
+        assertThat(installationToken.getExpiresAt(), is(GitHubClient.parseDate("2022-07-27T21:38:33Z")));
 
         GHRepository repository = installationToken.getRepositories().get(0);
         assertThat(installationToken.getRepositories().size(), is(1));
@@ -138,8 +134,8 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
         assertThat(app.getDescription(), is(""));
         assertThat(app.getExternalUrl(), is("http://localhost"));
         assertThat(app.getHtmlUrl().toString(), is("https://github.com/apps/ghapi-test-app-1"));
-        assertThat(app.getCreatedAt(), is(GitHubClient.parseInstant("2020-09-30T13:40:56Z")));
-        assertThat(app.getUpdatedAt(), is(GitHubClient.parseInstant("2020-09-30T13:40:56Z")));
+        assertThat(app.getCreatedAt(), is(GitHubClient.parseDate("2020-09-30T13:40:56Z")));
+        assertThat(app.getUpdatedAt(), is(GitHubClient.parseDate("2020-09-30T13:40:56Z")));
         assertThat(app.getPermissions().size(), is(2));
         assertThat(app.getEvents().size(), is(0));
         assertThat(app.getInstallationsCount(), is((long) 1));
@@ -217,7 +213,7 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
         assertThat(appInstallation.getRequester().getId(), is((long) 195437694));
         assertThat(appInstallation.getRequester().getLogin(), is("kaladinstormblessed2"));
         assertThat(appInstallation.getRequester().getType(), is("User"));
-        assertThat(appInstallation.getCreatedAt(), is(GitHubClient.parseInstant("2025-01-17T15:50:51Z")));
+        assertThat(appInstallation.getCreatedAt(), is(GitHubClient.parseDate("2025-01-17T15:50:51Z")));
         assertThat(appInstallation.getNodeId(), is("MDMwOkludGVncmF0aW9uSW5zdGFsbGF0aW9uUmVxdWVzdDEwMzcyMDQ="));
     }
 
@@ -242,18 +238,15 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
-     * @throws ParseException
-     *             Signals that a ParseException has occurred.
      *
+     * @throws ParseException
+     *             Issue parsing date string.
      */
     @Test
     public void listInstallationsSince() throws IOException, ParseException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date localDate = simpleDateFormat.parse("2023-11-01");
-        Instant localInstant = LocalDate.parse("2023-11-01", DateTimeFormatter.ISO_LOCAL_DATE)
-                .atStartOfDay()
-                .toInstant(ZoneOffset.UTC);
         GHApp app = gitHub.getApp();
         List<GHAppInstallation> installations = app.listInstallations(localDate).toList();
         assertThat(installations.size(), is(1));
@@ -286,8 +279,8 @@ public class GHAppTest extends AbstractGHAppInstallationTest {
 
         List<GHEvent> events = Arrays.asList(GHEvent.PULL_REQUEST, GHEvent.PUSH);
         assertThat(appInstallation.getEvents(), containsInAnyOrder(events.toArray(new GHEvent[0])));
-        assertThat(appInstallation.getCreatedAt(), is(GitHubClient.parseInstant("2019-07-04T01:19:36.000Z")));
-        assertThat(appInstallation.getUpdatedAt(), is(GitHubClient.parseInstant("2019-07-30T22:48:09.000Z")));
+        assertThat(appInstallation.getCreatedAt(), is(GitHubClient.parseDate("2019-07-04T01:19:36.000Z")));
+        assertThat(appInstallation.getUpdatedAt(), is(GitHubClient.parseDate("2019-07-30T22:48:09.000Z")));
         assertThat(appInstallation.getSingleFileName(), nullValue());
     }
 

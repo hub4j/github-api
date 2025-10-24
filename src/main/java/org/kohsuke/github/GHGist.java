@@ -23,18 +23,18 @@ import java.util.Map.Entry;
  */
 public class GHGist extends GHObject {
 
+    @JsonProperty("public")
+    private boolean _public;
+
     private int comments;
 
-    private String commentsUrl;
+    private String comments_url;
 
     private String description;
 
     private final Map<String, GHGistFile> files;
 
-    private String forksUrl, commitsUrl, id, gitPullUrl, gitPushUrl, htmlUrl;
-
-    @JsonProperty("public")
-    private boolean isPublic;
+    private String forks_url, commits_url, id, git_pull_url, git_push_url, html_url;
 
     /** The owner. */
     final GHUser owner;
@@ -102,7 +102,7 @@ public class GHGist extends GHObject {
      * @return API URL of listing comments.
      */
     public String getCommentsUrl() {
-        return commentsUrl;
+        return comments_url;
     }
 
     /**
@@ -111,7 +111,7 @@ public class GHGist extends GHObject {
      * @return the commits url
      */
     public String getCommitsUrl() {
-        return commitsUrl;
+        return commits_url;
     }
 
     /**
@@ -149,7 +149,7 @@ public class GHGist extends GHObject {
      * @return the forks url
      */
     public String getForksUrl() {
-        return forksUrl;
+        return forks_url;
     }
 
     /**
@@ -168,7 +168,7 @@ public class GHGist extends GHObject {
      * @return URL like https://gist.github.com/gists/12345.git
      */
     public String getGitPullUrl() {
-        return gitPullUrl;
+        return git_pull_url;
     }
 
     /**
@@ -177,7 +177,7 @@ public class GHGist extends GHObject {
      * @return the git push url
      */
     public String getGitPushUrl() {
-        return gitPushUrl;
+        return git_push_url;
     }
 
     /**
@@ -186,7 +186,7 @@ public class GHGist extends GHObject {
      * @return the github html url
      */
     public URL getHtmlUrl() {
-        return GitHubClient.parseURL(htmlUrl);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -229,7 +229,7 @@ public class GHGist extends GHObject {
      * @return the boolean
      */
     public boolean isPublic() {
-        return isPublic;
+        return _public;
     }
 
     /**

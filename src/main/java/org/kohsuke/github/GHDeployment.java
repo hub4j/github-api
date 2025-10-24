@@ -27,31 +27,31 @@ public class GHDeployment extends GHObject {
     protected String environment;
 
     /** The original environment. */
-    protected String originalEnvironment;
+    protected String original_environment;
 
     /** The payload. */
     protected Object payload;
 
     /** The production environment. */
-    protected boolean productionEnvironment;
+    protected boolean production_environment;
 
     /** The ref. */
     protected String ref;
 
     /** The repository url. */
-    protected String repositoryUrl;
+    protected String repository_url;
 
     /** The sha. */
     protected String sha;
 
     /** The statuses url. */
-    protected String statusesUrl;
+    protected String statuses_url;
 
     /** The task. */
     protected String task;
 
     /** The transient environment. */
-    protected boolean transientEnvironment;
+    protected boolean transient_environment;
 
     /**
      * Create default GHDeployment instance
@@ -94,7 +94,7 @@ public class GHDeployment extends GHObject {
      * @return the original deployment environment
      */
     public String getOriginalEnvironment() {
-        return originalEnvironment;
+        return original_environment;
     }
 
     /**
@@ -141,7 +141,7 @@ public class GHDeployment extends GHObject {
      * @return the repository url
      */
     public URL getRepositoryUrl() {
-        return GitHubClient.parseURL(repositoryUrl);
+        return GitHubClient.parseURL(repository_url);
     }
 
     /**
@@ -159,7 +159,7 @@ public class GHDeployment extends GHObject {
      * @return the statuses url
      */
     public URL getStatusesUrl() {
-        return GitHubClient.parseURL(statusesUrl);
+        return GitHubClient.parseURL(statuses_url);
     }
 
     /**
@@ -177,7 +177,7 @@ public class GHDeployment extends GHObject {
      * @return the environment is used by end-users directly
      */
     public boolean isProductionEnvironment() {
-        return productionEnvironment;
+        return production_environment;
     }
 
     /**
@@ -187,7 +187,7 @@ public class GHDeployment extends GHObject {
      * @return the environment is transient
      */
     public boolean isTransientEnvironment() {
-        return transientEnvironment;
+        return transient_environment;
     }
 
     /**
@@ -197,7 +197,7 @@ public class GHDeployment extends GHObject {
      */
     public PagedIterable<GHDeploymentStatus> listStatuses() {
         return root().createRequest()
-                .withUrlPath(statusesUrl)
+                .withUrlPath(statuses_url)
                 .toIterable(GHDeploymentStatus[].class, item -> item.lateBind(owner));
     }
 

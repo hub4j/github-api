@@ -1,0 +1,11 @@
+[
+  {
+    "id": 2806274122,
+    "node_id": "MDU6TGFiZWwyODA2Mjc0MTIy",
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/labels/addLabelsConcurrencyIssue_label_name_2",
+    "name": "addLabelsConcurrencyIssue_label_name_2",
+    "color": "ededed",
+    "default": false,
+    "description": null
+  }
+]

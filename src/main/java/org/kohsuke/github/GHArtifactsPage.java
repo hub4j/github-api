@@ -10,7 +10,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
         justification = "JSON API")
 class GHArtifactsPage {
     private GHArtifact[] artifacts;
-    private int totalCount;
+    private int total_count;
 
     /**
      * Gets the total count.
@@ -18,7 +18,7 @@ class GHArtifactsPage {
      * @return the total count
      */
     public int getTotalCount() {
-        return totalCount;
+        return total_count;
     }
 
     /**

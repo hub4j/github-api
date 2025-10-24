@@ -23,12 +23,10 @@
  */
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.Instant;
 import java.util.Date;
 
 import javax.annotation.CheckForNull;
@@ -45,11 +43,11 @@ public class GHPullRequestReview extends GHObject {
 
     private String body;
 
-    private String commitId;
+    private String commit_id;
 
-    private String htmlUrl;
+    private String html_url;
     private GHPullRequestReviewState state;
-    private String submittedAt;
+    private String submitted_at;
     private GHUser user;
     /** The owner. */
     GHPullRequest owner;
@@ -102,7 +100,7 @@ public class GHPullRequestReview extends GHObject {
      * @return the commit id
      */
     public String getCommitId() {
-        return commitId;
+        return commit_id;
     }
 
     /**
@@ -113,8 +111,7 @@ public class GHPullRequestReview extends GHObject {
      *             Signals that an I/O exception has occurred.
      */
     @Override
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getCreatedAt() throws IOException {
+    public Date getCreatedAt() throws IOException {
         return getSubmittedAt();
     }
 
@@ -124,7 +121,7 @@ public class GHPullRequestReview extends GHObject {
      * @return the html url
      */
     public URL getHtmlUrl() {
-        return GitHubClient.parseURL(htmlUrl);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -152,9 +149,8 @@ public class GHPullRequestReview extends GHObject {
      *
      * @return the submitted at
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getSubmittedAt() {
-        return GitHubClient.parseInstant(submittedAt);
+    public Date getSubmittedAt() {
+        return GitHubClient.parseDate(submitted_at);
     }
 
     /**

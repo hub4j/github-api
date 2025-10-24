@@ -1,0 +1,98 @@
+{
+  "sha": "8ae38db0ea5837313ab5f39d43a6f73de3bd9000",
+  "node_id": "MDY6Q29tbWl0MzQyMjYwMTo4YWUzOGRiMGVhNTgzNzMxM2FiNWYzOWQ0M2E2ZjczZGUzYmQ5MDAw",
+  "commit": {
+    "author": {
+      "name": "Kohsuke Kawaguchi",
+      "email": "kk@kohsuke.org",
+      "date": "2012-04-24T22:54:20Z"
+    },
+    "committer": {
+      "name": "Kohsuke Kawaguchi",
+      "email": "kk@kohsuke.org",
+      "date": "2012-04-24T22:54:20Z"
+    },
+    "message": "deleted",
+    "tree": {
+      "sha": "7499e2f81fdaa0f861d522218424636032ee0c39",
+      "url": "https://api.github.com/repos/kohsuke/sandbox-ant/git/trees/7499e2f81fdaa0f861d522218424636032ee0c39"
+    },
+    "url": "https://api.github.com/repos/kohsuke/sandbox-ant/git/commits/8ae38db0ea5837313ab5f39d43a6f73de3bd9000",
+    "comment_count": 30,
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null
+    }
+  },
+  "url": "https://api.github.com/repos/kohsuke/sandbox-ant/commits/8ae38db0ea5837313ab5f39d43a6f73de3bd9000",
+  "html_url": "https://github.com/kohsuke/sandbox-ant/commit/8ae38db0ea5837313ab5f39d43a6f73de3bd9000",
+  "comments_url": "https://api.github.com/repos/kohsuke/sandbox-ant/commits/8ae38db0ea5837313ab5f39d43a6f73de3bd9000/comments",
+  "author": {
+    "login": "kohsuke",
+    "id": 50003,
+    "node_id": "MDQ6VXNlcjUwMDAz",
+    "avatar_url": "https://avatars.githubusercontent.com/u/50003?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/kohsuke",
+    "html_url": "https://github.com/kohsuke",
+    "followers_url": "https://api.github.com/users/kohsuke/followers",
+    "following_url": "https://api.github.com/users/kohsuke/following{/other_user}",
+    "gists_url": "https://api.github.com/users/kohsuke/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/kohsuke/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/kohsuke/subscriptions",
+    "organizations_url": "https://api.github.com/users/kohsuke/orgs",
+    "repos_url": "https://api.github.com/users/kohsuke/repos",
+    "events_url": "https://api.github.com/users/kohsuke/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/kohsuke/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "kohsuke",
+    "id": 50003,
+    "node_id": "MDQ6VXNlcjUwMDAz",
+    "avatar_url": "https://avatars.githubusercontent.com/u/50003?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/kohsuke",
+    "html_url": "https://github.com/kohsuke",
+    "followers_url": "https://api.github.com/users/kohsuke/followers",
+    "following_url": "https://api.github.com/users/kohsuke/following{/other_user}",
+    "gists_url": "https://api.github.com/users/kohsuke/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/kohsuke/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/kohsuke/subscriptions",
+    "organizations_url": "https://api.github.com/users/kohsuke/orgs",
+    "repos_url": "https://api.github.com/users/kohsuke/repos",
+    "events_url": "https://api.github.com/users/kohsuke/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/kohsuke/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "c6e9f4865e57d52992c86111858d289d36b6cf7d",
+      "url": "https://api.github.com/repos/kohsuke/sandbox-ant/commits/c6e9f4865e57d52992c86111858d289d36b6cf7d",
+      "html_url": "https://github.com/kohsuke/sandbox-ant/commit/c6e9f4865e57d52992c86111858d289d36b6cf7d"
+    }
+  ],
+  "stats": {
+    "total": 2,
+    "additions": 0,
+    "deletions": 2
+  },
+  "files": [
+    {
+      "sha": "5d8a5566f0e8b2794b60559ecaa3cf8986e23d47",
+      "filename": "a",
+      "status": "removed",
+      "additions": 0,
+      "deletions": 2,
+      "changes": 2,
+      "blob_url": "https://github.com/kohsuke/sandbox-ant/blob/c6e9f4865e57d52992c86111858d289d36b6cf7d/a",
+      "raw_url": "https://github.com/kohsuke/sandbox-ant/raw/c6e9f4865e57d52992c86111858d289d36b6cf7d/a",
+      "contents_url": "https://api.github.com/repos/kohsuke/sandbox-ant/contents/a?ref=c6e9f4865e57d52992c86111858d289d36b6cf7d",
+      "patch": "@@ -1,2 +0,0 @@\n-abc\n-abc"
+    }
+  ]
+}

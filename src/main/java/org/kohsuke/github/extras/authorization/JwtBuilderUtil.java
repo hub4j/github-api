@@ -52,8 +52,6 @@ final class JwtBuilderUtil {
             SignatureAlgorithm rs256 = Jwts.SIG.RS256;
 
             JwtBuilder jwtBuilder = Jwts.builder();
-            // jjwt uses the legacy java date-time api
-            // see https://github.com/jwtk/jjwt/issues/235 for future support for java 8 date-time api
             jwtBuilder = jwtBuilder.issuedAt(Date.from(issuedAt))
                     .expiration(Date.from(expiration))
                     .issuer(applicationId)
@@ -84,12 +82,8 @@ final class JwtBuilderUtil {
             JwtBuilder jwtBuilder = Jwts.builder();
             Class<?> jwtReflectionClass = jwtBuilder.getClass();
 
-            // jjwt uses the legacy java date-time api
-            // see https://github.com/jwtk/jjwt/issues/235 for future support for java 8 date-time api
-            // noinspection UseOfObsoleteDateTimeApi
             setIssuedAtMethod = jwtReflectionClass.getMethod("setIssuedAt", Date.class);
             setIssuerMethod = jwtReflectionClass.getMethod("setIssuer", String.class);
-            // noinspection UseOfObsoleteDateTimeApi
             setExpirationMethod = jwtReflectionClass.getMethod("setExpiration", Date.class);
             Class<?> signatureAlgorithmClass = Class.forName("io.jsonwebtoken.SignatureAlgorithm");
             rs256SignatureAlgorithm = createEnumInstance(signatureAlgorithmClass, "RS256");
@@ -126,8 +120,6 @@ final class JwtBuilderUtil {
                 PrivateKey privateKey) throws IllegalAccessException, InvocationTargetException {
             JwtBuilder jwtBuilder = Jwts.builder();
             Object builderObj = jwtBuilder;
-            // jjwt uses the legacy java date-time api
-            // see https://github.com/jwtk/jjwt/issues/235 for future support for java 8 date-time api
             builderObj = setIssuedAtMethod.invoke(builderObj, Date.from(issuedAt));
             builderObj = setExpirationMethod.invoke(builderObj, Date.from(expiration));
             builderObj = setIssuerMethod.invoke(builderObj, applicationId);

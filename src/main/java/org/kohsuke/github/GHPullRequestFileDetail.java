@@ -39,13 +39,13 @@ public class GHPullRequestFileDetail {
     int additions;
 
     /** The blob url. */
-    String blobUrl;
+    String blob_url;
 
     /** The changes. */
     int changes;
 
     /** The contents url. */
-    String contentsUrl;
+    String contents_url;
 
     /** The deletions. */
     int deletions;
@@ -57,10 +57,10 @@ public class GHPullRequestFileDetail {
     String patch;
 
     /** The previous filename. */
-    String previousFilename;
+    String previous_filename;
 
     /** The raw url. */
-    String rawUrl;
+    String raw_url;
 
     /** The sha. */
     String sha;
@@ -89,7 +89,7 @@ public class GHPullRequestFileDetail {
      * @return the blob url
      */
     public URL getBlobUrl() {
-        return GitHubClient.parseURL(blobUrl);
+        return GitHubClient.parseURL(blob_url);
     }
 
     /**
@@ -107,7 +107,7 @@ public class GHPullRequestFileDetail {
      * @return the contents url
      */
     public URL getContentsUrl() {
-        return GitHubClient.parseURL(contentsUrl);
+        return GitHubClient.parseURL(contents_url);
     }
 
     /**
@@ -143,7 +143,7 @@ public class GHPullRequestFileDetail {
      * @return the previous filename
      */
     public String getPreviousFilename() {
-        return previousFilename;
+        return previous_filename;
     }
 
     /**
@@ -152,7 +152,7 @@ public class GHPullRequestFileDetail {
      * @return the raw url
      */
     public URL getRawUrl() {
-        return GitHubClient.parseURL(rawUrl);
+        return GitHubClient.parseURL(raw_url);
     }
 
     /**

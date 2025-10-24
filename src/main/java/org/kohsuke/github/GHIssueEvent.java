@@ -1,9 +1,7 @@
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.time.Instant;
 import java.util.Date;
 
 // TODO: Auto-generated Javadoc
@@ -18,15 +16,15 @@ public class GHIssueEvent extends GitHubInteractiveObject {
     private GHUser actor;
 
     private GHUser assignee;
-    private String commitId;
-    private String commitUrl;
-    private String createdAt;
+    private String commit_id;
+    private String commit_url;
+    private String created_at;
     private String event;
     private long id;
     private GHIssue issue;
     private GHLabel label;
     private GHMilestone milestone;
-    private String nodeId;
+    private String node_id;
     private GHIssueRename rename;
     private GHUser requestedReviewer;
     private GHUser reviewRequester;
@@ -65,7 +63,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      * @return the commit id
      */
     public String getCommitId() {
-        return commitId;
+        return commit_id;
     }
 
     /**
@@ -74,7 +72,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      * @return the commit url
      */
     public String getCommitUrl() {
-        return commitUrl;
+        return commit_url;
     }
 
     /**
@@ -82,9 +80,8 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      *
      * @return the created at
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getCreatedAt() {
-        return GitHubClient.parseInstant(createdAt);
+    public Date getCreatedAt() {
+        return GitHubClient.parseDate(created_at);
     }
 
     /**
@@ -143,7 +140,7 @@ public class GHIssueEvent extends GitHubInteractiveObject {
      * @return the node id
      */
     public String getNodeId() {
-        return nodeId;
+        return node_id;
     }
 
     /**

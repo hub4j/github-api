@@ -219,8 +219,8 @@ public class GHCompare {
             };
         }
     }
-    private int aheadBy, behindBy, totalCommits;
-    private Commit baseCommit, mergeBaseCommit;
+    private int ahead_by, behind_by, total_commits;
+    private Commit base_commit, merge_base_commit;
 
     private Commit[] commits;
 
@@ -230,7 +230,7 @@ public class GHCompare {
 
     private Status status;
 
-    private String url, htmlUrl, permalinkUrl, diffUrl, patchUrl;
+    private String url, html_url, permalink_url, diff_url, patch_url;
 
     @JacksonInject("GHCompare_usePaginatedCommits")
     private boolean usePaginatedCommits;
@@ -247,7 +247,7 @@ public class GHCompare {
      * @return the ahead by
      */
     public int getAheadBy() {
-        return aheadBy;
+        return ahead_by;
     }
 
     /**
@@ -257,7 +257,7 @@ public class GHCompare {
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public Commit getBaseCommit() {
-        return baseCommit;
+        return base_commit;
     }
 
     /**
@@ -266,7 +266,7 @@ public class GHCompare {
      * @return the behind by
      */
     public int getBehindBy() {
-        return behindBy;
+        return behind_by;
     }
 
     /**
@@ -297,7 +297,7 @@ public class GHCompare {
      * @return the diff url
      */
     public URL getDiffUrl() {
-        return GitHubClient.parseURL(diffUrl);
+        return GitHubClient.parseURL(diff_url);
     }
 
     /**
@@ -321,7 +321,7 @@ public class GHCompare {
      * @return the html url
      */
     public URL getHtmlUrl() {
-        return GitHubClient.parseURL(htmlUrl);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -331,7 +331,7 @@ public class GHCompare {
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public Commit getMergeBaseCommit() {
-        return mergeBaseCommit;
+        return merge_base_commit;
     }
 
     /**
@@ -340,7 +340,7 @@ public class GHCompare {
      * @return the patch url
      */
     public URL getPatchUrl() {
-        return GitHubClient.parseURL(patchUrl);
+        return GitHubClient.parseURL(patch_url);
     }
 
     /**
@@ -349,7 +349,7 @@ public class GHCompare {
      * @return the permalink url
      */
     public URL getPermalinkUrl() {
-        return GitHubClient.parseURL(permalinkUrl);
+        return GitHubClient.parseURL(permalink_url);
     }
 
     /**
@@ -367,7 +367,7 @@ public class GHCompare {
      * @return the total commits
      */
     public int getTotalCommits() {
-        return totalCommits;
+        return total_commits;
     }
 
     /**
@@ -420,8 +420,8 @@ public class GHCompare {
         for (Commit commit : commits) {
             commit.wrapUp(owner);
         }
-        mergeBaseCommit.wrapUp(owner);
-        baseCommit.wrapUp(owner);
+        merge_base_commit.wrapUp(owner);
+        base_commit.wrapUp(owner);
         return this;
     }
 }

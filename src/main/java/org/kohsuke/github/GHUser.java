@@ -23,10 +23,7 @@
  */
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
-
 import java.io.IOException;
-import java.time.Instant;
 import java.util.*;
 
 // TODO: Auto-generated Javadoc
@@ -37,11 +34,11 @@ import java.util.*;
  */
 public class GHUser extends GHPerson {
 
-    /** The suspendedAt */
+    /** The suspended_at */
     private String suspendedAt;
 
     /** The ldap dn. */
-    protected String ldapDn;
+    protected String ldap_dn;
 
     /**
      * Create default GHUser instance
@@ -129,7 +126,7 @@ public class GHUser extends GHPerson {
      */
     public Optional<String> getLdapDn() throws IOException {
         super.populate();
-        return Optional.ofNullable(ldapDn);
+        return Optional.ofNullable(ldap_dn);
     }
 
     /**
@@ -159,10 +156,9 @@ public class GHUser extends GHPerson {
      * @throws IOException
      *             on error
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getSuspendedAt() throws IOException {
+    public Date getSuspendedAt() throws IOException {
         super.populate();
-        return GitHubClient.parseInstant(suspendedAt);
+        return GitHubClient.parseDate(suspendedAt);
     }
 
     /**

@@ -1,11 +1,8 @@
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.time.Instant;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
@@ -21,25 +18,25 @@ import java.util.TreeMap;
 public abstract class GHPerson extends GHObject {
 
     /** The public gists. */
-    protected int followers, following, publicRepos, publicGists;
+    protected int followers, following, public_repos, public_gists;
 
     /** The html url. */
-    protected String htmlUrl;
+    protected String html_url;
 
     /** The twitter username. */
     // other fields (that only show up in full data)
-    protected String location, blog, email, bio, name, company, type, twitterUsername;
+    protected String location, blog, email, bio, name, company, type, twitter_username;
 
     /** The avatar url. */
     // core data fields that exist even for "small" user data (such as the user info in pull request)
-    protected String login, avatarUrl;
+    protected String login, avatar_url;
 
     /** The hireable. */
-    protected boolean siteAdmin, hireable;
+    protected boolean site_admin, hireable;
 
     /** The total private repos. */
     // other fields (that only show up in full data) that require privileged scope
-    protected Integer totalPrivateRepos;
+    protected Integer total_private_repos;
 
     /**
      * Create default GHPerson instance
@@ -53,7 +50,7 @@ public abstract class GHPerson extends GHObject {
      * @return the avatar url
      */
     public String getAvatarUrl() {
-        return avatarUrl;
+        return avatar_url;
     }
 
     /**
@@ -87,8 +84,7 @@ public abstract class GHPerson extends GHObject {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getCreatedAt() throws IOException {
+    public Date getCreatedAt() throws IOException {
         populate();
         return super.getCreatedAt();
     }
@@ -135,7 +131,7 @@ public abstract class GHPerson extends GHObject {
      * @return the html url
      */
     public URL getHtmlUrl() {
-        return GitHubClient.parseURL(htmlUrl);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -180,7 +176,7 @@ public abstract class GHPerson extends GHObject {
      */
     public int getPublicGistCount() throws IOException {
         populate();
-        return publicGists;
+        return public_gists;
     }
 
     /**
@@ -192,7 +188,7 @@ public abstract class GHPerson extends GHObject {
      */
     public int getPublicRepoCount() throws IOException {
         populate();
-        return publicRepos;
+        return public_repos;
     }
 
     /**
@@ -237,7 +233,7 @@ public abstract class GHPerson extends GHObject {
      */
     public Optional<Integer> getTotalPrivateRepoCount() throws IOException {
         populate();
-        return Optional.ofNullable(totalPrivateRepos);
+        return Optional.ofNullable(total_private_repos);
     }
 
     /**
@@ -249,7 +245,7 @@ public abstract class GHPerson extends GHObject {
      */
     public String getTwitterUsername() throws IOException {
         populate();
-        return twitterUsername;
+        return twitter_username;
     }
 
     /**
@@ -273,22 +269,21 @@ public abstract class GHPerson extends GHObject {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getUpdatedAt() throws IOException {
+    public Date getUpdatedAt() throws IOException {
         populate();
         return super.getUpdatedAt();
     }
 
     /**
-     * Gets the siteAdmin field.
+     * Gets the site_admin field.
      *
-     * @return the siteAdmin field
+     * @return the site_admin field
      * @throws IOException
      *             the io exception
      */
     public boolean isSiteAdmin() throws IOException {
         populate();
-        return siteAdmin;
+        return site_admin;
     }
 
     /**

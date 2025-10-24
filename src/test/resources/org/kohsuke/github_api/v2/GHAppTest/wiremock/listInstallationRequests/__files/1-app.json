@@ -1,0 +1,42 @@
+{
+  "id": 986532,
+  "client_id": "Iv23liTxF5NAu46u9qto",
+  "slug": "anuj-github-app",
+  "node_id": "A_kwDOB7K2ac4ADw2k",
+  "owner": {
+    "login": "kaladinstormblessed",
+    "id": 129152617,
+    "node_id": "U_kgDOB7K2aQ",
+    "avatar_url": "https://avatars.githubusercontent.com/u/129152617?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/kaladinstormblessed",
+    "html_url": "https://github.com/kaladinstormblessed",
+    "followers_url": "https://api.github.com/users/kaladinstormblessed/followers",
+    "following_url": "https://api.github.com/users/kaladinstormblessed/following{/other_user}",
+    "gists_url": "https://api.github.com/users/kaladinstormblessed/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/kaladinstormblessed/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/kaladinstormblessed/subscriptions",
+    "organizations_url": "https://api.github.com/users/kaladinstormblessed/orgs",
+    "repos_url": "https://api.github.com/users/kaladinstormblessed/repos",
+    "events_url": "https://api.github.com/users/kaladinstormblessed/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/kaladinstormblessed/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "name": "anuj-github-app",
+  "description": "",
+  "external_url": "https://cloud.cloud",
+  "html_url": "https://github.com/apps/anuj-github-app",
+  "created_at": "2024-09-03T07:14:38Z",
+  "updated_at": "2025-01-17T10:52:47Z",
+  "permissions": {
+    "administration": "write",
+    "contents": "write",
+    "members": "read",
+    "metadata": "read",
+    "pull_requests": "read"
+  },
+  "events": [],
+  "installations_count": 6
+}

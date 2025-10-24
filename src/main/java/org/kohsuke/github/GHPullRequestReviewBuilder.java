@@ -68,13 +68,13 @@ public class GHPullRequestReviewBuilder {
         private final String body;
         private final int line;
         private final String path;
-        private final int startLine;
+        private final int start_line;
 
         MultilineDraftReviewComment(final String body, final String path, final int startLine, final int line) {
             this.body = body;
             this.path = path;
             this.line = line;
-            this.startLine = startLine;
+            this.start_line = startLine;
         }
 
         public String getBody() {
@@ -100,7 +100,7 @@ public class GHPullRequestReviewBuilder {
          * @return the start line of the comment.
          */
         public int getStartLine() {
-            return startLine;
+            return start_line;
         }
     }
 

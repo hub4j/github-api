@@ -10,7 +10,7 @@ package org.kohsuke.github;
  */
 public class GHGistFile {
 
-    private String rawUrl, type, language, content;
+    private String raw_url, type, language, content;
 
     private int size;
 
@@ -56,7 +56,7 @@ public class GHGistFile {
      * @return the raw url
      */
     public String getRawUrl() {
-        return rawUrl;
+        return raw_url;
     }
 
     /**

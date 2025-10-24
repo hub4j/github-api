@@ -1,0 +1,12 @@
+{
+  "id": 6820790,
+  "node_id": "MDg6V29ya2Zsb3c2ODIwNzkw",
+  "name": "Fast workflow",
+  "path": ".github/workflows/fast-workflow.yml",
+  "state": "active",
+  "created_at": "2021-03-17T11:53:12.000+01:00",
+  "updated_at": "2021-03-17T11:53:12.000+01:00",
+  "url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/actions/workflows/6820790",
+  "html_url": "https://github.com/hub4j-test-org/GHWorkflowRunTest/blob/main/.github/workflows/fast-workflow.yml",
+  "badge_url": "https://github.com/hub4j-test-org/GHWorkflowRunTest/workflows/Fast%20workflow/badge.svg"
+}

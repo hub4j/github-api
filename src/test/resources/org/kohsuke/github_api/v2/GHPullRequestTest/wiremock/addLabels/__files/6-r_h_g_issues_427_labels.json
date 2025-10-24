@@ -1,0 +1,29 @@
+[
+  {
+    "id": 2806272360,
+    "node_id": "MDU6TGFiZWwyODA2MjcyMzYw",
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/labels/addLabels_label_name_1",
+    "name": "addLabels_label_name_1",
+    "color": "ededed",
+    "default": false,
+    "description": null
+  },
+  {
+    "id": 2806272397,
+    "node_id": "MDU6TGFiZWwyODA2MjcyMzk3",
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/labels/addLabels_label_name_2",
+    "name": "addLabels_label_name_2",
+    "color": "ededed",
+    "default": false,
+    "description": null
+  },
+  {
+    "id": 2809132787,
+    "node_id": "MDU6TGFiZWwyODA5MTMyNzg3",
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/labels/addLabels_label_name_3",
+    "name": "addLabels_label_name_3",
+    "color": "ededed",
+    "default": false,
+    "description": null
+  }
+]

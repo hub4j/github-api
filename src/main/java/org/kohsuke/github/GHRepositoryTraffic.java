@@ -1,8 +1,5 @@
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
-
-import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +7,7 @@ import java.util.List;
 /**
  * The type GHRepositoryTraffic.
  */
-public abstract class GHRepositoryTraffic extends GitHubBridgeAdapterObject implements TrafficInfo {
+public abstract class GHRepositoryTraffic implements TrafficInfo {
     /**
      * The type DailyInfo.
      */
@@ -55,9 +52,8 @@ public abstract class GHRepositoryTraffic extends GitHubBridgeAdapterObject impl
          *
          * @return the timestamp
          */
-        @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-        public Instant getTimestamp() {
-            return GitHubClient.parseInstant(timestamp);
+        public Date getTimestamp() {
+            return GitHubClient.parseDate(timestamp);
         }
 
         /**

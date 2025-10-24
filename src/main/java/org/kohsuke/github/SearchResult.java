@@ -11,10 +11,10 @@ package org.kohsuke.github;
 abstract class SearchResult<T> {
 
     /** The incomplete results. */
-    boolean incompleteResults;
+    boolean incomplete_results;
 
     /** The total count. */
-    int totalCount;
+    int total_count;
 
     /**
      * Wraps up the retrieved object and return them. Only called once.

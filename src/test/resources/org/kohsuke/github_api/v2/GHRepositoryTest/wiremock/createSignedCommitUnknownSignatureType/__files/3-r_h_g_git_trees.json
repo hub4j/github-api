@@ -1,0 +1,15 @@
+{
+  "sha": "496d6428b9cf92981dc9495211e6e1120fb6f2ba",
+  "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/trees/496d6428b9cf92981dc9495211e6e1120fb6f2ba",
+  "tree": [
+    {
+      "path": "a",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0,
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    }
+  ],
+  "truncated": false
+}

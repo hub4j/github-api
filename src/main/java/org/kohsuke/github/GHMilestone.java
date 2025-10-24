@@ -1,11 +1,9 @@
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.Instant;
 import java.util.Date;
 import java.util.Locale;
 
@@ -17,12 +15,12 @@ import java.util.Locale;
  */
 public class GHMilestone extends GHObject {
 
-    private int closedIssues, openIssues, number;
+    private int closed_issues, open_issues, number;
 
-    private String state, dueOn, title, description, htmlUrl;
+    private String state, due_on, title, description, html_url;
 
     /** The closed at. */
-    protected String closedAt;
+    protected String closed_at;
     /** The creator. */
     GHUser creator;
     /** The owner. */
@@ -59,9 +57,8 @@ public class GHMilestone extends GHObject {
      *
      * @return the closed at
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getClosedAt() {
-        return GitHubClient.parseInstant(closedAt);
+    public Date getClosedAt() {
+        return GitHubClient.parseDate(closed_at);
     }
 
     /**
@@ -70,7 +67,7 @@ public class GHMilestone extends GHObject {
      * @return the closed issues
      */
     public int getClosedIssues() {
-        return closedIssues;
+        return closed_issues;
     }
 
     /**
@@ -96,9 +93,10 @@ public class GHMilestone extends GHObject {
      *
      * @return the due on
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getDueOn() {
-        return GitHubClient.parseInstant(dueOn);
+    public Date getDueOn() {
+        if (due_on == null)
+            return null;
+        return GitHubClient.parseDate(due_on);
     }
 
     /**
@@ -107,7 +105,7 @@ public class GHMilestone extends GHObject {
      * @return the html url
      */
     public URL getHtmlUrl() {
-        return GitHubClient.parseURL(htmlUrl);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -125,7 +123,7 @@ public class GHMilestone extends GHObject {
      * @return the open issues
      */
     public int getOpenIssues() {
-        return openIssues;
+        return open_issues;
     }
 
     /**
@@ -185,23 +183,9 @@ public class GHMilestone extends GHObject {
      *            the due on
      * @throws IOException
      *             the io exception
-     * @deprecated Use {@link #setDueOn(Instant)}
      */
-    @Deprecated
     public void setDueOn(Date dueOn) throws IOException {
-        setDueOn(GitHubClient.toInstantOrNull(dueOn));
-    }
-
-    /**
-     * Sets due on.
-     *
-     * @param dueOn
-     *            the due on
-     * @throws IOException
-     *             the io exception
-     */
-    public void setDueOn(Instant dueOn) throws IOException {
-        edit("due_on", GitHubClient.printInstant(dueOn));
+        edit("due_on", GitHubClient.printDate(dueOn));
     }
 
     /**

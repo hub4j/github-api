@@ -9,8 +9,10 @@ import org.kohsuke.github.GHProjectsV2ItemChanges.FieldType;
 import org.kohsuke.github.GHTeam.Privacy;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.List;
+import java.util.TimeZone;
 
 import static org.hamcrest.Matchers.aMapWithSize;
 import static org.hamcrest.Matchers.contains;
@@ -324,14 +326,14 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(category.getEmoji(), is(":pray:"));
         assertThat(category.getName(), is("Q&A"));
         assertThat(category.getDescription(), is("Ask the community for help"));
-        assertThat(category.getCreatedAt().toEpochMilli(), is(1636991431000L));
-        assertThat(category.getUpdatedAt().toEpochMilli(), is(1636991431000L));
+        assertThat(category.getCreatedAt().getTime(), is(1636991431000L));
+        assertThat(category.getUpdatedAt().getTime(), is(1636991431000L));
         assertThat(category.getSlug(), is("q-a"));
         assertThat(category.isAnswerable(), is(true));
 
         assertThat(discussion.getAnswerHtmlUrl().toString(),
                 is("https://github.com/gsmet/quarkus-bot-java-playground/discussions/78#discussioncomment-1681242"));
-        assertThat(discussion.getAnswerChosenAt().toEpochMilli(), is(1637585047000L));
+        assertThat(discussion.getAnswerChosenAt().getTime(), is(1637585047000L));
         assertThat(discussion.getAnswerChosenBy().getLogin(), is("gsmet"));
 
         assertThat(discussion.getHtmlUrl().toString(),
@@ -348,8 +350,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(discussion.getState(), is(GHRepositoryDiscussion.State.OPEN));
         assertThat(discussion.isLocked(), is(false));
         assertThat(discussion.getComments(), is(1));
-        assertThat(discussion.getCreatedAt().toEpochMilli(), is(1637584949000L));
-        assertThat(discussion.getUpdatedAt().toEpochMilli(), is(1637585047000L));
+        assertThat(discussion.getCreatedAt().getTime(), is(1637584949000L));
+        assertThat(discussion.getUpdatedAt().getTime(), is(1637585047000L));
         assertThat(discussion.getAuthorAssociation(), is(GHCommentAuthorAssociation.OWNER));
         assertThat(discussion.getActiveLockReason(), is(nullValue()));
         assertThat(discussion.getBody(), is("Body of discussion."));
@@ -379,8 +381,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(category.getEmoji(), is(":pray:"));
         assertThat(category.getName(), is("Q&A"));
         assertThat(category.getDescription(), is("Ask the community for help"));
-        assertThat(category.getCreatedAt().toEpochMilli(), is(1636991431000L));
-        assertThat(category.getUpdatedAt().toEpochMilli(), is(1636991431000L));
+        assertThat(category.getCreatedAt().getTime(), is(1636991431000L));
+        assertThat(category.getUpdatedAt().getTime(), is(1636991431000L));
         assertThat(category.getSlug(), is("q-a"));
         assertThat(category.isAnswerable(), is(true));
 
@@ -402,8 +404,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(discussion.getState(), is(GHRepositoryDiscussion.State.OPEN));
         assertThat(discussion.isLocked(), is(false));
         assertThat(discussion.getComments(), is(1));
-        assertThat(discussion.getCreatedAt().toEpochMilli(), is(1705586390000L));
-        assertThat(discussion.getUpdatedAt().toEpochMilli(), is(1705586399000L));
+        assertThat(discussion.getCreatedAt().getTime(), is(1705586390000L));
+        assertThat(discussion.getUpdatedAt().getTime(), is(1705586399000L));
         assertThat(discussion.getAuthorAssociation(), is(GHCommentAuthorAssociation.OWNER));
         assertThat(discussion.getActiveLockReason(), is(nullValue()));
         assertThat(discussion.getBody(), is("Test question"));
@@ -415,8 +417,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(comment.getId(), is(8169669L));
         assertThat(comment.getNodeId(), is("DC_kwDOEq3cwc4AfKjF"));
         assertThat(comment.getAuthorAssociation(), is(GHCommentAuthorAssociation.OWNER));
-        assertThat(comment.getCreatedAt().toEpochMilli(), is(1705586398000L));
-        assertThat(comment.getUpdatedAt().toEpochMilli(), is(1705586399000L));
+        assertThat(comment.getCreatedAt().getTime(), is(1705586398000L));
+        assertThat(comment.getUpdatedAt().getTime(), is(1705586399000L));
         assertThat(comment.getBody(), is("Test comment."));
         assertThat(comment.getUser().getLogin(), is("gsmet"));
         assertThat(comment.getUser().getId(), is(1279749L));
@@ -449,8 +451,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(category.getEmoji(), is(":pray:"));
         assertThat(category.getName(), is("Q&A"));
         assertThat(category.getDescription(), is("Ask the community for help"));
-        assertThat(category.getCreatedAt().toEpochMilli(), is(1636991431000L));
-        assertThat(category.getUpdatedAt().toEpochMilli(), is(1636991431000L));
+        assertThat(category.getCreatedAt().getTime(), is(1636991431000L));
+        assertThat(category.getUpdatedAt().getTime(), is(1636991431000L));
         assertThat(category.getSlug(), is("q-a"));
         assertThat(category.isAnswerable(), is(true));
 
@@ -472,8 +474,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(discussion.getState(), is(GHRepositoryDiscussion.State.OPEN));
         assertThat(discussion.isLocked(), is(false));
         assertThat(discussion.getComments(), is(0));
-        assertThat(discussion.getCreatedAt().toEpochMilli(), is(1637584949000L));
-        assertThat(discussion.getUpdatedAt().toEpochMilli(), is(1637584949000L));
+        assertThat(discussion.getCreatedAt().getTime(), is(1637584949000L));
+        assertThat(discussion.getUpdatedAt().getTime(), is(1637584949000L));
         assertThat(discussion.getAuthorAssociation(), is(GHCommentAuthorAssociation.OWNER));
         assertThat(discussion.getActiveLockReason(), is(nullValue()));
         assertThat(discussion.getBody(), is("Body of discussion."));
@@ -523,8 +525,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(category.getEmoji(), is(":pray:"));
         assertThat(category.getName(), is("Q&A"));
         assertThat(category.getDescription(), is("Ask the community for help"));
-        assertThat(category.getCreatedAt().toEpochMilli(), is(1636991431000L));
-        assertThat(category.getUpdatedAt().toEpochMilli(), is(1636991431000L));
+        assertThat(category.getCreatedAt().getTime(), is(1636991431000L));
+        assertThat(category.getUpdatedAt().getTime(), is(1636991431000L));
         assertThat(category.getSlug(), is("q-a"));
         assertThat(category.isAnswerable(), is(true));
 
@@ -546,8 +548,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(discussion.getState(), is(GHRepositoryDiscussion.State.OPEN));
         assertThat(discussion.isLocked(), is(false));
         assertThat(discussion.getComments(), is(0));
-        assertThat(discussion.getCreatedAt().toEpochMilli(), is(1637584949000L));
-        assertThat(discussion.getUpdatedAt().toEpochMilli(), is(1637584961000L));
+        assertThat(discussion.getCreatedAt().getTime(), is(1637584949000L));
+        assertThat(discussion.getUpdatedAt().getTime(), is(1637584961000L));
         assertThat(discussion.getAuthorAssociation(), is(GHCommentAuthorAssociation.OWNER));
         assertThat(discussion.getActiveLockReason(), is(nullValue()));
         assertThat(discussion.getBody(), is("Body of discussion."));
@@ -613,8 +615,6 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getIssue().getLabels().size(), is(1));
         assertThat(event.getIssue().getLabels().iterator().next().getName(), is("bug"));
         assertThat(event.getComment().getUser().getLogin(), is("baxterthehacker"));
-        assertThat(event.getComment().getBody(), is("You are totally right! I'll get this fixed right away."));
-        assertThat(event.getComment().getAuthorAssociation(), equalTo(GHCommentAuthorAssociation.UNKNOWN));
         assertThat(event.getComment().getBody(), is("You are totally right! I'll get this fixed right away."));
         assertThat(event.getRepository().getName(), is("public-repo"));
         assertThat(event.getRepository().getOwner().getLogin(), is("baxterthehacker"));
@@ -917,12 +917,12 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(projectsV2ItemPayload.getAction(), is("archived"));
 
         assertThat(projectsV2ItemPayload.getProjectsV2Item().getId(), is(8083794L));
-        assertThat(projectsV2ItemPayload.getProjectsV2Item().getCreatedAt().toEpochMilli(), is(1659532431000L));
-        assertThat(projectsV2ItemPayload.getProjectsV2Item().getUpdatedAt().toEpochMilli(), is(1660086629000L));
-        assertThat(projectsV2ItemPayload.getProjectsV2Item().getArchivedAt().toEpochMilli(), is(1660086629000L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getCreatedAt().getTime(), is(1659532431000L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getUpdatedAt().getTime(), is(1660086629000L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getArchivedAt().getTime(), is(1660086629000L));
 
         assertThat(projectsV2ItemPayload.getChanges().getArchivedAt().getFrom(), is(nullValue()));
-        assertThat(projectsV2ItemPayload.getChanges().getArchivedAt().getTo().toEpochMilli(), is(1660086629000L));
+        assertThat(projectsV2ItemPayload.getChanges().getArchivedAt().getTo().getTime(), is(1660086629000L));
     }
 
     // TODO implement support classes and write test
@@ -953,8 +953,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(projectsV2ItemPayload.getProjectsV2Item().getContentType(), is(ContentType.ISSUE));
         assertThat(projectsV2ItemPayload.getProjectsV2Item().getCreator().getLogin(), is("gsmet"));
         assertThat(projectsV2ItemPayload.getProjectsV2Item().getCreator().getNodeId(), is("MDQ6VXNlcjEyNzk3NDk="));
-        assertThat(projectsV2ItemPayload.getProjectsV2Item().getCreatedAt().toEpochMilli(), is(1659532028000L));
-        assertThat(projectsV2ItemPayload.getProjectsV2Item().getUpdatedAt().toEpochMilli(), is(1659532028000L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getCreatedAt().getTime(), is(1659532028000L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getUpdatedAt().getTime(), is(1659532028000L));
         assertThat(projectsV2ItemPayload.getProjectsV2Item().getArchivedAt(), is(nullValue()));
 
         assertThat(projectsV2ItemPayload.getOrganization().getLogin(), is("gsmet-bot-playground"));
@@ -984,8 +984,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(projectsV2ItemPayload.getAction(), is("edited"));
 
         assertThat(projectsV2ItemPayload.getProjectsV2Item().getId(), is(8083254L));
-        assertThat(projectsV2ItemPayload.getProjectsV2Item().getCreatedAt().toEpochMilli(), is(1659532028000L));
-        assertThat(projectsV2ItemPayload.getProjectsV2Item().getUpdatedAt().toEpochMilli(), is(1659532033000L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getCreatedAt().getTime(), is(1659532028000L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getUpdatedAt().getTime(), is(1659532033000L));
         assertThat(projectsV2ItemPayload.getProjectsV2Item().getArchivedAt(), is(nullValue()));
 
         assertThat(projectsV2ItemPayload.getChanges().getFieldValue().getFieldNodeId(),
@@ -1007,8 +1007,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(projectsV2ItemPayload.getAction(), is("reordered"));
 
         assertThat(projectsV2ItemPayload.getProjectsV2Item().getId(), is(8083794L));
-        assertThat(projectsV2ItemPayload.getProjectsV2Item().getCreatedAt().toEpochMilli(), is(1659532431000L));
-        assertThat(projectsV2ItemPayload.getProjectsV2Item().getUpdatedAt().toEpochMilli(), is(1659532439000L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getCreatedAt().getTime(), is(1659532431000L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getUpdatedAt().getTime(), is(1659532439000L));
         assertThat(projectsV2ItemPayload.getProjectsV2Item().getArchivedAt(), is(nullValue()));
 
         assertThat(projectsV2ItemPayload.getChanges().getPreviousProjectsV2ItemNodeId().getFrom(),
@@ -1031,11 +1031,11 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(projectsV2ItemPayload.getAction(), is("restored"));
 
         assertThat(projectsV2ItemPayload.getProjectsV2Item().getId(), is(8083254L));
-        assertThat(projectsV2ItemPayload.getProjectsV2Item().getCreatedAt().toEpochMilli(), is(1659532028000L));
-        assertThat(projectsV2ItemPayload.getProjectsV2Item().getUpdatedAt().toEpochMilli(), is(1659532419000L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getCreatedAt().getTime(), is(1659532028000L));
+        assertThat(projectsV2ItemPayload.getProjectsV2Item().getUpdatedAt().getTime(), is(1659532419000L));
         assertThat(projectsV2ItemPayload.getProjectsV2Item().getArchivedAt(), is(nullValue()));
 
-        assertThat(projectsV2ItemPayload.getChanges().getArchivedAt().getFrom().toEpochMilli(), is(1659532142000L));
+        assertThat(projectsV2ItemPayload.getChanges().getArchivedAt().getFrom().getTime(), is(1659532142000L));
         assertThat(projectsV2ItemPayload.getChanges().getArchivedAt().getTo(), is(nullValue()));
     }
 
@@ -1314,7 +1314,9 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getHeadCommit().getModified().get(0), is("README.md"));
         assertThat(event.getHeadCommit().getMessage(), is("Update README.md"));
 
-        assertThat(GitHubClient.printInstant(event.getCommits().get(0).getTimestamp()), is("2015-05-05T23:40:15Z"));
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        assertThat(formatter.format(event.getCommits().get(0).getTimestamp()), is("2015-05-05T23:40:15Z"));
         assertThat(event.getRepository().getName(), is("public-repo"));
         assertThat(event.getRepository().getOwnerName(), is("baxterthehacker"));
         assertThat(event.getRepository().getUrl().toExternalForm(),
@@ -1505,7 +1507,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(starPayload.getAction(), is("created"));
         assertThat(starPayload.getRepository().getFullName(), is("gsmet/quarkus-bot-java-playground"));
         assertThat(starPayload.getSender().getLogin(), is("gsmet"));
-        assertThat(starPayload.getStarredAt().toEpochMilli(), is(1654017876000L));
+        assertThat(starPayload.getStarredAt().getTime(), is(1654017876000L));
     }
 
     /**
@@ -1732,8 +1734,8 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(workflowJob.getHeadSha(), is("5dd2dadfbdc2a722c08a8ad42ae4e26e3e731042"));
         assertThat(workflowJob.getStatus(), is(GHWorkflowRun.Status.COMPLETED));
         assertThat(workflowJob.getConclusion(), is(GHWorkflowRun.Conclusion.FAILURE));
-        assertThat(workflowJob.getStartedAt().toEpochMilli(), is(1653908125000L));
-        assertThat(workflowJob.getCompletedAt().toEpochMilli(), is(1653908157000L));
+        assertThat(workflowJob.getStartedAt().getTime(), is(1653908125000L));
+        assertThat(workflowJob.getCompletedAt().getTime(), is(1653908157000L));
         assertThat(workflowJob.getName(), is("JVM Tests - JDK JDK16"));
         assertThat(workflowJob.getSteps(),
                 contains(hasProperty("name", is("Set up job")),
@@ -1801,14 +1803,14 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
                 is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/runs/680604745/rerun"));
         assertThat(workflowRun.getWorkflowUrl().toString(),
                 is("https://api.github.com/repos/gsmet/quarkus-bot-java-playground/actions/workflows/7087581"));
-        assertThat(workflowRun.getCreatedAt().toEpochMilli(), is(1616524526000L));
-        assertThat(workflowRun.getUpdatedAt().toEpochMilli(), is(1616524543000L));
+        assertThat(workflowRun.getCreatedAt().getTime(), is(1616524526000L));
+        assertThat(workflowRun.getUpdatedAt().getTime(), is(1616524543000L));
         assertThat(workflowRun.getRunAttempt(), is(1L));
-        assertThat(workflowRun.getRunStartedAt().toEpochMilli(), is(1616524526000L));
+        assertThat(workflowRun.getRunStartedAt().getTime(), is(1616524526000L));
         assertThat(workflowRun.getHeadCommit().getId(), is("dbea8d8b6ed2cf764dfd84a215f3f9040b3d4423"));
         assertThat(workflowRun.getHeadCommit().getTreeId(), is("b17089e6a2574ec1002566fe980923e62dce3026"));
         assertThat(workflowRun.getHeadCommit().getMessage(), is("Update main.yml"));
-        assertThat(workflowRun.getHeadCommit().getTimestamp().toEpochMilli(), is(1616523390000L));
+        assertThat(workflowRun.getHeadCommit().getTimestamp().getTime(), is(1616523390000L));
         assertThat(workflowRun.getHeadCommit().getAuthor().getName(), is("Guillaume Smet"));
         assertThat(workflowRun.getHeadCommit().getAuthor().getEmail(), is("guillaume.smet@gmail.com"));
         assertThat(workflowRun.getHeadCommit().getCommitter().getName(), is("GitHub"));
@@ -1869,8 +1871,10 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(checkRun.getNodeId(), is("MDg6Q2hlY2tSdW4xMjg2MjAyMjg="));
         assertThat(checkRun.getExternalId(), is(""));
 
-        assertThat(GitHubClient.printInstant(checkRun.getStartedAt()), is("2019-05-15T15:21:12Z"));
-        assertThat(GitHubClient.printInstant(checkRun.getCompletedAt()), is("2019-05-15T20:22:22Z"));
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        assertThat(formatter.format(checkRun.getStartedAt()), is("2019-05-15T15:21:12Z"));
+        assertThat(formatter.format(checkRun.getCompletedAt()), is("2019-05-15T20:22:22Z"));
 
         assertThat(checkRun.getConclusion(), is(Conclusion.SUCCESS));
         assertThat(checkRun.getUrl().toString(), endsWith("/repos/Codertocat/Hello-World/check-runs/128620228"));
@@ -1919,7 +1923,9 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(checkSuite.getHeadCommit().getAuthor().getName(), is("Codertocat"));
         assertThat(checkSuite.getHeadCommit().getCommitter().getName(), is("Codertocat"));
 
-        assertThat(GitHubClient.printInstant(checkSuite.getHeadCommit().getTimestamp()), is("2019-05-15T15:20:30Z"));
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        assertThat(formatter.format(checkSuite.getHeadCommit().getTimestamp()), is("2019-05-15T15:20:30Z"));
 
         assertThat(checkSuite.getApp().getId(), is(29310L));
 

@@ -24,14 +24,12 @@
 
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -61,7 +59,7 @@ public class GHIssue extends GHObject implements Reactable {
     @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
     public static class PullRequest {
 
-        private String diffUrl, patchUrl, htmlUrl;
+        private String diff_url, patch_url, html_url;
 
         /**
          * Create default PullRequest instance
@@ -75,7 +73,7 @@ public class GHIssue extends GHObject implements Reactable {
          * @return the diff url
          */
         public URL getDiffUrl() {
-            return GitHubClient.parseURL(diffUrl);
+            return GitHubClient.parseURL(diff_url);
         }
 
         /**
@@ -84,7 +82,7 @@ public class GHIssue extends GHObject implements Reactable {
          * @return the patch url
          */
         public URL getPatchUrl() {
-            return GitHubClient.parseURL(patchUrl);
+            return GitHubClient.parseURL(patch_url);
         }
 
         /**
@@ -93,7 +91,7 @@ public class GHIssue extends GHObject implements Reactable {
          * @return the url
          */
         public URL getUrl() {
-            return GitHubClient.parseURL(htmlUrl);
+            return GitHubClient.parseURL(html_url);
         }
     }
 
@@ -126,10 +124,10 @@ public class GHIssue extends GHObject implements Reactable {
     protected String body;
 
     /** The closed at. */
-    protected String closedAt;
+    protected String closed_at;
 
     /** The closed by. */
-    protected GHUser closedBy;
+    protected GHUser closed_by;
 
     /** The comments. */
     protected int comments;
@@ -147,16 +145,16 @@ public class GHIssue extends GHObject implements Reactable {
     protected int number;
 
     /** The pull request. */
-    protected GHIssue.PullRequest pullRequest;
+    protected GHIssue.PullRequest pull_request;
 
     /** The state. */
     protected String state;
 
     /** The state reason. */
-    protected String stateReason;
+    protected String state_reason;
 
     /** The html url. */
-    protected String title, htmlUrl;
+    protected String title, html_url;
 
     /** The user. */
     protected GHUser user;
@@ -363,9 +361,8 @@ public class GHIssue extends GHObject implements Reactable {
      *
      * @return the closed at
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getClosedAt() {
-        return GitHubClient.parseInstant(closedAt);
+    public Date getClosedAt() {
+        return GitHubClient.parseDate(closed_at);
     }
 
     /**
@@ -385,7 +382,7 @@ public class GHIssue extends GHObject implements Reactable {
         /*
          * if (closed_by==null) { closed_by = owner.getIssue(number).getClosed_by(); }
          */
-        return root().intern(closedBy);
+        return root().intern(closed_by);
     }
 
     /**
@@ -415,7 +412,7 @@ public class GHIssue extends GHObject implements Reactable {
      * @return the html url
      */
     public URL getHtmlUrl() {
-        return GitHubClient.parseURL(htmlUrl);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -455,7 +452,7 @@ public class GHIssue extends GHObject implements Reactable {
      * @return the pull request
      */
     public PullRequest getPullRequest() {
-        return pullRequest;
+        return pull_request;
     }
 
     /**
@@ -493,7 +490,7 @@ public class GHIssue extends GHObject implements Reactable {
      * @return the state reason
      */
     public GHIssueStateReason getStateReason() {
-        return EnumUtils.getNullableEnumOrDefault(GHIssueStateReason.class, stateReason, GHIssueStateReason.UNKNOWN);
+        return EnumUtils.getNullableEnumOrDefault(GHIssueStateReason.class, state_reason, GHIssueStateReason.UNKNOWN);
     }
 
     /**
@@ -529,7 +526,7 @@ public class GHIssue extends GHObject implements Reactable {
      * @return the boolean
      */
     public boolean isPullRequest() {
-        return pullRequest != null;
+        return pull_request != null;
     }
 
     /**

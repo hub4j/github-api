@@ -1,0 +1,170 @@
+{
+  "sha": "fb443a794e13921e7a9525a6976df900d897308f",
+  "node_id": "MDY6Q29tbWl0MTU0ODUxNDpmYjQ0M2E3OTRlMTM5MjFlN2E5NTI1YTY5NzZkZjkwMGQ4OTczMDhm",
+  "commit": {
+    "author": {
+      "name": "Jesse Glick",
+      "email": "jglick@cloudbees.com",
+      "date": "2020-02-10T20:17:10Z"
+    },
+    "committer": {
+      "name": "Jesse Glick",
+      "email": "jglick@cloudbees.com",
+      "date": "2020-02-10T20:17:10Z"
+    },
+    "message": "[maven-release-plugin] prepare release stapler-parent-1.259",
+    "tree": {
+      "sha": "5bb7e488ecee266439f0823faca46ada5e2d4d86",
+      "url": "https://api.github.com/repos/stapler/stapler/git/trees/5bb7e488ecee266439f0823faca46ada5e2d4d86"
+    },
+    "url": "https://api.github.com/repos/stapler/stapler/git/commits/fb443a794e13921e7a9525a6976df900d897308f",
+    "comment_count": 0,
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\niQEzBAABCgAdFiEEYYylhqBIUt57zhxYHdpp2UtiQxEFAl5BukYACgkQHdpp2Uti\nQxEf2Qf8COpjlUssvr68ErpybSvtqs02lVE/+FmmTjE1M8Ibrxf2S6dV+0KmzsKM\nSzv9ff5P2t4euPAnKcaYr3+gRexnvJLAqKveg+iwJNHsy/O4FiAGtPWChyqvpAMd\nZWQun6xhc21za7QuLlwITG9c8tmKH23u3sSBhOm9zg03X9Ayopkmzzuo94+MFZeD\nlCKlucvzuzIEU6FGLiV/yj5R3FKhfUyOuuW9Q76BB9owvuxGtb3tdWwKFn2G7suh\n4t/frqJGzSMe5fkNf4Xf/yUPu3IxeUPIaaYNGiMohKqSPYWish4/AxzXvCP+svh7\nUbpaZwt5B5PwJCpvCZ4v0bop697hqQ==\n=u4UQ\n-----END PGP SIGNATURE-----",
+      "payload": "tree 5bb7e488ecee266439f0823faca46ada5e2d4d86\nparent 81f51ffa3899dc27b4f400fc928f8c5b85ae6774\nauthor Jesse Glick <jglick@cloudbees.com> 1581365830 -0500\ncommitter Jesse Glick <jglick@cloudbees.com> 1581365830 -0500\n\n[maven-release-plugin] prepare release stapler-parent-1.259\n"
+    }
+  },
+  "url": "https://api.github.com/repos/stapler/stapler/commits/fb443a794e13921e7a9525a6976df900d897308f",
+  "html_url": "https://github.com/stapler/stapler/commit/fb443a794e13921e7a9525a6976df900d897308f",
+  "comments_url": "https://api.github.com/repos/stapler/stapler/commits/fb443a794e13921e7a9525a6976df900d897308f/comments",
+  "author": {
+    "login": "jglick",
+    "id": 154109,
+    "node_id": "MDQ6VXNlcjE1NDEwOQ==",
+    "avatar_url": "https://avatars1.githubusercontent.com/u/154109?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/jglick",
+    "html_url": "https://github.com/jglick",
+    "followers_url": "https://api.github.com/users/jglick/followers",
+    "following_url": "https://api.github.com/users/jglick/following{/other_user}",
+    "gists_url": "https://api.github.com/users/jglick/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/jglick/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/jglick/subscriptions",
+    "organizations_url": "https://api.github.com/users/jglick/orgs",
+    "repos_url": "https://api.github.com/users/jglick/repos",
+    "events_url": "https://api.github.com/users/jglick/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/jglick/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "jglick",
+    "id": 154109,
+    "node_id": "MDQ6VXNlcjE1NDEwOQ==",
+    "avatar_url": "https://avatars1.githubusercontent.com/u/154109?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/jglick",
+    "html_url": "https://github.com/jglick",
+    "followers_url": "https://api.github.com/users/jglick/followers",
+    "following_url": "https://api.github.com/users/jglick/following{/other_user}",
+    "gists_url": "https://api.github.com/users/jglick/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/jglick/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/jglick/subscriptions",
+    "organizations_url": "https://api.github.com/users/jglick/orgs",
+    "repos_url": "https://api.github.com/users/jglick/repos",
+    "events_url": "https://api.github.com/users/jglick/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/jglick/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "81f51ffa3899dc27b4f400fc928f8c5b85ae6774",
+      "url": "https://api.github.com/repos/stapler/stapler/commits/81f51ffa3899dc27b4f400fc928f8c5b85ae6774",
+      "html_url": "https://github.com/stapler/stapler/commit/81f51ffa3899dc27b4f400fc928f8c5b85ae6774"
+    }
+  ],
+  "stats": {
+    "total": 16,
+    "additions": 8,
+    "deletions": 8
+  },
+  "files": [
+    {
+      "sha": "110fddf77db4e2d493c8bd236f1fdb3d8d44acc3",
+      "filename": "core/pom.xml",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/stapler/stapler/blob/fb443a794e13921e7a9525a6976df900d897308f/core/pom.xml",
+      "raw_url": "https://github.com/stapler/stapler/raw/fb443a794e13921e7a9525a6976df900d897308f/core/pom.xml",
+      "contents_url": "https://api.github.com/repos/stapler/stapler/contents/core/pom.xml?ref=fb443a794e13921e7a9525a6976df900d897308f",
+      "patch": "@@ -3,7 +3,7 @@\n   <parent>\n     <groupId>org.kohsuke.stapler</groupId>\n     <artifactId>stapler-parent</artifactId>\n-    <version>${revision}${changelist}</version>\n+    <version>1.259</version>\n   </parent>\n   \n   <artifactId>stapler</artifactId>"
+    },
+    {
+      "sha": "bccbd36d79edbe9abdc5dd26929f72093211acc5",
+      "filename": "groovy/pom.xml",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/stapler/stapler/blob/fb443a794e13921e7a9525a6976df900d897308f/groovy/pom.xml",
+      "raw_url": "https://github.com/stapler/stapler/raw/fb443a794e13921e7a9525a6976df900d897308f/groovy/pom.xml",
+      "contents_url": "https://api.github.com/repos/stapler/stapler/contents/groovy/pom.xml?ref=fb443a794e13921e7a9525a6976df900d897308f",
+      "patch": "@@ -3,7 +3,7 @@\n   <parent>\n     <groupId>org.kohsuke.stapler</groupId>\n     <artifactId>stapler-parent</artifactId>\n-    <version>${revision}${changelist}</version>\n+    <version>1.259</version>\n   </parent>\n   \n   <artifactId>stapler-groovy</artifactId>"
+    },
+    {
+      "sha": "f962213b91c7510433920b7bfca78b9b4004286a",
+      "filename": "jelly/pom.xml",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/stapler/stapler/blob/fb443a794e13921e7a9525a6976df900d897308f/jelly/pom.xml",
+      "raw_url": "https://github.com/stapler/stapler/raw/fb443a794e13921e7a9525a6976df900d897308f/jelly/pom.xml",
+      "contents_url": "https://api.github.com/repos/stapler/stapler/contents/jelly/pom.xml?ref=fb443a794e13921e7a9525a6976df900d897308f",
+      "patch": "@@ -3,7 +3,7 @@\n   <parent>\n     <groupId>org.kohsuke.stapler</groupId>\n     <artifactId>stapler-parent</artifactId>\n-    <version>${revision}${changelist}</version>\n+    <version>1.259</version>\n   </parent>\n \n   <artifactId>stapler-jelly</artifactId>"
+    },
+    {
+      "sha": "4ed4e3e27f02ab732e20cb48dc68d14c48b9fdd3",
+      "filename": "jrebel/pom.xml",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/stapler/stapler/blob/fb443a794e13921e7a9525a6976df900d897308f/jrebel/pom.xml",
+      "raw_url": "https://github.com/stapler/stapler/raw/fb443a794e13921e7a9525a6976df900d897308f/jrebel/pom.xml",
+      "contents_url": "https://api.github.com/repos/stapler/stapler/contents/jrebel/pom.xml?ref=fb443a794e13921e7a9525a6976df900d897308f",
+      "patch": "@@ -3,7 +3,7 @@\n   <parent>\n     <groupId>org.kohsuke.stapler</groupId>\n     <artifactId>stapler-parent</artifactId>\n-    <version>${revision}${changelist}</version>\n+    <version>1.259</version>\n   </parent>\n   \n   <artifactId>stapler-jrebel</artifactId>"
+    },
+    {
+      "sha": "9f85776c66f5adfc1917912b2e6154c34ec7675d",
+      "filename": "jruby/pom.xml",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/stapler/stapler/blob/fb443a794e13921e7a9525a6976df900d897308f/jruby/pom.xml",
+      "raw_url": "https://github.com/stapler/stapler/raw/fb443a794e13921e7a9525a6976df900d897308f/jruby/pom.xml",
+      "contents_url": "https://api.github.com/repos/stapler/stapler/contents/jruby/pom.xml?ref=fb443a794e13921e7a9525a6976df900d897308f",
+      "patch": "@@ -3,7 +3,7 @@\n   <parent>\n     <groupId>org.kohsuke.stapler</groupId>\n     <artifactId>stapler-parent</artifactId>\n-    <version>${revision}${changelist}</version>\n+    <version>1.259</version>\n   </parent>\n \n   <artifactId>stapler-jruby</artifactId>"
+    },
+    {
+      "sha": "3e1980483229d43c6e8968e7df60cad4f4f7c536",
+      "filename": "jsp/pom.xml",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/stapler/stapler/blob/fb443a794e13921e7a9525a6976df900d897308f/jsp/pom.xml",
+      "raw_url": "https://github.com/stapler/stapler/raw/fb443a794e13921e7a9525a6976df900d897308f/jsp/pom.xml",
+      "contents_url": "https://api.github.com/repos/stapler/stapler/contents/jsp/pom.xml?ref=fb443a794e13921e7a9525a6976df900d897308f",
+      "patch": "@@ -3,7 +3,7 @@\n   <parent>\n     <groupId>org.kohsuke.stapler</groupId>\n     <artifactId>stapler-parent</artifactId>\n-    <version>${revision}${changelist}</version>\n+    <version>1.259</version>\n   </parent>\n   \n   <artifactId>stapler-jsp</artifactId>"
+    },
+    {
+      "sha": "a8229b9fc920545c045a653baf696d8f206de922",
+      "filename": "pom.xml",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/stapler/stapler/blob/fb443a794e13921e7a9525a6976df900d897308f/pom.xml",
+      "raw_url": "https://github.com/stapler/stapler/raw/fb443a794e13921e7a9525a6976df900d897308f/pom.xml",
+      "contents_url": "https://api.github.com/repos/stapler/stapler/contents/pom.xml?ref=fb443a794e13921e7a9525a6976df900d897308f",
+      "patch": "@@ -10,7 +10,7 @@\n   <groupId>org.kohsuke.stapler</groupId>\n   <artifactId>stapler-parent</artifactId>\n   <packaging>pom</packaging>\n-  <version>${revision}${changelist}</version>\n+  <version>1.259</version>\n \n   <name>Stapler</name>\n   <description>Stapler HTTP request handling engine</description>\n@@ -38,7 +38,7 @@\n     <connection>scm:git:git://github.com/stapler/stapler.git</connection>\n     <developerConnection>scm:git:ssh://git@github.com/stapler/stapler.git</developerConnection>\n     <url>https://github.com/stapler/stapler</url>\n-    <tag>${scmTag}</tag>\n+    <tag>stapler-parent-1.259</tag>\n   </scm>\n \n   <distributionManagement>"
+    }
+  ]
+}

@@ -3,10 +3,10 @@ package org.kohsuke.github;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
@@ -85,9 +85,9 @@ public class GHAppInstallationTest extends AbstractGHAppInstallationTest {
         final GHUser suspendedBy = appInstallation.getSuspendedBy();
         assertThat(suspendedBy.getLogin(), equalTo("gilday"));
 
-        final Instant suspendedAt = appInstallation.getSuspendedAt();
-        final Instant expectedSuspendedAt = LocalDateTime.of(2024, Month.FEBRUARY, 26, 2, 43, 12)
-                .toInstant(ZoneOffset.UTC);
+        final Date suspendedAt = appInstallation.getSuspendedAt();
+        final Date expectedSuspendedAt = Date
+                .from(LocalDateTime.of(2024, Month.FEBRUARY, 26, 2, 43, 12).toInstant(ZoneOffset.UTC));
         assertThat(suspendedAt, equalTo(expectedSuspendedAt));
     }
 

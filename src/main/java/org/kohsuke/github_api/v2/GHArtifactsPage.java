@@ -1,0 +1,37 @@
+package org.kohsuke.github_api.v2;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+// TODO: Auto-generated Javadoc
+/**
+ * Represents the one page of artifacts result when listing artifacts.
+ */
+@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
+        justification = "JSON API")
+class GHArtifactsPage {
+    private GHArtifact[] artifacts;
+    private int totalCount;
+
+    /**
+     * Gets the total count.
+     *
+     * @return the total count
+     */
+    public int getTotalCount() {
+        return totalCount;
+    }
+
+    /**
+     * Gets the artifacts.
+     *
+     * @param owner
+     *            the owner
+     * @return the artifacts
+     */
+    GHArtifact[] getArtifacts(GHRepository owner) {
+        for (GHArtifact artifact : artifacts) {
+            artifact.wrapUp(owner);
+        }
+        return artifacts;
+    }
+}

@@ -8,12 +8,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.time.Instant;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static java.lang.String.format;
+import static java.lang.String.*;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -42,19 +41,19 @@ public class GHRelease extends GHObject {
 
     private List<GHAsset> assets;
 
-    private String assetsUrl;
+    private String assets_url;
     private String body;
-    private String discussionUrl;
+    private String discussion_url;
     private boolean draft;
-    private String htmlUrl;
+    private String html_url;
     private String name;
     private boolean prerelease;
-    private String publishedAt;
-    private String tagName;
-    private String tarballUrl;
-    private String targetCommitish;
-    private String uploadUrl;
-    private String zipballUrl;
+    private Date published_at;
+    private String tag_name;
+    private String tarball_url;
+    private String target_commitish;
+    private String upload_url;
+    private String zipball_url;
     /** The owner. */
     GHRepository owner;
 
@@ -89,7 +88,7 @@ public class GHRelease extends GHObject {
      * @return the assets url
      */
     public String getAssetsUrl() {
-        return assetsUrl;
+        return assets_url;
     }
 
     /**
@@ -107,7 +106,7 @@ public class GHRelease extends GHObject {
      * @return the discussion url
      */
     public String getDiscussionUrl() {
-        return discussionUrl;
+        return discussion_url;
     }
 
     /**
@@ -116,7 +115,7 @@ public class GHRelease extends GHObject {
      * @return the html url
      */
     public URL getHtmlUrl() {
-        return GitHubClient.parseURL(htmlUrl);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**
@@ -143,19 +142,8 @@ public class GHRelease extends GHObject {
      *
      * @return the published at
      */
-    public Instant getPublishedAt() {
-        return GitHubClient.parseInstant(publishedAt);
-    }
-
-    /**
-     * Gets published at.
-     *
-     * @return the published at
-     * @deprecated Use #getPublishedAt()
-     */
-    @Deprecated
     public Date getPublished_at() {
-        return Date.from(getPublishedAt());
+        return new Date(published_at.getTime());
     }
 
     /**
@@ -164,7 +152,7 @@ public class GHRelease extends GHObject {
      * @return the tag name
      */
     public String getTagName() {
-        return tagName;
+        return tag_name;
     }
 
     /**
@@ -173,7 +161,7 @@ public class GHRelease extends GHObject {
      * @return the tarball url
      */
     public String getTarballUrl() {
-        return tarballUrl;
+        return tarball_url;
     }
 
     /**
@@ -182,7 +170,7 @@ public class GHRelease extends GHObject {
      * @return the target commitish
      */
     public String getTargetCommitish() {
-        return targetCommitish;
+        return target_commitish;
     }
 
     /**
@@ -191,7 +179,7 @@ public class GHRelease extends GHObject {
      * @return the upload url
      */
     public String getUploadUrl() {
-        return uploadUrl;
+        return upload_url;
     }
 
     /**
@@ -200,7 +188,7 @@ public class GHRelease extends GHObject {
      * @return the zipball url
      */
     public String getZipballUrl() {
-        return zipballUrl;
+        return zipball_url;
     }
 
     /**
@@ -229,6 +217,16 @@ public class GHRelease extends GHObject {
     public PagedIterable<GHAsset> listAssets() {
         Requester builder = owner.root().createRequest();
         return builder.withUrlPath(getApiTailUrl("assets")).toIterable(GHAsset[].class, item -> item.wrap(this));
+    }
+
+    /**
+     * Sets name.
+     *
+     * @param name
+     *            the name
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**

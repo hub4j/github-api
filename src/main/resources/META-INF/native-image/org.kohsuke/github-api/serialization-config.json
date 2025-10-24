@@ -1,1370 +1,1370 @@
 [
   {
-    "name": "org.kohsuke.github.AbstractBuilder"
+    "name": "org.kohsuke.github_api.v2.AbstractBuilder"
   },
   {
-    "name": "org.kohsuke.github.BetaApi"
+    "name": "org.kohsuke.github_api.v2.BetaApi"
   },
   {
-    "name": "org.kohsuke.github.EnforcementLevel"
+    "name": "org.kohsuke.github_api.v2.EnforcementLevel"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$AlertsThreshold"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$AlertsThreshold"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$BooleanParameter"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$BooleanParameter"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$BooleanParameter$1"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$BooleanParameter$1"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$CodeScanningTool"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$CodeScanningTool"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$IntegerParameter"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$IntegerParameter"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$IntegerParameter$1"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$IntegerParameter$1"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$ListParameter"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$ListParameter"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Operator"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Operator"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameter"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameter"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameters"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameters"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$1"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameters$1"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$1$1"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameters$1$1"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$2"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameters$2"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$2$1"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameters$2$1"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$3"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameters$3"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$3$1"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameters$3$1"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$4"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameters$4"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$4$1"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameters$4$1"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$5"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameters$5"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Parameters$5$1"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Parameters$5$1"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$RulesetSourceType"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$RulesetSourceType"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$SecurityAlertsThreshold"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$SecurityAlertsThreshold"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$StatusCheckConfiguration"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$StatusCheckConfiguration"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$StringParameter"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$StringParameter"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$StringParameter$1"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$StringParameter$1"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$Type"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$Type"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryRule$WorkflowFileReference"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryRule$WorkflowFileReference"
   },
   {
-    "name": "org.kohsuke.github.GHBranchSync"
+    "name": "org.kohsuke.github_api.v2.GHBranchSync"
   },
   {
-    "name": "org.kohsuke.github.GHApp"
+    "name": "org.kohsuke.github_api.v2.GHApp"
   },
   {
-    "name": "org.kohsuke.github.GHAppCreateTokenBuilder"
+    "name": "org.kohsuke.github_api.v2.GHAppCreateTokenBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHAppFromManifest"
+    "name": "org.kohsuke.github_api.v2.GHAppFromManifest"
   },
   {
-    "name": "org.kohsuke.github.GHAppInstallation"
+    "name": "org.kohsuke.github_api.v2.GHAppInstallation"
   },
   {
-    "name": "org.kohsuke.github.GHAppInstallation$GHAppInstallationRepositoryResult"
+    "name": "org.kohsuke.github_api.v2.GHAppInstallation$GHAppInstallationRepositoryResult"
   },
   {
-    "name": "org.kohsuke.github.GHAppInstallationsIterable$1"
+    "name": "org.kohsuke.github_api.v2.GHAppInstallationsIterable$1"
   },
   {
-    "name": "org.kohsuke.github.GHAppInstallationsIterable"
+    "name": "org.kohsuke.github_api.v2.GHAppInstallationsIterable"
   },
   {
-    "name": "org.kohsuke.github.GHAppInstallationsPage"
+    "name": "org.kohsuke.github_api.v2.GHAppInstallationsPage"
   },
   {
-    "name": "org.kohsuke.github.GHAppInstallationRequest"
+    "name": "org.kohsuke.github_api.v2.GHAppInstallationRequest"
   },
   {
-    "name": "org.kohsuke.github.GHAppInstallationToken"
+    "name": "org.kohsuke.github_api.v2.GHAppInstallationToken"
   },
   {
-    "name": "org.kohsuke.github.GHArtifact"
+    "name": "org.kohsuke.github_api.v2.GHArtifact"
   },
   {
-    "name": "org.kohsuke.github.GHArtifactsIterable$1"
+    "name": "org.kohsuke.github_api.v2.GHArtifactsIterable$1"
   },
   {
-    "name": "org.kohsuke.github.GHArtifactsIterable"
+    "name": "org.kohsuke.github_api.v2.GHArtifactsIterable"
   },
   {
-    "name": "org.kohsuke.github.GHArtifactsPage"
+    "name": "org.kohsuke.github_api.v2.GHArtifactsPage"
   },
   {
-    "name": "org.kohsuke.github.GHAsset"
+    "name": "org.kohsuke.github_api.v2.GHAsset"
   },
   {
-    "name": "org.kohsuke.github.GHAuthenticatedAppInstallation"
+    "name": "org.kohsuke.github_api.v2.GHAuthenticatedAppInstallation"
   },
   {
-    "name": "org.kohsuke.github.GHAuthenticatedAppInstallation$GHAuthenticatedAppInstallationRepositoryResult"
+    "name": "org.kohsuke.github_api.v2.GHAuthenticatedAppInstallation$GHAuthenticatedAppInstallationRepositoryResult"
   },
   {
-    "name": "org.kohsuke.github.GHAuthorization$App"
+    "name": "org.kohsuke.github_api.v2.GHAuthorization$App"
   },
   {
-    "name": "org.kohsuke.github.GHAuthorization"
+    "name": "org.kohsuke.github_api.v2.GHAuthorization"
   },
   {
-    "name": "org.kohsuke.github.GHBlob"
+    "name": "org.kohsuke.github_api.v2.GHBlob"
   },
   {
-    "name": "org.kohsuke.github.GHBlobBuilder"
+    "name": "org.kohsuke.github_api.v2.GHBlobBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHBranch$1"
+    "name": "org.kohsuke.github_api.v2.GHBranch$1"
   },
   {
-    "name": "org.kohsuke.github.GHBranch"
+    "name": "org.kohsuke.github_api.v2.GHBranch"
   },
   {
-    "name": "org.kohsuke.github.GHBranch$Commit"
+    "name": "org.kohsuke.github_api.v2.GHBranch$Commit"
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$AllowDeletions"
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$AllowDeletions"
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$AllowForcePushes"
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$AllowForcePushes"
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$AllowForkSyncing"
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$AllowForkSyncing"
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$BlockCreations"
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$BlockCreations"
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$Check"
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$Check"
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection"
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection"
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$EnforceAdmins"
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$EnforceAdmins"
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$LockBranch"
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$LockBranch"
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$RequiredConversationResolution"
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$RequiredConversationResolution"
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$RequiredLinearHistory"
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$RequiredLinearHistory"
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$RequiredReviews"
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$RequiredReviews"
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$RequiredSignatures"
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$RequiredSignatures"
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$RequiredStatusChecks"
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$RequiredStatusChecks"
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtection$Restrictions"
+    "name": "org.kohsuke.github_api.v2.GHBranchProtection$Restrictions"
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtectionBuilder$1"
+    "name": "org.kohsuke.github_api.v2.GHBranchProtectionBuilder$1"
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtectionBuilder"
+    "name": "org.kohsuke.github_api.v2.GHBranchProtectionBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtectionBuilder$Restrictions"
+    "name": "org.kohsuke.github_api.v2.GHBranchProtectionBuilder$Restrictions"
   },
   {
-    "name": "org.kohsuke.github.GHBranchProtectionBuilder$StatusChecks"
+    "name": "org.kohsuke.github_api.v2.GHBranchProtectionBuilder$StatusChecks"
   },
   {
-    "name": "org.kohsuke.github.GHCheckRun$AnnotationLevel"
+    "name": "org.kohsuke.github_api.v2.GHCheckRun$AnnotationLevel"
   },
   {
-    "name": "org.kohsuke.github.GHCheckRun"
+    "name": "org.kohsuke.github_api.v2.GHCheckRun"
   },
   {
-    "name": "org.kohsuke.github.GHCheckRun$Conclusion"
+    "name": "org.kohsuke.github_api.v2.GHCheckRun$Conclusion"
   },
   {
-    "name": "org.kohsuke.github.GHCheckRun$Output"
+    "name": "org.kohsuke.github_api.v2.GHCheckRun$Output"
   },
   {
-    "name": "org.kohsuke.github.GHCheckRun$Status"
+    "name": "org.kohsuke.github_api.v2.GHCheckRun$Status"
   },
   {
-    "name": "org.kohsuke.github.GHCheckRunBuilder$Action"
+    "name": "org.kohsuke.github_api.v2.GHCheckRunBuilder$Action"
   },
   {
-    "name": "org.kohsuke.github.GHCheckRunBuilder$Annotation"
+    "name": "org.kohsuke.github_api.v2.GHCheckRunBuilder$Annotation"
   },
   {
-    "name": "org.kohsuke.github.GHCheckRunBuilder"
+    "name": "org.kohsuke.github_api.v2.GHCheckRunBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHCheckRunBuilder$Image"
+    "name": "org.kohsuke.github_api.v2.GHCheckRunBuilder$Image"
   },
   {
-    "name": "org.kohsuke.github.GHCheckRunBuilder$Output"
+    "name": "org.kohsuke.github_api.v2.GHCheckRunBuilder$Output"
   },
   {
-    "name": "org.kohsuke.github.GHCheckRunsIterable$1"
+    "name": "org.kohsuke.github_api.v2.GHCheckRunsIterable$1"
   },
   {
-    "name": "org.kohsuke.github.GHCheckRunsIterable"
+    "name": "org.kohsuke.github_api.v2.GHCheckRunsIterable"
   },
   {
-    "name": "org.kohsuke.github.GHCheckRunsPage"
+    "name": "org.kohsuke.github_api.v2.GHCheckRunsPage"
   },
   {
-    "name": "org.kohsuke.github.GHCheckSuite"
+    "name": "org.kohsuke.github_api.v2.GHCheckSuite"
   },
   {
-    "name": "org.kohsuke.github.GHCheckSuite$HeadCommit"
+    "name": "org.kohsuke.github_api.v2.GHCheckSuite$HeadCommit"
   },
   {
-    "name": "org.kohsuke.github.GHCodeownersError"
+    "name": "org.kohsuke.github_api.v2.GHCodeownersError"
   },
   {
-    "name": "org.kohsuke.github.GHCommentAuthorAssociation"
+    "name": "org.kohsuke.github_api.v2.GHCommentAuthorAssociation"
   },
   {
-    "name": "org.kohsuke.github.GHCommit$1"
+    "name": "org.kohsuke.github_api.v2.GHCommit$1"
   },
   {
-    "name": "org.kohsuke.github.GHCommit"
+    "name": "org.kohsuke.github_api.v2.GHCommit"
   },
   {
-    "name": "org.kohsuke.github.GHCommit$File"
+    "name": "org.kohsuke.github_api.v2.GHCommit$File"
   },
   {
-    "name": "org.kohsuke.github.GHCommit$GHAuthor"
+    "name": "org.kohsuke.github_api.v2.GHCommit$GHAuthor"
   },
   {
-    "name": "org.kohsuke.github.GHCommit$Parent"
+    "name": "org.kohsuke.github_api.v2.GHCommit$Parent"
   },
   {
-    "name": "org.kohsuke.github.GHCommit$ShortInfo"
+    "name": "org.kohsuke.github_api.v2.GHCommit$ShortInfo"
   },
   {
-    "name": "org.kohsuke.github.GHCommit$Stats"
+    "name": "org.kohsuke.github_api.v2.GHCommit$Stats"
   },
   {
-    "name": "org.kohsuke.github.GHCommit$User"
+    "name": "org.kohsuke.github_api.v2.GHCommit$User"
   },
   {
-    "name": "org.kohsuke.github.GHCommitBuilder$1"
+    "name": "org.kohsuke.github_api.v2.GHCommitBuilder$1"
   },
   {
-    "name": "org.kohsuke.github.GHCommitBuilder"
+    "name": "org.kohsuke.github_api.v2.GHCommitBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHCommitBuilder$UserInfo"
+    "name": "org.kohsuke.github_api.v2.GHCommitBuilder$UserInfo"
   },
   {
-    "name": "org.kohsuke.github.GHCommitComment"
+    "name": "org.kohsuke.github_api.v2.GHCommitComment"
   },
   {
-    "name": "org.kohsuke.github.GHCommitFileIterable$1"
+    "name": "org.kohsuke.github_api.v2.GHCommitFileIterable$1"
   },
   {
-    "name": "org.kohsuke.github.GHCommitFileIterable"
+    "name": "org.kohsuke.github_api.v2.GHCommitFileIterable"
   },
   {
-    "name": "org.kohsuke.github.GHCommitFilesPage"
+    "name": "org.kohsuke.github_api.v2.GHCommitFilesPage"
   },
   {
-    "name": "org.kohsuke.github.GHCommitPointer"
+    "name": "org.kohsuke.github_api.v2.GHCommitPointer"
   },
   {
-    "name": "org.kohsuke.github.GHCommitQueryBuilder"
+    "name": "org.kohsuke.github_api.v2.GHCommitQueryBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHCommitSearchBuilder"
+    "name": "org.kohsuke.github_api.v2.GHCommitSearchBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHCommitSearchBuilder$CommitSearchResult"
+    "name": "org.kohsuke.github_api.v2.GHCommitSearchBuilder$CommitSearchResult"
   },
   {
-    "name": "org.kohsuke.github.GHCommitSearchBuilder$Sort"
+    "name": "org.kohsuke.github_api.v2.GHCommitSearchBuilder$Sort"
   },
   {
-    "name": "org.kohsuke.github.GHCommitState"
+    "name": "org.kohsuke.github_api.v2.GHCommitState"
   },
   {
-    "name": "org.kohsuke.github.GHCommitStatus"
+    "name": "org.kohsuke.github_api.v2.GHCommitStatus"
   },
   {
-    "name": "org.kohsuke.github.GHCompare$1"
+    "name": "org.kohsuke.github_api.v2.GHCompare$1"
   },
   {
-    "name": "org.kohsuke.github.GHCompare"
+    "name": "org.kohsuke.github_api.v2.GHCompare"
   },
   {
-    "name": "org.kohsuke.github.GHCompare$Commit"
+    "name": "org.kohsuke.github_api.v2.GHCompare$Commit"
   },
   {
-    "name": "org.kohsuke.github.GHCompare$GHCompareCommitsIterable$1"
+    "name": "org.kohsuke.github_api.v2.GHCompare$GHCompareCommitsIterable$1"
   },
   {
-    "name": "org.kohsuke.github.GHCompare$GHCompareCommitsIterable"
+    "name": "org.kohsuke.github_api.v2.GHCompare$GHCompareCommitsIterable"
   },
   {
-    "name": "org.kohsuke.github.GHCompare$InnerCommit"
+    "name": "org.kohsuke.github_api.v2.GHCompare$InnerCommit"
   },
   {
-    "name": "org.kohsuke.github.GHCompare$Status"
+    "name": "org.kohsuke.github_api.v2.GHCompare$Status"
   },
   {
-    "name": "org.kohsuke.github.GHCompare$Tree"
+    "name": "org.kohsuke.github_api.v2.GHCompare$Tree"
   },
   {
-    "name": "org.kohsuke.github.GHCompare$User"
+    "name": "org.kohsuke.github_api.v2.GHCompare$User"
   },
   {
-    "name": "org.kohsuke.github.GHContent"
+    "name": "org.kohsuke.github_api.v2.GHContent"
   },
   {
-    "name": "org.kohsuke.github.GHContentBuilder"
+    "name": "org.kohsuke.github_api.v2.GHContentBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHContentSearchBuilder"
+    "name": "org.kohsuke.github_api.v2.GHContentSearchBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHContentSearchBuilder$ContentSearchResult"
+    "name": "org.kohsuke.github_api.v2.GHContentSearchBuilder$ContentSearchResult"
   },
   {
-    "name": "org.kohsuke.github.GHContentSearchBuilder$Sort"
+    "name": "org.kohsuke.github_api.v2.GHContentSearchBuilder$Sort"
   },
   {
-    "name": "org.kohsuke.github.GHContentUpdateResponse"
+    "name": "org.kohsuke.github_api.v2.GHContentUpdateResponse"
   },
   {
-    "name": "org.kohsuke.github.GHContentWithLicense"
+    "name": "org.kohsuke.github_api.v2.GHContentWithLicense"
   },
   {
-    "name": "org.kohsuke.github.GHCreateRepositoryBuilder"
+    "name": "org.kohsuke.github_api.v2.GHCreateRepositoryBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHDeployKey"
+    "name": "org.kohsuke.github_api.v2.GHDeployKey"
   },
   {
-    "name": "org.kohsuke.github.GHDeployment"
+    "name": "org.kohsuke.github_api.v2.GHDeployment"
   },
   {
-    "name": "org.kohsuke.github.GHDeploymentBuilder"
+    "name": "org.kohsuke.github_api.v2.GHDeploymentBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHDeploymentState"
+    "name": "org.kohsuke.github_api.v2.GHDeploymentState"
   },
   {
-    "name": "org.kohsuke.github.GHDeploymentStatus"
+    "name": "org.kohsuke.github_api.v2.GHDeploymentStatus"
   },
   {
-    "name": "org.kohsuke.github.GHDeploymentStatusBuilder"
+    "name": "org.kohsuke.github_api.v2.GHDeploymentStatusBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHDirection"
+    "name": "org.kohsuke.github_api.v2.GHDirection"
   },
   {
-    "name": "org.kohsuke.github.GHDiscussion$1"
+    "name": "org.kohsuke.github_api.v2.GHDiscussion$1"
   },
   {
-    "name": "org.kohsuke.github.GHDiscussion"
+    "name": "org.kohsuke.github_api.v2.GHDiscussion"
   },
   {
-    "name": "org.kohsuke.github.GHDiscussionBuilder"
+    "name": "org.kohsuke.github_api.v2.GHDiscussionBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHEmail"
+    "name": "org.kohsuke.github_api.v2.GHEmail"
   },
   {
-    "name": "org.kohsuke.github.GHEnterpriseManagedUsersException"
+    "name": "org.kohsuke.github_api.v2.GHEnterpriseManagedUsersException"
   },
   {
-    "name": "org.kohsuke.github.GHError"
+    "name": "org.kohsuke.github_api.v2.GHError"
   },
   {
-    "name": "org.kohsuke.github.GHEvent"
+    "name": "org.kohsuke.github_api.v2.GHEvent"
   },
   {
-    "name": "org.kohsuke.github.GHEventInfo"
+    "name": "org.kohsuke.github_api.v2.GHEventInfo"
   },
   {
-    "name": "org.kohsuke.github.GHEventInfo$GHEventRepository"
+    "name": "org.kohsuke.github_api.v2.GHEventInfo$GHEventRepository"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$CheckRun"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$CheckRun"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$CheckSuite"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$CheckSuite"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$CommentChanges"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$CommentChanges"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$CommentChanges$GHFrom"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$CommentChanges$GHFrom"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$CommitComment"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$CommitComment"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Create"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Create"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Delete"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Delete"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Deployment"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Deployment"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$DeploymentStatus"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$DeploymentStatus"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Discussion"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Discussion"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$DiscussionComment"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$DiscussionComment"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Fork"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Fork"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Installation"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Installation"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Installation$Repository"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Installation$Repository"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$InstallationRepositories"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$InstallationRepositories"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Issue"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Issue"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$IssueComment"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$IssueComment"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Label"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Label"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Member"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Member"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Membership"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Membership"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Ping"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Ping"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$ProjectsV2Item"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$ProjectsV2Item"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Public"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Public"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$PullRequest"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$PullRequest"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$PullRequestReview"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$PullRequestReview"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$PullRequestReviewComment"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$PullRequestReviewComment"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Push"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Push"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Push$PushCommit"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Push$PushCommit"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Push$Pusher"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Push$Pusher"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Release"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Release"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Repository"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Repository"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Star"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Star"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Status"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Status"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$Team"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$Team"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$TeamAdd"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$TeamAdd"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$WorkflowDispatch"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$WorkflowDispatch"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$WorkflowJob"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$WorkflowJob"
   },
   {
-    "name": "org.kohsuke.github.GHEventPayload$WorkflowRun"
+    "name": "org.kohsuke.github_api.v2.GHEventPayload$WorkflowRun"
   },
   {
-    "name": "org.kohsuke.github.GHExternalGroup"
+    "name": "org.kohsuke.github_api.v2.GHExternalGroup"
   },
   {
-    "name": "org.kohsuke.github.GHExternalGroup$GHLinkedExternalMember"
+    "name": "org.kohsuke.github_api.v2.GHExternalGroup$GHLinkedExternalMember"
   },
   {
-    "name": "org.kohsuke.github.GHExternalGroup$GHLinkedTeam"
+    "name": "org.kohsuke.github_api.v2.GHExternalGroup$GHLinkedTeam"
   },
   {
-    "name": "org.kohsuke.github.GHExternalGroupIterable$1"
+    "name": "org.kohsuke.github_api.v2.GHExternalGroupIterable$1"
   },
   {
-    "name": "org.kohsuke.github.GHExternalGroupIterable"
+    "name": "org.kohsuke.github_api.v2.GHExternalGroupIterable"
   },
   {
-    "name": "org.kohsuke.github.GHExternalGroupPage"
+    "name": "org.kohsuke.github_api.v2.GHExternalGroupPage"
   },
   {
-    "name": "org.kohsuke.github.GHFork"
+    "name": "org.kohsuke.github_api.v2.GHFork"
   },
   {
-    "name": "org.kohsuke.github.GHGist"
+    "name": "org.kohsuke.github_api.v2.GHGist"
   },
   {
-    "name": "org.kohsuke.github.GHGistBuilder"
+    "name": "org.kohsuke.github_api.v2.GHGistBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHGistFile"
+    "name": "org.kohsuke.github_api.v2.GHGistFile"
   },
   {
-    "name": "org.kohsuke.github.GHHook"
+    "name": "org.kohsuke.github_api.v2.GHHook"
   },
   {
-    "name": "org.kohsuke.github.GHHooks$1"
+    "name": "org.kohsuke.github_api.v2.GHHooks$1"
   },
   {
-    "name": "org.kohsuke.github.GHInvitation"
+    "name": "org.kohsuke.github_api.v2.GHInvitation"
   },
   {
-    "name": "org.kohsuke.github.GHIssue"
+    "name": "org.kohsuke.github_api.v2.GHIssue"
   },
   {
-    "name": "org.kohsuke.github.GHIssue$PullRequest"
+    "name": "org.kohsuke.github_api.v2.GHIssue$PullRequest"
   },
   {
-    "name": "org.kohsuke.github.GHIssueBuilder"
+    "name": "org.kohsuke.github_api.v2.GHIssueBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHIssueChanges"
+    "name": "org.kohsuke.github_api.v2.GHIssueChanges"
   },
   {
-    "name": "org.kohsuke.github.GHIssueChanges$GHFrom"
+    "name": "org.kohsuke.github_api.v2.GHIssueChanges$GHFrom"
   },
   {
-    "name": "org.kohsuke.github.GHIssueComment"
+    "name": "org.kohsuke.github_api.v2.GHIssueComment"
   },
   {
-    "name": "org.kohsuke.github.GHIssueCommentQueryBuilder"
+    "name": "org.kohsuke.github_api.v2.GHIssueCommentQueryBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHIssueEvent"
+    "name": "org.kohsuke.github_api.v2.GHIssueEvent"
   },
   {
-    "name": "org.kohsuke.github.GHIssueQueryBuilder"
+    "name": "org.kohsuke.github_api.v2.GHIssueQueryBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHIssueQueryBuilder$ForRepository"
+    "name": "org.kohsuke.github_api.v2.GHIssueQueryBuilder$ForRepository"
   },
   {
-    "name": "org.kohsuke.github.GHIssueQueryBuilder$Sort"
+    "name": "org.kohsuke.github_api.v2.GHIssueQueryBuilder$Sort"
   },
   {
-    "name": "org.kohsuke.github.GHIssueRename"
+    "name": "org.kohsuke.github_api.v2.GHIssueRename"
   },
   {
-    "name": "org.kohsuke.github.GHIssueSearchBuilder"
+    "name": "org.kohsuke.github_api.v2.GHIssueSearchBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHIssueSearchBuilder$IssueSearchResult"
+    "name": "org.kohsuke.github_api.v2.GHIssueSearchBuilder$IssueSearchResult"
   },
   {
-    "name": "org.kohsuke.github.GHIssueSearchBuilder$Sort"
+    "name": "org.kohsuke.github_api.v2.GHIssueSearchBuilder$Sort"
   },
   {
-    "name": "org.kohsuke.github.GHIssueState"
+    "name": "org.kohsuke.github_api.v2.GHIssueState"
   },
   {
-    "name": "org.kohsuke.github.GHIssueStateReason"
+    "name": "org.kohsuke.github_api.v2.GHIssueStateReason"
   },
   {
-    "name": "org.kohsuke.github.GHKey"
+    "name": "org.kohsuke.github_api.v2.GHKey"
   },
   {
-    "name": "org.kohsuke.github.GHLabel$1"
+    "name": "org.kohsuke.github_api.v2.GHLabel$1"
   },
   {
-    "name": "org.kohsuke.github.GHLabel"
+    "name": "org.kohsuke.github_api.v2.GHLabel"
   },
   {
-    "name": "org.kohsuke.github.GHLabel$Creator"
+    "name": "org.kohsuke.github_api.v2.GHLabel$Creator"
   },
   {
-    "name": "org.kohsuke.github.GHLabel$Setter"
+    "name": "org.kohsuke.github_api.v2.GHLabel$Setter"
   },
   {
-    "name": "org.kohsuke.github.GHLabel$Updater"
+    "name": "org.kohsuke.github_api.v2.GHLabel$Updater"
   },
   {
-    "name": "org.kohsuke.github.GHLabelBuilder"
+    "name": "org.kohsuke.github_api.v2.GHLabelBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHLabelChanges"
+    "name": "org.kohsuke.github_api.v2.GHLabelChanges"
   },
   {
-    "name": "org.kohsuke.github.GHLabelChanges$GHFrom"
+    "name": "org.kohsuke.github_api.v2.GHLabelChanges$GHFrom"
   },
   {
-    "name": "org.kohsuke.github.GHLicense"
+    "name": "org.kohsuke.github_api.v2.GHLicense"
   },
   {
-    "name": "org.kohsuke.github.GHMarketplaceAccount"
+    "name": "org.kohsuke.github_api.v2.GHMarketplaceAccount"
   },
   {
-    "name": "org.kohsuke.github.GHMarketplaceAccountPlan"
+    "name": "org.kohsuke.github_api.v2.GHMarketplaceAccountPlan"
   },
   {
-    "name": "org.kohsuke.github.GHMarketplaceAccountType"
+    "name": "org.kohsuke.github_api.v2.GHMarketplaceAccountType"
   },
   {
-    "name": "org.kohsuke.github.GHMarketplaceListAccountBuilder"
+    "name": "org.kohsuke.github_api.v2.GHMarketplaceListAccountBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHMarketplaceListAccountBuilder$Sort"
+    "name": "org.kohsuke.github_api.v2.GHMarketplaceListAccountBuilder$Sort"
   },
   {
-    "name": "org.kohsuke.github.GHMarketplacePendingChange"
+    "name": "org.kohsuke.github_api.v2.GHMarketplacePendingChange"
   },
   {
-    "name": "org.kohsuke.github.GHMarketplacePlan"
+    "name": "org.kohsuke.github_api.v2.GHMarketplacePlan"
   },
   {
-    "name": "org.kohsuke.github.GHMarketplacePlanForAccountBuilder"
+    "name": "org.kohsuke.github_api.v2.GHMarketplacePlanForAccountBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHMarketplacePriceModel"
+    "name": "org.kohsuke.github_api.v2.GHMarketplacePriceModel"
   },
   {
-    "name": "org.kohsuke.github.GHMarketplacePurchase"
+    "name": "org.kohsuke.github_api.v2.GHMarketplacePurchase"
   },
   {
-    "name": "org.kohsuke.github.GHMarketplaceUserPurchase"
+    "name": "org.kohsuke.github_api.v2.GHMarketplaceUserPurchase"
   },
   {
-    "name": "org.kohsuke.github.GHMemberChanges"
+    "name": "org.kohsuke.github_api.v2.GHMemberChanges"
   },
   {
-    "name": "org.kohsuke.github.GHMemberChanges$FromRoleName"
+    "name": "org.kohsuke.github_api.v2.GHMemberChanges$FromRoleName"
   },
   {
-    "name": "org.kohsuke.github.GHMemberChanges$FromToPermission"
+    "name": "org.kohsuke.github_api.v2.GHMemberChanges$FromToPermission"
   },
   {
-    "name": "org.kohsuke.github.GHMembership"
+    "name": "org.kohsuke.github_api.v2.GHMembership"
   },
   {
-    "name": "org.kohsuke.github.GHMembership$Role"
+    "name": "org.kohsuke.github_api.v2.GHMembership$Role"
   },
   {
-    "name": "org.kohsuke.github.GHMembership$State"
+    "name": "org.kohsuke.github_api.v2.GHMembership$State"
   },
   {
-    "name": "org.kohsuke.github.GHMeta"
+    "name": "org.kohsuke.github_api.v2.GHMeta"
   },
   {
-    "name": "org.kohsuke.github.GHMilestone"
+    "name": "org.kohsuke.github_api.v2.GHMilestone"
   },
   {
-    "name": "org.kohsuke.github.GHMilestoneState"
+    "name": "org.kohsuke.github_api.v2.GHMilestoneState"
   },
   {
-    "name": "org.kohsuke.github.GHMyself"
+    "name": "org.kohsuke.github_api.v2.GHMyself"
   },
   {
-    "name": "org.kohsuke.github.GHMyself$RepositoryListFilter"
+    "name": "org.kohsuke.github_api.v2.GHMyself$RepositoryListFilter"
   },
   {
-    "name": "org.kohsuke.github.GHNotExternallyManagedEnterpriseException"
+    "name": "org.kohsuke.github_api.v2.GHNotExternallyManagedEnterpriseException"
   },
   {
-    "name": "org.kohsuke.github.GHNotificationStream$1"
+    "name": "org.kohsuke.github_api.v2.GHNotificationStream$1"
   },
   {
-    "name": "org.kohsuke.github.GHNotificationStream"
+    "name": "org.kohsuke.github_api.v2.GHNotificationStream"
   },
   {
-    "name": "org.kohsuke.github.GHObject$1"
+    "name": "org.kohsuke.github_api.v2.GHObject$1"
   },
   {
-    "name": "org.kohsuke.github.GHObject$2"
+    "name": "org.kohsuke.github_api.v2.GHObject$2"
   },
   {
-    "name": "org.kohsuke.github.GHObject"
+    "name": "org.kohsuke.github_api.v2.GHObject"
   },
   {
-    "name": "org.kohsuke.github.GHOrganization"
+    "name": "org.kohsuke.github_api.v2.GHOrganization"
   },
   {
-    "name": "org.kohsuke.github.GHOrganization$Permission"
+    "name": "org.kohsuke.github_api.v2.GHOrganization$Permission"
   },
   {
-    "name": "org.kohsuke.github.GHOrganization$RepositoryRole"
+    "name": "org.kohsuke.github_api.v2.GHOrganization$RepositoryRole"
   },
   {
-    "name": "org.kohsuke.github.GHOrganization$Role"
+    "name": "org.kohsuke.github_api.v2.GHOrganization$Role"
   },
   {
-    "name": "org.kohsuke.github.GHOrgHook"
+    "name": "org.kohsuke.github_api.v2.GHOrgHook"
   },
   {
-    "name": "org.kohsuke.github.GHOTPRequiredException"
+    "name": "org.kohsuke.github_api.v2.GHOTPRequiredException"
   },
   {
-    "name": "org.kohsuke.github.GHPermission"
+    "name": "org.kohsuke.github_api.v2.GHPermission"
   },
   {
-    "name": "org.kohsuke.github.GHPermissionType"
+    "name": "org.kohsuke.github_api.v2.GHPermissionType"
   },
   {
-    "name": "org.kohsuke.github.GHPerson$1"
+    "name": "org.kohsuke.github_api.v2.GHPerson$1"
   },
   {
-    "name": "org.kohsuke.github.GHPerson"
+    "name": "org.kohsuke.github_api.v2.GHPerson"
   },
   {
-    "name": "org.kohsuke.github.GHProject"
+    "name": "org.kohsuke.github_api.v2.GHProject"
   },
   {
-    "name": "org.kohsuke.github.GHProject$ProjectState"
+    "name": "org.kohsuke.github_api.v2.GHProject$ProjectState"
   },
   {
-    "name": "org.kohsuke.github.GHProject$ProjectStateFilter"
+    "name": "org.kohsuke.github_api.v2.GHProject$ProjectStateFilter"
   },
   {
-    "name": "org.kohsuke.github.GHProjectCard"
+    "name": "org.kohsuke.github_api.v2.GHProjectCard"
   },
   {
-    "name": "org.kohsuke.github.GHProjectColumn"
+    "name": "org.kohsuke.github_api.v2.GHProjectColumn"
   },
   {
-    "name": "org.kohsuke.github.GHProjectsV2Item"
+    "name": "org.kohsuke.github_api.v2.GHProjectsV2Item"
   },
   {
-    "name": "org.kohsuke.github.GHProjectsV2Item$ContentType"
+    "name": "org.kohsuke.github_api.v2.GHProjectsV2Item$ContentType"
   },
   {
-    "name": "org.kohsuke.github.GHProjectsV2ItemChanges"
+    "name": "org.kohsuke.github_api.v2.GHProjectsV2ItemChanges"
   },
   {
-    "name": "org.kohsuke.github.GHProjectsV2ItemChanges$FieldType"
+    "name": "org.kohsuke.github_api.v2.GHProjectsV2ItemChanges$FieldType"
   },
   {
-    "name": "org.kohsuke.github.GHProjectsV2ItemChanges$FieldValue"
+    "name": "org.kohsuke.github_api.v2.GHProjectsV2ItemChanges$FieldValue"
   },
   {
-    "name": "org.kohsuke.github.GHProjectsV2ItemChanges$FromTo"
+    "name": "org.kohsuke.github_api.v2.GHProjectsV2ItemChanges$FromTo"
   },
   {
-    "name": "org.kohsuke.github.GHProjectsV2ItemChanges$FromToDate"
+    "name": "org.kohsuke.github_api.v2.GHProjectsV2ItemChanges$FromToDate"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequest$AutoMerge"
+    "name": "org.kohsuke.github_api.v2.GHPullRequest$AutoMerge"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequest"
+    "name": "org.kohsuke.github_api.v2.GHPullRequest"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequest$MergeMethod"
+    "name": "org.kohsuke.github_api.v2.GHPullRequest$MergeMethod"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestChanges"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestChanges"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestChanges$GHCommitPointer"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestChanges$GHCommitPointer"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestChanges$GHFrom"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestChanges$GHFrom"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestCommitDetail$Authorship"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestCommitDetail$Authorship"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestCommitDetail"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestCommitDetail"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestCommitDetail$Commit"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestCommitDetail$Commit"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestCommitDetail$CommitPointer"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestCommitDetail$CommitPointer"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestCommitDetail$Tree"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestCommitDetail$Tree"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestFileDetail"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestFileDetail"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestQueryBuilder"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestQueryBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestQueryBuilder$Sort"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestQueryBuilder$Sort"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReview"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReview"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewBuilder"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewBuilder$DraftReviewComment"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewBuilder$DraftReviewComment"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewBuilder$MultilineDraftReviewComment"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewBuilder$MultilineDraftReviewComment"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewBuilder$ReviewComment"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewBuilder$ReviewComment"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewBuilder$SingleLineDraftReviewComment"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewBuilder$SingleLineDraftReviewComment"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewComment"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewComment"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewComment$Side"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewComment$Side"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewCommentBuilder"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewCommentBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewCommentReactions"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewCommentReactions"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewEvent$1"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewEvent$1"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewEvent"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewEvent"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewState$1"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewState$1"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestReviewState"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestReviewState"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestSearchBuilder"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestSearchBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestSearchBuilder$PullRequestSearchResult"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestSearchBuilder$PullRequestSearchResult"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequestSearchBuilder$Sort"
+    "name": "org.kohsuke.github_api.v2.GHPullRequestSearchBuilder$Sort"
   },
   {
-    "name": "org.kohsuke.github.GHQueryBuilder"
+    "name": "org.kohsuke.github_api.v2.GHQueryBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHRateLimit"
+    "name": "org.kohsuke.github_api.v2.GHRateLimit"
   },
   {
-    "name": "org.kohsuke.github.GHRateLimit$Record"
+    "name": "org.kohsuke.github_api.v2.GHRateLimit$Record"
   },
   {
-    "name": "org.kohsuke.github.GHRateLimit$UnknownLimitRecord"
+    "name": "org.kohsuke.github_api.v2.GHRateLimit$UnknownLimitRecord"
   },
   {
-    "name": "org.kohsuke.github.GHReaction"
+    "name": "org.kohsuke.github_api.v2.GHReaction"
   },
   {
-    "name": "org.kohsuke.github.GHRef"
+    "name": "org.kohsuke.github_api.v2.GHRef"
   },
   {
-    "name": "org.kohsuke.github.GHRef$GHObject"
+    "name": "org.kohsuke.github_api.v2.GHRef$GHObject"
   },
   {
-    "name": "org.kohsuke.github.GHRelease"
+    "name": "org.kohsuke.github_api.v2.GHRelease"
   },
   {
-    "name": "org.kohsuke.github.GHReleaseBuilder"
+    "name": "org.kohsuke.github_api.v2.GHReleaseBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHReleaseBuilder$MakeLatest"
+    "name": "org.kohsuke.github_api.v2.GHReleaseBuilder$MakeLatest"
   },
   {
-    "name": "org.kohsuke.github.GHRepoHook"
+    "name": "org.kohsuke.github_api.v2.GHRepoHook"
   },
   {
-    "name": "org.kohsuke.github.GHRepository$1"
+    "name": "org.kohsuke.github_api.v2.GHRepository$1"
   },
   {
-    "name": "org.kohsuke.github.GHRepository"
+    "name": "org.kohsuke.github_api.v2.GHRepository"
   },
   {
-    "name": "org.kohsuke.github.GHRepository$CollaboratorAffiliation"
+    "name": "org.kohsuke.github_api.v2.GHRepository$CollaboratorAffiliation"
   },
   {
-    "name": "org.kohsuke.github.GHRepository$Contributor"
+    "name": "org.kohsuke.github_api.v2.GHRepository$Contributor"
   },
   {
-    "name": "org.kohsuke.github.GHRepository$ForkSort"
+    "name": "org.kohsuke.github_api.v2.GHRepository$ForkSort"
   },
   {
-    "name": "org.kohsuke.github.GHRepository$GHCodeownersErrors"
+    "name": "org.kohsuke.github_api.v2.GHRepository$GHCodeownersErrors"
   },
   {
-    "name": "org.kohsuke.github.GHRepository$GHRepoPermission"
+    "name": "org.kohsuke.github_api.v2.GHRepository$GHRepoPermission"
   },
   {
-    "name": "org.kohsuke.github.GHRepository$Setter"
+    "name": "org.kohsuke.github_api.v2.GHRepository$Setter"
   },
   {
-    "name": "org.kohsuke.github.GHRepository$Topics"
+    "name": "org.kohsuke.github_api.v2.GHRepository$Topics"
   },
   {
-    "name": "org.kohsuke.github.GHRepository$Updater"
+    "name": "org.kohsuke.github_api.v2.GHRepository$Updater"
   },
   {
-    "name": "org.kohsuke.github.GHRepository$Visibility"
+    "name": "org.kohsuke.github_api.v2.GHRepository$Visibility"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryBuilder"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryChanges"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryChanges"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryChanges$FromName"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryChanges$FromName"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryChanges$FromOwner"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryChanges$FromOwner"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryChanges$FromRepository"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryChanges$FromRepository"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryChanges$Owner"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryChanges$Owner"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryCloneTraffic"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryCloneTraffic"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryCloneTraffic$DailyInfo"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryCloneTraffic$DailyInfo"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryDiscussion$Category"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryDiscussion$Category"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryDiscussion"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryDiscussion"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryDiscussion$State"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryDiscussion$State"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryDiscussionComment"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryDiscussionComment"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryPublicKey"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryPublicKey"
   },
   {
-    "name": "org.kohsuke.github.GHRepositorySearchBuilder"
+    "name": "org.kohsuke.github_api.v2.GHRepositorySearchBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHRepositorySearchBuilder$Fork"
+    "name": "org.kohsuke.github_api.v2.GHRepositorySearchBuilder$Fork"
   },
   {
-    "name": "org.kohsuke.github.GHRepositorySearchBuilder$RepositorySearchResult"
+    "name": "org.kohsuke.github_api.v2.GHRepositorySearchBuilder$RepositorySearchResult"
   },
   {
-    "name": "org.kohsuke.github.GHRepositorySearchBuilder$Sort"
+    "name": "org.kohsuke.github_api.v2.GHRepositorySearchBuilder$Sort"
   },
   {
-    "name": "org.kohsuke.github.GHRepositorySelection"
+    "name": "org.kohsuke.github_api.v2.GHRepositorySelection"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryStatistics"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryStatistics"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryStatistics$CodeFrequency"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryStatistics$CodeFrequency"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryStatistics$CommitActivity"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryStatistics$CommitActivity"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryStatistics$ContributorStats"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryStatistics$ContributorStats"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryStatistics$ContributorStats$Week"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryStatistics$ContributorStats$Week"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryStatistics$Participation"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryStatistics$Participation"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryStatistics$PunchCardItem"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryStatistics$PunchCardItem"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryTraffic"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryTraffic"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryTraffic$DailyInfo"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryTraffic$DailyInfo"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryTrafficReferralBase"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryTrafficReferralBase"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryTrafficTopReferralPath"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryTrafficTopReferralPath"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryTrafficTopReferralSources"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryTrafficTopReferralSources"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryVariable$1"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryVariable$1"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryVariable"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryVariable"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryVariable$Creator"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryVariable$Creator"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryVariable$Setter"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryVariable$Setter"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryVariableBuilder"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryVariableBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryViewTraffic"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryViewTraffic"
   },
   {
-    "name": "org.kohsuke.github.GHRepositoryViewTraffic$DailyInfo"
+    "name": "org.kohsuke.github_api.v2.GHRepositoryViewTraffic$DailyInfo"
   },
   {
-    "name": "org.kohsuke.github.GHRequestedAction"
+    "name": "org.kohsuke.github_api.v2.GHRequestedAction"
   },
   {
-    "name": "org.kohsuke.github.GHSearchBuilder"
+    "name": "org.kohsuke.github_api.v2.GHSearchBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHStargazer"
+    "name": "org.kohsuke.github_api.v2.GHStargazer"
   },
   {
-    "name": "org.kohsuke.github.GHSubscription"
+    "name": "org.kohsuke.github_api.v2.GHSubscription"
   },
   {
-    "name": "org.kohsuke.github.GHTag"
+    "name": "org.kohsuke.github_api.v2.GHTag"
   },
   {
-    "name": "org.kohsuke.github.GHTagObject"
+    "name": "org.kohsuke.github_api.v2.GHTagObject"
   },
   {
-    "name": "org.kohsuke.github.GHTargetType"
+    "name": "org.kohsuke.github_api.v2.GHTargetType"
   },
   {
-    "name": "org.kohsuke.github.GHTeam"
+    "name": "org.kohsuke.github_api.v2.GHTeam"
   },
   {
-    "name": "org.kohsuke.github.GHTeam$Privacy"
+    "name": "org.kohsuke.github_api.v2.GHTeam$Privacy"
   },
   {
-    "name": "org.kohsuke.github.GHTeam$Role"
+    "name": "org.kohsuke.github_api.v2.GHTeam$Role"
   },
   {
-    "name": "org.kohsuke.github.GHTeamBuilder"
+    "name": "org.kohsuke.github_api.v2.GHTeamBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHTeamCannotBeExternallyManagedException"
+    "name": "org.kohsuke.github_api.v2.GHTeamCannotBeExternallyManagedException"
   },
   {
-    "name": "org.kohsuke.github.GHTeamChanges"
+    "name": "org.kohsuke.github_api.v2.GHTeamChanges"
   },
   {
-    "name": "org.kohsuke.github.GHTeamChanges$FromPrivacy"
+    "name": "org.kohsuke.github_api.v2.GHTeamChanges$FromPrivacy"
   },
   {
-    "name": "org.kohsuke.github.GHTeamChanges$FromRepository"
+    "name": "org.kohsuke.github_api.v2.GHTeamChanges$FromRepository"
   },
   {
-    "name": "org.kohsuke.github.GHTeamChanges$FromRepositoryPermissions"
+    "name": "org.kohsuke.github_api.v2.GHTeamChanges$FromRepositoryPermissions"
   },
   {
-    "name": "org.kohsuke.github.GHTeamChanges$FromString"
+    "name": "org.kohsuke.github_api.v2.GHTeamChanges$FromString"
   },
   {
-    "name": "org.kohsuke.github.GHThread"
+    "name": "org.kohsuke.github_api.v2.GHThread"
   },
   {
-    "name": "org.kohsuke.github.GHThread$Subject"
+    "name": "org.kohsuke.github_api.v2.GHThread$Subject"
   },
   {
-    "name": "org.kohsuke.github.GHTree"
+    "name": "org.kohsuke.github_api.v2.GHTree"
   },
   {
-    "name": "org.kohsuke.github.GHTreeBuilder$1"
+    "name": "org.kohsuke.github_api.v2.GHTreeBuilder$1"
   },
   {
-    "name": "org.kohsuke.github.GHTreeBuilder"
+    "name": "org.kohsuke.github_api.v2.GHTreeBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHTreeBuilder$DeleteTreeEntry"
+    "name": "org.kohsuke.github_api.v2.GHTreeBuilder$DeleteTreeEntry"
   },
   {
-    "name": "org.kohsuke.github.GHTreeBuilder$TreeEntry"
+    "name": "org.kohsuke.github_api.v2.GHTreeBuilder$TreeEntry"
   },
   {
-    "name": "org.kohsuke.github.GHTreeEntry"
+    "name": "org.kohsuke.github_api.v2.GHTreeEntry"
   },
   {
-    "name": "org.kohsuke.github.GHUser"
+    "name": "org.kohsuke.github_api.v2.GHUser"
   },
   {
-    "name": "org.kohsuke.github.GHUserSearchBuilder"
+    "name": "org.kohsuke.github_api.v2.GHUserSearchBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHUserSearchBuilder$Sort"
+    "name": "org.kohsuke.github_api.v2.GHUserSearchBuilder$Sort"
   },
   {
-    "name": "org.kohsuke.github.GHUserSearchBuilder$UserSearchResult"
+    "name": "org.kohsuke.github_api.v2.GHUserSearchBuilder$UserSearchResult"
   },
   {
-    "name": "org.kohsuke.github.GHVerification"
+    "name": "org.kohsuke.github_api.v2.GHVerification"
   },
   {
-    "name": "org.kohsuke.github.GHVerification$Reason"
+    "name": "org.kohsuke.github_api.v2.GHVerification$Reason"
   },
   {
-    "name": "org.kohsuke.github.GHVerifiedKey"
+    "name": "org.kohsuke.github_api.v2.GHVerifiedKey"
   },
   {
-    "name": "org.kohsuke.github.GHWorkflow"
+    "name": "org.kohsuke.github_api.v2.GHWorkflow"
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowJob"
+    "name": "org.kohsuke.github_api.v2.GHWorkflowJob"
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowJob$Step"
+    "name": "org.kohsuke.github_api.v2.GHWorkflowJob$Step"
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowJobQueryBuilder"
+    "name": "org.kohsuke.github_api.v2.GHWorkflowJobQueryBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowJobsIterable$1"
+    "name": "org.kohsuke.github_api.v2.GHWorkflowJobsIterable$1"
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowJobsIterable"
+    "name": "org.kohsuke.github_api.v2.GHWorkflowJobsIterable"
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowJobsPage"
+    "name": "org.kohsuke.github_api.v2.GHWorkflowJobsPage"
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowRun"
+    "name": "org.kohsuke.github_api.v2.GHWorkflowRun"
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowRun$Conclusion"
+    "name": "org.kohsuke.github_api.v2.GHWorkflowRun$Conclusion"
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowRun$HeadCommit"
+    "name": "org.kohsuke.github_api.v2.GHWorkflowRun$HeadCommit"
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowRun$Status"
+    "name": "org.kohsuke.github_api.v2.GHWorkflowRun$Status"
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowRunQueryBuilder"
+    "name": "org.kohsuke.github_api.v2.GHWorkflowRunQueryBuilder"
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowRunsIterable$1"
+    "name": "org.kohsuke.github_api.v2.GHWorkflowRunsIterable$1"
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowRunsIterable"
+    "name": "org.kohsuke.github_api.v2.GHWorkflowRunsIterable"
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowRunsPage"
+    "name": "org.kohsuke.github_api.v2.GHWorkflowRunsPage"
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowsIterable$1"
+    "name": "org.kohsuke.github_api.v2.GHWorkflowsIterable$1"
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowsIterable"
+    "name": "org.kohsuke.github_api.v2.GHWorkflowsIterable"
   },
   {
-    "name": "org.kohsuke.github.GHWorkflowsPage"
+    "name": "org.kohsuke.github_api.v2.GHWorkflowsPage"
   },
   {
-    "name": "org.kohsuke.github.GitCommit$1"
+    "name": "org.kohsuke.github_api.v2.GitCommit$1"
   },
   {
-    "name": "org.kohsuke.github.GitCommit"
+    "name": "org.kohsuke.github_api.v2.GitCommit"
   },
   {
-    "name": "org.kohsuke.github.GitCommit$Tree"
+    "name": "org.kohsuke.github_api.v2.GitCommit$Tree"
   },
   {
-    "name": "org.kohsuke.github.GitHub$1"
+    "name": "org.kohsuke.github_api.v2.GitHub$1"
   },
   {
-    "name": "org.kohsuke.github.GitHub$AuthorizationRefreshGitHubWrapper"
+    "name": "org.kohsuke.github_api.v2.GitHub$AuthorizationRefreshGitHubWrapper"
   },
   {
-    "name": "org.kohsuke.github.GitHubBuilder"
+    "name": "org.kohsuke.github_api.v2.GitHubBuilder"
   },
   {
-    "name": "org.kohsuke.github.GitHubConnectorResponseErrorHandler$1"
+    "name": "org.kohsuke.github_api.v2.GitHubConnectorResponseErrorHandler$1"
   },
   {
-    "name": "org.kohsuke.github.GitHubInteractiveObject"
+    "name": "org.kohsuke.github_api.v2.GitHubInteractiveObject"
   },
   {
-    "name": "org.kohsuke.github.GitHubPageContentsIterable"
+    "name": "org.kohsuke.github_api.v2.GitHubPageContentsIterable"
   },
   {
-    "name": "org.kohsuke.github.GitHubPageContentsIterable$GitHubPageContentsIterator"
+    "name": "org.kohsuke.github_api.v2.GitHubPageContentsIterable$GitHubPageContentsIterator"
   },
   {
-    "name": "org.kohsuke.github.GitHubPageIterator"
+    "name": "org.kohsuke.github_api.v2.GitHubPageIterator"
   },
   {
-    "name": "org.kohsuke.github.GitHubRequest$1"
+    "name": "org.kohsuke.github_api.v2.GitHubRequest$1"
   },
   {
-    "name": "org.kohsuke.github.GitHubRequest$Builder"
+    "name": "org.kohsuke.github_api.v2.GitHubRequest$Builder"
   },
   {
-    "name": "org.kohsuke.github.GitHubRequest"
+    "name": "org.kohsuke.github_api.v2.GitHubRequest"
   },
   {
-    "name": "org.kohsuke.github.GitHubRequest$Entry"
+    "name": "org.kohsuke.github_api.v2.GitHubRequest$Entry"
   },
   {
-    "name": "org.kohsuke.github.GitHubResponse"
+    "name": "org.kohsuke.github_api.v2.GitHubResponse"
   },
   {
-    "name": "org.kohsuke.github.GitHubSanityCachedValue"
+    "name": "org.kohsuke.github_api.v2.GitHubSanityCachedValue"
   },
   {
-    "name": "org.kohsuke.github.GitUser"
+    "name": "org.kohsuke.github_api.v2.GitUser"
   },
   {
-    "name": "org.kohsuke.github.JsonRateLimit"
+    "name": "org.kohsuke.github_api.v2.JsonRateLimit"
   },
   {
-    "name": "org.kohsuke.github.MarkdownMode"
+    "name": "org.kohsuke.github_api.v2.MarkdownMode"
   },
   {
-    "name": "org.kohsuke.github.PagedIterable"
+    "name": "org.kohsuke.github_api.v2.PagedIterable"
   },
   {
-    "name": "org.kohsuke.github.PagedSearchIterable$1"
+    "name": "org.kohsuke.github_api.v2.PagedSearchIterable$1"
   },
   {
-    "name": "org.kohsuke.github.PagedSearchIterable"
+    "name": "org.kohsuke.github_api.v2.PagedSearchIterable"
   },
   {
-    "name": "org.kohsuke.github.Preview"
+    "name": "org.kohsuke.github_api.v2.Preview"
   },
   {
-    "name": "org.kohsuke.github.RateLimitChecker$1"
+    "name": "org.kohsuke.github_api.v2.RateLimitChecker$1"
   },
   {
-    "name": "org.kohsuke.github.RateLimitChecker$LiteralValue"
+    "name": "org.kohsuke.github_api.v2.RateLimitChecker$LiteralValue"
   },
   {
-    "name": "org.kohsuke.github.RateLimitHandler$1"
+    "name": "org.kohsuke.github_api.v2.RateLimitHandler$1"
   },
   {
-    "name": "org.kohsuke.github.RateLimitHandler$2"
+    "name": "org.kohsuke.github_api.v2.RateLimitHandler$2"
   },
   {
-    "name": "org.kohsuke.github.RateLimitTarget"
+    "name": "org.kohsuke.github_api.v2.RateLimitTarget"
   },
   {
-    "name": "org.kohsuke.github.ReactionContent"
+    "name": "org.kohsuke.github_api.v2.ReactionContent"
   },
   {
-    "name": "org.kohsuke.github.SearchResult"
+    "name": "org.kohsuke.github_api.v2.SearchResult"
   },
   {
-    "name": "org.kohsuke.github.ServiceDownException"
+    "name": "org.kohsuke.github_api.v2.ServiceDownException"
   },
   {
-    "name": "org.kohsuke.github.SkipFromToString"
+    "name": "org.kohsuke.github_api.v2.SkipFromToString"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequest$EnablePullRequestAutoMergeResponse"
+    "name": "org.kohsuke.github_api.v2.GHPullRequest$EnablePullRequestAutoMergeResponse"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequest$EnablePullRequestAutoMergeResponse$EnablePullRequestAutoMerge"
+    "name": "org.kohsuke.github_api.v2.GHPullRequest$EnablePullRequestAutoMergeResponse$EnablePullRequestAutoMerge"
   },
   {
-    "name": "org.kohsuke.github.GHPullRequest$EnablePullRequestAutoMergeResponse$EnablePullRequestAutoMerge$EnablePullRequestAutoMergePullRequest"
+    "name": "org.kohsuke.github_api.v2.GHPullRequest$EnablePullRequestAutoMergeResponse$EnablePullRequestAutoMerge$EnablePullRequestAutoMergePullRequest"
   },
   {
-    "name": "org.kohsuke.github.internal.graphql.response.GHGraphQLResponse"
+    "name": "org.kohsuke.github_api.v2.internal.graphql.response.GHGraphQLResponse"
   },
   {
-    "name": "org.kohsuke.github.internal.graphql.response.GHGraphQLResponse$GraphQLError"
+    "name": "org.kohsuke.github_api.v2.internal.graphql.response.GHGraphQLResponse$GraphQLError"
   },
   {
-    "name": "org.kohsuke.github.internal.graphql.response.GHGraphQLResponse$ObjectResponse"
+    "name": "org.kohsuke.github_api.v2.internal.graphql.response.GHGraphQLResponse$ObjectResponse"
   },
   {
-    "name": "org.kohsuke.github.GHAutolink"
+    "name": "org.kohsuke.github_api.v2.GHAutolink"
   },
   {
-    "name": "org.kohsuke.github.GitHubBridgeAdapterObject"
+    "name": "org.kohsuke.github_api.v2.GitHubBridgeAdapterObject"
   }
 ]

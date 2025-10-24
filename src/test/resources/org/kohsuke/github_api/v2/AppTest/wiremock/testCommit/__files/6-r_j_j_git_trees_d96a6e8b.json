@@ -1,0 +1,217 @@
+{
+  "sha": "d96a6e8b7231571b49af150a683177f37a180f04",
+  "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/d96a6e8b7231571b49af150a683177f37a180f04",
+  "tree": [
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "66394a91cad2c5e142c52e2681f3d04038261527",
+      "size": 441,
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/blobs/66394a91cad2c5e142c52e2681f3d04038261527"
+    },
+    {
+      "path": ".jenkins",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "652bd394f0252c7f1347be196dc1b2173accd0cf",
+      "size": 93,
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/blobs/652bd394f0252c7f1347be196dc1b2173accd0cf"
+    },
+    {
+      "path": "BUILDING.TXT",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9620b1b88b9f31a8b32cc37c2da0316d5c639d25",
+      "size": 287,
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/blobs/9620b1b88b9f31a8b32cc37c2da0316d5c639d25"
+    },
+    {
+      "path": "LICENSE.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b3249a138b58c24fbe712e51c9827fa97c3efa70",
+      "size": 1144,
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/blobs/b3249a138b58c24fbe712e51c9827fa97c3efa70"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2df751a11a4904182fc43d969de8e6d0ceef33c0",
+      "size": 1033,
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/blobs/2df751a11a4904182fc43d969de8e6d0ceef33c0"
+    },
+    {
+      "path": "assembly-src.xml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "851623064c9d27d0d0cd6340f8bf1de4f5ea93d0",
+      "size": 1937,
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/blobs/851623064c9d27d0d0cd6340f8bf1de4f5ea93d0"
+    },
+    {
+      "path": "changelog.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "04d3e54017542ad0ff46355eababacd4850ccba5",
+      "size": 219753,
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/blobs/04d3e54017542ad0ff46355eababacd4850ccba5"
+    },
+    {
+      "path": "cli",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "248bcb60672bf6fe97f9954c66600433cd56901d",
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/248bcb60672bf6fe97f9954c66600433cd56901d"
+    },
+    {
+      "path": "core",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "06dc1d486f7fa4a10a3183fce9b531ccfff600dd",
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/06dc1d486f7fa4a10a3183fce9b531ccfff600dd"
+    },
+    {
+      "path": "debian",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "37ec5c6670aefdce71a2c4062c752f9ababfc5ae",
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/37ec5c6670aefdce71a2c4062c752f9ababfc5ae"
+    },
+    {
+      "path": "dummy.keystore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a353377aca92b2cead3697ee42c9278d39320fa4",
+      "size": 1320,
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/blobs/a353377aca92b2cead3697ee42c9278d39320fa4"
+    },
+    {
+      "path": "ebuild",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "0a4e94466a714487b7c1916ad316a3e41f32a364",
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/0a4e94466a714487b7c1916ad316a3e41f32a364"
+    },
+    {
+      "path": "ips",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "35ec0860150597ad54ef2be8f634566bcf9ae807",
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/35ec0860150597ad54ef2be8f634566bcf9ae807"
+    },
+    {
+      "path": "licenseCompleter.groovy",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1df9f4208a30246a3ae13f6af2254be33519057d",
+      "size": 4556,
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/blobs/1df9f4208a30246a3ae13f6af2254be33519057d"
+    },
+    {
+      "path": "maven-plugin",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "bc6560e847a20b5884a410ce5923a7accbb55b8c",
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/bc6560e847a20b5884a410ce5923a7accbb55b8c"
+    },
+    {
+      "path": "msi",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "12a20d74ac9c11a570f49cea90a85b6a531c8938",
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/12a20d74ac9c11a570f49cea90a85b6a531c8938"
+    },
+    {
+      "path": "opensuse",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "cd38934df44b4c3221f0fbca7c1ae8dd83eb0346",
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/cd38934df44b4c3221f0fbca7c1ae8dd83eb0346"
+    },
+    {
+      "path": "osx",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "fb010ba70f4179daf83a5ae37c3d684b3085abad",
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/fb010ba70f4179daf83a5ae37c3d684b3085abad"
+    },
+    {
+      "path": "plugins",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "3f1aef66e70d19f42bc90a1c42b0293b99ae7c42",
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/3f1aef66e70d19f42bc90a1c42b0293b99ae7c42"
+    },
+    {
+      "path": "pom.xml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6bfdff966a8e9ed14c58e04504bb6d2c105fcddf",
+      "size": 27424,
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/blobs/6bfdff966a8e9ed14c58e04504bb6d2c105fcddf"
+    },
+    {
+      "path": "rc.changelog.rb",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7f3051b461197ca2b7a4440e3651930c42a4bd58",
+      "size": 1737,
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/blobs/7f3051b461197ca2b7a4440e3651930c42a4bd58"
+    },
+    {
+      "path": "rpm",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "203ee4411eb9c05674afeec91eefc426f2dcb3e6",
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/203ee4411eb9c05674afeec91eefc426f2dcb3e6"
+    },
+    {
+      "path": "show-pom-version.rb",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "919e6e524ee1a180e8ebf1f2e0a79905db4cadbf",
+      "size": 320,
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/blobs/919e6e524ee1a180e8ebf1f2e0a79905db4cadbf"
+    },
+    {
+      "path": "test",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "cde7393d6f5ce16310db1f469990ae2439e02340",
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/cde7393d6f5ce16310db1f469990ae2439e02340"
+    },
+    {
+      "path": "todo.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "187cdf651cbf44196886f87327dc3968443174fb",
+      "size": 116,
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/blobs/187cdf651cbf44196886f87327dc3968443174fb"
+    },
+    {
+      "path": "translation-tool.pl",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "11ca0dc92e660a35a6b9a94d4c7d520feeeb56e2",
+      "size": 13335,
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/blobs/11ca0dc92e660a35a6b9a94d4c7d520feeeb56e2"
+    },
+    {
+      "path": "ui-samples-plugin",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "86d4e6eb13ed9c81a23e2534a3a145787205af27",
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/86d4e6eb13ed9c81a23e2534a3a145787205af27"
+    },
+    {
+      "path": "war",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "216d657eb6b24cb3ee300cf9dfe97b4131b7800b",
+      "url": "https://api.github.com/repos/jenkinsci/jenkins/git/trees/216d657eb6b24cb3ee300cf9dfe97b4131b7800b"
+    }
+  ],
+  "truncated": false
+}

@@ -1,0 +1,33 @@
+[
+  {
+    "url": "https://api.github.com/repos/cloudbees/support-analytics/issues/comments/328369618",
+    "html_url": "https://github.com/cloudbees/support-analytics/issues/40#issuecomment-328369618",
+    "issue_url": "https://api.github.com/repos/cloudbees/support-analytics/issues/40",
+    "id": 328369618,
+    "node_id": "MDEyOklzc3VlQ29tbWVudDMyODM2OTYxOA==",
+    "user": {
+      "login": "aheritier",
+      "id": 174600,
+      "node_id": "MDQ6VXNlcjE3NDYwMA==",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/174600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/aheritier",
+      "html_url": "https://github.com/aheritier",
+      "followers_url": "https://api.github.com/users/aheritier/followers",
+      "following_url": "https://api.github.com/users/aheritier/following{/other_user}",
+      "gists_url": "https://api.github.com/users/aheritier/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/aheritier/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/aheritier/subscriptions",
+      "organizations_url": "https://api.github.com/users/aheritier/orgs",
+      "repos_url": "https://api.github.com/users/aheritier/repos",
+      "events_url": "https://api.github.com/users/aheritier/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/aheritier/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "created_at": "2017-09-10T20:28:21Z",
+    "updated_at": "2017-09-10T20:28:21Z",
+    "author_association": "CONTRIBUTOR",
+    "body": "Replaced by https://cloudbees.atlassian.net/browse/CE-1062"
+  }
+]

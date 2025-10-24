@@ -1,11 +1,9 @@
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.time.Instant;
 import java.util.Date;
 
 // TODO: Auto-generated Javadoc
@@ -22,10 +20,10 @@ public class GHThread extends GHObject {
     /**
      * The Class Subject.
      */
-    static class Subject extends GitHubBridgeAdapterObject {
+    static class Subject {
 
         /** The latest comment url. */
-        String latestCommentUrl;
+        String latest_comment_url;
 
         /** The title. */
         String title;
@@ -36,13 +34,13 @@ public class GHThread extends GHObject {
         /** The url. */
         String url;
     }
-    private String lastReadAt;
+    private String last_read_at;
     private String reason;
     private GHRepository repository;
     private Subject subject;
     private boolean unread;
 
-    private String url, subscriptionUrl;
+    private String url, subscription_url;
 
     private GHThread() {// no external construction allowed
     }
@@ -94,7 +92,7 @@ public class GHThread extends GHObject {
      * @return the last comment url
      */
     public String getLastCommentUrl() {
-        return subject.latestCommentUrl;
+        return subject.latest_comment_url;
     }
 
     /**
@@ -102,9 +100,8 @@ public class GHThread extends GHObject {
      *
      * @return the last read at
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getLastReadAt() {
-        return GitHubClient.parseInstant(lastReadAt);
+    public Date getLastReadAt() {
+        return GitHubClient.parseDate(last_read_at);
     }
 
     /**
@@ -135,7 +132,7 @@ public class GHThread extends GHObject {
      */
     public GHSubscription getSubscription() throws IOException {
         try {
-            return root().createRequest().method("POST").withUrlPath(subscriptionUrl).fetch(GHSubscription.class);
+            return root().createRequest().method("POST").withUrlPath(subscription_url).fetch(GHSubscription.class);
         } catch (FileNotFoundException e) {
             return null;
         }
@@ -194,7 +191,7 @@ public class GHThread extends GHObject {
                 .method("PUT")
                 .with("subscribed", subscribed)
                 .with("ignored", ignored)
-                .withUrlPath(subscriptionUrl)
+                .withUrlPath(subscription_url)
                 .fetch(GHSubscription.class);
     }
 }

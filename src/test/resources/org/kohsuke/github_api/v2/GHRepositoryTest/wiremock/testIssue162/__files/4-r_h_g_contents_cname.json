@@ -1,0 +1,18 @@
+{
+  "name": "CNAME",
+  "path": "CNAME",
+  "sha": "b54f5a6e2976e5e0ea312837006e9b2b3378f99c",
+  "size": 23,
+  "url": "https://api.github.com/repos/hub4j/github-api/contents/CNAME?ref=gh-pages",
+  "html_url": "https://github.com/hub4j/github-api/blob/gh-pages/CNAME",
+  "git_url": "https://api.github.com/repos/hub4j/github-api/git/blobs/b54f5a6e2976e5e0ea312837006e9b2b3378f99c",
+  "download_url": "https://raw.githubusercontent.com/hub4j/github-api/gh-pages/CNAME",
+  "type": "file",
+  "content": "Z2l0aHViLWFwaS5rb2hzdWtlLm9yZwo=\n",
+  "encoding": "base64",
+  "_links": {
+    "self": "https://api.github.com/repos/hub4j/github-api/contents/CNAME?ref=gh-pages",
+    "git": "https://api.github.com/repos/hub4j/github-api/git/blobs/b54f5a6e2976e5e0ea312837006e9b2b3378f99c",
+    "html": "https://github.com/hub4j/github-api/blob/gh-pages/CNAME"
+  }
+}

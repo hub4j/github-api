@@ -124,13 +124,13 @@ public class GHLabel extends GitHubInteractiveObject {
         return r;
     }
 
+    @JsonProperty("default")
+    private boolean default_;
+
     @CheckForNull
     private String description;
 
     private long id;
-
-    @JsonProperty("default")
-    private boolean isDefault;
 
     private String nodeId;
 
@@ -247,7 +247,7 @@ public class GHLabel extends GitHubInteractiveObject {
      * @return true if the label is a default one
      */
     public boolean isDefault() {
-        return isDefault;
+        return default_;
     }
 
     /**

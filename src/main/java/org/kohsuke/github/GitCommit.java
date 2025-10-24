@@ -1,9 +1,7 @@
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.time.Instant;
 import java.util.AbstractList;
 import java.util.Collections;
 import java.util.Date;
@@ -18,7 +16,7 @@ import java.util.List;
  */
 
 @SuppressFBWarnings(value = { "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
-public class GitCommit extends GitHubBridgeAdapterObject {
+public class GitCommit {
     /**
      * The Class Tree.
      */
@@ -57,7 +55,7 @@ public class GitCommit extends GitHubBridgeAdapterObject {
 
     private List<GHCommit.Parent> parents;
 
-    private String sha, nodeId, url, htmlUrl;
+    private String sha, node_id, url, html_url;
 
     private Tree tree;
 
@@ -81,9 +79,9 @@ public class GitCommit extends GitHubBridgeAdapterObject {
         // to GHCommit, for testing purposes
         this.owner = commit.getOwner();
         this.sha = commit.getSha();
-        this.nodeId = commit.getNodeId();
+        this.node_id = commit.getNodeId();
         this.url = commit.getUrl();
-        this.htmlUrl = commit.getHtmlUrl();
+        this.html_url = commit.getHtmlUrl();
         this.author = commit.getAuthor();
         this.committer = commit.getCommitter();
         this.message = commit.getMessage();
@@ -106,8 +104,7 @@ public class GitCommit extends GitHubBridgeAdapterObject {
      *
      * @return the authored date
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getAuthoredDate() {
+    public Date getAuthoredDate() {
         return author.getDate();
     }
 
@@ -116,8 +113,7 @@ public class GitCommit extends GitHubBridgeAdapterObject {
      *
      * @return the commit date
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getCommitDate() {
+    public Date getCommitDate() {
         return committer.getDate();
     }
 
@@ -136,7 +132,7 @@ public class GitCommit extends GitHubBridgeAdapterObject {
      * @return The HTML URL of this commit
      */
     public String getHtmlUrl() {
-        return htmlUrl;
+        return html_url;
     }
 
     /**
@@ -154,7 +150,7 @@ public class GitCommit extends GitHubBridgeAdapterObject {
      * @return The node id of this commit
      */
     public String getNodeId() {
-        return nodeId;
+        return node_id;
     }
 
     /**

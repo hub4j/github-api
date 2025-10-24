@@ -1,0 +1,57 @@
+{
+  "id": "9f6f5be6-b5c5-4840-865c-ba84ad262118",
+  "name": "repos_hub4j-test-org_temp-testcheckswithappids_branches_main_protection",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-testChecksWithAppIds/branches/main/protection",
+    "method": "PUT",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"required_pull_request_reviews\":null,\"required_status_checks\":{\"checks\":[{\"context\":\"context\",\"app_id\":-1},{\"context\":\"context2\",\"app_id\":123},{\"context\":\"context3\"}],\"strict\":false},\"restrictions\":null,\"enforce_admins\":false}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "6-r_h_t_branches_main_protection.json",
+    "headers": {
+      "Server": "GitHub.com",
+      "Date": "Thu, 13 Jun 2024 14:46:41 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": [
+        "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "Accept-Encoding, Accept, X-Requested-With"
+      ],
+      "ETag": "W/\"59d4b1a76c2903c6f8950aecee97ded98e0a0704a6ec06aebd22434d63b3a19c\"",
+      "X-OAuth-Scopes": "admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, admin:ssh_signing_key, audit_log, codespace, copilot, delete:packages, delete_repo, gist, notifications, project, repo, user, workflow, write:discussion, write:packages",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2024-06-16 12:56:36 UTC",
+      "X-GitHub-Media-Type": "github.v3; param=luke-cage-preview; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4966",
+      "X-RateLimit-Reset": "1718293429",
+      "X-RateLimit-Used": "34",
+      "X-RateLimit-Resource": "core",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "X-GitHub-Request-Id": "C8E4:2DA98F:90511D4:9134847:666B0651"
+    }
+  },
+  "uuid": "9f6f5be6-b5c5-4840-865c-ba84ad262118",
+  "persistent": true,
+  "insertionIndex": 6
+}

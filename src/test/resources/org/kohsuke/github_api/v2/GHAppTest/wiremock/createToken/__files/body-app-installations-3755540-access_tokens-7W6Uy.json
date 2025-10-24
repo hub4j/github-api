@@ -1,0 +1,11 @@
+{
+  "token": "bogus",
+  "expires_at": "2019-12-19T12:27:59Z",
+  "permissions": {
+    "checks": "write",
+    "pull_requests": "write",
+    "contents": "read",
+    "metadata": "read"
+  },
+  "repository_selection": "all"
+}

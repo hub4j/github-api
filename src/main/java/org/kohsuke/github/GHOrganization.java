@@ -93,7 +93,7 @@ public class GHOrganization extends GHPerson {
         MEMBER /** The user is a non-owner member of the organization. */
     }
 
-    private boolean hasOrganizationProjects;
+    private boolean has_organization_projects;
 
     /**
      * Create default GHOrganization instance
@@ -127,7 +127,7 @@ public class GHOrganization extends GHPerson {
      * @return the boolean
      */
     public boolean areOrganizationProjectsEnabled() {
-        return hasOrganizationProjects;
+        return has_organization_projects;
     }
 
     /**

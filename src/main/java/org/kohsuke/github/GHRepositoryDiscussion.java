@@ -1,10 +1,8 @@
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import org.kohsuke.github.internal.EnumUtils;
 
 import java.net.URL;
-import java.time.Instant;
 import java.util.Date;
 
 // TODO: Auto-generated Javadoc
@@ -33,7 +31,7 @@ public class GHRepositoryDiscussion extends GHObject {
      *      "https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions#discussioncategory">The
      *      GraphQL API for Discussions</a>
      */
-    public static class Category extends GitHubBridgeAdapterObject {
+    public static class Category {
 
         private String createdAt;
 
@@ -57,9 +55,8 @@ public class GHRepositoryDiscussion extends GHObject {
          *
          * @return the created at
          */
-        @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-        public Instant getCreatedAt() {
-            return GitHubClient.parseInstant(createdAt);
+        public Date getCreatedAt() {
+            return GitHubClient.parseDate(createdAt);
         }
 
         /**
@@ -130,9 +127,8 @@ public class GHRepositoryDiscussion extends GHObject {
          *
          * @return the updated at
          */
-        @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-        public Instant getUpdatedAt() {
-            return GitHubClient.parseInstant(updatedAt);
+        public Date getUpdatedAt() {
+            return GitHubClient.parseDate(updatedAt);
         }
 
         /**
@@ -197,9 +193,8 @@ public class GHRepositoryDiscussion extends GHObject {
      *
      * @return the answer chosen at
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getAnswerChosenAt() {
-        return GitHubClient.parseInstant(answerChosenAt);
+    public Date getAnswerChosenAt() {
+        return GitHubClient.parseDate(answerChosenAt);
     }
 
     /**

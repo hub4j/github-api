@@ -1,0 +1,348 @@
+[
+  {
+    "id": 243799118,
+    "url": "https://api.github.com/authorizations/243799118",
+    "app": {
+      "name": "Gist",
+      "url": "https://gist.github.com",
+      "client_id": "7e0a3cd836d3e544dbd9"
+    },
+    "token": "",
+    "hashed_token": "8680e9eb916138677c2e1dea04c9c50bca37fdb0aee4ed5c6659e6229af8d67e",
+    "token_last_eight": "0e0dc4c8",
+    "note": null,
+    "note_url": null,
+    "created_at": "2018-12-10T22:29:20Z",
+    "updated_at": "2018-12-10T22:29:22Z",
+    "scopes": [],
+    "fingerprint": null
+  },
+  {
+    "id": 248745961,
+    "url": "https://api.github.com/authorizations/248745961",
+    "app": {
+      "name": "Gist",
+      "url": "https://gist.github.com",
+      "client_id": "7e0a3cd836d3e544dbd9"
+    },
+    "token": "",
+    "hashed_token": "27fceb6cf799c5abfa0b31a2029afc0d4aba12b9e8ccd1a125ceb461e0d70ef0",
+    "token_last_eight": "8976808a",
+    "note": null,
+    "note_url": null,
+    "created_at": "2019-01-02T19:33:02Z",
+    "updated_at": "2019-01-02T19:33:03Z",
+    "scopes": [],
+    "fingerprint": null
+  },
+  {
+    "id": 315689462,
+    "url": "https://api.github.com/authorizations/315689462",
+    "app": {
+      "name": "Gist",
+      "url": "https://gist.github.com",
+      "client_id": "7e0a3cd836d3e544dbd9"
+    },
+    "token": "",
+    "hashed_token": "26b427c5dce5aa12b76043959bf67f42dfe4bbe3fba6274bf6bfa8f2fd5081d8",
+    "token_last_eight": "b2ef795e",
+    "note": null,
+    "note_url": null,
+    "created_at": "2019-08-06T20:33:14Z",
+    "updated_at": "2019-08-06T20:33:15Z",
+    "scopes": [],
+    "fingerprint": null
+  },
+  {
+    "id": 334088329,
+    "url": "https://api.github.com/authorizations/334088329",
+    "app": {
+      "name": "Gist",
+      "url": "https://gist.github.com",
+      "client_id": "7e0a3cd836d3e544dbd9"
+    },
+    "token": "",
+    "hashed_token": "42e81f6167677609fdbd275f1c7973f1359bd1accd8bf61391fff1f23ad50db9",
+    "token_last_eight": "a9183c33",
+    "note": null,
+    "note_url": null,
+    "created_at": "2019-09-30T01:42:27Z",
+    "updated_at": "2019-09-30T01:42:27Z",
+    "scopes": [],
+    "fingerprint": null
+  },
+  {
+    "id": 322436210,
+    "url": "https://api.github.com/authorizations/322436210",
+    "app": {
+      "name": "Bountysource",
+      "url": "https://www.bountysource.com",
+      "client_id": "7add57608c13b4f85a24"
+    },
+    "token": "",
+    "hashed_token": "6a39ace1d94c584968e734214e7de2cf2cf35cb8faa6732d388ea161c94ae87a",
+    "token_last_eight": "3c86fcea",
+    "note": null,
+    "note_url": null,
+    "created_at": "2019-08-27T19:59:12Z",
+    "updated_at": "2019-08-27T19:59:13Z",
+    "scopes": [],
+    "fingerprint": null
+  },
+  {
+    "id": 323662651,
+    "url": "https://api.github.com/authorizations/323662651",
+    "app": {
+      "name": "txlogin",
+      "url": "https://www.transifex.com/",
+      "client_id": "8eb7a6c0d0589d4da4a3"
+    },
+    "token": "",
+    "hashed_token": "fd3e240cb7062032012966eaa96b1efd60b066badbe196f313a370b7de0135e0",
+    "token_last_eight": "fc3a833d",
+    "note": null,
+    "note_url": null,
+    "created_at": "2019-08-31T02:57:15Z",
+    "updated_at": "2019-08-31T02:57:16Z",
+    "scopes": [
+      "user:email"
+    ],
+    "fingerprint": null
+  },
+  {
+    "id": 323971701,
+    "url": "https://api.github.com/authorizations/323971701",
+    "app": {
+      "name": "txlogin",
+      "url": "https://www.transifex.com/",
+      "client_id": "8eb7a6c0d0589d4da4a3"
+    },
+    "token": "",
+    "hashed_token": "b60029ee1c6f4e73bd733abc1a59647cff7b9c738e6bf300ed1f80b246d76cac",
+    "token_last_eight": "2fcdea07",
+    "note": null,
+    "note_url": null,
+    "created_at": "2019-09-01T18:45:24Z",
+    "updated_at": "2019-09-01T18:45:25Z",
+    "scopes": [
+      "user:email"
+    ],
+    "fingerprint": null
+  },
+  {
+    "id": 238459428,
+    "url": "https://api.github.com/authorizations/238459428",
+    "app": {
+      "name": "Gerrit (production)",
+      "url": "https://gerrit.libreoffice.org",
+      "client_id": "dbb12683baf88308f204"
+    },
+    "token": "",
+    "hashed_token": "6bc485fbe21e0b7ec472e2dd696a69fcf3a005bfb83445063d474a2774526546",
+    "token_last_eight": "c0a324ce",
+    "note": null,
+    "note_url": null,
+    "created_at": "2018-11-21T09:51:19Z",
+    "updated_at": "2018-11-21T09:51:20Z",
+    "scopes": [],
+    "fingerprint": null
+  },
+  {
+    "id": 262749303,
+    "url": "https://api.github.com/authorizations/262749303",
+    "app": {
+      "name": "Gerrit (production)",
+      "url": "https://gerrit.libreoffice.org",
+      "client_id": "dbb12683baf88308f204"
+    },
+    "token": "",
+    "hashed_token": "c513ed15f09b9e949a39195c046db8af99b40b1360fcc43262bc9bd6729e63a8",
+    "token_last_eight": "d0c61fd1",
+    "note": null,
+    "note_url": null,
+    "created_at": "2019-02-20T02:17:44Z",
+    "updated_at": "2019-02-20T02:17:45Z",
+    "scopes": [],
+    "fingerprint": null
+  },
+  {
+    "id": 249108993,
+    "url": "https://api.github.com/authorizations/249108993",
+    "app": {
+      "name": "gitlab.gnome.org",
+      "url": "https://gitlab.gnome.org",
+      "client_id": "a0550bbc0bbd5d9192b0"
+    },
+    "token": "",
+    "hashed_token": "a9d837352e22d3acaa3d956fe337aca2e1129146842a43e1747101e4fc723bdc",
+    "token_last_eight": "c13c6063",
+    "note": null,
+    "note_url": null,
+    "created_at": "2019-01-04T01:41:41Z",
+    "updated_at": "2019-01-04T01:41:43Z",
+    "scopes": [
+      "user:email"
+    ],
+    "fingerprint": null
+  },
+  {
+    "id": 254544801,
+    "url": "https://api.github.com/authorizations/254544801",
+    "app": {
+      "name": "gitlab.gnome.org",
+      "url": "https://gitlab.gnome.org",
+      "client_id": "a0550bbc0bbd5d9192b0"
+    },
+    "token": "",
+    "hashed_token": "05d2e1b9ad275ee52a9c91e79c86e90c28fe1935814ba77dd59ed467a42de6e7",
+    "token_last_eight": "572265ac",
+    "note": null,
+    "note_url": null,
+    "created_at": "2019-01-22T22:00:45Z",
+    "updated_at": "2019-01-22T22:00:46Z",
+    "scopes": [
+      "user:email"
+    ],
+    "fingerprint": null
+  },
+  {
+    "id": 256210392,
+    "url": "https://api.github.com/authorizations/256210392",
+    "app": {
+      "name": "gitlab.gnome.org",
+      "url": "https://gitlab.gnome.org",
+      "client_id": "a0550bbc0bbd5d9192b0"
+    },
+    "token": "",
+    "hashed_token": "9648dc266b32d769c212b3c1e56863df10d56187de0c45aee090695c5d993584",
+    "token_last_eight": "83bfdc27",
+    "note": null,
+    "note_url": null,
+    "created_at": "2019-01-28T18:22:50Z",
+    "updated_at": "2019-01-28T18:22:51Z",
+    "scopes": [
+      "user:email"
+    ],
+    "fingerprint": null
+  },
+  {
+    "id": 256212289,
+    "url": "https://api.github.com/authorizations/256212289",
+    "app": {
+      "name": "gitlab.gnome.org",
+      "url": "https://gitlab.gnome.org",
+      "client_id": "a0550bbc0bbd5d9192b0"
+    },
+    "token": "",
+    "hashed_token": "a3b17d5dc1eddf991ff7636bbf9bce4deb033b8f3cf14783d58a91a29eb8926f",
+    "token_last_eight": "66d749b7",
+    "note": null,
+    "note_url": null,
+    "created_at": "2019-01-28T18:29:16Z",
+    "updated_at": "2019-01-28T18:29:16Z",
+    "scopes": [
+      "user:email"
+    ],
+    "fingerprint": null
+  },
+  {
+    "id": 258599271,
+    "url": "https://api.github.com/authorizations/258599271",
+    "app": {
+      "name": "gitlab.gnome.org",
+      "url": "https://gitlab.gnome.org",
+      "client_id": "a0550bbc0bbd5d9192b0"
+    },
+    "token": "",
+    "hashed_token": "1d2de2c034a3d42a3f2b813881a3ad350e4612f0923441400db7b0c5202e29da",
+    "token_last_eight": "e016b7da",
+    "note": null,
+    "note_url": null,
+    "created_at": "2019-02-05T22:47:47Z",
+    "updated_at": "2019-02-05T22:47:51Z",
+    "scopes": [
+      "user:email"
+    ],
+    "fingerprint": null
+  },
+  {
+    "id": 258617438,
+    "url": "https://api.github.com/authorizations/258617438",
+    "app": {
+      "name": "gitlab.gnome.org",
+      "url": "https://gitlab.gnome.org",
+      "client_id": "a0550bbc0bbd5d9192b0"
+    },
+    "token": "",
+    "hashed_token": "b51727d5b1967e31ee2eb9c4fd041d95ece73d85c1172a28868f1fb766505682",
+    "token_last_eight": "22ef194a",
+    "note": null,
+    "note_url": null,
+    "created_at": "2019-02-06T00:36:36Z",
+    "updated_at": "2019-02-06T00:36:37Z",
+    "scopes": [
+      "user:email"
+    ],
+    "fingerprint": null
+  },
+  {
+    "id": 260299829,
+    "url": "https://api.github.com/authorizations/260299829",
+    "app": {
+      "name": "gitlab.gnome.org",
+      "url": "https://gitlab.gnome.org",
+      "client_id": "a0550bbc0bbd5d9192b0"
+    },
+    "token": "",
+    "hashed_token": "e6555a186b9906aacdfb05853b17527f8704d1ef6655f993c117675dac7552b8",
+    "token_last_eight": "2f6779f4",
+    "note": null,
+    "note_url": null,
+    "created_at": "2019-02-12T04:41:00Z",
+    "updated_at": "2019-02-12T04:41:01Z",
+    "scopes": [
+      "user:email"
+    ],
+    "fingerprint": null
+  },
+  {
+    "id": 335919696,
+    "url": "https://api.github.com/authorizations/335919696",
+    "app": {
+      "name": "gitlab.gnome.org",
+      "url": "https://gitlab.gnome.org",
+      "client_id": "a0550bbc0bbd5d9192b0"
+    },
+    "token": "",
+    "hashed_token": "165093857ab088861fdee20321ee7fddf13fba7e144167371023e181ce3bdfed",
+    "token_last_eight": "2986185e",
+    "note": null,
+    "note_url": null,
+    "created_at": "2019-10-04T03:42:20Z",
+    "updated_at": "2019-10-04T03:42:21Z",
+    "scopes": [
+      "user:email"
+    ],
+    "fingerprint": null
+  },
+  {
+    "id": 273525985,
+    "url": "https://api.github.com/authorizations/273525985",
+    "app": {
+      "name": "PWK",
+      "url": "https://play-with-k8s.com",
+      "client_id": "3adcd1df9f5e917ea249"
+    },
+    "token": "",
+    "hashed_token": "4a07b918ee287004f5a083305cc9ccd14b4fc11f68daf36d81ec28939ee6a17a",
+    "token_last_eight": "b4b21399",
+    "note": null,
+    "note_url": null,
+    "created_at": "2019-03-25T21:27:13Z",
+    "updated_at": "2019-03-25T21:27:14Z",
+    "scopes": [
+      "user:email"
+    ],
+    "fingerprint": null
+  }
+]

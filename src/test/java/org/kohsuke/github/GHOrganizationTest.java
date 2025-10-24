@@ -265,37 +265,6 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test create a repository from a template with all branches included
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     * @throws InterruptedException
-     *             Signals that Thread.sleep() was interrupted
-     */
-
-    @Test
-    public void testCreateRepositoryWithTemplateAndIncludeAllBranches() throws IOException, InterruptedException {
-        cleanupRepository(GITHUB_API_TEST_ORG + '/' + GITHUB_API_TEST);
-
-        GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
-        GHRepository templateRepository = org.getRepository(GITHUB_API_TEMPLATE_TEST);
-
-        GHRepository repository = gitHub.createRepository(GITHUB_API_TEST)
-                .fromTemplateRepository(templateRepository)
-                .includeAllBranches(true)
-                .owner(GITHUB_API_TEST_ORG)
-                .create();
-
-        assertThat(repository, notNullValue());
-
-        // give it a moment for branches to be created
-        Thread.sleep(1500);
-
-        assertThat(repository.getBranches().keySet(), equalTo(templateRepository.getBranches().keySet()));
-
-    }
-
-    /**
      * Test create team.
      *
      * @throws IOException

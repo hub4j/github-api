@@ -1,11 +1,9 @@
 package org.kohsuke.github;
 
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.Instant;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,10 +31,10 @@ public class GHCommit {
         int changes, additions, deletions;
 
         /** The previous filename. */
-        String filename, previousFilename;
+        String filename, previous_filename;
 
         /** The patch. */
-        String rawUrl, blobUrl, sha, patch;
+        String raw_url, blob_url, sha, patch;
 
         /** The status. */
         String status;
@@ -55,7 +53,7 @@ public class GHCommit {
          *         that resolves to the HTML page that describes this file.
          */
         public URL getBlobUrl() {
-            return GitHubClient.parseURL(blobUrl);
+            return GitHubClient.parseURL(blob_url);
         }
 
         /**
@@ -111,7 +109,7 @@ public class GHCommit {
          * @return Previous path, in case file has moved.
          */
         public String getPreviousFilename() {
-            return previousFilename;
+            return previous_filename;
         }
 
         /**
@@ -122,7 +120,7 @@ public class GHCommit {
          *         resolves to the actual content of the file.
          */
         public URL getRawUrl() {
-            return GitHubClient.parseURL(rawUrl);
+            return GitHubClient.parseURL(raw_url);
         }
 
         /**
@@ -172,7 +170,7 @@ public class GHCommit {
             justification = "JSON API")
     public static class ShortInfo extends GitCommit {
 
-        private int commentCount = -1;
+        private int comment_count = -1;
 
         /**
          * Creates instance of {@link GHCommit.ShortInfo}.
@@ -201,10 +199,10 @@ public class GHCommit {
          *             the GH exception
          */
         public int getCommentCount() throws GHException {
-            if (commentCount < 0) {
+            if (comment_count < 0) {
                 throw new GHException("Not available on this endpoint.");
             }
-            return commentCount;
+            return comment_count;
         }
 
         /**
@@ -253,7 +251,7 @@ public class GHCommit {
         /** The gravatar id. */
         // TODO: what if someone who doesn't have an account on GitHub makes a commit?
         @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "We don't provide it in API now")
-        String url, avatarUrl, gravatarId;
+        String url, avatar_url, gravatar_id;
     }
 
     private ShortInfo commit;
@@ -273,7 +271,7 @@ public class GHCommit {
     Stats stats;
 
     /** The sha. */
-    String url, htmlUrl, sha, message;
+    String url, html_url, sha, message;
 
     /**
      * Creates an instance of {@link GHCommit}.
@@ -296,7 +294,7 @@ public class GHCommit {
         commit = shortInfo;
 
         owner = commit.getOwner();
-        htmlUrl = commit.getHtmlUrl();
+        html_url = commit.getHtmlUrl();
         sha = commit.getSha();
         url = commit.getUrl();
         parents = commit.getParents();
@@ -366,8 +364,7 @@ public class GHCommit {
      * @throws IOException
      *             if the information was not already fetched and an attempt at fetching the information failed.
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getAuthoredDate() throws IOException {
+    public Date getAuthoredDate() throws IOException {
         return getCommitShortInfo().getAuthoredDate();
     }
 
@@ -389,8 +386,7 @@ public class GHCommit {
      * @throws IOException
      *             if the information was not already fetched and an attempt at fetching the information failed.
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getCommitDate() throws IOException {
+    public Date getCommitDate() throws IOException {
         return getCommitShortInfo().getCommitDate();
     }
 
@@ -426,7 +422,7 @@ public class GHCommit {
      *         "https://github.com/kohsuke/sandbox-ant/commit/8ae38db0ea5837313ab5f39d43a6f73de3bd9000"
      */
     public URL getHtmlUrl() {
-        return GitHubClient.parseURL(htmlUrl);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**

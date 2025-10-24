@@ -22,11 +22,11 @@ public class GHPullRequestReviewCommentReactions {
     private int hooray = -1;
     private int laugh = -1;
     @JsonProperty("-1")
-    private int minusOne = -1;
+    private int minus_one = -1;
     @JsonProperty("+1")
-    private int plusOne = -1;
+    private int plus_one = -1;
     private int rocket = -1;
-    private int totalCount = -1;
+    private int total_count = -1;
     private String url;
     /**
      * Create default GHPullRequestReviewCommentReactions instance
@@ -85,7 +85,7 @@ public class GHPullRequestReviewCommentReactions {
      * @return the number of -1 reactions
      */
     public int getMinusOne() {
-        return minusOne;
+        return minus_one;
     }
 
     /**
@@ -94,7 +94,7 @@ public class GHPullRequestReviewCommentReactions {
      * @return the number of +1 reactions
      */
     public int getPlusOne() {
-        return plusOne;
+        return plus_one;
     }
 
     /**
@@ -112,7 +112,7 @@ public class GHPullRequestReviewCommentReactions {
      * @return the number of total reactions
      */
     public int getTotalCount() {
-        return totalCount;
+        return total_count;
     }
 
     /**

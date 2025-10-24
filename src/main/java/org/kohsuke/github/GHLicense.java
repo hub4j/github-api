@@ -55,7 +55,7 @@ public class GHLicense extends GHObject {
     protected List<String> forbidden = new ArrayList<String>();
 
     /** The body. */
-    protected String htmlUrl, description, category, implementation, body;
+    protected String html_url, description, category, implementation, body;
 
     /** The name. */
     // these fields are always present, even in the short form
@@ -148,7 +148,7 @@ public class GHLicense extends GHObject {
      */
     public URL getHtmlUrl() throws IOException {
         populate();
-        return GitHubClient.parseURL(htmlUrl);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**

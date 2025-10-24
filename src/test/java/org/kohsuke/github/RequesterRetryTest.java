@@ -298,6 +298,65 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
     // }
 
     /**
+     * Test socket connection and retry success.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    // @Test
+    // public void testSocketConnectionAndRetry_Success() throws Exception {
+    // // Only implemented for HttpURLConnection connectors
+    // Assume.assumeThat(DefaultGitHubConnector.create(), not(instanceOf(HttpClientGitHubConnector.class)));
+
+    // // CONNECTION_RESET_BY_PEER errors result in two requests each
+    // // to get this failure for "3" tries we have to do 6 queries.
+    // // If there are only 5 errors we succeed.
+    // this.mockGitHub.apiServer()
+    // .stubFor(get(urlMatching(".+/branches/test/timeout")).atPriority(0)
+    // .inScenario("Retry")
+    // .whenScenarioStateIs(Scenario.STARTED)
+    // .willReturn(aResponse().withFault(Fault.CONNECTION_RESET_BY_PEER)))
+    // .setNewScenarioState("Retry-1");
+    // this.mockGitHub.apiServer()
+    // .stubFor(get(urlMatching(".+/branches/test/timeout")).atPriority(0)
+    // .inScenario("Retry")
+    // .whenScenarioStateIs("Retry-1")
+    // .willReturn(aResponse().withFault(Fault.CONNECTION_RESET_BY_PEER)))
+    // .setNewScenarioState("Retry-2");
+    // this.mockGitHub.apiServer()
+    // .stubFor(get(urlMatching(".+/branches/test/timeout")).atPriority(0)
+    // .inScenario("Retry")
+    // .whenScenarioStateIs("Retry-2")
+    // .willReturn(aResponse().withFault(Fault.CONNECTION_RESET_BY_PEER)))
+    // .setNewScenarioState("Retry-3");
+    // this.mockGitHub.apiServer()
+    // .stubFor(get(urlMatching(".+/branches/test/timeout")).atPriority(0)
+    // .inScenario("Retry")
+    // .whenScenarioStateIs("Retry-3")
+    // .willReturn(aResponse().withFault(Fault.CONNECTION_RESET_BY_PEER)))
+    // .setNewScenarioState("Retry-4");
+    // this.mockGitHub.apiServer()
+    // .stubFor(get(urlMatching(".+/branches/test/timeout")).atPriority(0)
+    // .atPriority(0)
+    // .inScenario("Retry")
+    // .whenScenarioStateIs("Retry-4")
+    // .willReturn(aResponse().withFault(Fault.CONNECTION_RESET_BY_PEER)))
+    // .setNewScenarioState("Retry-5");
+
+    // this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl()).build();
+
+    // GHRepository repo = getRepository();
+    // baseRequestCount = this.mockGitHub.getRequestCount();
+    // GHBranch branch = repo.getBranch("test/timeout");
+    // assertThat(branch, notNullValue());
+    // String capturedLog = getTestCapturedLog();
+    // assertThat(capturedLog, containsString("(2 retries remaining)"));
+    // assertThat(capturedLog, containsString("(1 retries remaining)"));
+
+    // assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + 6));
+    // }
+
+    /**
      * Reset test captured log.
      */
     public void resetTestCapturedLog() {
@@ -481,65 +540,6 @@ public class RequesterRetryTest extends AbstractGitHubWireMockTest {
             assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount));
         }
     }
-
-    /**
-     * Test socket connection and retry success.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    // @Test
-    // public void testSocketConnectionAndRetry_Success() throws Exception {
-    // // Only implemented for HttpURLConnection connectors
-    // Assume.assumeThat(DefaultGitHubConnector.create(), not(instanceOf(HttpClientGitHubConnector.class)));
-
-    // // CONNECTION_RESET_BY_PEER errors result in two requests each
-    // // to get this failure for "3" tries we have to do 6 queries.
-    // // If there are only 5 errors we succeed.
-    // this.mockGitHub.apiServer()
-    // .stubFor(get(urlMatching(".+/branches/test/timeout")).atPriority(0)
-    // .inScenario("Retry")
-    // .whenScenarioStateIs(Scenario.STARTED)
-    // .willReturn(aResponse().withFault(Fault.CONNECTION_RESET_BY_PEER)))
-    // .setNewScenarioState("Retry-1");
-    // this.mockGitHub.apiServer()
-    // .stubFor(get(urlMatching(".+/branches/test/timeout")).atPriority(0)
-    // .inScenario("Retry")
-    // .whenScenarioStateIs("Retry-1")
-    // .willReturn(aResponse().withFault(Fault.CONNECTION_RESET_BY_PEER)))
-    // .setNewScenarioState("Retry-2");
-    // this.mockGitHub.apiServer()
-    // .stubFor(get(urlMatching(".+/branches/test/timeout")).atPriority(0)
-    // .inScenario("Retry")
-    // .whenScenarioStateIs("Retry-2")
-    // .willReturn(aResponse().withFault(Fault.CONNECTION_RESET_BY_PEER)))
-    // .setNewScenarioState("Retry-3");
-    // this.mockGitHub.apiServer()
-    // .stubFor(get(urlMatching(".+/branches/test/timeout")).atPriority(0)
-    // .inScenario("Retry")
-    // .whenScenarioStateIs("Retry-3")
-    // .willReturn(aResponse().withFault(Fault.CONNECTION_RESET_BY_PEER)))
-    // .setNewScenarioState("Retry-4");
-    // this.mockGitHub.apiServer()
-    // .stubFor(get(urlMatching(".+/branches/test/timeout")).atPriority(0)
-    // .atPriority(0)
-    // .inScenario("Retry")
-    // .whenScenarioStateIs("Retry-4")
-    // .willReturn(aResponse().withFault(Fault.CONNECTION_RESET_BY_PEER)))
-    // .setNewScenarioState("Retry-5");
-
-    // this.gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl()).build();
-
-    // GHRepository repo = getRepository();
-    // baseRequestCount = this.mockGitHub.getRequestCount();
-    // GHBranch branch = repo.getBranch("test/timeout");
-    // assertThat(branch, notNullValue());
-    // String capturedLog = getTestCapturedLog();
-    // assertThat(capturedLog, containsString("(2 retries remaining)"));
-    // assertThat(capturedLog, containsString("(1 retries remaining)"));
-
-    // assertThat(this.mockGitHub.getRequestCount(), equalTo(baseRequestCount + 6));
-    // }
 
     private GHRepository getRepository(GitHub gitHub) throws IOException {
         return gitHub.getOrganization("hub4j-test-org").getRepository("github-api");

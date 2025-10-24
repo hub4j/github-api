@@ -1,0 +1,32 @@
+{
+  "permission": "read",
+  "user": {
+    "login": "dude",
+    "id": 60431,
+    "node_id": "MDQ6VXNlcjYwNDMx",
+    "avatar_url": "https://avatars.githubusercontent.com/u/60431?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/dude",
+    "html_url": "https://github.com/dude",
+    "followers_url": "https://api.github.com/users/dude/followers",
+    "following_url": "https://api.github.com/users/dude/following{/other_user}",
+    "gists_url": "https://api.github.com/users/dude/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/dude/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/dude/subscriptions",
+    "organizations_url": "https://api.github.com/users/dude/orgs",
+    "repos_url": "https://api.github.com/users/dude/repos",
+    "events_url": "https://api.github.com/users/dude/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/dude/received_events",
+    "type": "User",
+    "site_admin": false,
+    "permissions": {
+      "admin": false,
+      "maintain": false,
+      "push": false,
+      "triage": false,
+      "pull": true
+    },
+    "role_name": "read"
+  },
+  "role_name": "read"
+}

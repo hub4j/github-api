@@ -1,14 +1,12 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.function.InputStreamFunction;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.Instant;
 import java.util.Date;
 import java.util.Objects;
 
@@ -79,9 +77,8 @@ public class GHArtifact extends GHObject {
      *
      * @return the date of expiration
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getExpiresAt() {
-        return GitHubClient.parseInstant(expiresAt);
+    public Date getExpiresAt() {
+        return GitHubClient.parseDate(expiresAt);
     }
 
     /**

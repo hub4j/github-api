@@ -1,0 +1,23 @@
+{
+  "node_id": "MDM6VGFnMjA2ODg4MjAxOmU3YWE2ZDRhZmJhYTQ4NjY5ZjBiYmUxMWNhM2M0ZDc4N2IyYjE1M2M=",
+  "sha": "e7aa6d4afbaa48669f0bbe11ca3c4d787b2b153c",
+  "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/tags/e7aa6d4afbaa48669f0bbe11ca3c4d787b2b153c",
+  "tagger": {
+    "name": "Martin van Zijl",
+    "email": "martin.vanzijl@gmail.com",
+    "date": "2020-01-10T23:17:13Z"
+  },
+  "object": {
+    "sha": "dfe47235cfdcaa12292dab3b1a84ca53a1ceadaf",
+    "type": "commit",
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/commits/dfe47235cfdcaa12292dab3b1a84ca53a1ceadaf"
+  },
+  "tag": "create_tag_test",
+  "message": "Test Tag",
+  "verification": {
+    "verified": false,
+    "reason": "unsigned",
+    "signature": null,
+    "payload": null
+  }
+}

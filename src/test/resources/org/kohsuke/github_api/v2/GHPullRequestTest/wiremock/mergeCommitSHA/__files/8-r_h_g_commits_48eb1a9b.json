@@ -1,0 +1,103 @@
+{
+  "sha": "48eb1a9b8cd56782d11ea45adcf062eade17528e",
+  "node_id": "MDY6Q29tbWl0MjA2ODg4MjAxOjQ4ZWIxYTliOGNkNTY3ODJkMTFlYTQ1YWRjZjA2MmVhZGUxNzUyOGU=",
+  "commit": {
+    "author": {
+      "name": "Liam Newman",
+      "email": "bitwiseman@gmail.com",
+      "date": "2019-10-05T21:11:41Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2019-10-05T21:11:41Z"
+    },
+    "message": "Merge b036909fcf45565c82c888ee326ebd0e382f6173 into 3a09d2de4a9a1322a0ba2c3e2f54a919ca8fe353",
+    "tree": {
+      "sha": "3abf688e5c9e7c888f28a1672cd59a59cf414159",
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/trees/3abf688e5c9e7c888f28a1672cd59a59cf414159"
+    },
+    "url": "https://api.github.com/repos/hub4j-test-org/github-api/git/commits/48eb1a9b8cd56782d11ea45adcf062eade17528e",
+    "comment_count": 0,
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJdmQcNCRBK7hj4Ov3rIwAAdHIIAEOQH/mfMnhJReTmpOTLdyB3\nD0LBkuzbiZybP1TAtYFbRJRU9KspRFm/VxbClq2DkL5RJQ0aR64xDbG3bCyoPCYJ\nNMgaB7D569+EJldQyG1HRY8FUMw4JEXQ9Vu8z9R7qD95cOk0IvKx7VzZmUM1LNmJ\nUhMz+bcMVSyAkd5YgAjNhnlFF5WIvLISALOyuh7ollKkQWIbA61mK9CDF1BRJxk8\nwrgSineedyTrxptbZ0MkdoFRsOftTL4zYECcUPP4gfnSS8ZzKb4t7o5qKMEs9Uo3\nUGr0Lz/gT5lgvRLMfNJJBXOCPLpT+32RtlvS3EehJkkiPlAzgfjd91YHIuvOELQ=\n=RNmv\n-----END PGP SIGNATURE-----\n",
+      "payload": "tree 3abf688e5c9e7c888f28a1672cd59a59cf414159\nparent 3a09d2de4a9a1322a0ba2c3e2f54a919ca8fe353\nparent b036909fcf45565c82c888ee326ebd0e382f6173\nauthor Liam Newman <bitwiseman@gmail.com> 1570309901 +0000\ncommitter GitHub <noreply@github.com> 1570309901 +0000\n\nMerge b036909fcf45565c82c888ee326ebd0e382f6173 into 3a09d2de4a9a1322a0ba2c3e2f54a919ca8fe353\n"
+    }
+  },
+  "url": "https://api.github.com/repos/hub4j-test-org/github-api/commits/48eb1a9b8cd56782d11ea45adcf062eade17528e",
+  "html_url": "https://github.com/hub4j-test-org/github-api/commit/48eb1a9b8cd56782d11ea45adcf062eade17528e",
+  "comments_url": "https://api.github.com/repos/hub4j-test-org/github-api/commits/48eb1a9b8cd56782d11ea45adcf062eade17528e/comments",
+  "author": {
+    "login": "bitwiseman",
+    "id": 1958953,
+    "node_id": "MDQ6VXNlcjE5NTg5NTM=",
+    "avatar_url": "https://avatars3.githubusercontent.com/u/1958953?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/bitwiseman",
+    "html_url": "https://github.com/bitwiseman",
+    "followers_url": "https://api.github.com/users/bitwiseman/followers",
+    "following_url": "https://api.github.com/users/bitwiseman/following{/other_user}",
+    "gists_url": "https://api.github.com/users/bitwiseman/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/bitwiseman/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/bitwiseman/subscriptions",
+    "organizations_url": "https://api.github.com/users/bitwiseman/orgs",
+    "repos_url": "https://api.github.com/users/bitwiseman/repos",
+    "events_url": "https://api.github.com/users/bitwiseman/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/bitwiseman/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "web-flow",
+    "id": 19864447,
+    "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+    "avatar_url": "https://avatars3.githubusercontent.com/u/19864447?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/web-flow",
+    "html_url": "https://github.com/web-flow",
+    "followers_url": "https://api.github.com/users/web-flow/followers",
+    "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+    "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+    "organizations_url": "https://api.github.com/users/web-flow/orgs",
+    "repos_url": "https://api.github.com/users/web-flow/repos",
+    "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/web-flow/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "3a09d2de4a9a1322a0ba2c3e2f54a919ca8fe353",
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api/commits/3a09d2de4a9a1322a0ba2c3e2f54a919ca8fe353",
+      "html_url": "https://github.com/hub4j-test-org/github-api/commit/3a09d2de4a9a1322a0ba2c3e2f54a919ca8fe353"
+    },
+    {
+      "sha": "b036909fcf45565c82c888ee326ebd0e382f6173",
+      "url": "https://api.github.com/repos/hub4j-test-org/github-api/commits/b036909fcf45565c82c888ee326ebd0e382f6173",
+      "html_url": "https://github.com/hub4j-test-org/github-api/commit/b036909fcf45565c82c888ee326ebd0e382f6173"
+    }
+  ],
+  "stats": {
+    "total": 4,
+    "additions": 4,
+    "deletions": 0
+  },
+  "files": [
+    {
+      "sha": "4ef1269926a3fc469d53e0e89528ddc5d1b448eb",
+      "filename": "README.md",
+      "status": "modified",
+      "additions": 4,
+      "deletions": 0,
+      "changes": 4,
+      "blob_url": "https://github.com/hub4j-test-org/github-api/blob/48eb1a9b8cd56782d11ea45adcf062eade17528e/README.md",
+      "raw_url": "https://github.com/hub4j-test-org/github-api/raw/48eb1a9b8cd56782d11ea45adcf062eade17528e/README.md",
+      "contents_url": "https://api.github.com/repos/hub4j-test-org/github-api/contents/README.md?ref=48eb1a9b8cd56782d11ea45adcf062eade17528e",
+      "patch": "@@ -1,3 +1,7 @@\n Java API for GitHub\n \n See https://github-api.kohsuke.org/ for more details\n+\n+# No conflict\n+\n+Mergeable_branch\n\\ No newline at end of file"
+    }
+  ]
+}

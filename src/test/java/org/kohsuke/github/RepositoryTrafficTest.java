@@ -9,8 +9,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class RepositoryTrafficTest.
@@ -41,8 +39,6 @@ public class RepositoryTrafficTest extends AbstractGitHubWireMockTest {
         snapshotNotAllowed();
 
         GHRepository repository = getRepository(gitHub);
-        assertThat(repository.getPushedAt(), equalTo(GitHubClient.parseInstant("2020-02-21T21:17:31Z")));
-
         GHRepositoryCloneTraffic clones = repository.getCloneTraffic();
 
         GHRepositoryCloneTraffic expectedResult = new GHRepositoryCloneTraffic(128,

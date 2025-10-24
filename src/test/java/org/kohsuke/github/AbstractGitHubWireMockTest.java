@@ -36,7 +36,6 @@ public abstract class AbstractGitHubWireMockTest {
     protected static class TemplatingHelper {
 
         /** The test start date. */
-        @SuppressWarnings("UseOfObsoleteDateTimeApi")
         public Date testStartDate = new Date();
 
         /**
@@ -51,12 +50,11 @@ public abstract class AbstractGitHubWireMockTest {
          * @return the response template transformer
          */
         public ResponseTemplateTransformer newResponseTransformer() {
-            // noinspection UnqualifiedFieldAccess
             testStartDate = new Date();
             return ResponseTemplateTransformer.builder()
                     .global(true)
                     .maxCacheEntries(0L)
-                    .helper("testStartDate", new Helper<>() {
+                    .helper("testStartDate", new Helper<Object>() {
                         private HandlebarsCurrentDateHelper helper = new HandlebarsCurrentDateHelper();
                         @Override
                         public Object apply(final Object context, final Options options) throws IOException {

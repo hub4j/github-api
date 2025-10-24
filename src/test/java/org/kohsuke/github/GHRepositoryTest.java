@@ -15,7 +15,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -88,9 +87,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
         GHPersonSet<GHUser> collabs = repo.getCollaborators();
         GHUser colabUser = collabs.byLogin("jimmysombrero");
-        assertThat(colabUser.getAvatarUrl(), equalTo("https://avatars3.githubusercontent.com/u/12157727?v=4"));
-        assertThat(colabUser.getHtmlUrl().toString(), equalTo("https://github.com/jimmysombrero"));
-        assertThat(colabUser.getLocation(), nullValue());
 
         assertThat(user.getName(), equalTo(colabUser.getName()));
     }
@@ -1116,7 +1112,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         repository = gitHub.getOrganization("hub4j").getRepository("github-api");
         Iterable<GHStargazer> stargazers = repository.listStargazers2();
         GHStargazer stargazer = stargazers.iterator().next();
-        assertThat(stargazer.getStarredAt(), equalTo(Instant.ofEpochMilli(1271650383000L)));
+        assertThat(stargazer.getStarredAt(), equalTo(new Date(1271650383000L)));
         assertThat(stargazer.getUser().getLogin(), equalTo("nielswind"));
         assertThat(stargazer.getRepository(), sameInstance(repository));
     }
@@ -1331,7 +1327,7 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             assertThat(s.getUrl().toString(), containsString("/repos/hub4j-test-org/github-api/subscription"));
 
             assertThat(s.getReason(), nullValue());
-            assertThat(s.getCreatedAt(), equalTo(Instant.ofEpochMilli(1611377286000L)));
+            assertThat(s.getCreatedAt(), equalTo(new Date(1611377286000L)));
         } finally {
             s.delete();
         }
@@ -1348,7 +1344,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     @Test
     public void sync() throws IOException {
         GHRepository r = getRepository();
-        assertThat(r.getForksCount(), equalTo(0));
         GHBranchSync sync = r.sync("main");
         assertThat(sync.getOwner().getFullName(), equalTo("hub4j-test-org/github-api"));
         assertThat(sync.getMessage(), equalTo("Successfully fetched and fast-forwarded from upstream github-api:main"));
@@ -1571,13 +1566,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
 
         String httpTransport = "https://github.com/hub4j-test-org/temp-testGetters.git";
         assertThat(r.getHttpTransportUrl(), equalTo(httpTransport));
-        assertThat(r.getGitTransportUrl(), equalTo("git://github.com/hub4j-test-org/temp-testGetters.git"));
-        assertThat(r.getSvnUrl(), equalTo("https://github.com/hub4j-test-org/temp-testGetters"));
-        assertThat(r.getMirrorUrl(), nullValue());
-        assertThat(r.getSshUrl(), equalTo("git@github.com:hub4j-test-org/temp-testGetters.git"));
-        assertThat(r.getHtmlUrl().toString(), equalTo("https://github.com/hub4j-test-org/temp-testGetters"));
-        assertThat(r.getOpenIssueCount(), equalTo(0));
-        assertThat(r.getSubscribersCount(), equalTo(7));
 
         assertThat(r.getName(), equalTo("temp-testGetters"));
         assertThat(r.getFullName(), equalTo("hub4j-test-org/temp-testGetters"));

@@ -53,7 +53,7 @@ public class GHTeam extends GHObject implements Refreshable {
      */
     private static final String EXTERNAL_GROUPS = "/external-groups";
     private String description;
-    private String htmlUrl;
+    private String html_url;
     private String name;
     private GHOrganization organization; // populated by GET /user/teams where Teams+Orgs are returned together
     private String permission;
@@ -286,7 +286,7 @@ public class GHTeam extends GHObject implements Refreshable {
      * @return the html url
      */
     public URL getHtmlUrl() {
-        return GitHubClient.parseURL(htmlUrl);
+        return GitHubClient.parseURL(html_url);
     }
 
     /**

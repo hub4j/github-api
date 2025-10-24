@@ -79,10 +79,6 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
             assertThat(userPurchase.isOnFreeTrial(), is(false));
             assertThat(userPurchase.getFreeTrialEndsOn(), nullValue());
             assertThat(userPurchase.getBillingCycle(), equalTo("monthly"));
-            assertThat(userPurchase.getNextBillingDate(),
-                    equalTo(GitHubClient.parseInstant("2020-01-01T00:00:00.000+13:00")));
-            assertThat(userPurchase.getUpdatedAt(),
-                    equalTo(GitHubClient.parseInstant("2019-12-02T00:00:00.000+13:00")));
 
             GHMarketplacePlan plan = userPurchase.getPlan();
             // GHMarketplacePlan - Non-nullable fields
@@ -244,10 +240,6 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
                 .order(GHDirection.DESC)
                 .list();
         GHContent c = r.iterator().next();
-        assertThat(c.getGitUrl(), endsWith("/repositories/167174/git/blobs/796fbcc808ca15bbe771f8c9c1a7bab3388f6128"));
-        assertThat(c.getHtmlUrl(),
-                endsWith(
-                        "https://github.com/jquery/jquery/blob/a684e6ba836f7c553968d7d026ed7941e1a612d8/src/attributes/classes.js"));
 
         // System.out.println(c.getName());
         assertThat(c.getDownloadUrl(), notNullValue());

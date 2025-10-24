@@ -1,0 +1,10 @@
+{
+  "ref": "refs/heads/main",
+  "node_id": "MDM6UmVmMjMyNzE0NTk1OnJlZnMvaGVhZHMvbWFzdGVy",
+  "url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/git/refs/heads/main",
+  "object": {
+    "sha": "c23cd80bd4460975b9055fb4c5c7af861fd1d2e1",
+    "type": "commit",
+    "url": "https://api.github.com/repos/hub4j-test-org/GHTreeBuilderTest/git/commits/c23cd80bd4460975b9055fb4c5c7af861fd1d2e1"
+  }
+}

@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.github.function.InputStreamFunction;
@@ -9,7 +8,6 @@ import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -79,7 +77,7 @@ public class GHWorkflowRun extends GHObject {
     /**
      * The Class HeadCommit.
      */
-    public static class HeadCommit extends GitHubBridgeAdapterObject {
+    public static class HeadCommit {
 
         private GitUser author;
 
@@ -135,9 +133,8 @@ public class GHWorkflowRun extends GHObject {
          *
          * @return timestamp of the commit
          */
-        @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-        public Instant getTimestamp() {
-            return GitHubClient.parseInstant(timestamp);
+        public Date getTimestamp() {
+            return GitHubClient.parseDate(timestamp);
         }
 
         /**
@@ -207,12 +204,11 @@ public class GHWorkflowRun extends GHObject {
             return name().toLowerCase(Locale.ROOT);
         }
     }
-    private GHUser actor;
     private String artifactsUrl;
     private String cancelUrl;
     private String checkSuiteUrl;
-    private String conclusion;
 
+    private String conclusion;
     private String displayTitle;
     private String event;
 
@@ -306,26 +302,6 @@ public class GHWorkflowRun extends GHObject {
         requireNonNull(streamFunction, "Stream function must not be null");
 
         return root().createRequest().method("GET").withUrlPath(getApiRoute(), "logs").fetchStream(streamFunction);
-    }
-
-    /**
-     * Force-cancel the workflow run.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    public void forceCancel() throws IOException {
-        root().createRequest().method("POST").withUrlPath(getApiRoute(), "force-cancel").send();
-    }
-
-    /**
-     * The actor which triggered the initial run.
-     *
-     * @return the triggering actor
-     */
-    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
-    public GHUser getActor() {
-        return actor;
     }
 
     /**
@@ -520,9 +496,8 @@ public class GHWorkflowRun extends GHObject {
      *
      * @return run triggered
      */
-    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
-    public Instant getRunStartedAt() {
-        return GitHubClient.parseInstant(runStartedAt);
+    public Date getRunStartedAt() {
+        return GitHubClient.parseDate(runStartedAt);
     }
 
     /**

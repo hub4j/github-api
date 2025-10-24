@@ -1,0 +1,16 @@
+[
+  {
+    "name": "ee4j-bean-validation-committers",
+    "id": 3335319,
+    "node_id": "MDQ6VGVhbTMzMzUzMTk=",
+    "slug": "ee4j-bean-validation-committers",
+    "description": null,
+    "privacy": "secret",
+    "url": "https://api.github.com/organizations/31900942/team/3335319",
+    "html_url": "https://github.com/orgs/eclipse-ee4j/teams/ee4j-bean-validation-committers",
+    "members_url": "https://api.github.com/organizations/31900942/team/3335319/members{/member}",
+    "repositories_url": "https://api.github.com/organizations/31900942/team/3335319/repos",
+    "permission": "push",
+    "parent": null
+  }
+]

@@ -68,7 +68,7 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
      */
     public int getTotalCount() {
         populate();
-        return result.totalCount;
+        return result.total_count;
     }
 
     /**
@@ -78,7 +78,7 @@ public class PagedSearchIterable<T> extends PagedIterable<T> {
      */
     public boolean isIncomplete() {
         populate();
-        return result.incompleteResults;
+        return result.incomplete_results;
     }
 
     /**

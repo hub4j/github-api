@@ -323,10 +323,11 @@ public class GitHubRequest implements GitHubConnectorRequest {
          * @return the request builder
          */
         public B with(Map<String, Object> map) {
-            for (Map.Entry<String, Object> entry : map.entrySet()) {
-                with(entry.getKey(), entry.getValue());
+            if (map != null) {
+                for (Map.Entry<String, Object> entry : map.entrySet()) {
+                    with(entry.getKey(), entry.getValue());
+                }
             }
-
             return (B) this;
         }
 

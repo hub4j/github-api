@@ -1189,10 +1189,7 @@ public class GHRepository extends GHObject {
      *      for a specific ref</a>
      */
     public PagedIterable<GHCheckRun> getCheckRuns(String ref) {
-        GitHubRequest request = root().createRequest()
-                .withUrlPath(String.format("/repos/%s/%s/commits/%s/check-runs", getOwnerName(), name, ref))
-                .build();
-        return new GHCheckRunsIterable(this, request);
+        return getCheckRuns(ref, null);
     }
 
     /**
@@ -1207,11 +1204,10 @@ public class GHRepository extends GHObject {
      *      for a specific ref</a>
      */
     public PagedIterable<GHCheckRun> getCheckRuns(String ref, Map<String, Object> params) {
-        GitHubRequest request = root().createRequest()
+        Requester requester = root().createRequest()
                 .withUrlPath(String.format("/repos/%s/%s/commits/%s/check-runs", getOwnerName(), name, ref))
-                .with(params)
-                .build();
-        return new GHCheckRunsIterable(this, request);
+                .with(params);
+        return requester.toIterable(GHCheckRunsPage.class, GHCheckRun.class, item -> item.wrap(this));
     }
 
     /**
@@ -2552,7 +2548,9 @@ public class GHRepository extends GHObject {
      * @return the paged iterable
      */
     public PagedIterable<GHArtifact> listArtifacts() {
-        return new GHArtifactsIterable(this, root().createRequest().withUrlPath(getApiTailUrl("actions/artifacts")));
+        return root().createRequest()
+                .withUrlPath(getApiTailUrl("actions/artifacts"))
+                .toIterable(GHArtifactsPage.class, GHArtifact.class, item -> item.wrapUp(this));
     }
 
     /**
@@ -2960,7 +2958,9 @@ public class GHRepository extends GHObject {
      * @return the paged iterable
      */
     public PagedIterable<GHWorkflow> listWorkflows() {
-        return new GHWorkflowsIterable(this);
+        return root().createRequest()
+                .withUrlPath(getApiTailUrl("actions/workflows"))
+                .toIterable(GHWorkflowsPage.class, GHWorkflow.class, item -> item.wrapUp(this));
     }
 
     /**

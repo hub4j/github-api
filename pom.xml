@@ -145,6 +145,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-jsr310</artifactId>
+      <version>2.20.0</version>
     </dependency>
     <dependency>
       <groupId>com.github.spotbugs</groupId>
@@ -545,6 +546,14 @@
             <excludes>
               <!-- Classes in internal are public but are considered private for API stability purposes -->
               <exclude>org.kohsuke.github.internal</exclude>
+              <!-- Ignore protected items from Pagination update -->
+              <exclude>org.kohsuke.github.PagedIterable#_iterator(int)</exclude>
+              <exclude>org.kohsuke.github.PagedIterable#toArray(org.kohsuke.github.PagedIterator)</exclude>
+              <exclude>org.kohsuke.github.PagedIterable#PagedIterable()</exclude>
+              <exclude>org.kohsuke.github.PagedIterator#base</exclude>
+              <exclude>org.kohsuke.github.PagedIterator#wrapUp(java.lang.Object[])</exclude>
+              <exclude>org.kohsuke.github.PagedSearchIterable#_iterator(int)</exclude>
+              <exclude>org.kohsuke.github.PagedSearchIterable#adapt(java.util.Iterator)</exclude>
             </excludes>
           </parameter>
         </configuration>

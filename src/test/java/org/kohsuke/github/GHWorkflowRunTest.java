@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import org.assertj.core.util.Objects;
 import org.awaitility.Awaitility;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,10 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -154,7 +158,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
                 .event(GHEvent.PULL_REQUEST)
                 .list()
                 .withPageSize(20)
-                .iterator()
+                .items()
                 .nextPage();
 
         for (GHWorkflowRun workflowRun : workflowRuns) {
@@ -176,7 +180,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
                 .event(GHEvent.WORKFLOW_DISPATCH)
                 .list()
                 .withPageSize(20)
-                .iterator()
+                .items()
                 .nextPage();
 
         for (GHWorkflowRun workflowRun : workflowRuns) {
@@ -347,8 +351,12 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         checkArtifactProperties(artifactById, "artifact2");
 
         // Test GHRepository#listArtifacts() as we are sure we have artifacts around
-        List<GHArtifact> artifactsFromRepo = new ArrayList<>(
-                repo.listArtifacts().withPageSize(2).iterator().nextPage());
+        var endpointItems = repo.listArtifacts().withPageSize(2).items();
+        var currentPage = endpointItems.getCurrentPage();
+        var firstPage = Objects.castIfBelongsToType(currentPage, GHArtifactsPage.class);
+        assertThat(firstPage.getTotalCount(), equalTo(69));
+
+        List<GHArtifact> artifactsFromRepo = new ArrayList<>(endpointItems.nextPage());
         artifactsFromRepo.sort((a1, a2) -> a1.getName().compareTo(a2.getName()));
 
         // We have at least the two artifacts we just added
@@ -524,9 +532,13 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
                 latestPreexistingWorkflowRunId)
                 .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
 
-        List<GHWorkflowJob> jobs = workflowRun.listJobs()
-                .toList()
-                .stream()
+        var endpointItems = workflowRun.listJobs().items();
+        var currentPage = endpointItems.getCurrentPage();
+        var firstPage = Objects.castIfBelongsToType(currentPage, GHWorkflowJobsPage.class);
+        assertThat(firstPage.getTotalCount(), equalTo(2));
+
+        List<GHWorkflowJob> jobs = StreamSupport
+                .stream(Spliterators.spliteratorUnknownSize(endpointItems, Spliterator.ORDERED), false)
                 .sorted((j1, j2) -> j1.getName().compareTo(j2.getName()))
                 .collect(Collectors.toList());
 
@@ -547,7 +559,7 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         checkJobProperties(workflowRun.getId(), job1ById, "job1");
 
         // Also test listAllJobs() works correctly
-        List<GHWorkflowJob> allJobs = workflowRun.listAllJobs().withPageSize(10).iterator().nextPage();
+        List<GHWorkflowJob> allJobs = workflowRun.listAllJobs().withPageSize(10).items().nextPage();
         assertThat(allJobs.size(), greaterThanOrEqualTo(2));
     }
 
@@ -763,9 +775,13 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
 
         GHWorkflow ghWorkflow = repo.getWorkflow("startup-failure-workflow.yml");
 
-        List<GHWorkflowRun> ghWorkflowRunList = ghWorkflow.listRuns().toList();
+        var endpointItems = ghWorkflow.listRuns().items();
+        var currentPage = endpointItems.getCurrentPage();
+        var firstPage = Objects.castIfBelongsToType(currentPage, GHWorkflowRunsPage.class);
+        assertThat(firstPage.getTotalCount(), equalTo(4));
 
-        List<GHWorkflowRun> list = ghWorkflowRunList.stream()
+        List<GHWorkflowRun> list = StreamSupport
+                .stream(Spliterators.spliteratorUnknownSize(endpointItems, Spliterator.ORDERED), false)
                 .filter(ghWorkflowRun -> ghWorkflowRun.getConclusion().equals(Conclusion.STARTUP_FAILURE))
                 .collect(Collectors.toList());
 

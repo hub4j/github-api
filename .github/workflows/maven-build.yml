@@ -36,7 +36,7 @@ jobs:
       env:
         MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
       run: mvn -B clean install -DskipTests --file pom.xml
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v5
       with:
         name: maven-target-directory
         path: target/
@@ -110,7 +110,7 @@ jobs:
       run: mvn -B clean install -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
     - name: Save coverage data
       if: matrix.os == 'ubuntu' && matrix.java == '17'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: maven-test-target-directory
         path: target/

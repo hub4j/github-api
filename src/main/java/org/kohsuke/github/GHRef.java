@@ -1,7 +1,7 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import tools.jackson.databind.DatabindException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -59,6 +59,17 @@ public class GHRef extends GitHubInteractiveObject {
         }
     }
 
+    private static boolean hasDatabindExceptionCause(Throwable e) {
+        Throwable cause = e;
+        while (cause != null) {
+            if (cause instanceof DatabindException) {
+                return true;
+            }
+            cause = cause.getCause();
+        }
+        return false;
+    }
+
     /**
      * Retrieve a ref of the given type for the current GitHub repository.
      *
@@ -88,7 +99,8 @@ public class GHRef extends GitHubInteractiveObject {
             // If the parse exception is due to the above returning an array instead of a single ref
             // that means the individual ref did not exist. Handled by result check below.
             // Otherwise, rethrow.
-            if (!(e.getCause() instanceof JsonMappingException)) {
+            // In Jackson 3, DatabindException is wrapped in IOException, so check the nested cause chain
+            if (!hasDatabindExceptionCause(e)) {
                 throw e;
             }
         }

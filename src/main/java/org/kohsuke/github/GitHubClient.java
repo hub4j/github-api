@@ -1,8 +1,5 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.authorization.UserAuthorizationProvider;
@@ -10,6 +7,13 @@ import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.connector.GitHubConnectorRequest;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 import org.kohsuke.github.function.FunctionThrows;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.InjectableValues;
+import tools.jackson.databind.MapperFeature;
+import tools.jackson.databind.ObjectReader;
+import tools.jackson.databind.ObjectWriter;
+import tools.jackson.databind.PropertyNamingStrategies;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.*;
 import java.net.*;
@@ -109,20 +113,33 @@ class GitHubClient {
     /** The Constant DEFAULT_MINIMUM_RETRY_TIMEOUT_MILLIS. */
     private static final int DEFAULT_MINIMUM_RETRY_MILLIS = DEFAULT_MAXIMUM_RETRY_MILLIS;
     private static final Logger LOGGER = Logger.getLogger(GitHubClient.class.getName());
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final JsonMapper MAPPER = JsonMapper.builder()
+            // Use annotations and enable access to private fields
+            .enable(MapperFeature.USE_ANNOTATIONS)
+            .enable(MapperFeature.CAN_OVERRIDE_ACCESS_MODIFIERS)
+            .enable(MapperFeature.INFER_PROPERTY_MUTATORS)
+            .enable(MapperFeature.ALLOW_FINAL_FIELDS_AS_MUTATORS)
+            // Set visibility to detect all fields (including private fields)
+            // This matches the original Jackson 2 config: new VisibilityChecker.Std(NONE, NONE, NONE, NONE, ANY)
+            .changeDefaultVisibility(vc -> {
+                return vc.withGetterVisibility(NONE)
+                        .withIsGetterVisibility(NONE)
+                        .withSetterVisibility(NONE)
+                        .withCreatorVisibility(NONE)
+                        .withFieldVisibility(ANY);
+            })
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            // Jackson 3 enables these by default - disable to match Jackson 2.x behavior
+            .disable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS)
+            .disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
+            .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
+            .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+            .build();
 
     private static final ThreadLocal<String> sendRequestTraceId = new ThreadLocal<>();
 
     /** The Constant GITHUB_URL. */
     static final String GITHUB_URL = "https://api.github.com";
-
-    static {
-        MAPPER.registerModule(new JavaTimeModule());
-        MAPPER.setVisibility(new VisibilityChecker.Std(NONE, NONE, NONE, NONE, ANY));
-        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        MAPPER.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true);
-        MAPPER.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
-    }
 
     @Nonnull
     private static <T> GitHubResponse<T> createResponse(@Nonnull GitHubConnectorResponse connectorResponse,

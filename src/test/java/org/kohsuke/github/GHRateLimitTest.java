@@ -1,9 +1,9 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.databind.exc.MismatchedInputException;
-import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import org.junit.Test;
+import tools.jackson.databind.exc.MismatchedInputException;
+import tools.jackson.databind.exc.ValueInstantiationException;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -440,8 +440,10 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
             fail("Invalid rate limit missing some records should throw");
         } catch (Exception e) {
             assertThat(e, instanceOf(HttpException.class));
-            assertThat(e.getCause(), instanceOf(ValueInstantiationException.class));
-            assertThat(e.getCause().getMessage(),
+            // In Jackson 3, the exception is wrapped in IOException
+            assertThat(e.getCause(), instanceOf(IOException.class));
+            assertThat(e.getCause().getCause(), instanceOf(ValueInstantiationException.class));
+            assertThat(e.getCause().getCause().getMessage(),
                     containsString(
                             "Cannot construct instance of `org.kohsuke.github.GHRateLimit`, problem: `java.lang.NullPointerException`"));
         }
@@ -451,8 +453,10 @@ public class GHRateLimitTest extends AbstractGitHubWireMockTest {
             fail("Invalid rate limit record missing a value should throw");
         } catch (Exception e) {
             assertThat(e, instanceOf(HttpException.class));
-            assertThat(e.getCause(), instanceOf(MismatchedInputException.class));
-            assertThat(e.getCause().getMessage(),
+            // In Jackson 3, the exception is wrapped in IOException
+            assertThat(e.getCause(), instanceOf(IOException.class));
+            assertThat(e.getCause().getCause(), instanceOf(MismatchedInputException.class));
+            assertThat(e.getCause().getCause().getMessage(),
                     containsString("Missing required creator property 'reset' (index 2)"));
         }
 

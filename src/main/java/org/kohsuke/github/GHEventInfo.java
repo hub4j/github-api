@@ -1,8 +1,8 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import tools.jackson.databind.node.ObjectNode;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -174,7 +174,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
      *             if payload cannot be parsed
      */
     public <T extends GHEventPayload> T getPayload(Class<T> type) throws IOException {
-        T v = GitHubClient.getMappingObjectReader(root()).readValue(payload.traverse(), type);
+        T v = GitHubClient.getMappingObjectReader(root()).forType(type).readValue(payload);
         v.lateBind();
         return v;
     }

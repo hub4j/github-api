@@ -1,6 +1,6 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import tools.jackson.core.JacksonException;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -20,7 +20,7 @@ class EnterpriseManagedSupport {
 
     static final String TEAM_CANNOT_BE_EXTERNALLY_MANAGED_ERROR = "This team cannot be externally managed since it has explicit members.";
 
-    private static String logUnexpectedFailure(final JsonProcessingException exception, final String payload) {
+    private static String logUnexpectedFailure(final JacksonException exception, final String payload) {
         final StringWriter sw = new StringWriter();
         final PrintWriter pw = new PrintWriter(sw);
         exception.printStackTrace(pw);
@@ -58,7 +58,7 @@ class EnterpriseManagedSupport {
                 } else if (TEAM_CANNOT_BE_EXTERNALLY_MANAGED_ERROR.equals(error.getMessage())) {
                     return Optional.of(new GHTeamCannotBeExternallyManagedException(scenario, error, he));
                 }
-            } catch (final JsonProcessingException e) {
+            } catch (final JacksonException e) {
                 // We can ignore it
                 LOGGER.warning(() -> logUnexpectedFailure(e, responseMessage));
             }

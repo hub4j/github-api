@@ -1,8 +1,8 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import tools.jackson.databind.exc.MismatchedInputException;
 
 import java.io.IOException;
 import java.util.Arrays;

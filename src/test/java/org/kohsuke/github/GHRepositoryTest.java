@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.common.collect.Sets;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.io.IOUtils;
@@ -9,6 +8,7 @@ import org.junit.Test;
 import org.kohsuke.github.GHCheckRun.Conclusion;
 import org.kohsuke.github.GHOrganization.RepositoryRole;
 import org.kohsuke.github.GHRepository.Visibility;
+import tools.jackson.databind.DatabindException;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
@@ -1039,7 +1039,9 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
             fail();
         } catch (Exception e) {
             assertThat(e, instanceOf(HttpException.class));
-            assertThat(e.getCause(), instanceOf(JsonMappingException.class));
+            // In Jackson 3, DatabindException is wrapped in IOException
+            assertThat(e.getCause(), instanceOf(IOException.class));
+            assertThat(e.getCause().getCause(), instanceOf(DatabindException.class));
         }
 
         // git/refs/heads/gh

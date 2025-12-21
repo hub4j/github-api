@@ -1,11 +1,11 @@
 package org.kohsuke.github.internal.graphql.response;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.ObjectReader;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 
@@ -19,11 +19,10 @@ import static org.hamcrest.Matchers.is;
  */
 class GHGraphQLResponseMockTest {
 
-    private GHGraphQLResponse<Object> convertJsonToGraphQLResponse(String json) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    private GHGraphQLResponse<Object> convertJsonToGraphQLResponse(String json) throws JacksonException {
+        JsonMapper mapper = JsonMapper.builder().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES).build();
 
-        ObjectReader objectReader = objectMapper.reader();
+        ObjectReader objectReader = mapper.reader();
         JavaType javaType = objectReader.getTypeFactory()
                 .constructParametricType(GHGraphQLResponse.class, Object.class);
 
@@ -33,12 +32,12 @@ class GHGraphQLResponseMockTest {
     /**
      * Test get data throws exception when response means error
      *
-     * @throws JsonProcessingException
+     * @throws JacksonException
      *             Json parse exception
      *
      */
     @Test
-    void getDataFailure() throws JsonProcessingException {
+    void getDataFailure() throws JacksonException {
         String graphQLErrorResponse = "{\"data\": {\"enablePullRequestAutoMerge\": null},\"errors\": [{\"type\": "
                 + "\"UNPROCESSABLE\",\"path\": [\"enablePullRequestAutoMerge\"],\"locations\": [{\"line\": 2,"
                 + "\"column\": 5}],\"message\": \"hub4j does not have a verified email, which is required to enable "
@@ -56,11 +55,11 @@ class GHGraphQLResponseMockTest {
     /**
      * Test getErrorMessages throws exception when response means not error
      *
-     * @throws JsonProcessingException
+     * @throws JacksonException
      *             Json parse exception
      */
     @Test
-    void getErrorMessagesFailure() throws JsonProcessingException {
+    void getErrorMessagesFailure() throws JacksonException {
         String graphQLSuccessResponse = "{\"data\": {\"repository\": {\"pullRequest\": {\"id\": "
                 + "\"PR_TEMP_GRAPHQL_ID\"}}}}";
 

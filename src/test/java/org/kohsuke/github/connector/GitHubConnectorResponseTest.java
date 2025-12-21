@@ -1,6 +1,5 @@
 package org.kohsuke.github.connector;
 
-import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -8,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.kohsuke.github.AbstractGitHubWireMockTest;
 import org.kohsuke.github.connector.GitHubConnectorResponse.ByteArrayResponse;
+import tools.jackson.databind.util.ByteBufferBackedInputStream;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

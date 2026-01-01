@@ -71,7 +71,7 @@
     <jacoco.haltOnFailure>false</jacoco.haltOnFailure>
 
     <jacoco.surefire.argLine></jacoco.surefire.argLine>
-    <jjwt.suite.version>0.12.6</jjwt.suite.version>
+    <jjwt.suite.version>0.13.0</jjwt.suite.version>
     <!-- This project was registered before 2021, so it uses the old server. -->
     <nexus.serverUrl>https://ossrh-staging-api.central.sonatype.com</nexus.serverUrl>
     <okhttp3.version>4.12.0</okhttp3.version>

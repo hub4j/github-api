@@ -121,7 +121,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
-    - uses: actions/download-artifact@v6
+    - uses: actions/download-artifact@v7
       with:
         name: maven-test-target-directory
         path: target
@@ -139,7 +139,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
-    - uses: actions/download-artifact@v6
+    - uses: actions/download-artifact@v7
       with:
         name: maven-target-directory
         path: target

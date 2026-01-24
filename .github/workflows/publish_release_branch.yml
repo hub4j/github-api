@@ -78,7 +78,7 @@ jobs:
         run: |
           echo "version=$(mvn -B help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_OUTPUT
 
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v7
         with:
           name: maven-release-target-directory
           path: target

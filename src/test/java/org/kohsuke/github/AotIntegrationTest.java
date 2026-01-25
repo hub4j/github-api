@@ -1,7 +1,7 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -80,7 +80,9 @@ public class AotIntegrationTest {
 
     private Stream<String> readAotConfigToStreamOfClassNames(String reflectionConfig) throws IOException {
         byte[] reflectionConfigFileAsBytes = Files.readAllBytes(Path.of(reflectionConfig));
-        ArrayNode reflectConfigJsonArray = (ArrayNode) new ObjectMapper().readTree(reflectionConfigFileAsBytes);
+        ArrayNode reflectConfigJsonArray = (ArrayNode) JsonMapper.builder()
+                .build()
+                .readTree(reflectionConfigFileAsBytes);
         return StreamSupport
                 .stream(Spliterators.spliteratorUnknownSize(reflectConfigJsonArray.iterator(), Spliterator.ORDERED),
                         false)

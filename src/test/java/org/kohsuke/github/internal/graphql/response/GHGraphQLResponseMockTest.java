@@ -3,8 +3,8 @@ package org.kohsuke.github.internal.graphql.response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -20,10 +20,9 @@ import static org.hamcrest.Matchers.is;
 class GHGraphQLResponseMockTest {
 
     private GHGraphQLResponse<Object> convertJsonToGraphQLResponse(String json) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        JsonMapper mapper = JsonMapper.builder().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES).build();
 
-        ObjectReader objectReader = objectMapper.reader();
+        ObjectReader objectReader = mapper.reader();
         JavaType javaType = objectReader.getTypeFactory()
                 .constructParametricType(GHGraphQLResponse.class, Object.class);
 

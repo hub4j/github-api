@@ -174,7 +174,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
      *             if payload cannot be parsed
      */
     public <T extends GHEventPayload> T getPayload(Class<T> type) throws IOException {
-        T v = GitHubClient.getMappingObjectReader(root()).readValue(payload.traverse(), type);
+        T v = GitHubClient.getMappingObjectReader(root()).forType(type).readValue(payload);
         v.lateBind();
         return v;
     }

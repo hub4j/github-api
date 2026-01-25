@@ -856,6 +856,44 @@ public class AppTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test issue search with isIssue filter to exclude pull requests.
+     */
+    @Test
+    public void testIssueSearchIssuesOnly() {
+        PagedSearchIterable<GHIssue> r = gitHub.searchIssues()
+                .repo("hub4j", "github-api")
+                .isIssue()
+                .isOpen()
+                .sort(GHIssueSearchBuilder.Sort.UPDATED)
+                .list();
+        assertThat(r.getTotalCount(), greaterThan(0));
+        for (GHIssue issue : r) {
+            assertThat(issue.getTitle(), notNullValue());
+            // Verify it's not a PR (pull_request field should be null)
+            assertThat(issue.getPullRequest(), nullValue());
+        }
+    }
+
+    /**
+     * Test issue search with isPullRequest filter to only return pull requests.
+     */
+    @Test
+    public void testIssueSearchPullRequestsOnly() {
+        PagedSearchIterable<GHIssue> r = gitHub.searchIssues()
+                .repo("hub4j", "github-api")
+                .isPullRequest()
+                .isOpen()
+                .sort(GHIssueSearchBuilder.Sort.UPDATED)
+                .list();
+        assertThat(r.getTotalCount(), greaterThan(0));
+        for (GHIssue issue : r) {
+            assertThat(issue.getTitle(), notNullValue());
+            // Verify it's a PR (pull_request field should not be null)
+            assertThat(issue.getPullRequest(), notNullValue());
+        }
+    }
+
+    /**
      * Test issue with comment.
      *
      * @throws IOException

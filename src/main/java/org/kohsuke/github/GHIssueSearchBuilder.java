@@ -58,6 +58,15 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
     }
 
     /**
+     * Filters results to only include issues (excludes pull requests).
+     *
+     * @return the gh issue search builder
+     */
+    public GHIssueSearchBuilder isIssue() {
+        return q("is:issue");
+    }
+
+    /**
      * Is merged gh issue search builder.
      *
      * @return the gh issue search builder
@@ -73,6 +82,15 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
      */
     public GHIssueSearchBuilder isOpen() {
         return q("is:open");
+    }
+
+    /**
+     * Filters results to only include pull requests (excludes issues).
+     *
+     * @return the gh issue search builder
+     */
+    public GHIssueSearchBuilder isPullRequest() {
+        return q("is:pr");
     }
 
     /**
@@ -119,6 +137,19 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
     public GHIssueSearchBuilder q(String term) {
         super.q(term);
         return this;
+    }
+
+    /**
+     * Filters results to a specific repository.
+     *
+     * @param owner
+     *            the repository owner
+     * @param name
+     *            the repository name
+     * @return the gh issue search builder
+     */
+    public GHIssueSearchBuilder repo(String owner, String name) {
+        return q("repo:" + owner + "/" + name);
     }
 
     /**

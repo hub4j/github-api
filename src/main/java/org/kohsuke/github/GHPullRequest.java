@@ -287,6 +287,10 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         return changedFiles;
     }
 
+    //
+    // details that are only available via get with ID
+    //
+
     /**
      * Gets the closed by.
      *

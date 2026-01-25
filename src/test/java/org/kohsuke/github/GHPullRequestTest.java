@@ -425,7 +425,8 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     @Test
     public void markReadyForReview() throws Exception {
         // Create a draft PR first
-        GHPullRequest p = getRepository().createPullRequest("markReadyForReview", "test/mark_ready_for_review", "main", "## test", false, true);
+        GHPullRequest p = getRepository()
+                .createPullRequest("markReadyForReview", "test/stable", "main", "## test", false, true);
         assertThat(p.isDraft(), is(true));
 
         // Mark it ready for review

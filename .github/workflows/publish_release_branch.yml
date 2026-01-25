@@ -25,7 +25,7 @@ jobs:
           MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
         run: mvn -B clean install site -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
 
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         with:
           name: maven-release-target-directory
           path: target/
@@ -78,7 +78,7 @@ jobs:
         run: |
           echo "version=$(mvn -B help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_OUTPUT
 
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v7
         with:
           name: maven-release-target-directory
           path: target
@@ -90,7 +90,7 @@ jobs:
           cp -r ./target/site/* ./
 
       - name: Publish GH Pages
-        uses: stefanzweifel/git-auto-commit-action@v6
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "Release (${{ github.actor }}): v${{ steps.release.outputs.version }}" 
           branch: gh-pages

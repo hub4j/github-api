@@ -87,6 +87,18 @@ public class GHPullRequestQueryBuilder extends GHQueryBuilder<GHPullRequest> {
     }
 
     /**
+     * Page size gh pull request query builder.
+     *
+     * @param pageSize
+     *            the page size
+     * @return the gh pull request query builder
+     */
+    public GHPullRequestQueryBuilder pageSize(int pageSize) {
+        req.with("per_page", pageSize);
+        return this;
+    }
+
+    /**
      * Sort gh pull request query builder.
      *
      * @param sort

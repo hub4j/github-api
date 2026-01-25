@@ -729,6 +729,7 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
                 .state(GHIssueState.OPEN)
                 .head("hub4j-test-org:test/stable")
                 .base("main")
+                .pageSize(5)
                 .list()
                 .toList();
         assertThat(prs, notNullValue());

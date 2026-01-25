@@ -1984,6 +1984,20 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Exports the software bill of materials (SBOM) for a repository.
+     *
+     * @return the SBOM export result containing the SPDX-formatted SBOM
+     * @throws IOException
+     *             the io exception
+     * @see <a href="https://docs.github.com/en/rest/dependency-graph/sboms">SBOM API documentation</a>
+     */
+    public GHSBOMExportResult getSBOM() throws IOException {
+        return root().createRequest()
+                .withUrlPath(getApiTailUrl("dependency-graph/sbom"))
+                .fetch(GHSBOMExportResult.class);
+    }
+
+    /**
      * Gets size.
      *
      * @return the size
@@ -3397,7 +3411,7 @@ public class GHRepository extends GHObject {
      * @return the api tail url
      */
     String getApiTailUrl(String tail) {
-        if (tail.length() > 0 && !tail.startsWith("/")) {
+        if (!tail.isEmpty() && !tail.startsWith("/")) {
             tail = '/' + tail;
         }
         return "/repos/" + fullName + tail;

@@ -1,9 +1,8 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.databind.InjectableValues;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.authorization.UserAuthorizationProvider;
@@ -11,6 +10,8 @@ import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.connector.GitHubConnectorRequest;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 import org.kohsuke.github.function.FunctionThrows;
+import org.kohsuke.github.internal.GitHubJackson;
+import org.kohsuke.github.internal.GitHubJackson2;
 
 import java.io.*;
 import java.net.*;
@@ -25,8 +26,6 @@ import java.util.logging.Logger;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 import static java.net.HttpURLConnection.HTTP_ACCEPTED;
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 import static java.net.HttpURLConnection.HTTP_MOVED_PERM;
@@ -109,14 +108,17 @@ class GitHubClient {
     private static final int DEFAULT_MAXIMUM_RETRY_MILLIS = 100;
     /** The Constant DEFAULT_MINIMUM_RETRY_TIMEOUT_MILLIS. */
     private static final int DEFAULT_MINIMUM_RETRY_MILLIS = DEFAULT_MAXIMUM_RETRY_MILLIS;
+
+    /**
+     * Jackson 2.x specific implementation for backward compatibility with static methods.
+     * <p>
+     * This is used by {@link #getMappingObjectReader(GitHubConnectorResponse)} and {@link #getMappingObjectWriter()} to
+     * maintain backward compatibility with code that expects Jackson 2.x ObjectReader/ObjectWriter.
+     * </p>
+     */
+    private static final GitHubJackson2 JACKSON2_STATIC = new GitHubJackson2();
+
     private static final Logger LOGGER = Logger.getLogger(GitHubClient.class.getName());
-    private static final ObjectMapper MAPPER = JsonMapper.builder()
-            .addModule(new JavaTimeModule())
-            .visibility(new VisibilityChecker.Std(NONE, NONE, NONE, NONE, ANY))
-            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-            .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
-            .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
-            .build();
 
     private static final ThreadLocal<String> sendRequestTraceId = new ThreadLocal<>();
 
@@ -251,41 +253,6 @@ class GitHubClient {
         }
     }
 
-    private static GitHubConnectorRequest prepareConnectorRequest(GitHubRequest request,
-            AuthorizationProvider authorizationProvider) throws IOException {
-        GitHubRequest.Builder<?> builder = request.toBuilder();
-        // if the authentication is needed but no credential is given, try it anyway (so that some calls
-        // that do work with anonymous access in the reduced form should still work.)
-        if (!request.allHeaders().containsKey("Authorization")) {
-            String authorization = authorizationProvider.getEncodedAuthorization();
-            if (authorization != null) {
-                builder.setHeader("Authorization", authorization);
-            }
-        }
-        if (request.header("Accept") == null) {
-            builder.setHeader("Accept", "application/vnd.github+json");
-        }
-        builder.setHeader("Accept-Encoding", "gzip");
-
-        builder.setHeader("X-GitHub-Api-Version", "2022-11-28");
-
-        if (request.hasBody()) {
-            if (request.body() != null) {
-                builder.contentType(defaultString(request.contentType(), "application/x-www-form-urlencoded"));
-            } else {
-                builder.contentType("application/json");
-                Map<String, Object> json = new HashMap<>();
-                for (GitHubRequest.Entry e : request.args()) {
-                    json.put(e.key, e.value);
-                }
-                builder.with(new ByteArrayInputStream(getMappingObjectWriter().writeValueAsBytes(json)));
-            }
-
-        }
-
-        return builder.build();
-    }
-
     private static boolean shouldIgnoreBody(@Nonnull GitHubConnectorResponse connectorResponse) {
         if (connectorResponse.statusCode() == HTTP_NOT_MODIFIED) {
             // special case handling for 304 unmodified, as the content will be ""
@@ -311,25 +278,39 @@ class GitHubClient {
     /**
      * Helper for {@link #getMappingObjectReader(GitHubConnectorResponse)}.
      *
+     * <p>
+     * <strong>Note:</strong> This method returns a Jackson 2.x {@link ObjectReader}. For Jackson 3.x compatibility, use
+     * the {@link GitHubJackson} abstraction instead.
+     * </p>
+     *
      * @param root
      *            the root GitHub object for this reader
      * @return an {@link ObjectReader} instance that can be further configured.
      */
     @Nonnull
     static ObjectReader getMappingObjectReader(@Nonnull GitHub root) {
-        ObjectReader reader = getMappingObjectReader((GitHubConnectorResponse) null);
-        ((InjectableValues.Std) reader.getInjectableValues()).addValue(GitHub.class, root);
-        return reader;
+        Map<String, Object> injected = JACKSON2_STATIC.createInjectableValues(null);
+        JACKSON2_STATIC.addGitHubRoot(injected, root);
+        return JACKSON2_STATIC.getReader(injected);
     }
 
     /**
      * Gets an {@link ObjectReader}.
      *
+     * <p>
      * Members of {@link InjectableValues} must be present even if {@code null}, otherwise classes expecting those
      * values will fail to read. This differs from regular JSONProperties which provide defaults instead of failing.
+     * </p>
      *
+     * <p>
      * Having one spot to create readers and having it take all injectable values is not a great long term solution but
      * it is sufficient for this first cut.
+     * </p>
+     *
+     * <p>
+     * <strong>Note:</strong> This method returns a Jackson 2.x {@link ObjectReader}. For Jackson 3.x compatibility, use
+     * the {@link GitHubJackson} abstraction instead.
+     * </p>
      *
      * @param connectorResponse
      *            the {@link GitHubConnectorResponse} to inject for this reader.
@@ -338,31 +319,23 @@ class GitHubClient {
      */
     @Nonnull
     static ObjectReader getMappingObjectReader(@CheckForNull GitHubConnectorResponse connectorResponse) {
-        Map<String, Object> injected = new HashMap<>();
-
-        // Required or many things break
-        injected.put(GitHubConnectorResponse.class.getName(), null);
-        injected.put(GitHub.class.getName(), null);
-
-        if (connectorResponse != null) {
-            injected.put(GitHubConnectorResponse.class.getName(), connectorResponse);
-            GitHubConnectorRequest request = connectorResponse.request();
-            // This is cheating, but it is an acceptable cheat for now.
-            if (request instanceof GitHubRequest) {
-                injected.putAll(((GitHubRequest) connectorResponse.request()).injectedMappingValues());
-            }
-        }
-        return MAPPER.reader(new InjectableValues.Std(injected));
+        Map<String, Object> injected = JACKSON2_STATIC.createInjectableValues(connectorResponse);
+        return JACKSON2_STATIC.getReader(injected);
     }
 
     /**
      * Gets an {@link ObjectWriter}.
      *
+     * <p>
+     * <strong>Note:</strong> This method returns a Jackson 2.x {@link ObjectWriter}. For Jackson 3.x compatibility, use
+     * the {@link GitHubJackson} abstraction instead.
+     * </p>
+     *
      * @return an {@link ObjectWriter} instance that can be further configured.
      */
     @Nonnull
     static ObjectWriter getMappingObjectWriter() {
-        return MAPPER.writer();
+        return JACKSON2_STATIC.getWriter();
     }
 
     /**
@@ -461,6 +434,11 @@ class GitHubClient {
 
     private GitHubConnector connector;
 
+    /**
+     * The Jackson implementation used for JSON serialization/deserialization.
+     */
+    private final GitHubJackson jackson;
+
     @Nonnull
     private final AtomicReference<GHRateLimit> rateLimit = new AtomicReference<>(GHRateLimit.DEFAULT);
 
@@ -489,13 +467,16 @@ class GitHubClient {
      *            the rate limit checker
      * @param authorizationProvider
      *            the authorization provider
+     * @param jackson
+     *            the Jackson implementation to use for JSON serialization
      */
     GitHubClient(String apiUrl,
             GitHubConnector connector,
             GitHubRateLimitHandler rateLimitHandler,
             GitHubAbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
-            AuthorizationProvider authorizationProvider) {
+            AuthorizationProvider authorizationProvider,
+            GitHubJackson jackson) {
 
         if (apiUrl.endsWith("/")) {
             apiUrl = apiUrl.substring(0, apiUrl.length() - 1); // normalize
@@ -513,6 +494,7 @@ class GitHubClient {
         this.rateLimitHandler = rateLimitHandler;
         this.abuseLimitHandler = abuseLimitHandler;
         this.rateLimitChecker = rateLimitChecker;
+        this.jackson = jackson;
     }
 
     /**
@@ -860,6 +842,41 @@ class GitHubClient {
         }
     }
 
+    private GitHubConnectorRequest prepareConnectorRequest(GitHubRequest request,
+            AuthorizationProvider authorizationProvider) throws IOException {
+        GitHubRequest.Builder<?> builder = request.toBuilder();
+        // if the authentication is needed but no credential is given, try it anyway (so that some calls
+        // that do work with anonymous access in the reduced form should still work.)
+        if (!request.allHeaders().containsKey("Authorization")) {
+            String authorization = authorizationProvider.getEncodedAuthorization();
+            if (authorization != null) {
+                builder.setHeader("Authorization", authorization);
+            }
+        }
+        if (request.header("Accept") == null) {
+            builder.setHeader("Accept", "application/vnd.github+json");
+        }
+        builder.setHeader("Accept-Encoding", "gzip");
+
+        builder.setHeader("X-GitHub-Api-Version", "2022-11-28");
+
+        if (request.hasBody()) {
+            if (request.body() != null) {
+                builder.contentType(defaultString(request.contentType(), "application/x-www-form-urlencoded"));
+            } else {
+                builder.contentType("application/json");
+                Map<String, Object> json = new HashMap<>();
+                for (GitHubRequest.Entry e : request.args()) {
+                    json.put(e.key, e.value);
+                }
+                builder.with(new ByteArrayInputStream(jackson.writeValueAsBytes(json)));
+            }
+
+        }
+
+        return builder.build();
+    }
+
     private GitHubConnectorRequest prepareRedirectRequest(GitHubConnectorResponse connectorResponse,
             GitHubRequest request) throws IOException {
         URI requestUri = URI.create(request.url().toString());
@@ -919,6 +936,16 @@ class GitHubClient {
     @CheckForNull
     String getEncodedAuthorization() throws IOException {
         return authorizationProvider.getEncodedAuthorization();
+    }
+
+    /**
+     * Gets the name of the Jackson implementation being used by this client.
+     *
+     * @return the implementation name, e.g., "Jackson 2.21.0" or "Jackson 3.0.3"
+     */
+    @Nonnull
+    String getJacksonImplementationName() {
+        return jackson.getImplementationName();
     }
 
     /**

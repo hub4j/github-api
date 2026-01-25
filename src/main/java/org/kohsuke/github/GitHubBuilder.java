@@ -5,6 +5,8 @@ import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.authorization.ImmutableAuthorizationProvider;
 import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
+import org.kohsuke.github.internal.DefaultGitHubJackson;
+import org.kohsuke.github.internal.GitHubJackson;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -159,6 +161,8 @@ public class GitHubBuilder implements Cloneable {
 
     private GitHubConnector connector;
 
+    private GitHubJackson jackson;
+
     private GitHubRateLimitChecker rateLimitChecker = new GitHubRateLimitChecker();
 
     private GitHubRateLimitHandler rateLimitHandler = GitHubRateLimitHandler.WAIT;
@@ -189,7 +193,8 @@ public class GitHubBuilder implements Cloneable {
                 rateLimitHandler,
                 abuseLimitHandler,
                 rateLimitChecker,
-                authorizationProvider);
+                authorizationProvider,
+                jackson != null ? jackson : DefaultGitHubJackson.createDefault());
     }
 
     /**
@@ -274,6 +279,38 @@ public class GitHubBuilder implements Cloneable {
      */
     public GitHubBuilder withEndpoint(String endpoint) {
         this.endpoint = endpoint;
+        return this;
+    }
+
+    /**
+     * Configures which Jackson implementation to use for JSON serialization/deserialization.
+     *
+     * <p>
+     * By default, Jackson 2.x is used. To use Jackson 3.x, create a Jackson 3 instance using
+     * {@link DefaultGitHubJackson#createJackson3()} and pass it to this method.
+     * </p>
+     *
+     * <h3>Example: Using Jackson 3.x</h3>
+     *
+     * <pre>
+     * GitHub github = new GitHubBuilder().withOAuthToken("token")
+     *         .withJackson(DefaultGitHubJackson.createJackson3())
+     *         .build();
+     * </pre>
+     *
+     * <p>
+     * <strong>Note:</strong> To use Jackson 3.x, you must add the Jackson 3 {@code tools.jackson.core:jackson-databind}
+     * dependency to your project.
+     * </p>
+     *
+     * @param jackson
+     *            the Jackson implementation to use
+     * @return the GitHubBuilder
+     * @see DefaultGitHubJackson#createJackson2()
+     * @see DefaultGitHubJackson#createJackson3()
+     */
+    public GitHubBuilder withJackson(GitHubJackson jackson) {
+        this.jackson = jackson;
         return this;
     }
 

@@ -1,0 +1,48 @@
+{
+  "id": "249d36bd-a54d-4106-a62f-f86c4f834d34",
+  "name": "user",
+  "request": {
+    "url": "/user",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "12-user.json",
+    "headers": {
+      "Date": "Mon, 26 Jan 2026 22:10:52 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
+      "ETag": "W/\"15d7e1ad92a3639b979fc55254902e63ee0bfa5c8f6766990bf989044d491ce1\"",
+      "Last-Modified": "Sat, 24 Jan 2026 22:07:12 GMT",
+      "X-OAuth-Scopes": "repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2026-02-19 19:55:13 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Server": "github.com",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4963",
+      "X-RateLimit-Reset": "1769467964",
+      "X-RateLimit-Used": "37",
+      "X-RateLimit-Resource": "core",
+      "X-GitHub-Request-Id": "D98D:30C18B:44C18DC:3CA8C0F:6977E66C"
+    }
+  },
+  "uuid": "249d36bd-a54d-4106-a62f-f86c4f834d34",
+  "persistent": true,
+  "insertionIndex": 12
+}

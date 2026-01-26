@@ -743,6 +743,15 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(comments.size(), equalTo(3));
         GHPullRequestReviewComment comment = comments.get(0);
         assertThat(comment.getBody(), equalTo("Some niggle"));
+
+        // Verify that line is not available when fetched via review.listReviewComments()
+        // due to GitHub API limitation (the review comments endpoint doesn't return line field)
+        assertThat(comment.getLine(), equalTo(-1));
+
+        // After refresh(), line information should be available
+        comment.refresh();
+        assertThat(comment.getLine(), equalTo(1));
+
         comment = comments.get(1);
         assertThat(comment.getBody(), equalTo("A single line comment"));
         assertThat(comment.getPosition(), equalTo(4));

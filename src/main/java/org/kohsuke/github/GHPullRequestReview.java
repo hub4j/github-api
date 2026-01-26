@@ -174,7 +174,19 @@ public class GHPullRequestReview extends GHObject {
     /**
      * Obtains all the review comments associated with this pull request review.
      *
+     * <p>
+     * <strong>Note:</strong> The GitHub API endpoint used by this method does not return line-related fields such as
+     * {@link GHPullRequestReviewComment#getLine() line}, {@link GHPullRequestReviewComment#getOriginalLine()
+     * originalLine}, {@link GHPullRequestReviewComment#getSide() side},
+     * {@link GHPullRequestReviewComment#getStartLine() startLine}, etc. These fields will return their default values
+     * (-1 or UNKNOWN).
+     *
+     * <p>
+     * If you need line number information, use {@link GHPullRequest#listReviewComments()} instead and filter by
+     * {@link GHPullRequestReviewComment#getPullRequestReviewId()} if needed.
+     *
      * @return the paged iterable
+     * @see GHPullRequest#listReviewComments()
      */
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() {
         return owner.root()

@@ -24,12 +24,12 @@ import javax.annotation.Nonnull;
  *
  * <h2>Configuration</h2>
  * <p>
- * Use {@link org.kohsuke.github.GitHubBuilder#withJackson(GitHubJackson)} to configure which Jackson version to use:
+ * Use {@link org.kohsuke.github.GitHubBuilder#useJackson3()} to configure the client to use Jackson 3.x:
  * </p>
  *
  * <pre>
  * // Use Jackson 3.x
- * GitHub github = new GitHubBuilder().withJackson(DefaultGitHubJackson.createJackson3()).build();
+ * GitHub github = new GitHubBuilder().useJackson3().build();
  * </pre>
  *
  * @author Pierre Villard

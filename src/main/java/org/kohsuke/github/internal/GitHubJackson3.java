@@ -39,7 +39,7 @@ import javax.annotation.Nonnull;
  * </p>
  *
  * <pre>
- * GitHub github = new GitHubBuilder().withJackson(DefaultGitHubJackson.createJackson3()).build();
+ * GitHub github = new GitHubBuilder().useJackson3().build();
  * </pre>
  *
  * @author Pierre Villard

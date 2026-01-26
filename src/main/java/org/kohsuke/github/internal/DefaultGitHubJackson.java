@@ -19,9 +19,7 @@ package org.kohsuke.github.internal;
  * GitHub github = new GitHubBuilder().withOAuthToken("token").build();
  *
  * // Using Jackson 3.x
- * GitHub github = new GitHubBuilder().withOAuthToken("token")
- *         .withJackson(DefaultGitHubJackson.createJackson3())
- *         .build();
+ * GitHub github = new GitHubBuilder().withOAuthToken("token").useJackson3().build();
  * </pre>
  *
  * <h2>Jackson 3.x Dependencies</h2>

@@ -2,14 +2,13 @@ package org.kohsuke.github;
 
 import org.junit.Test;
 import org.kohsuke.github.internal.DefaultGitHubJackson;
-import org.kohsuke.github.internal.GitHubJackson;
 
 import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.*;
 
 /**
- * Tests for Jackson implementation selection via {@link GitHubBuilder#withJackson(GitHubJackson)}.
+ * Tests for Jackson implementation selection via {@link GitHubBuilder#useJackson3()}.
  */
 public class GitHubJacksonTest extends AbstractGitHubWireMockTest {
 
@@ -34,19 +33,6 @@ public class GitHubJacksonTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test that Jackson 2 can be explicitly configured via builder.
-     *
-     * @throws IOException
-     *             the io exception
-     */
-    @Test
-    public void testJackson2ViaBuilder() throws IOException {
-        gitHub = getGitHubBuilder().withJackson(DefaultGitHubJackson.createJackson2()).build();
-        String implementationName = gitHub.getClient().getJacksonImplementationName();
-        assertThat(implementationName, startsWith("Jackson 2."));
-    }
-
-    /**
      * Test that Jackson 3 can be configured via builder when available.
      *
      * @throws IOException
@@ -55,7 +41,7 @@ public class GitHubJacksonTest extends AbstractGitHubWireMockTest {
     @Test
     public void testJackson3ViaBuilder() throws IOException {
         if (DefaultGitHubJackson.isJackson3Available()) {
-            gitHub = getGitHubBuilder().withJackson(DefaultGitHubJackson.createJackson3()).build();
+            gitHub = getGitHubBuilder().useJackson3().build();
             String implementationName = gitHub.getClient().getJacksonImplementationName();
             assertThat(implementationName, startsWith("Jackson 3."));
         }

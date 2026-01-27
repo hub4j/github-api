@@ -493,6 +493,16 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     }
 
     /**
+     * Since a GHPullRequest is always a pull request, this method always returns true.
+     *
+     * @return true
+     */
+    @Override
+    public boolean isPullRequest() {
+        return true;
+    }
+
+    /**
      * Retrieves all the commits associated to this pull request.
      *
      * @return the paged iterable

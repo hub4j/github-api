@@ -17,14 +17,19 @@ public class DefaultGitHubJacksonTest {
     }
 
     /**
-     * Test that createDefault returns Jackson 2 implementation.
+     * Test that createDefault returns Jackson 3 when available, otherwise Jackson 2.
      */
     @Test
     public void testCreateDefault() {
         GitHubJackson jackson = DefaultGitHubJackson.createDefault();
         assertThat(jackson, notNullValue());
-        assertThat(jackson, instanceOf(GitHubJackson2.class));
-        assertThat(jackson.getImplementationName(), startsWith("Jackson 2."));
+        if (DefaultGitHubJackson.isJackson3Available()) {
+            assertThat(jackson, instanceOf(GitHubJackson3.class));
+            assertThat(jackson.getImplementationName(), startsWith("Jackson 3."));
+        } else {
+            assertThat(jackson, instanceOf(GitHubJackson2.class));
+            assertThat(jackson.getImplementationName(), startsWith("Jackson 2."));
+        }
     }
 
     /**

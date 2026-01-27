@@ -18,18 +18,19 @@ import javax.annotation.Nonnull;
  *
  * <h2>Available Implementations</h2>
  * <ul>
- * <li>{@link GitHubJackson2} - Jackson 2.x implementation (default)</li>
- * <li>{@link GitHubJackson3} - Jackson 3.x implementation (requires additional dependencies)</li>
+ * <li>{@link GitHubJackson2} - Jackson 2.x implementation</li>
+ * <li>{@link GitHubJackson3} - Jackson 3.x implementation (default when available)</li>
  * </ul>
  *
  * <h2>Configuration</h2>
  * <p>
- * Use {@link org.kohsuke.github.GitHubBuilder#useJackson3()} to configure the client to use Jackson 3.x:
+ * By default, Jackson 3.x is used if available on the classpath, otherwise Jackson 2.x is used. Use
+ * {@link org.kohsuke.github.GitHubBuilder#useJackson2()} to explicitly use Jackson 2.x:
  * </p>
  *
  * <pre>
- * // Use Jackson 3.x
- * GitHub github = new GitHubBuilder().useJackson3().build();
+ * // Explicitly use Jackson 2.x
+ * GitHub github = new GitHubBuilder().useJackson2().build();
  * </pre>
  *
  * @author Pierre Villard

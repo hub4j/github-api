@@ -11,15 +11,16 @@ package org.kohsuke.github.internal;
  * <h2>Usage</h2>
  *
  * <p>
- * By default, Jackson 2.x is used. To use Jackson 3.x, configure the {@link org.kohsuke.github.GitHubBuilder}:
+ * By default, Jackson 3.x is used if available on the classpath, otherwise Jackson 2.x is used. To explicitly use
+ * Jackson 2.x, configure the {@link org.kohsuke.github.GitHubBuilder}:
  * </p>
  *
  * <pre>
- * // Using Jackson 2.x (default)
+ * // Using default (Jackson 3.x if available, otherwise Jackson 2.x)
  * GitHub github = new GitHubBuilder().withOAuthToken("token").build();
  *
- * // Using Jackson 3.x
- * GitHub github = new GitHubBuilder().withOAuthToken("token").useJackson3().build();
+ * // Explicitly using Jackson 2.x
+ * GitHub github = new GitHubBuilder().withOAuthToken("token").useJackson2().build();
  * </pre>
  *
  * <h2>Jackson 3.x Dependencies</h2>
@@ -39,13 +40,18 @@ public final class DefaultGitHubJackson {
      * Creates the default {@link GitHubJackson} instance.
      *
      * <p>
-     * This method returns a Jackson 2.x implementation, which is the default and most stable option.
+     * This method returns a Jackson 3.x implementation if available on the classpath, otherwise it returns a Jackson
+     * 2.x implementation.
      * </p>
      *
-     * @return a GitHubJackson2 instance
+     * @return a GitHubJackson3 instance if Jackson 3.x is available, otherwise a GitHubJackson2 instance
      */
     public static GitHubJackson createDefault() {
-        return new GitHubJackson2();
+        if (isJackson3Available()) {
+            return new GitHubJackson3();
+        } else {
+            return new GitHubJackson2();
+        }
     }
 
     /**

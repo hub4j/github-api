@@ -8,7 +8,7 @@ import java.io.IOException;
 import static org.hamcrest.CoreMatchers.*;
 
 /**
- * Tests for Jackson implementation selection via {@link GitHubBuilder#useJackson3()}.
+ * Tests for Jackson implementation selection via {@link GitHubBuilder#useJackson2()}.
  */
 public class GitHubJacksonTest extends AbstractGitHubWireMockTest {
 
@@ -20,30 +20,32 @@ public class GitHubJacksonTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Test that the default Jackson implementation is Jackson 2.
+     * Test that the default Jackson implementation is Jackson 3 when available.
      *
      * @throws IOException
      *             the io exception
      */
     @Test
-    public void testDefaultJacksonIsJackson2() throws IOException {
+    public void testDefaultJacksonIsJackson3WhenAvailable() throws IOException {
         gitHub = getGitHubBuilder().build();
         String implementationName = gitHub.getClient().getJacksonImplementationName();
-        assertThat(implementationName, startsWith("Jackson 2."));
+        if (DefaultGitHubJackson.isJackson3Available()) {
+            assertThat(implementationName, startsWith("Jackson 3."));
+        } else {
+            assertThat(implementationName, startsWith("Jackson 2."));
+        }
     }
 
     /**
-     * Test that Jackson 3 can be configured via builder when available.
+     * Test that Jackson 2 can be explicitly configured via builder.
      *
      * @throws IOException
      *             the io exception
      */
     @Test
-    public void testJackson3ViaBuilder() throws IOException {
-        if (DefaultGitHubJackson.isJackson3Available()) {
-            gitHub = getGitHubBuilder().useJackson3().build();
-            String implementationName = gitHub.getClient().getJacksonImplementationName();
-            assertThat(implementationName, startsWith("Jackson 3."));
-        }
+    public void testJackson2ViaBuilder() throws IOException {
+        gitHub = getGitHubBuilder().useJackson2().build();
+        String implementationName = gitHub.getClient().getJacksonImplementationName();
+        assertThat(implementationName, startsWith("Jackson 2."));
     }
 }

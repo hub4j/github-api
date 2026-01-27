@@ -161,7 +161,7 @@ public class GitHubBuilder implements Cloneable {
 
     private GitHubConnector connector;
 
-    private GitHubJackson jackson;
+    private GitHubJackson jackson = DefaultGitHubJackson.createDefault();
 
     private GitHubRateLimitChecker rateLimitChecker = new GitHubRateLimitChecker();
 
@@ -194,7 +194,7 @@ public class GitHubBuilder implements Cloneable {
                 abuseLimitHandler,
                 rateLimitChecker,
                 authorizationProvider,
-                jackson != null ? jackson : DefaultGitHubJackson.createDefault());
+                jackson);
     }
 
     /**
@@ -212,29 +212,23 @@ public class GitHubBuilder implements Cloneable {
     }
 
     /**
-     * Configures the client to use Jackson 3.x for JSON serialization/deserialization.
+     * Configures the client to use Jackson 2.x for JSON serialization/deserialization.
      *
      * <p>
-     * By default, Jackson 2.x is used. Call this method to use Jackson 3.x instead.
+     * By default, Jackson 3.x is used if available on the classpath, otherwise Jackson 2.x is used. Call this method to
+     * explicitly use Jackson 2.x.
      * </p>
      *
      * <h3>Example</h3>
      *
      * <pre>
-     * GitHub github = new GitHubBuilder().withOAuthToken("token").useJackson3().build();
+     * GitHub github = new GitHubBuilder().withOAuthToken("token").useJackson2().build();
      * </pre>
      *
-     * <p>
-     * <strong>Note:</strong> To use Jackson 3.x, you must add the Jackson 3 {@code tools.jackson.core:jackson-databind}
-     * dependency to your project.
-     * </p>
-     *
      * @return the GitHubBuilder
-     * @throws IllegalStateException
-     *             if Jackson 3.x is not available on the classpath
      */
-    public GitHubBuilder useJackson3() {
-        this.jackson = DefaultGitHubJackson.createJackson3();
+    public GitHubBuilder useJackson2() {
+        this.jackson = DefaultGitHubJackson.createJackson2();
         return this;
     }
 

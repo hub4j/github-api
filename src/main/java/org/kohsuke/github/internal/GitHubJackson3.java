@@ -31,16 +31,9 @@ import javax.annotation.Nonnull;
  * </p>
  *
  * <p>
- * To use Jackson 3.x, add the {@code tools.jackson.core:jackson-databind} dependency to your project.
+ * To use Jackson 3.x, add the {@code tools.jackson.core:jackson-databind} dependency to your project. When Jackson 3.x
+ * is available on the classpath, it is used by default.
  * </p>
- *
- * <p>
- * Then configure the GitHub client to use Jackson 3:
- * </p>
- *
- * <pre>
- * GitHub github = new GitHubBuilder().useJackson3().build();
- * </pre>
  *
  * @author Pierre Villard
  */

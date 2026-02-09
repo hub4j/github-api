@@ -30,5 +30,3 @@ public enum GHTargetType {
         return StringUtils.capitalize(name().toLowerCase(Locale.ENGLISH));
     }
 }
-
-https://api.github.com/app/installations

@@ -15,8 +15,11 @@ public enum GHTargetType {
 
     /** The organization. */
     ORGANIZATION,
+    /** The enterprise */
+    ENTERPRISE,
     /** The user. */
     USER;
+
 
     /**
      * Returns GitHub's internal representation of this event.
@@ -27,3 +30,5 @@ public enum GHTargetType {
         return StringUtils.capitalize(name().toLowerCase(Locale.ENGLISH));
     }
 }
+
+https://api.github.com/app/installations

@@ -20,7 +20,6 @@ public enum GHTargetType {
     /** The user. */
     USER;
 
-
     /**
      * Returns GitHub's internal representation of this event.
      *

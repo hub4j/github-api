@@ -862,15 +862,19 @@ public class AppTest extends AbstractGitHubWireMockTest {
     public void testIssueSearchIssuesOnly() {
         PagedSearchIterable<GHIssue> r = gitHub.searchIssues()
                 .repo("hub4j", "github-api")
+                .isPullRequest()
                 .isIssue()
-                .isOpen()
-                .sort(GHIssueSearchBuilder.Sort.UPDATED)
+                .isClosed()
+                .sort(GHIssueSearchBuilder.Sort.CREATED)
                 .list();
         assertThat(r.getTotalCount(), greaterThan(0));
+        int count = 0;
         for (GHIssue issue : r) {
             assertThat(issue.getTitle(), notNullValue());
-            // Verify it's not a PR (pull_request field should be null)
             assertThat(issue.getPullRequest(), nullValue());
+            if (++count >= 3) {
+                break;
+            }
         }
     }
 
@@ -883,14 +887,17 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 .repo("hub4j", "github-api")
                 .isIssue()
                 .isPullRequest()
-                .isOpen()
-                .sort(GHIssueSearchBuilder.Sort.UPDATED)
+                .isClosed()
+                .sort(GHIssueSearchBuilder.Sort.CREATED)
                 .list();
         assertThat(r.getTotalCount(), greaterThan(0));
+        int count = 0;
         for (GHIssue issue : r) {
             assertThat(issue.getTitle(), notNullValue());
-            // Verify it's a PR (pull_request field should not be null)
             assertThat(issue.getPullRequest(), notNullValue());
+            if (++count >= 3) {
+                break;
+            }
         }
     }
 

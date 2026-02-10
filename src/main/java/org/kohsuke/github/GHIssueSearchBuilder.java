@@ -63,6 +63,7 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
      * @return the gh issue search builder
      */
     public GHIssueSearchBuilder isIssue() {
+        terms.removeIf("is:pr"::equals);
         return q("is:issue");
     }
 
@@ -90,6 +91,7 @@ public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
      * @return the gh issue search builder
      */
     public GHIssueSearchBuilder isPullRequest() {
+        terms.removeIf("is:issue"::equals);
         return q("is:pr");
     }
 

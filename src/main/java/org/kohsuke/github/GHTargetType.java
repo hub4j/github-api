@@ -29,3 +29,4 @@ public enum GHTargetType {
         return StringUtils.capitalize(name().toLowerCase(Locale.ENGLISH));
     }
 }
+

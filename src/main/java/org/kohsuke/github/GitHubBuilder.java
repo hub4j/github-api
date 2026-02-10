@@ -5,6 +5,8 @@ import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.authorization.ImmutableAuthorizationProvider;
 import org.kohsuke.github.connector.GitHubConnector;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
+import org.kohsuke.github.internal.DefaultGitHubJackson;
+import org.kohsuke.github.internal.GitHubJackson;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -159,6 +161,8 @@ public class GitHubBuilder implements Cloneable {
 
     private GitHubConnector connector;
 
+    private GitHubJackson jackson = DefaultGitHubJackson.createDefault();
+
     private GitHubRateLimitChecker rateLimitChecker = new GitHubRateLimitChecker();
 
     private GitHubRateLimitHandler rateLimitHandler = GitHubRateLimitHandler.WAIT;
@@ -189,7 +193,8 @@ public class GitHubBuilder implements Cloneable {
                 rateLimitHandler,
                 abuseLimitHandler,
                 rateLimitChecker,
-                authorizationProvider);
+                authorizationProvider,
+                jackson);
     }
 
     /**
@@ -204,6 +209,27 @@ public class GitHubBuilder implements Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException("Clone should be supported", e);
         }
+    }
+
+    /**
+     * Configures the client to use Jackson 2.x for JSON serialization/deserialization.
+     *
+     * <p>
+     * By default, Jackson 3.x is used if available on the classpath, otherwise Jackson 2.x is used. Call this method to
+     * explicitly use Jackson 2.x.
+     * </p>
+     *
+     * <h3>Example</h3>
+     *
+     * <pre>
+     * GitHub github = new GitHubBuilder().withOAuthToken("token").useJackson2().build();
+     * </pre>
+     *
+     * @return the GitHubBuilder
+     */
+    public GitHubBuilder useJackson2() {
+        this.jackson = DefaultGitHubJackson.createJackson2();
+        return this;
     }
 
     /**

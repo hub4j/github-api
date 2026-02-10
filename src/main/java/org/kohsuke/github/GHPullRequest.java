@@ -493,6 +493,16 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     }
 
     /**
+     * Since a GHPullRequest is always a pull request, this method always returns true.
+     *
+     * @return true
+     */
+    @Override
+    public boolean isPullRequest() {
+        return true;
+    }
+
+    /**
      * Retrieves all the commits associated to this pull request.
      *
      * @return the paged iterable
@@ -537,6 +547,30 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         return root().createRequest()
                 .withUrlPath(String.format("%s/reviews", getApiRoute()))
                 .toIterable(GHPullRequestReview[].class, item -> item.wrapUp(this));
+    }
+
+    /**
+     * Converts a draft pull request to ready for review.
+     *
+     * @throws IOException
+     *             the io exception
+     * @throws IllegalStateException
+     *             if the pull request is not a draft
+     */
+    public void markReadyForReview() throws IOException {
+        if (!draft) {
+            throw new IllegalStateException("Pull request is not a draft");
+        }
+
+        StringBuilder inputBuilder = new StringBuilder();
+        addParameter(inputBuilder, "pullRequestId", this.getNodeId());
+
+        String graphqlBody = "mutation MarkReadyForReview { markPullRequestReadyForReview(input: {" + inputBuilder
+                + "}) { pullRequest { id } } }";
+
+        root().createGraphQLRequest(graphqlBody).sendGraphQL();
+
+        refresh();
     }
 
     /**

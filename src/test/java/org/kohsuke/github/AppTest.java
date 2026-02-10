@@ -881,6 +881,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     public void testIssueSearchPullRequestsOnly() {
         PagedSearchIterable<GHIssue> r = gitHub.searchIssues()
                 .repo("hub4j", "github-api")
+                .isIssue()
                 .isPullRequest()
                 .isOpen()
                 .sort(GHIssueSearchBuilder.Sort.UPDATED)

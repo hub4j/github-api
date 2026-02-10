@@ -30,11 +30,13 @@ public class GHAsset extends GHObject {
 
     private String browserDownloadUrl;
     private String contentType;
+    private String digest;
     private long downloadCount;
     private String label;
     private String name;
     private long size;
     private String state;
+    private GHUser uploader;
     /** The owner. */
     GHRepository owner;
 
@@ -70,6 +72,15 @@ public class GHAsset extends GHObject {
      */
     public String getContentType() {
         return contentType;
+    }
+
+    /**
+     * Gets the digest.
+     *
+     * @return the digest
+     */
+    public String getDigest() {
+        return digest;
     }
 
     /**
@@ -125,6 +136,16 @@ public class GHAsset extends GHObject {
      */
     public String getState() {
         return state;
+    }
+
+    /**
+     * Gets uploader.
+     *
+     * @return the uploader
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHPerson getUploader() {
+        return uploader;
     }
 
     /**

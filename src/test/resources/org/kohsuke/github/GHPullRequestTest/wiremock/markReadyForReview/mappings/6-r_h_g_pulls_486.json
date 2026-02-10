@@ -1,0 +1,47 @@
+{
+  "id": "d00fbce7-5819-4b69-88b4-a9201bbdbeaf",
+  "name": "repos_hub4j-test-org_github-api_pulls_486",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/pulls/486",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "6-r_h_g_pulls_486.json",
+    "headers": {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Content-Security-Policy": "default-src 'none'",
+      "Content-Type": "application/json; charset=utf-8",
+      "Date": "Sun, 25 Jan 2026 03:18:09 GMT",
+      "ETag": "W/\"0c63ffd8648417e7fbf86ee41f53146e573a08f88b3472f2ffd3974db9ae24cc\"",
+      "github-authentication-token-expiration": "2026-02-19 19:55:13 UTC",
+      "Last-Modified": "Sun, 25 Jan 2026 03:18:08 GMT",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "deny",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "X-OAuth-Scopes": "repo",
+      "X-XSS-Protection": "0",
+      "Server": "github.com",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4957",
+      "X-RateLimit-Reset": "1769314022",
+      "X-RateLimit-Used": "43",
+      "X-RateLimit-Resource": "core",
+      "X-GitHub-Request-Id": "D2AE:19034C:25CB2D9:20EB663:69758B71"
+    }
+  },
+  "uuid": "d00fbce7-5819-4b69-88b4-a9201bbdbeaf",
+  "persistent": true,
+  "insertionIndex": 6
+}

@@ -550,6 +550,30 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     }
 
     /**
+     * Converts a draft pull request to ready for review.
+     *
+     * @throws IOException
+     *             the io exception
+     * @throws IllegalStateException
+     *             if the pull request is not a draft
+     */
+    public void markReadyForReview() throws IOException {
+        if (!draft) {
+            throw new IllegalStateException("Pull request is not a draft");
+        }
+
+        StringBuilder inputBuilder = new StringBuilder();
+        addParameter(inputBuilder, "pullRequestId", this.getNodeId());
+
+        String graphqlBody = "mutation MarkReadyForReview { markPullRequestReadyForReview(input: {" + inputBuilder
+                + "}) { pullRequest { id } } }";
+
+        root().createGraphQLRequest(graphqlBody).sendGraphQL();
+
+        refresh();
+    }
+
+    /**
      * Merge this pull request.
      *
      * <p>

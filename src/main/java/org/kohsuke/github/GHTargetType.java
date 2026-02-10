@@ -15,7 +15,7 @@ public enum GHTargetType {
 
     /** The organization. */
     ORGANIZATION,
-    /** The enterprise.  */
+    /** The enterprise. */
     ENTERPRISE,
     /** The user. */
     USER;
@@ -29,4 +29,3 @@ public enum GHTargetType {
         return StringUtils.capitalize(name().toLowerCase(Locale.ENGLISH));
     }
 }
-

@@ -1,8 +1,8 @@
 {
-  "id": "09a5cfec-10dd-450e-bc93-7733e3901b45",
+  "id": "02b59382-023b-4a4c-976d-a1f5dc88c747",
   "name": "search_issues",
   "request": {
-    "url": "/search/issues?sort=updated&q=repo%3Ahub4j%2Fgithub-api+is%3Aissue+is%3Aopen",
+    "url": "/search/issues?sort=created&q=repo%3Ahub4j%2Fgithub-api+is%3Aissue+is%3Aclosed",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -14,7 +14,7 @@
     "status": 200,
     "bodyFileName": "2-search_issues.json",
     "headers": {
-      "Date": "Sun, 25 Jan 2026 19:36:35 GMT",
+      "Date": "Tue, 10 Feb 2026 20:14:51 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "no-cache",
       "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
@@ -24,9 +24,9 @@
       "X-GitHub-Media-Type": "github.v3; format=json",
       "x-github-api-version-selected": "2022-11-28",
       "X-RateLimit-Limit": "30",
-      "X-RateLimit-Remaining": "29",
-      "X-RateLimit-Reset": "1769369855",
-      "X-RateLimit-Used": "1",
+      "X-RateLimit-Remaining": "27",
+      "X-RateLimit-Reset": "1770754529",
+      "X-RateLimit-Used": "3",
       "X-RateLimit-Resource": "search",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
       "Access-Control-Allow-Origin": "*",
@@ -37,11 +37,11 @@
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
       "Server": "github.com",
-      "X-GitHub-Request-Id": "F6F6:1DC7F0:634116F:547C64E:697670C2",
-      "Link": "<https://api.github.com/search/issues?sort=updated&q=repo%3Ahub4j%2Fgithub-api+is%3Aissue+is%3Aopen&page=2>; rel=\"next\", <https://api.github.com/search/issues?sort=updated&q=repo%3Ahub4j%2Fgithub-api+is%3Aissue+is%3Aopen&page=6>; rel=\"last\""
+      "X-GitHub-Request-Id": "FC91:2EFE2C:A1558AD:9585268:698B91BA",
+      "Link": "<https://api.github.com/search/issues?sort=created&q=repo%3Ahub4j%2Fgithub-api+is%3Aissue+is%3Aclosed&page=2>; rel=\"next\", <https://api.github.com/search/issues?sort=created&q=repo%3Ahub4j%2Fgithub-api+is%3Aissue+is%3Aclosed&page=19>; rel=\"last\""
     }
   },
-  "uuid": "09a5cfec-10dd-450e-bc93-7733e3901b45",
+  "uuid": "02b59382-023b-4a4c-976d-a1f5dc88c747",
   "persistent": true,
   "scenarioName": "scenario-1-search-issues",
   "requiredScenarioState": "Started",

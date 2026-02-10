@@ -1,5 +1,5 @@
 {
-  "id": "00e67418-a035-401d-b3d3-457fc73ffd0c",
+  "id": "fcc027dc-1763-4fc2-8537-10be7501b306",
   "name": "user",
   "request": {
     "url": "/user",
@@ -14,7 +14,7 @@
     "status": 200,
     "bodyFileName": "1-user.json",
     "headers": {
-      "Date": "Sun, 25 Jan 2026 19:36:34 GMT",
+      "Date": "Tue, 10 Feb 2026 20:14:50 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "private, max-age=60, s-maxage=60",
       "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
@@ -35,14 +35,14 @@
       "Content-Security-Policy": "default-src 'none'",
       "Server": "github.com",
       "X-RateLimit-Limit": "5000",
-      "X-RateLimit-Remaining": "4976",
-      "X-RateLimit-Reset": "1769372833",
-      "X-RateLimit-Used": "24",
+      "X-RateLimit-Remaining": "4905",
+      "X-RateLimit-Reset": "1770755531",
+      "X-RateLimit-Used": "95",
       "X-RateLimit-Resource": "core",
-      "X-GitHub-Request-Id": "F6F4:EDA44:64803E0:55D240F:697670C1"
+      "X-GitHub-Request-Id": "FC8F:31B50A:A0F14CA:959A082:698B91B9"
     }
   },
-  "uuid": "00e67418-a035-401d-b3d3-457fc73ffd0c",
+  "uuid": "fcc027dc-1763-4fc2-8537-10be7501b306",
   "persistent": true,
   "insertionIndex": 1
 }

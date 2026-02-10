@@ -1,8 +1,8 @@
 {
-  "id": "ec183035-31a6-476e-b33b-99fbc7df7a18",
+  "id": "29a7effd-f202-484d-852a-cdcaac4a38b6",
   "name": "search_issues",
   "request": {
-    "url": "/search/issues?sort=updated&q=repo%3Ahub4j%2Fgithub-api+is%3Apr+is%3Aopen",
+    "url": "/search/issues?sort=created&q=repo%3Ahub4j%2Fgithub-api+is%3Apr+is%3Aclosed",
     "method": "GET",
     "headers": {
       "Accept": {
@@ -14,7 +14,7 @@
     "status": 200,
     "bodyFileName": "2-search_issues.json",
     "headers": {
-      "Date": "Sun, 25 Jan 2026 19:38:36 GMT",
+      "Date": "Tue, 10 Feb 2026 20:15:10 GMT",
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "no-cache",
       "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
@@ -24,9 +24,9 @@
       "X-GitHub-Media-Type": "github.v3; format=json",
       "x-github-api-version-selected": "2022-11-28",
       "X-RateLimit-Limit": "30",
-      "X-RateLimit-Remaining": "29",
-      "X-RateLimit-Reset": "1769369976",
-      "X-RateLimit-Used": "1",
+      "X-RateLimit-Remaining": "25",
+      "X-RateLimit-Reset": "1770754529",
+      "X-RateLimit-Used": "5",
       "X-RateLimit-Resource": "search",
       "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
       "Access-Control-Allow-Origin": "*",
@@ -37,10 +37,11 @@
       "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
       "Content-Security-Policy": "default-src 'none'",
       "Server": "github.com",
-      "X-GitHub-Request-Id": "F72B:121DD1:616A142:52B0E01:6976713B"
+      "X-GitHub-Request-Id": "FC9D:312B30:9B9970D:900825A:698B91CE",
+      "Link": "<https://api.github.com/search/issues?sort=created&q=repo%3Ahub4j%2Fgithub-api+is%3Apr+is%3Aclosed&page=2>; rel=\"next\", <https://api.github.com/search/issues?sort=created&q=repo%3Ahub4j%2Fgithub-api+is%3Apr+is%3Aclosed&page=34>; rel=\"last\""
     }
   },
-  "uuid": "ec183035-31a6-476e-b33b-99fbc7df7a18",
+  "uuid": "29a7effd-f202-484d-852a-cdcaac4a38b6",
   "persistent": true,
   "scenarioName": "scenario-1-search-issues",
   "requiredScenarioState": "Started",

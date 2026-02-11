@@ -1119,7 +1119,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(refs.get(0).getRef(), equalTo("refs/heads/main"));
     }
 
-
     /**
      * List releases.
      *

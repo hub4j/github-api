@@ -1010,6 +1010,35 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * List matching refs.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void listMatchingRefs() throws Exception {
+        GHRepository repo = getRepository();
+        List<GHRef> refs;
+
+        // Test listing refs matching a prefix
+        refs = repo.listMatchingRefs("heads").toList();
+        assertThat(refs, notNullValue());
+        assertThat(refs.size(), greaterThan(3));
+        assertThat(refs.get(0).getRef(), equalTo("refs/heads/changes"));
+
+        // Test with refs/ prefix
+        List<GHRef> refsWithPrefix = repo.listMatchingRefs("refs/heads").toList();
+        assertThat(refsWithPrefix.size(), equalTo(refs.size()));
+        assertThat(refsWithPrefix.get(0).getRef(), equalTo(refs.get(0).getRef()));
+
+        // Test with a more specific prefix
+        refs = repo.listMatchingRefs("heads/gh").toList();
+        assertThat(refs, notNullValue());
+        assertThat(refs.size(), equalTo(1));
+        assertThat(refs.get(0).getRef(), equalTo("refs/heads/gh-pages"));
+    }
+
+    /**
      * List refs.
      *
      * @throws Exception
@@ -1090,34 +1119,6 @@ public class GHRepositoryTest extends AbstractGitHubWireMockTest {
         assertThat(refs.get(0).getRef(), equalTo("refs/heads/main"));
     }
 
-    /**
-     * List matching refs.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    public void listMatchingRefs() throws Exception {
-        GHRepository repo = getRepository();
-        List<GHRef> refs;
-
-        // Test listing refs matching a prefix
-        refs = repo.listMatchingRefs("heads").toList();
-        assertThat(refs, notNullValue());
-        assertThat(refs.size(), greaterThan(3));
-        assertThat(refs.get(0).getRef(), equalTo("refs/heads/changes"));
-
-        // Test with refs/ prefix
-        List<GHRef> refsWithPrefix = repo.listMatchingRefs("refs/heads").toList();
-        assertThat(refsWithPrefix.size(), equalTo(refs.size()));
-        assertThat(refsWithPrefix.get(0).getRef(), equalTo(refs.get(0).getRef()));
-
-        // Test with a more specific prefix
-        refs = repo.listMatchingRefs("heads/gh").toList();
-        assertThat(refs, notNullValue());
-        assertThat(refs.size(), equalTo(1));
-        assertThat(refs.get(0).getRef(), equalTo("refs/heads/gh-pages"));
-    }
 
     /**
      * List releases.

@@ -2869,6 +2869,18 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Retrieves all refs that match the given prefix using the matching-refs endpoint.
+     * This is useful to avoid fetching all available refs.
+     *
+     * @param refPrefix
+     *            the ref prefix to match e.g. <code>heads/main</code> or <code>tags/v1</code>
+     * @return paged iterable of all refs matching the specified prefix
+     */
+    public PagedIterable<GHRef> listMatchingRefs(String refPrefix) {
+        return GHRef.readMatchingRefs(this, refPrefix);
+    }
+
+    /**
      * List releases paged iterable.
      *
      * @return the paged iterable

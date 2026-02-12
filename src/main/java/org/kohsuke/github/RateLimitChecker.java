@@ -21,7 +21,8 @@ import java.util.logging.Logger;
  *
  * @author Liam Newman
  */
-public abstract class RateLimitChecker {
+public abstract class RateLimitChecker
+        implements community.kotlin.conrib.github.RateLimitChecker {
 
     /**
      * A {@link RateLimitChecker} with a simple number as the limit.

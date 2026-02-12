@@ -1,6 +1,8 @@
 package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import community.kotlin.conrib.github.Reactable;
+import community.kotlin.conrib.github.ReactionContent;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -9,7 +11,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * @author Kohsuke Kawaguchi
  * @see Reactable
  */
-public class GHReaction extends GHObject {
+public class GHReaction extends GHObject
+        implements community.kotlin.conrib.github.GHReaction {
 
     private ReactionContent content;
 

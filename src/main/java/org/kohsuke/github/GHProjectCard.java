@@ -13,7 +13,8 @@ import java.net.URL;
  *
  * @author Gunnar Skjold
  */
-public class GHProjectCard extends GHObject {
+public class GHProjectCard extends GHObject
+        implements community.kotlin.conrib.github.GHProjectCard {
 
     private boolean archived;
 

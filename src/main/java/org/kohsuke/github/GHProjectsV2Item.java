@@ -22,7 +22,8 @@ import java.util.Date;
  *      "https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/using-the-api-to-manage-projects">The
  *      GraphQL API for Projects V2</a>
  */
-public class GHProjectsV2Item extends GHObject {
+public class GHProjectsV2Item extends GHObject
+        implements community.kotlin.conrib.github.GHProjectsV2Item {
 
     /**
      * The Enum ContentType.

@@ -8,6 +8,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import community.kotlin.conrib.github.GHEvent;
+import community.kotlin.conrib.github.GHIssueState;
+import community.kotlin.conrib.github.HttpException;
 
 // TODO: Auto-generated Javadoc
 
@@ -16,7 +19,8 @@ import java.util.TreeMap;
  *
  * @author Kohsuke Kawaguchi
  */
-public class GHOrganization extends GHPerson {
+public class GHOrganization extends GHPerson
+        implements community.kotlin.conrib.github.GHOrganization {
 
     /**
      * The enum Permission.

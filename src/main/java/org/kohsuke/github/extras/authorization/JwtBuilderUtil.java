@@ -5,7 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Serializer;
 import io.jsonwebtoken.jackson.io.JacksonSerializer;
 import io.jsonwebtoken.security.SignatureAlgorithm;
-import org.kohsuke.github.GHException;
+import community.kotlin.conrib.github.GHException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

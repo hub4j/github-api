@@ -8,9 +8,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
-import static org.kohsuke.github.GHDirection.DESC;
-import static org.kohsuke.github.GHMarketplaceAccountType.ORGANIZATION;
+import static community.kotlin.conrib.github.GHDirection.DESC;
+import static community.kotlin.conrib.github.GHMarketplaceAccountType.ORGANIZATION;
 import static org.kohsuke.github.GHMarketplaceListAccountBuilder.Sort.UPDATED;
+import community.kotlin.conrib.github.GHDirection;
+import community.kotlin.conrib.github.GHMarketplaceAccountType;
+import community.kotlin.conrib.github.GHMarketplacePriceModel;
 
 // TODO: Auto-generated Javadoc
 /**

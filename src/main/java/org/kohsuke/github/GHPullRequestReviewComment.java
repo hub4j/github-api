@@ -30,6 +30,9 @@ import java.io.IOException;
 import java.net.URL;
 
 import javax.annotation.CheckForNull;
+import community.kotlin.conrib.github.GHCommentAuthorAssociation;
+import community.kotlin.conrib.github.Reactable;
+import community.kotlin.conrib.github.ReactionContent;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -40,7 +43,9 @@ import javax.annotation.CheckForNull;
  * @see GHPullRequest#createReviewComment(String, String, String, int) GHPullRequest#createReviewComment(String, String,
  *      String, int)
  */
-public class GHPullRequestReviewComment extends GHObject implements Reactable {
+public class GHPullRequestReviewComment extends GHObject
+        implements Reactable,
+        community.kotlin.conrib.github.GHPullRequestReviewComment {
 
     /**
      * The side of the diff to which the comment applies

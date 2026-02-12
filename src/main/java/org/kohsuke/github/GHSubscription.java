@@ -15,7 +15,8 @@ import java.util.Date;
  * @see GHRepository#getSubscription() GHRepository#getSubscription()
  * @see GHThread#getSubscription() GHThread#getSubscription()
  */
-public class GHSubscription extends GitHubInteractiveObject {
+public class GHSubscription extends GitHubInteractiveObject
+        implements community.kotlin.conrib.github.GHSubscription {
 
     private String createdAt, url, repositoryUrl, reason;
 

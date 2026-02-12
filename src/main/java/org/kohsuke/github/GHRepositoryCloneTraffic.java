@@ -9,7 +9,8 @@ import java.util.List;
  *
  * @see GHRepository#getCloneTraffic() GHRepository#getCloneTraffic()
  */
-public class GHRepositoryCloneTraffic extends GHRepositoryTraffic {
+public class GHRepositoryCloneTraffic extends GHRepositoryTraffic
+        implements community.kotlin.conrib.github.GHRepositoryCloneTraffic {
     /**
      * The type DailyInfo.
      */

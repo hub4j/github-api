@@ -11,6 +11,8 @@ import java.util.*;
 import javax.annotation.Nonnull;
 
 import static org.kohsuke.github.GitHubRequest.transformEnum;
+import community.kotlin.conrib.github.HttpException;
+import community.kotlin.conrib.github.Refreshable;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -18,7 +20,9 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
  *
  * @author Kohsuke Kawaguchi
  */
-public class GHTeam extends GHObject implements Refreshable {
+public class GHTeam extends GHObject
+        implements Refreshable,
+        community.kotlin.conrib.github.GHTeam {
 
     /**
      * The Enum Privacy.

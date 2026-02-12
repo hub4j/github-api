@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import java.io.IOException;
 import java.net.URL;
+import community.kotlin.conrib.github.GHMarketplaceAccountType;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -11,7 +12,8 @@ import java.net.URL;
  * @see GitHub#getMyMarketplacePurchases()
  * @see GHMarketplaceListAccountBuilder#createRequest()
  */
-public class GHMarketplaceAccount extends GitHubInteractiveObject {
+public class GHMarketplaceAccount extends GitHubInteractiveObject
+        implements community.kotlin.conrib.github.GHMarketplaceAccount {
 
     private String email;
 

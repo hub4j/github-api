@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import java.io.IOException;
+import community.kotlin.conrib.github.GHDeploymentState;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -8,7 +9,8 @@ import java.io.IOException;
  *
  * @see GHDeployment#createStatus(GHDeploymentState) GHDeployment#createStatus(GHDeploymentState)
  */
-public class GHDeploymentStatusBuilder {
+public class GHDeploymentStatusBuilder
+        implements community.kotlin.conrib.github.GHDeploymentStatusBuilder {
     private final Requester builder;
     private long deploymentId;
     private GHRepository repo;

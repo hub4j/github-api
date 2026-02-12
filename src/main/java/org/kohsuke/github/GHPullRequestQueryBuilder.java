@@ -1,5 +1,8 @@
 package org.kohsuke.github;
 
+
+import community.kotlin.conrib.github.GHDirection;
+import community.kotlin.conrib.github.GHIssueState;
 // TODO: Auto-generated Javadoc
 /**
  * Lists up pull requests with some filtering and sorting.
@@ -7,7 +10,8 @@ package org.kohsuke.github;
  * @author Kohsuke Kawaguchi
  * @see GHRepository#queryPullRequests() GHRepository#queryPullRequests()
  */
-public class GHPullRequestQueryBuilder extends GHQueryBuilder<GHPullRequest> {
+public class GHPullRequestQueryBuilder extends GHQueryBuilder<GHPullRequest>
+        implements community.kotlin.conrib.github.GHPullRequestQueryBuilder {
     /**
      * The enum Sort.
      */

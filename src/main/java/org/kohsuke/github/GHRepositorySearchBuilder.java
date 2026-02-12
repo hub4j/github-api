@@ -1,6 +1,9 @@
 package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import community.kotlin.conrib.github.GHDirection;
+import community.kotlin.conrib.github.GHException;
+import community.kotlin.conrib.github.GHFork;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -9,7 +12,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * @author Kohsuke Kawaguchi
  * @see GitHub#searchRepositories() GitHub#searchRepositories()
  */
-public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository> {
+public class GHRepositorySearchBuilder extends GHSearchBuilder<GHRepository>
+        implements community.kotlin.conrib.github.GHRepositorySearchBuilder {
 
     /**
      * The enum Sort.

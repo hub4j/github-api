@@ -8,7 +8,8 @@ import javax.annotation.Nonnull;
  *
  * @see GitHub#getInstallation() GitHub#getAuthenticatedAppInstallation()
  */
-public class GHAuthenticatedAppInstallation extends GitHubInteractiveObject {
+public class GHAuthenticatedAppInstallation extends GitHubInteractiveObject
+        implements community.kotlin.conrib.github.GHAuthenticatedAppInstallation {
 
     private static class GHAuthenticatedAppInstallationRepositoryResult extends SearchResult<GHRepository> {
         private GHRepository[] repositories;

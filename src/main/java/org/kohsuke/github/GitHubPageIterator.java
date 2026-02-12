@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import javax.annotation.Nonnull;
+import community.kotlin.conrib.github.GHException;
 
 // TODO: Auto-generated Javadoc
 /**

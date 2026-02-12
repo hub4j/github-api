@@ -3,7 +3,8 @@ package org.kohsuke.github;
 /**
  * Base class for traffic referral objects.
  */
-public class GHRepositoryTrafficReferralBase {
+public class GHRepositoryTrafficReferralBase
+        implements community.kotlin.conrib.github.GHRepositoryTrafficReferralBase {
     private int count;
     private int uniques;
 

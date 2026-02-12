@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import javax.annotation.Nonnull;
 
 import static java.net.HttpURLConnection.HTTP_FORBIDDEN;
+import community.kotlin.conrib.github.HttpException;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -22,7 +23,8 @@ import static java.net.HttpURLConnection.HTTP_FORBIDDEN;
  * @see GitHubBuilder#withRateLimitHandler(GitHubRateLimitHandler)
  * @see GitHubAbuseLimitHandler
  */
-public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErrorHandler {
+public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErrorHandler
+        implements community.kotlin.conrib.github.GitHubRateLimitHandler {
 
     /**
      * Fail immediately.

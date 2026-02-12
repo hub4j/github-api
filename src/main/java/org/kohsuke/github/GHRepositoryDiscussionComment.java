@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import java.net.URL;
+import community.kotlin.conrib.github.GHCommentAuthorAssociation;
 
 /**
  * A discussion comment in the repository.
@@ -15,7 +16,8 @@ import java.net.URL;
  * @see <a href="https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions#discussion">The GraphQL
  *      API for Discussions</a>
  */
-public class GHRepositoryDiscussionComment extends GHObject {
+public class GHRepositoryDiscussionComment extends GHObject
+        implements community.kotlin.conrib.github.GHRepositoryDiscussionComment {
 
     private GHCommentAuthorAssociation authorAssociation;
 

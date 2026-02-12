@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import javax.annotation.Nonnull;
+import community.kotlin.conrib.github.GHException;
 
 /**
  * Iterable for external group listing.

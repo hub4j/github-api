@@ -26,6 +26,8 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 import static org.hamcrest.Matchers.*;
+import community.kotlin.conrib.github.GHFileNotFoundException;
+import community.kotlin.conrib.github.HttpException;
 
 // TODO: Auto-generated Javadoc
 /**

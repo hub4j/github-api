@@ -33,7 +33,8 @@ import java.net.URL;
  * @see GHPullRequest#listFiles() GHPullRequest#listFiles()
  * @see <a href="https://docs.github.com/en/rest/reference/pulls#list-pull-requests-files">List pull requests files</a>
  */
-public class GHPullRequestFileDetail {
+public class GHPullRequestFileDetail
+        implements community.kotlin.conrib.github.GHPullRequestFileDetail {
 
     /** The additions. */
     int additions;

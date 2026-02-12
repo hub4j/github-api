@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import community.kotlin.conrib.github.GHPermissionType;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -12,7 +13,8 @@ import java.util.Map;
  * @author Paulo Miguel Almeida
  * @see GHAppInstallation#createToken() GHAppInstallation#createToken()
  */
-public class GHAppCreateTokenBuilder extends GitHubInteractiveObject {
+public class GHAppCreateTokenBuilder extends GitHubInteractiveObject
+        implements community.kotlin.conrib.github.GHAppCreateTokenBuilder {
 
     private final String apiUrlTail;
     /** The builder. */

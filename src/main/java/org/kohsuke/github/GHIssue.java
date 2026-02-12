@@ -42,6 +42,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import community.kotlin.conrib.github.GHException;
+import community.kotlin.conrib.github.GHFileNotFoundException;
+import community.kotlin.conrib.github.GHIssueState;
+import community.kotlin.conrib.github.GHIssueStateReason;
+import community.kotlin.conrib.github.Reactable;
+import community.kotlin.conrib.github.ReactionContent;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -53,13 +59,14 @@ import java.util.Objects;
  * @see GitHub#searchIssues() GitHub#searchIssues()
  * @see GHIssueSearchBuilder
  */
-public class GHIssue extends GHObject implements Reactable {
+public class GHIssue extends GHObject implements Reactable,
+        community.kotlin.conrib.github.GHIssue {
 
     /**
      * The type PullRequest.
      */
     @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
-    public static class PullRequest {
+    public static class PullRequest implements community.kotlin.conrib.github.GHIssue.PullRequest {
 
         private String diffUrl, patchUrl, htmlUrl;
 

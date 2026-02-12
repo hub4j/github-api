@@ -16,7 +16,8 @@ import java.util.NoSuchElementException;
  *
  * @author Martin van Zijl
  */
-public class GHRepositoryStatistics extends GitHubInteractiveObject {
+public class GHRepositoryStatistics extends GitHubInteractiveObject
+        implements community.kotlin.conrib.github.GHRepositoryStatistics {
 
     /**
      * The type CodeFrequency.

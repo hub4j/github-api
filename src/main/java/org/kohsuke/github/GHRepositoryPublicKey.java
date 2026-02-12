@@ -8,7 +8,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  * @author Aditya Bansal
  */
-public class GHRepositoryPublicKey extends GHObject {
+public class GHRepositoryPublicKey extends GHObject
+        implements community.kotlin.conrib.github.GHRepositoryPublicKey {
 
     private String key;
 

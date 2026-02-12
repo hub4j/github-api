@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import community.kotlin.conrib.github.GHEvent;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -20,7 +21,8 @@ import java.util.List;
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD", "URF_UNREAD_FIELD" },
         justification = "JSON API")
-public class GHCheckSuite extends GHObject {
+public class GHCheckSuite extends GHObject
+        implements community.kotlin.conrib.github.GHCheckSuite {
 
     /**
      * The Class HeadCommit.

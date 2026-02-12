@@ -16,7 +16,8 @@ import java.util.Map;
  * @see <a href="https://docs.github.com/en/rest/meta/meta?apiVersion=2022-11-28#get-github-meta-information">Get
  *      Meta</a>
  */
-public class GHMeta {
+public class GHMeta
+        implements community.kotlin.conrib.github.GHMeta {
 
     private List<String> actions;
 

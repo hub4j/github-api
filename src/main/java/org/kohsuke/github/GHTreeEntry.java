@@ -11,7 +11,8 @@ import java.net.URL;
  * @author Daniel Teixeira - https://github.com/ddtxra
  * @see GHTree
  */
-public class GHTreeEntry {
+public class GHTreeEntry
+        implements community.kotlin.conrib.github.GHTreeEntry {
 
     private String path, mode, type, sha, url;
 

@@ -8,7 +8,8 @@ package org.kohsuke.github;
  * @param <T>
  *            the type parameter
  */
-public abstract class GHQueryBuilder<T> extends GitHubInteractiveObject {
+public abstract class GHQueryBuilder<T> extends GitHubInteractiveObject
+        implements community.kotlin.conrib.github.GHQueryBuilder {
 
     /** The req. */
     protected final Requester req;

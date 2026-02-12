@@ -5,7 +5,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 /**
  * The type Gh branch sync.
  */
-public class GHBranchSync extends GitHubInteractiveObject {
+public class GHBranchSync extends GitHubInteractiveObject
+        implements community.kotlin.conrib.github.GHBranchSync {
 
     /**
      * The base branch.

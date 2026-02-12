@@ -13,6 +13,8 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThrows;
+import community.kotlin.conrib.github.GHException;
+import community.kotlin.conrib.github.GHFileNotFoundException;
 
 // TODO: Auto-generated Javadoc
 /**

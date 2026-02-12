@@ -9,7 +9,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * @see GHEventPayload.Issue
  */
 @SuppressFBWarnings("UWF_UNWRITTEN_FIELD")
-public class GHIssueChanges {
+public class GHIssueChanges
+        implements community.kotlin.conrib.github.GHIssueChanges {
 
     /**
      * Wrapper for changed values.

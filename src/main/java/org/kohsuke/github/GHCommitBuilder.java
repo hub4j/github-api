@@ -10,7 +10,8 @@ import java.util.List;
 /**
  * Builder pattern for creating a new commit. Based on https://developer.github.com/v3/git/commits/#create-a-commit
  */
-public class GHCommitBuilder {
+public class GHCommitBuilder
+        implements community.kotlin.conrib.github.GHCommitBuilder {
     private static final class UserInfo {
         private final String date;
         private final String email;

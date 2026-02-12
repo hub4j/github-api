@@ -23,7 +23,8 @@ import java.util.Locale;
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD", "URF_UNREAD_FIELD" },
         justification = "JSON API")
-public class GHCheckRun extends GHObject {
+public class GHCheckRun extends GHObject
+        implements community.kotlin.conrib.github.GHCheckRun {
 
     /**
      * The Enum AnnotationLevel.

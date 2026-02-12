@@ -9,7 +9,8 @@ import java.util.List;
  *
  * @see GHRepository#getViewTraffic() GHRepository#getViewTraffic()
  */
-public class GHRepositoryViewTraffic extends GHRepositoryTraffic {
+public class GHRepositoryViewTraffic extends GHRepositoryTraffic
+        implements community.kotlin.conrib.github.GHRepositoryViewTraffic {
     /**
      * The type DailyInfo.
      */

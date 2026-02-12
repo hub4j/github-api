@@ -6,6 +6,11 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Optional;
 import java.util.logging.Logger;
+import community.kotlin.conrib.github.GHException;
+import community.kotlin.conrib.github.GHIOException;
+import community.kotlin.conrib.github.GHNotExternallyManagedEnterpriseException;
+import community.kotlin.conrib.github.GHTeamCannotBeExternallyManagedException;
+import community.kotlin.conrib.github.HttpException;
 
 /**
  * Utility class for helping with operations for enterprise managed resources.

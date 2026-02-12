@@ -4,6 +4,7 @@ import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 
 import java.time.Instant;
 import java.util.*;
+import community.kotlin.conrib.github.GHRepositorySelection;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -12,7 +13,8 @@ import java.util.*;
  * @author Paulo Miguel Almeida
  * @see GHAppInstallation#createToken() GHAppInstallation#createToken()
  */
-public class GHAppInstallationToken extends GitHubInteractiveObject {
+public class GHAppInstallationToken extends GitHubInteractiveObject
+        implements community.kotlin.conrib.github.GHAppInstallationToken {
 
     private Map<String, String> permissions;
 

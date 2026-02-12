@@ -9,7 +9,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * @author Paulo Miguel Almeida
  * @see GHMarketplaceListAccountBuilder#createRequest()
  */
-public class GHMarketplaceAccountPlan extends GHMarketplaceAccount {
+public class GHMarketplaceAccountPlan extends GHMarketplaceAccount
+        implements community.kotlin.conrib.github.GHMarketplaceAccountPlan {
 
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     private GHMarketplacePendingChange marketplacePendingChange;

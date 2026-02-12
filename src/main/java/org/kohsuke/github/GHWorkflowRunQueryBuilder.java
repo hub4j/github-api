@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import org.kohsuke.github.GHWorkflowRun.Conclusion;
 import org.kohsuke.github.GHWorkflowRun.Status;
+import community.kotlin.conrib.github.GHEvent;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -10,7 +11,8 @@ import org.kohsuke.github.GHWorkflowRun.Status;
  * @author Guillaume Smet
  * @see GHRepository#queryWorkflowRuns()
  */
-public class GHWorkflowRunQueryBuilder extends GHQueryBuilder<GHWorkflowRun> {
+public class GHWorkflowRunQueryBuilder extends GHQueryBuilder<GHWorkflowRun>
+        implements community.kotlin.conrib.github.GHWorkflowRunQueryBuilder {
     private final GHRepository repo;
 
     /**

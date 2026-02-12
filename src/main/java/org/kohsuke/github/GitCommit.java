@@ -18,7 +18,8 @@ import java.util.List;
  */
 
 @SuppressFBWarnings(value = { "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
-public class GitCommit extends GitHubBridgeAdapterObject {
+public class GitCommit extends GitHubBridgeAdapterObject
+        implements community.kotlin.conrib.github.GitCommit {
     /**
      * The Class Tree.
      */

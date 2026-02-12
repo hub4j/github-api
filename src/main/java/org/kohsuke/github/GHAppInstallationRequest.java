@@ -8,7 +8,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * @author Anuj Hydrabadi
  * @see GHApp#listInstallationRequests() GHApp#listInstallationRequests()
  */
-public class GHAppInstallationRequest extends GHObject {
+public class GHAppInstallationRequest extends GHObject
+        implements community.kotlin.conrib.github.GHAppInstallationRequest {
     private GHOrganization account;
 
     private GHUser requester;

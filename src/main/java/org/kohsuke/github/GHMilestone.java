@@ -8,6 +8,7 @@ import java.net.URL;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Locale;
+import community.kotlin.conrib.github.GHMilestoneState;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -15,7 +16,8 @@ import java.util.Locale;
  *
  * @author Yusuke Kokubo
  */
-public class GHMilestone extends GHObject {
+public class GHMilestone extends GHObject
+        implements community.kotlin.conrib.github.GHMilestone {
 
     private int closedIssues, openIssues, number;
 

@@ -19,7 +19,8 @@ import javax.annotation.CheckForNull;
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
-public class GitUser extends GitHubBridgeAdapterObject {
+public class GitUser extends GitHubBridgeAdapterObject
+        implements community.kotlin.conrib.github.GitUser {
     private String name, email, date, username;
 
     /**

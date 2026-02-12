@@ -8,7 +8,8 @@ package org.kohsuke.github;
  * @see GHGist#getFile(String) GHGist#getFile(String)
  * @see GHGist#getFiles() GHGist#getFiles()
  */
-public class GHGistFile {
+public class GHGistFile
+        implements community.kotlin.conrib.github.GHGistFile {
 
     private String rawUrl, type, language, content;
 

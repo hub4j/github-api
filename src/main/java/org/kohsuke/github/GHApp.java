@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import community.kotlin.conrib.github.GHEvent;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -19,7 +20,8 @@ import java.util.stream.Collectors;
  * @author Paulo Miguel Almeida
  * @see GitHub#getApp() GitHub#getApp()
  */
-public class GHApp extends GHObject {
+public class GHApp extends GHObject
+        implements community.kotlin.conrib.github.GHApp {
 
     private String description;
 

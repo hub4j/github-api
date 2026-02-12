@@ -5,6 +5,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
+import community.kotlin.conrib.github.GHFileNotFoundException;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -12,7 +13,8 @@ import java.net.URL;
  *
  * @author Michael Clarke
  */
-public class GHRef extends GitHubInteractiveObject {
+public class GHRef extends GitHubInteractiveObject
+        implements community.kotlin.conrib.github.GHRef {
 
     /**
      * The type GHObject.

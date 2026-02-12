@@ -12,7 +12,8 @@ import java.util.HashSet;
  * @param <T>
  *            the type parameter
  */
-public class GHPersonSet<T extends GHPerson> extends HashSet<T> {
+public class GHPersonSet<T extends GHPerson> extends HashSet<T>
+        implements community.kotlin.conrib.github.GHPersonSet {
     private static final long serialVersionUID = 1L;
 
     /**

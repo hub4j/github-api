@@ -15,6 +15,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 
 import javax.annotation.Nonnull;
+import community.kotlin.conrib.github.RateLimitTarget;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -22,7 +23,9 @@ import javax.annotation.Nonnull;
  *
  * @since 1.59
  */
-public class GitHubBuilder implements Cloneable {
+public class GitHubBuilder
+        implements Cloneable,
+        community.kotlin.conrib.github.GitHubBuilder {
 
     /** The home directory. */
     // for testing

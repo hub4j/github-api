@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import community.kotlin.conrib.github.GHException;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -20,7 +21,9 @@ import javax.annotation.Nonnull;
  * @param <T>
  *            the type of items on each page
  */
-public abstract class PagedIterable<T> implements Iterable<T> {
+public abstract class PagedIterable<T>
+        implements Iterable<T>,
+        community.kotlin.conrib.github.PagedIterable<T> {
     /**
      * Page size. 0 is default.
      */

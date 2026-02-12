@@ -22,7 +22,8 @@ import javax.annotation.Nonnull;
  * @see GHIssue#getLabels() GHIssue#getLabels()
  * @see GHRepository#listLabels() GHRepository#listLabels()
  */
-public class GHLabel extends GitHubInteractiveObject {
+public class GHLabel extends GitHubInteractiveObject
+        implements community.kotlin.conrib.github.GHLabel {
 
     /**
      * A {@link GHLabelBuilder} that creates a new {@link GHLabel}

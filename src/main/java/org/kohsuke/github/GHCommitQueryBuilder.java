@@ -20,7 +20,8 @@ import java.util.Date;
  * @author Kohsuke Kawaguchi
  * @see GHRepository#queryCommits() GHRepository#queryCommits()
  */
-public class GHCommitQueryBuilder {
+public class GHCommitQueryBuilder
+        implements community.kotlin.conrib.github.GHCommitQueryBuilder {
     private final GHRepository repo;
     private final Requester req;
 

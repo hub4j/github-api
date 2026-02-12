@@ -2,12 +2,14 @@ package org.kohsuke.github;
 
 import java.net.URL;
 import java.util.Locale;
+import community.kotlin.conrib.github.GHDeploymentState;
 
 // TODO: Auto-generated Javadoc
 /**
  * The type GHDeploymentStatus.
  */
-public class GHDeploymentStatus extends GHObject {
+public class GHDeploymentStatus extends GHObject
+        implements community.kotlin.conrib.github.GHDeploymentStatus {
 
     private GHRepository owner;
 

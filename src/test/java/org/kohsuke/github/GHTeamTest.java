@@ -15,6 +15,10 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.assertThrows;
 import static org.kohsuke.github.ExternalGroupsTestingSupport.*;
 import static org.kohsuke.github.ExternalGroupsTestingSupport.Matchers.isExternalGroupSummary;
+import community.kotlin.conrib.github.GHFileNotFoundException;
+import community.kotlin.conrib.github.GHIOException;
+import community.kotlin.conrib.github.GHNotExternallyManagedEnterpriseException;
+import community.kotlin.conrib.github.GHTeamCannotBeExternallyManagedException;
 
 // TODO: Auto-generated Javadoc
 /**

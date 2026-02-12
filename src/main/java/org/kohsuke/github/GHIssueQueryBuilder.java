@@ -4,12 +4,15 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import community.kotlin.conrib.github.GHDirection;
+import community.kotlin.conrib.github.GHIssueState;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class GHIssueQueryBuilder.
  */
-public abstract class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue> {
+public abstract class GHIssueQueryBuilder extends GHQueryBuilder<GHIssue>
+        implements community.kotlin.conrib.github.GHIssueQueryBuilder {
     /**
      * The Class ForRepository.
      */

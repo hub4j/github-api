@@ -6,7 +6,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * Changes made to a repository.
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
-public class GHRepositoryChanges {
+public class GHRepositoryChanges
+        implements community.kotlin.conrib.github.GHRepositoryChanges {
 
     /**
      * Repository name that was changed.

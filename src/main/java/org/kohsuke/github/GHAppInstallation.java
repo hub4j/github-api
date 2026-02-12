@@ -13,6 +13,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import community.kotlin.conrib.github.GHEvent;
+import community.kotlin.conrib.github.GHPermissionType;
+import community.kotlin.conrib.github.GHRepositorySelection;
+import community.kotlin.conrib.github.GHTargetType;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -25,7 +29,8 @@ import java.util.stream.Collectors;
  * @see GHApp#getInstallationByRepository(String, String) GHApp#getInstallationByRepository(String, String)
  * @see GHApp#getInstallationByUser(String) GHApp#getInstallationByUser(String)
  */
-public class GHAppInstallation extends GHObject {
+public class GHAppInstallation extends GHObject
+        implements community.kotlin.conrib.github.GHAppInstallation {
 
     private static class GHAppInstallationRepositoryResult extends SearchResult<GHRepository> {
         private GHRepository[] repositories;

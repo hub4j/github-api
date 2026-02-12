@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import community.kotlin.conrib.github.GHEvent;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -17,7 +18,8 @@ import java.util.Map;
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
-public abstract class GHHook extends GHObject {
+public abstract class GHHook extends GHObject
+        implements community.kotlin.conrib.github.GHHook {
 
     /** The active. */
     boolean active;

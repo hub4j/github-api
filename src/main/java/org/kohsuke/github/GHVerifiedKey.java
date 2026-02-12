@@ -4,7 +4,8 @@ package org.kohsuke.github;
 /**
  * The type GHVerifiedKey.
  */
-public class GHVerifiedKey extends GHKey {
+public class GHVerifiedKey extends GHKey
+        implements community.kotlin.conrib.github.GHVerifiedKey {
 
     /**
      * Instantiates a new Gh verified key.

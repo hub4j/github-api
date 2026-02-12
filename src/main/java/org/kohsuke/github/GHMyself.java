@@ -15,7 +15,8 @@ import java.util.stream.Collectors;
  *
  * @author Kohsuke Kawaguchi
  */
-public class GHMyself extends GHUser {
+public class GHMyself extends GHUser
+        implements community.kotlin.conrib.github.GHMyself {
 
     /**
      * Type of repositories returned during listing.

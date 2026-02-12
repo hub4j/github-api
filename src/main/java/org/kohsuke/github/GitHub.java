@@ -40,6 +40,10 @@ import java.util.logging.Logger;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
+import community.kotlin.conrib.github.GHException;
+import community.kotlin.conrib.github.GHOTPRequiredException;
+import community.kotlin.conrib.github.MarkdownMode;
+import community.kotlin.conrib.github.RateLimitTarget;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -53,7 +57,8 @@ import javax.annotation.Nonnull;
  *
  * @author Kohsuke Kawaguchi
  */
-public class GitHub {
+public class GitHub
+        implements community.kotlin.conrib.github.GitHub {
 
     /**
      * The Class DependentAuthorizationProvider.

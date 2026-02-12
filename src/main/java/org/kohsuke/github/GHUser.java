@@ -35,7 +35,8 @@ import java.util.*;
  *
  * @author Kohsuke Kawaguchi
  */
-public class GHUser extends GHPerson {
+public class GHUser extends GHPerson
+        implements community.kotlin.conrib.github.GHUser {
 
     /** The suspendedAt */
     private String suspendedAt;

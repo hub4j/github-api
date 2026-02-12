@@ -9,7 +9,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * @see GHEventPayload.PullRequest
  */
 @SuppressFBWarnings("UWF_UNWRITTEN_FIELD")
-public class GHPullRequestChanges {
+public class GHPullRequestChanges
+        implements community.kotlin.conrib.github.GHPullRequestChanges {
 
     /**
      * The Class GHCommitPointer.

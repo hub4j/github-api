@@ -7,7 +7,8 @@ package org.kohsuke.github;
  *
  * @author Michael Grant
  */
-public class GHCodeownersError {
+public class GHCodeownersError
+        implements community.kotlin.conrib.github.GHCodeownersError {
 
     private String kind, source, suggestion, message, path;
 

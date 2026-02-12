@@ -21,6 +21,13 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
+import community.kotlin.conrib.github.GHCommitState;
+import community.kotlin.conrib.github.GHDeploymentState;
+import community.kotlin.conrib.github.GHDirection;
+import community.kotlin.conrib.github.GHEvent;
+import community.kotlin.conrib.github.GHFileNotFoundException;
+import community.kotlin.conrib.github.GHIssueState;
+import community.kotlin.conrib.github.ReactionContent;
 
 // TODO: Auto-generated Javadoc
 /**

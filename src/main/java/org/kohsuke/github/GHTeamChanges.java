@@ -12,7 +12,8 @@ import org.kohsuke.github.internal.EnumUtils;
  *      edited action</a>
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
-public class GHTeamChanges {
+public class GHTeamChanges
+        implements community.kotlin.conrib.github.GHTeamChanges {
 
     /**
      * Changes made to privacy.

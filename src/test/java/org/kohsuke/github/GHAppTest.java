@@ -18,6 +18,10 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import static org.hamcrest.Matchers.*;
+import community.kotlin.conrib.github.GHEvent;
+import community.kotlin.conrib.github.GHPermissionType;
+import community.kotlin.conrib.github.GHRepositorySelection;
+import community.kotlin.conrib.github.GHTargetType;
 
 // TODO: Auto-generated Javadoc
 /**

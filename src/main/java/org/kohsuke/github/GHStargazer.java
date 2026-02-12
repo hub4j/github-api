@@ -13,7 +13,8 @@ import java.util.Date;
  * @author noctarius
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
-public class GHStargazer extends GitHubBridgeAdapterObject {
+public class GHStargazer extends GitHubBridgeAdapterObject
+        implements community.kotlin.conrib.github.GHStargazer {
 
     private GHRepository repository;
 

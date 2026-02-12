@@ -6,7 +6,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 /**
  * The response that is returned when updating repository content.
  */
-public class GHContentUpdateResponse {
+public class GHContentUpdateResponse
+        implements community.kotlin.conrib.github.GHContentUpdateResponse {
 
     private GitCommit commit;
 

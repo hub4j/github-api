@@ -13,7 +13,8 @@ import java.util.Date;
  * @author Martin van Zijl
  * @see <a href="https://developer.github.com/v3/issues/events/">Github documentation for issue events</a>
  */
-public class GHIssueEvent extends GitHubInteractiveObject {
+public class GHIssueEvent extends GitHubInteractiveObject
+        implements community.kotlin.conrib.github.GHIssueEvent {
 
     private GHUser actor;
 

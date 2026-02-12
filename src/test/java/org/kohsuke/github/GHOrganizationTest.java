@@ -15,6 +15,8 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThrows;
 import static org.kohsuke.github.ExternalGroupsTestingSupport.*;
 import static org.kohsuke.github.ExternalGroupsTestingSupport.Matchers.*;
+import community.kotlin.conrib.github.GHIOException;
+import community.kotlin.conrib.github.GHNotExternallyManagedEnterpriseException;
 
 // TODO: Auto-generated Javadoc
 
@@ -560,7 +562,7 @@ public class GHOrganizationTest extends AbstractGitHubWireMockTest {
 
         assertThat(failure.getMessage(), equalTo("Could not retrieve organization external groups"));
 
-        final GHError error = failure.getError();
+        final community.kotlin.conrib.github.GHError error = failure.getError();
 
         assertThat(error, notNullValue());
         assertThat(error.getMessage(),

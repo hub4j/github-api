@@ -21,6 +21,7 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 import static java.util.logging.Level.FINEST;
+import community.kotlin.conrib.github.RateLimitTarget;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -29,7 +30,8 @@ import static java.util.logging.Level.FINEST;
  * @author Liam Newman
  */
 @SuppressFBWarnings(value = "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD", justification = "JSON API")
-public class GHRateLimit {
+public class GHRateLimit
+        implements community.kotlin.conrib.github.GHRateLimit {
 
     /**
      * A rate limit record.

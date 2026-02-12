@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
+import community.kotlin.conrib.github.GHFileNotFoundException;
 
 // TODO: Auto-generated Javadoc
 /**

@@ -21,7 +21,8 @@ import java.util.Map.Entry;
  * @see GitHub#createGist() GitHub#createGist()
  * @see <a href="https://developer.github.com/v3/gists/">documentation</a>
  */
-public class GHGist extends GHObject {
+public class GHGist extends GHObject
+        implements community.kotlin.conrib.github.GHGist {
 
     private int comments;
 

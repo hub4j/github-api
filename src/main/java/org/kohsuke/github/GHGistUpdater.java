@@ -13,7 +13,8 @@ import javax.annotation.Nonnull;
  *
  * @author Martin van Zijl
  */
-public class GHGistUpdater {
+public class GHGistUpdater
+        implements community.kotlin.conrib.github.GHGistUpdater {
     private final GHGist base;
     private final Requester builder;
 

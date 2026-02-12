@@ -6,7 +6,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * Changes made to a team.
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
-public class GHMemberChanges {
+public class GHMemberChanges
+        implements community.kotlin.conrib.github.GHMemberChanges {
 
     /**
      * Changes to role name.

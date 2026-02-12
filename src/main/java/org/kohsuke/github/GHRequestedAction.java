@@ -8,7 +8,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD", "URF_UNREAD_FIELD" },
         justification = "JSON API")
-public class GHRequestedAction extends GHObject {
+public class GHRequestedAction extends GHObject
+        implements community.kotlin.conrib.github.GHRequestedAction {
 
     private String description;
 

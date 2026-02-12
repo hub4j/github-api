@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import community.kotlin.conrib.github.GHDirection;
 
 /**
  * Search for pull requests by main search terms in order to narrow down search results.
@@ -10,7 +11,8 @@ import java.time.format.DateTimeFormatter;
  * @see <a href="https://docs.github.com/en/search-github/searching-on-github/searching-issues-and-pull-requests">Search
  *      issues and PRs</a>
  */
-public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest> {
+public class GHPullRequestSearchBuilder extends GHSearchBuilder<GHPullRequest>
+        implements community.kotlin.conrib.github.GHPullRequestSearchBuilder {
     /**
      * The sort order values.
      */

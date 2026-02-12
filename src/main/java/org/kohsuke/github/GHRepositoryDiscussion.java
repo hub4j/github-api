@@ -6,6 +6,7 @@ import org.kohsuke.github.internal.EnumUtils;
 import java.net.URL;
 import java.time.Instant;
 import java.util.Date;
+import community.kotlin.conrib.github.GHCommentAuthorAssociation;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -21,7 +22,8 @@ import java.util.Date;
  * @see <a href="https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions#discussion">The GraphQL
  *      API for Discussions</a>
  */
-public class GHRepositoryDiscussion extends GHObject {
+public class GHRepositoryDiscussion extends GHObject
+        implements community.kotlin.conrib.github.GHRepositoryDiscussion {
 
     /**
      * Category of a discussion.

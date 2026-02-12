@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
+import community.kotlin.conrib.github.RateLimitTarget;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -16,7 +17,8 @@ import javax.annotation.Nonnull;
  * @param <T>
  *            the type parameter
  */
-public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T> {
+public abstract class GHSearchBuilder<T> extends GHQueryBuilder<T>
+        implements community.kotlin.conrib.github.GHSearchBuilder {
 
     /**
      * Data transfer object that receives the result of search.

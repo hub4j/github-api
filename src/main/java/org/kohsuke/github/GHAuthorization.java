@@ -15,7 +15,8 @@ import java.util.List;
  * @see GitHub#createToken(Collection, String, String) GitHub#createToken(Collection, String, String)
  * @see <a href="http://developer.github.com/v3/oauth/#create-a-new-authorization">API documentation</a>
  */
-public class GHAuthorization extends GHObject {
+public class GHAuthorization extends GHObject
+        implements community.kotlin.conrib.github.GHAuthorization {
 
     @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD" },
             justification = "JSON API")

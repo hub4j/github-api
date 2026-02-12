@@ -10,6 +10,7 @@ import java.time.ZoneOffset;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
+import community.kotlin.conrib.github.GHMarketplaceAccountType;
 
 // TODO: Auto-generated Javadoc
 

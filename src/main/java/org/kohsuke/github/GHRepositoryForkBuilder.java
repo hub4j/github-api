@@ -9,7 +9,8 @@ import java.io.InterruptedIOException;
  * @see GHRepository#createFork() GHRepository#createFork()GHRepository#createFork()
  * @see <a href="https://docs.github.com/en/rest/repos/forks#create-a-fork">Repository fork API</a>
  */
-public class GHRepositoryForkBuilder {
+public class GHRepositoryForkBuilder
+        implements community.kotlin.conrib.github.GHRepositoryForkBuilder {
     static int FORK_RETRY_INTERVAL = 3000;
     private Boolean defaultBranchOnly;
     private String name;

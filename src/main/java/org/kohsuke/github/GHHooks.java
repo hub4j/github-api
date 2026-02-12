@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import community.kotlin.conrib.github.GHEvent;
 
 // TODO: Auto-generated Javadoc
 /**

@@ -33,6 +33,8 @@ import java.time.Instant;
 import java.util.Date;
 
 import static org.hamcrest.Matchers.*;
+import community.kotlin.conrib.github.GHException;
+import community.kotlin.conrib.github.HttpException;
 
 // TODO: Auto-generated Javadoc
 /**

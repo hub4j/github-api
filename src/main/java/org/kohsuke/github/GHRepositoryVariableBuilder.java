@@ -11,7 +11,8 @@ import javax.annotation.Nonnull;
  * @param <S>
  *            the type parameter
  */
-public class GHRepositoryVariableBuilder<S> extends AbstractBuilder<GHRepositoryVariable, S> {
+public class GHRepositoryVariableBuilder<S> extends AbstractBuilder<GHRepositoryVariable, S>
+        implements community.kotlin.conrib.github.GHRepositoryVariableBuilder {
     /**
      * Instantiates a new GH Repository Variable builder.
      *

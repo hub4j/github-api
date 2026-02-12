@@ -10,7 +10,8 @@ import java.util.List;
  * The type GHDeploymentBuilder.
  */
 // Based on https://developer.github.com/v3/repos/deployments/#create-a-deployment
-public class GHDeploymentBuilder {
+public class GHDeploymentBuilder
+        implements community.kotlin.conrib.github.GHDeploymentBuilder {
     private final Requester builder;
     private final GHRepository repo;
 

@@ -14,6 +14,8 @@ import javax.annotation.Nonnull;
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
+import community.kotlin.conrib.github.HttpException;
+import community.kotlin.conrib.github.ServiceDownException;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -49,10 +51,34 @@ abstract class GitHubConnectorResponseErrorHandler {
         public void onError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
             if (connectorResponse.statusCode() == HTTP_NOT_FOUND) {
                 throw new FileNotFoundException(connectorResponse.request().url().toString());
-            } else if (isServiceDown(connectorResponse)) {
-                throw new ServiceDownException(connectorResponse);
+            }
+
+            // Read response body for error message
+            String responseBody = null;
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(connectorResponse.bodyStream(), StandardCharsets.UTF_8))) {
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (sb.length() > 0)
+                        sb.append('\n');
+                    sb.append(line);
+                }
+                responseBody = sb.toString();
+            } catch (Exception e) {
+                // ignore body read failures
+            }
+
+            if (isServiceDown(connectorResponse)) {
+                throw new ServiceDownException(connectorResponse.statusCode(),
+                        connectorResponse.header("Status"),
+                        connectorResponse.request().url().toString());
             } else {
-                throw new HttpException(connectorResponse);
+                throw new HttpException(responseBody,
+                        connectorResponse.statusCode(),
+                        connectorResponse.header("Status"),
+                        connectorResponse.request().url().toString(),
+                        null);
             }
         }
 

@@ -32,6 +32,8 @@ import java.time.Instant;
 import java.util.Date;
 
 import javax.annotation.CheckForNull;
+import community.kotlin.conrib.github.GHPullRequestReviewEvent;
+import community.kotlin.conrib.github.GHPullRequestReviewState;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -41,7 +43,8 @@ import javax.annotation.CheckForNull;
  * @see GHPullRequestReviewBuilder
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
-public class GHPullRequestReview extends GHObject {
+public class GHPullRequestReview extends GHObject
+        implements community.kotlin.conrib.github.GHPullRequestReview {
 
     private String body;
 

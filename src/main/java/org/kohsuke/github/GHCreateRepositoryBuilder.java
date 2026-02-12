@@ -9,7 +9,8 @@ import java.util.Objects;
  *
  * @author Kohsuke Kawaguchi
  */
-public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepositoryBuilder> {
+public class GHCreateRepositoryBuilder extends GHRepositoryBuilder<GHCreateRepositoryBuilder>
+        implements community.kotlin.conrib.github.GHCreateRepositoryBuilder {
 
     /**
      * Instantiates a new GH create repository builder.

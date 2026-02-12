@@ -10,7 +10,8 @@ import java.util.List;
  *
  * @author Kohsuke Kawaguchi
  */
-public class GHIssueBuilder {
+public class GHIssueBuilder
+        implements community.kotlin.conrib.github.GHIssueBuilder {
     private List<String> assignees = new ArrayList<String>();
     private final Requester builder;
     private List<String> labels = new ArrayList<String>();

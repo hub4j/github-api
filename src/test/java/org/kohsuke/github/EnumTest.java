@@ -3,6 +3,24 @@ package org.kohsuke.github;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.*;
+import community.kotlin.conrib.github.GHCommentAuthorAssociation;
+import community.kotlin.conrib.github.GHCommitState;
+import community.kotlin.conrib.github.GHDeploymentState;
+import community.kotlin.conrib.github.GHDirection;
+import community.kotlin.conrib.github.GHEvent;
+import community.kotlin.conrib.github.GHFork;
+import community.kotlin.conrib.github.GHIssueState;
+import community.kotlin.conrib.github.GHIssueStateReason;
+import community.kotlin.conrib.github.GHMarketplaceAccountType;
+import community.kotlin.conrib.github.GHMarketplacePriceModel;
+import community.kotlin.conrib.github.GHMilestoneState;
+import community.kotlin.conrib.github.GHPermissionType;
+import community.kotlin.conrib.github.GHPullRequestReviewEvent;
+import community.kotlin.conrib.github.GHPullRequestReviewState;
+import community.kotlin.conrib.github.GHRepositorySelection;
+import community.kotlin.conrib.github.GHTargetType;
+import community.kotlin.conrib.github.MarkdownMode;
+import community.kotlin.conrib.github.ReactionContent;
 
 // TODO: Auto-generated Javadoc
 /**

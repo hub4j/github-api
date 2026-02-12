@@ -8,7 +8,8 @@ package org.kohsuke.github;
  * @see <a href="https://docs.github.com/en/developers/webhooks-and-events/events/issue-event-types#renamed">Github
  *      documentation for renamed event</a>
  */
-public class GHIssueRename {
+public class GHIssueRename
+        implements community.kotlin.conrib.github.GHIssueRename {
 
     private String from = "";
 

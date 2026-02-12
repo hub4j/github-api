@@ -25,6 +25,7 @@
 package org.kohsuke.github;
 
 import org.kohsuke.github.internal.EnumUtils;
+import community.kotlin.conrib.github.GHPermissionType;
 
 // TODO: Auto-generated Javadoc
 /**

@@ -1,6 +1,7 @@
 package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import community.kotlin.conrib.github.GHDirection;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -9,7 +10,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * @author Kohsuke Kawaguchi
  * @see GitHub#searchIssues() GitHub#searchIssues()
  */
-public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue> {
+public class GHIssueSearchBuilder extends GHSearchBuilder<GHIssue>
+        implements community.kotlin.conrib.github.GHIssueSearchBuilder {
 
     /**
      * The enum Sort.

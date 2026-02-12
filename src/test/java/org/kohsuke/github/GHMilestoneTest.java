@@ -9,6 +9,7 @@ import java.time.Instant;
 import java.util.Date;
 
 import static org.hamcrest.Matchers.*;
+import community.kotlin.conrib.github.GHIssueState;
 
 // TODO: Auto-generated Javadoc
 /**

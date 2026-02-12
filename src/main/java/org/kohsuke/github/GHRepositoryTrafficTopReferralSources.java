@@ -3,7 +3,8 @@ package org.kohsuke.github;
 /**
  * Top referral source object.
  */
-public class GHRepositoryTrafficTopReferralSources extends GHRepositoryTrafficReferralBase {
+public class GHRepositoryTrafficTopReferralSources extends GHRepositoryTrafficReferralBase
+        implements community.kotlin.conrib.github.GHRepositoryTrafficTopReferralSources {
     private String referrer;
 
     /**

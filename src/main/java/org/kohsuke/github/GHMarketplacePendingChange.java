@@ -13,7 +13,8 @@ import java.util.Date;
  * @author Paulo Miguel Almeida
  * @see GHMarketplaceListAccountBuilder#createRequest()
  */
-public class GHMarketplacePendingChange extends GitHubInteractiveObject {
+public class GHMarketplacePendingChange extends GitHubInteractiveObject
+        implements community.kotlin.conrib.github.GHMarketplacePendingChange {
 
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     private String effectiveDate;

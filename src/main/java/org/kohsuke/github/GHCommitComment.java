@@ -4,6 +4,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.net.URL;
+import community.kotlin.conrib.github.Reactable;
+import community.kotlin.conrib.github.ReactionContent;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -17,7 +19,9 @@ import java.net.URL;
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
-public class GHCommitComment extends GHObject implements Reactable {
+public class GHCommitComment extends GHObject
+        implements Reactable,
+        community.kotlin.conrib.github.GHCommitComment {
 
     private GHRepository owner;
 

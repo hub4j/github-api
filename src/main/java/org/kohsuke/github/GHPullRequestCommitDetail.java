@@ -38,7 +38,8 @@ import java.net.URL;
         value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
                 "URF_UNREAD_FIELD" },
         justification = "JSON API")
-public class GHPullRequestCommitDetail {
+public class GHPullRequestCommitDetail
+        implements community.kotlin.conrib.github.GHPullRequestCommitDetail {
 
     /**
      * The type Commit.

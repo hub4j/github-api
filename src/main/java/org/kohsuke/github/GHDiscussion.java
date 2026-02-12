@@ -9,6 +9,7 @@ import java.util.Objects;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
+import community.kotlin.conrib.github.GitHubRequestBuilderDone;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -17,7 +18,8 @@ import javax.annotation.Nonnull;
  * @author Charles Moulliard
  * @see <a href="https://developer.github.com/v3/teams/discussions">GitHub Team Discussions</a>
  */
-public class GHDiscussion extends GHObject {
+public class GHDiscussion extends GHObject
+        implements community.kotlin.conrib.github.GHDiscussion {
 
     /**
      * A {@link GHLabelBuilder} that creates a new {@link GHLabel}

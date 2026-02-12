@@ -10,7 +10,8 @@ import javax.annotation.Nonnull;
  *
  * @author garridobarrera
  */
-public class GHRepositoryVariable extends GitHubInteractiveObject {
+public class GHRepositoryVariable extends GitHubInteractiveObject
+        implements community.kotlin.conrib.github.GHRepositoryVariable {
 
     /**
      * A {@link GHRepositoryVariableBuilder} that creates a new {@link GHRepositoryVariable}

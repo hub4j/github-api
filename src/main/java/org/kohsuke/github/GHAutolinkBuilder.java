@@ -9,7 +9,8 @@ import java.io.IOException;
  * @see GHRepository#createAutolink()
  * @see GHAutolink
  */
-public class GHAutolinkBuilder {
+public class GHAutolinkBuilder
+        implements community.kotlin.conrib.github.GHAutolinkBuilder {
 
     private Boolean isAlphanumeric;
     private String keyPrefix;

@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import community.kotlin.conrib.github.HttpException;
 
 // TODO: Auto-generated Javadoc
 /**

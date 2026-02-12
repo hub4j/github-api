@@ -23,6 +23,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.WillClose;
 
 import static java.util.Arrays.asList;
+import community.kotlin.conrib.github.GHException;
+import community.kotlin.conrib.github.RateLimitTarget;
 
 // TODO: Auto-generated Javadoc
 /**

@@ -25,6 +25,12 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThrows;
+import community.kotlin.conrib.github.GHCommentAuthorAssociation;
+import community.kotlin.conrib.github.GHCommitState;
+import community.kotlin.conrib.github.GHDeploymentState;
+import community.kotlin.conrib.github.GHEvent;
+import community.kotlin.conrib.github.GHIssueState;
+import community.kotlin.conrib.github.GHPullRequestReviewState;
 
 // TODO: Auto-generated Javadoc
 /**

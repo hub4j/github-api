@@ -25,6 +25,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import static org.hamcrest.Matchers.*;
+import community.kotlin.conrib.github.GHDirection;
+import community.kotlin.conrib.github.GHEvent;
+import community.kotlin.conrib.github.GHFileNotFoundException;
+import community.kotlin.conrib.github.GHIssueState;
 
 // TODO: Auto-generated Javadoc
 /**

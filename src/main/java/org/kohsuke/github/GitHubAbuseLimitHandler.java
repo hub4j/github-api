@@ -12,6 +12,7 @@ import java.time.temporal.ChronoUnit;
 import javax.annotation.Nonnull;
 
 import static java.net.HttpURLConnection.HTTP_FORBIDDEN;
+import community.kotlin.conrib.github.HttpException;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -22,7 +23,8 @@ import static java.net.HttpURLConnection.HTTP_FORBIDDEN;
  * @see GitHubBuilder#withAbuseLimitHandler(GitHubAbuseLimitHandler)
  * @see GitHubRateLimitHandler
  */
-public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErrorHandler {
+public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErrorHandler
+        implements community.kotlin.conrib.github.GitHubAbuseLimitHandler {
 
     /**
      * Fail immediately.

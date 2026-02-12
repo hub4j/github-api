@@ -1,5 +1,8 @@
 package org.kohsuke.github;
 
+
+import community.kotlin.conrib.github.GHDirection;
+import community.kotlin.conrib.github.GHFork;
 // TODO: Auto-generated Javadoc
 /**
  * Search code for {@link GHContent}.
@@ -7,7 +10,8 @@ package org.kohsuke.github;
  * @author Kohsuke Kawaguchi
  * @see GitHub#searchContent() GitHub#searchContent()
  */
-public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {
+public class GHContentSearchBuilder extends GHSearchBuilder<GHContent>
+        implements community.kotlin.conrib.github.GHContentSearchBuilder {
 
     /**
      * The enum Sort.

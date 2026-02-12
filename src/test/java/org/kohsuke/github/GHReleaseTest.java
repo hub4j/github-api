@@ -7,6 +7,8 @@ import java.util.Date;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThrows;
+import community.kotlin.conrib.github.GHFileNotFoundException;
+import community.kotlin.conrib.github.HttpException;
 
 // TODO: Auto-generated Javadoc
 /**

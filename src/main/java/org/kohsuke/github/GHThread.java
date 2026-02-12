@@ -18,7 +18,8 @@ import java.util.Date;
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
-public class GHThread extends GHObject {
+public class GHThread extends GHObject
+        implements community.kotlin.conrib.github.GHThread {
     /**
      * The Class Subject.
      */

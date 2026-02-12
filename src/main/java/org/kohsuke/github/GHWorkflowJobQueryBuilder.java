@@ -6,7 +6,8 @@ package org.kohsuke.github;
  *
  * @author Guillaume Smet
  */
-public class GHWorkflowJobQueryBuilder extends GHQueryBuilder<GHWorkflowJob> {
+public class GHWorkflowJobQueryBuilder extends GHQueryBuilder<GHWorkflowJob>
+        implements community.kotlin.conrib.github.GHWorkflowJobQueryBuilder {
     private final GHRepository repo;
 
     /**

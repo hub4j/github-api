@@ -1,6 +1,6 @@
 package org.kohsuke.github.connector;
 
-import org.kohsuke.github.GHIOException;
+import community.kotlin.conrib.github.GHIOException;
 import org.kohsuke.github.internal.DefaultGitHubConnector;
 
 import java.io.IOException;

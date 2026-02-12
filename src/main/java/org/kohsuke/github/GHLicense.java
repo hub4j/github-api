@@ -45,7 +45,8 @@ import java.util.Objects;
 @SuppressWarnings({ "UnusedDeclaration" })
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
-public class GHLicense extends GHObject {
+public class GHLicense extends GHObject
+        implements community.kotlin.conrib.github.GHLicense {
 
     /** The featured. */
     // the rest is only after populated

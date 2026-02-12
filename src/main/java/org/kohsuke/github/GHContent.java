@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import community.kotlin.conrib.github.Refreshable;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -16,7 +17,9 @@ import java.util.Base64;
  * @see GHRepository#getFileContent(String) GHRepository#getFileContent(String)
  */
 @SuppressWarnings({ "UnusedDeclaration" })
-public class GHContent extends GitHubInteractiveObject implements Refreshable {
+public class GHContent extends GitHubInteractiveObject
+        implements Refreshable,
+        community.kotlin.conrib.github.GHContent {
 
     /**
      * Gets the api route.

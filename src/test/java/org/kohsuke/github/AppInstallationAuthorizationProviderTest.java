@@ -10,6 +10,7 @@ import java.io.IOException;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.startsWith;
+import community.kotlin.conrib.github.HttpException;
 
 // TODO: Auto-generated Javadoc
 

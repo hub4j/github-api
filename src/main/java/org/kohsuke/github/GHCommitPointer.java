@@ -33,7 +33,8 @@ import java.io.IOException;
  *
  * @author Kohsuke Kawaguchi
  */
-public class GHCommitPointer {
+public class GHCommitPointer
+        implements community.kotlin.conrib.github.GHCommitPointer {
 
     private String ref, sha, label;
 

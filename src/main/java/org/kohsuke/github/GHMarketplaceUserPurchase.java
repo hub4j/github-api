@@ -13,7 +13,8 @@ import java.util.Date;
  * @author Paulo Miguel Almeida
  * @see GitHub#getMyMarketplacePurchases()
  */
-public class GHMarketplaceUserPurchase extends GitHubInteractiveObject {
+public class GHMarketplaceUserPurchase extends GitHubInteractiveObject
+        implements community.kotlin.conrib.github.GHMarketplaceUserPurchase {
 
     @SuppressFBWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "Field comes from JSON deserialization")
     private GHMarketplaceAccount account;

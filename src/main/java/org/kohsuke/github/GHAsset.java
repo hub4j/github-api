@@ -10,7 +10,8 @@ import java.io.IOException;
  *
  * @see GHRelease#getAssets() GHRelease#getAssets()
  */
-public class GHAsset extends GHObject {
+public class GHAsset extends GHObject
+        implements community.kotlin.conrib.github.GHAsset {
 
     /**
      * Wrap gh asset [ ].

@@ -18,7 +18,8 @@ import java.util.List;
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
-public class GHTree {
+public class GHTree
+        implements community.kotlin.conrib.github.GHTree {
 
     private String sha, url;
 

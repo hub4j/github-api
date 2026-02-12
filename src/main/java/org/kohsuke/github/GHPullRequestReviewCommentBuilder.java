@@ -9,7 +9,8 @@ import java.io.IOException;
  *
  * @see GHPullRequest#createReviewComment()
  */
-public class GHPullRequestReviewCommentBuilder {
+public class GHPullRequestReviewCommentBuilder
+        implements community.kotlin.conrib.github.GHPullRequestReviewCommentBuilder {
     private final Requester builder;
     private final GHPullRequest pr;
 

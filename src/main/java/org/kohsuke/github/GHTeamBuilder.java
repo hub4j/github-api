@@ -10,7 +10,8 @@ import java.io.IOException;
  *
  * https://developer.github.com/v3/teams/#create-team
  */
-public class GHTeamBuilder extends GitHubInteractiveObject {
+public class GHTeamBuilder extends GitHubInteractiveObject
+        implements community.kotlin.conrib.github.GHTeamBuilder {
 
     private final String orgName;
     /** The builder. */

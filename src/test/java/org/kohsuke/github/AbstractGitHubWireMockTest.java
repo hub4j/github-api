@@ -21,6 +21,7 @@ import java.util.*;
 
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
+import community.kotlin.conrib.github.GHFileNotFoundException;
 
 // TODO: Auto-generated Javadoc
 /**

@@ -10,7 +10,8 @@ import java.io.IOException;
  * @see GHMarketplacePlan#listAccounts()
  * @see GitHub#listMarketplacePlans()
  */
-public class GHMarketplacePlanForAccountBuilder extends GitHubInteractiveObject {
+public class GHMarketplacePlanForAccountBuilder extends GitHubInteractiveObject
+        implements community.kotlin.conrib.github.GHMarketplacePlanForAccountBuilder {
     private final long accountId;
     private final Requester builder;
 

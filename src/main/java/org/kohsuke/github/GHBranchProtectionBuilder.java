@@ -22,7 +22,8 @@ import java.util.Set;
         value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
                 "URF_UNREAD_FIELD" },
         justification = "JSON API")
-public class GHBranchProtectionBuilder {
+public class GHBranchProtectionBuilder
+        implements community.kotlin.conrib.github.GHBranchProtectionBuilder {
     private static class Restrictions {
         private Set<String> teams = new HashSet<String>();
         private Set<String> users = new HashSet<String>();

@@ -35,6 +35,11 @@ import static java.net.HttpURLConnection.HTTP_NOT_MODIFIED;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 import static java.util.logging.Level.*;
 import static org.apache.commons.lang3.StringUtils.defaultString;
+import community.kotlin.conrib.github.GHFileNotFoundException;
+import community.kotlin.conrib.github.GHIOException;
+import community.kotlin.conrib.github.GHOTPRequiredException;
+import community.kotlin.conrib.github.HttpException;
+import community.kotlin.conrib.github.RateLimitTarget;
 
 // TODO: Auto-generated Javadoc
 /**

@@ -27,6 +27,13 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.kohsuke.github.GHPullRequestReviewComment.Side.LEFT;
 import static org.kohsuke.github.GHPullRequestReviewComment.Side.RIGHT;
+import community.kotlin.conrib.github.GHCommentAuthorAssociation;
+import community.kotlin.conrib.github.GHFileNotFoundException;
+import community.kotlin.conrib.github.GHIssueState;
+import community.kotlin.conrib.github.GHPullRequestReviewEvent;
+import community.kotlin.conrib.github.GHPullRequestReviewState;
+import community.kotlin.conrib.github.HttpException;
+import community.kotlin.conrib.github.ReactionContent;
 
 // TODO: Auto-generated Javadoc
 /**

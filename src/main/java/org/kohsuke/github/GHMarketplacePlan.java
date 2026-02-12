@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
+import community.kotlin.conrib.github.GHMarketplacePriceModel;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -13,7 +14,8 @@ import java.util.List;
  * @author Paulo Miguel Almeida
  * @see GitHub#listMarketplacePlans()
  */
-public class GHMarketplacePlan extends GitHubInteractiveObject {
+public class GHMarketplacePlan extends GitHubInteractiveObject
+        implements community.kotlin.conrib.github.GHMarketplacePlan {
 
     private String accountsUrl;
 

@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import community.kotlin.conrib.github.GHPullRequestReviewEvent;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -11,7 +12,8 @@ import java.util.List;
  * @author Kohsuke Kawaguchi
  * @see GHPullRequest#createReview() GHPullRequest#createReview()
  */
-public class GHPullRequestReviewBuilder {
+public class GHPullRequestReviewBuilder
+        implements community.kotlin.conrib.github.GHPullRequestReviewBuilder {
     /**
      * Common properties of the review comments, regardless of how the comment is positioned on the gh pull request.
      */

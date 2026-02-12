@@ -9,7 +9,11 @@ import java.io.IOException;
 import java.util.*;
 
 import static org.hamcrest.Matchers.*;
-import static org.kohsuke.github.GHMarketplaceAccountType.ORGANIZATION;
+import static community.kotlin.conrib.github.GHMarketplaceAccountType.ORGANIZATION;
+import community.kotlin.conrib.github.GHDirection;
+import community.kotlin.conrib.github.GHFork;
+import community.kotlin.conrib.github.GHMarketplaceAccountType;
+import community.kotlin.conrib.github.ServiceDownException;
 
 // TODO: Auto-generated Javadoc
 /**

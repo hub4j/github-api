@@ -7,7 +7,8 @@ import java.util.Base64;
 /**
  * Builder pattern for creating a new blob. Based on https://developer.github.com/v3/git/blobs/#create-a-blob
  */
-public class GHBlobBuilder {
+public class GHBlobBuilder
+        implements community.kotlin.conrib.github.GHBlobBuilder {
     private final GHRepository repo;
     private final Requester req;
 

@@ -11,7 +11,8 @@ import java.util.Locale;
  *
  * @see GHRepository#createRelease(String) GHRepository#createRelease(String)
  */
-public class GHReleaseBuilder {
+public class GHReleaseBuilder
+        implements community.kotlin.conrib.github.GHReleaseBuilder {
     /**
      * Values for whether this release should be the latest.
      */

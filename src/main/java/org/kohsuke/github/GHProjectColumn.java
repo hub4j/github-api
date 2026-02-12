@@ -12,7 +12,8 @@ import java.net.URL;
  *
  * @author Gunnar Skjold
  */
-public class GHProjectColumn extends GHObject {
+public class GHProjectColumn extends GHObject
+        implements community.kotlin.conrib.github.GHProjectColumn {
 
     private String name;
 

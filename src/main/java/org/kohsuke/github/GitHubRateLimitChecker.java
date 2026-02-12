@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 import javax.annotation.Nonnull;
+import community.kotlin.conrib.github.RateLimitTarget;
 
 // TODO: Auto-generated Javadoc
 /**

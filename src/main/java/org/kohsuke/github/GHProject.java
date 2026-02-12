@@ -29,6 +29,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
+import community.kotlin.conrib.github.GHPermissionType;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -37,7 +38,8 @@ import java.util.Locale;
  * @author Martin van Zijl
  * @see <a href="https://developer.github.com/v3/projects/">Projects</a>
  */
-public class GHProject extends GHObject {
+public class GHProject extends GHObject
+        implements community.kotlin.conrib.github.GHProject {
 
     /**
      * The enum ProjectState.

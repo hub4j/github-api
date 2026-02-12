@@ -5,12 +5,15 @@ import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import community.kotlin.conrib.github.TrafficInfo;
 
 // TODO: Auto-generated Javadoc
 /**
  * The type GHRepositoryTraffic.
  */
-public abstract class GHRepositoryTraffic extends GitHubBridgeAdapterObject implements TrafficInfo {
+public abstract class GHRepositoryTraffic extends GitHubBridgeAdapterObject
+        implements TrafficInfo,
+        community.kotlin.conrib.github.GHRepositoryTraffic {
     /**
      * The type DailyInfo.
      */

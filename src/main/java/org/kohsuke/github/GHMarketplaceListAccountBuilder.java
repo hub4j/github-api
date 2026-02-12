@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+
+import community.kotlin.conrib.github.GHDirection;
 // TODO: Auto-generated Javadoc
 /**
  * Returns any accounts associated with a plan, including free plans.
@@ -7,7 +9,8 @@ package org.kohsuke.github;
  * @author Paulo Miguel Almeida
  * @see GHMarketplacePlan#listAccounts()
  */
-public class GHMarketplaceListAccountBuilder extends GitHubInteractiveObject {
+public class GHMarketplaceListAccountBuilder extends GitHubInteractiveObject
+        implements community.kotlin.conrib.github.GHMarketplaceListAccountBuilder {
     /**
      * The enum Sort.
      */

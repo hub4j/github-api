@@ -8,13 +8,16 @@ import java.time.Instant;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import community.kotlin.conrib.github.Refreshable;
 
 /**
  * An external group available in a GitHub organization.
  *
  * @author Miguel Esteban Gutiérrez
  */
-public class GHExternalGroup extends GitHubInteractiveObject implements Refreshable {
+public class GHExternalGroup extends GitHubInteractiveObject
+        implements Refreshable,
+        community.kotlin.conrib.github.GHExternalGroup {
 
     /**
      * A reference of an external member linked to an external group

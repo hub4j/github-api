@@ -35,7 +35,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
         value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
                 "NP_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD" },
         justification = "JSON API")
-public class GHEmail {
+public class GHEmail
+        implements community.kotlin.conrib.github.GHEmail {
 
     /** The email. */
     protected String email;

@@ -12,7 +12,8 @@ import java.io.IOException;
  * @author Kohsuke Kawaguchi
  */
 @SuppressFBWarnings(value = "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", justification = "JSON API")
-public class GHKey extends GitHubInteractiveObject {
+public class GHKey extends GitHubInteractiveObject
+        implements community.kotlin.conrib.github.GHKey {
 
     /** The id. */
     protected int id;

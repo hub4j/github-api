@@ -22,7 +22,8 @@ import static java.lang.String.format;
  * @see GHRepository#listReleases() () GHRepository#listReleases()
  * @see GHRepository#createRelease(String) GHRepository#createRelease(String)
  */
-public class GHRelease extends GHObject {
+public class GHRelease extends GHObject
+        implements community.kotlin.conrib.github.GHRelease {
 
     /**
      * Wrap.

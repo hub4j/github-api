@@ -13,7 +13,8 @@ import javax.annotation.Nonnull;
  * @author Kohsuke Kawaguchi
  * @see GitHub#createGist() GitHub#createGist()
  */
-public class GHGistBuilder {
+public class GHGistBuilder
+        implements community.kotlin.conrib.github.GHGistBuilder {
     private final LinkedHashMap<String, Object> files = new LinkedHashMap<String, Object>();
     private final Requester req;
 

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import community.kotlin.conrib.github.GHException;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -21,7 +22,8 @@ import java.util.List;
  * @see GHCommitComment#getCommit() GHCommitComment#getCommit()
  */
 @SuppressFBWarnings(value = { "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
-public class GHCommit {
+public class GHCommit
+        implements community.kotlin.conrib.github.GHCommit {
 
     /**
      * A file that was modified.

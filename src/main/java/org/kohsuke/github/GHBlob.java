@@ -15,7 +15,8 @@ import java.util.Base64;
  * @see GHRepository#getBlob(String) GHRepository#getBlob(String)
  * @see <a href="https://developer.github.com/v3/git/blobs/#get-a-blob">Get a blob</a>
  */
-public class GHBlob {
+public class GHBlob
+        implements community.kotlin.conrib.github.GHBlob {
 
     private String content, encoding, url, sha;
 

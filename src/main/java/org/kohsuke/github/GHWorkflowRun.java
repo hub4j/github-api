@@ -18,6 +18,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
+import community.kotlin.conrib.github.GHEvent;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -26,7 +27,8 @@ import static java.util.Objects.requireNonNull;
  * @author Guillaume Smet
  * @see GHRepository#getWorkflowRun(long)
  */
-public class GHWorkflowRun extends GHObject {
+public class GHWorkflowRun extends GHObject
+        implements community.kotlin.conrib.github.GHWorkflowRun {
 
     /**
      * The Enum Conclusion.

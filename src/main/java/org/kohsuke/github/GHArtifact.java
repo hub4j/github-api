@@ -20,7 +20,8 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Guillaume Smet
  */
-public class GHArtifact extends GHObject {
+public class GHArtifact extends GHObject
+        implements community.kotlin.conrib.github.GHArtifact {
 
     private String archiveDownloadUrl;
 

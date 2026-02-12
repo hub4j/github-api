@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
+import community.kotlin.conrib.github.GitHubRequestBuilderDone;
 
 /**
  * An abstract data object builder/updater.

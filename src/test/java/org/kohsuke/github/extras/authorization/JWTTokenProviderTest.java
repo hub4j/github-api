@@ -10,6 +10,7 @@ import java.time.Duration;
 import java.time.Instant;
 
 import static org.hamcrest.Matchers.*;
+import community.kotlin.conrib.github.HttpException;
 
 // TODO: Auto-generated Javadoc
 /**

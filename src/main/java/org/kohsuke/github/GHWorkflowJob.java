@@ -25,7 +25,8 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Guillaume Smet
  */
-public class GHWorkflowJob extends GHObject {
+public class GHWorkflowJob extends GHObject
+        implements community.kotlin.conrib.github.GHWorkflowJob {
 
     /**
      * The Class Step.

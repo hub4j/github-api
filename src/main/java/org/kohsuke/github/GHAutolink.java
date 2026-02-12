@@ -12,7 +12,8 @@ import java.io.IOException;
  * @see GHRepository#listAutolinks() GHRepository#listAutolinks()
  * @see <a href="https://docs.github.com/en/rest/repos/autolinks">Repository autolinks API</a>
  */
-public class GHAutolink {
+public class GHAutolink
+        implements community.kotlin.conrib.github.GHAutolink {
 
     private int id;
     private boolean isAlphanumeric;

@@ -9,7 +9,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * @see GHEventPayload.Label
  */
 @SuppressFBWarnings("UWF_UNWRITTEN_FIELD")
-public class GHLabelChanges {
+public class GHLabelChanges
+        implements community.kotlin.conrib.github.GHLabelChanges {
 
     /**
      * Wrapper for changed values.

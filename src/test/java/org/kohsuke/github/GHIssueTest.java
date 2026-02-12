@@ -19,6 +19,10 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
+import community.kotlin.conrib.github.GHCommentAuthorAssociation;
+import community.kotlin.conrib.github.GHFileNotFoundException;
+import community.kotlin.conrib.github.GHIssueState;
+import community.kotlin.conrib.github.GHIssueStateReason;
 
 // TODO: Auto-generated Javadoc
 /**

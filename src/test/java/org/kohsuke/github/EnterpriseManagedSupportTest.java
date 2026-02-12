@@ -6,6 +6,11 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.*;
+import community.kotlin.conrib.github.GHException;
+import community.kotlin.conrib.github.GHIOException;
+import community.kotlin.conrib.github.GHNotExternallyManagedEnterpriseException;
+import community.kotlin.conrib.github.GHTeamCannotBeExternallyManagedException;
+import community.kotlin.conrib.github.HttpException;
 
 // TODO: Auto-generated Javadoc
 
@@ -65,7 +70,7 @@ public class EnterpriseManagedSupportTest extends AbstractGitHubWireMockTest {
         assertThat(failure.getMessage(),
                 equalTo(EnterpriseManagedSupport.COULD_NOT_RETRIEVE_ORGANIZATION_EXTERNAL_GROUPS));
 
-        final GHError error = failure.getError();
+        final community.kotlin.conrib.github.GHError error = failure.getError();
 
         assertThat(error, notNullValue());
         assertThat(error.getMessage(),
@@ -102,7 +107,7 @@ public class EnterpriseManagedSupportTest extends AbstractGitHubWireMockTest {
 
         final GHTeamCannotBeExternallyManagedException failure = (GHTeamCannotBeExternallyManagedException) exception;
 
-        final GHError error = failure.getError();
+        final community.kotlin.conrib.github.GHError error = failure.getError();
 
         assertThat(error, notNullValue());
         assertThat(error.getMessage(), equalTo(EnterpriseManagedSupport.TEAM_CANNOT_BE_EXTERNALLY_MANAGED_ERROR));

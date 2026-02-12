@@ -36,6 +36,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import community.kotlin.conrib.github.Refreshable;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -45,7 +46,9 @@ import java.util.Objects;
  * @see GHRepository#getPullRequest(int) GHRepository#getPullRequest(int)
  */
 @SuppressWarnings({ "UnusedDeclaration" })
-public class GHPullRequest extends GHIssue implements Refreshable {
+public class GHPullRequest extends GHIssue
+        implements Refreshable,
+        community.kotlin.conrib.github.GHPullRequest {
 
     /**
      * The status of auto merging a {@linkplain GHPullRequest}.
@@ -428,7 +431,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the pull request
      */
     @Override
-    public PullRequest getPullRequest() {
+    public GHIssue.PullRequest getPullRequest() {
         return null;
     }
 

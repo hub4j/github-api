@@ -25,6 +25,14 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertThrows;
 import static org.kohsuke.github.GHVerification.Reason.GPGVERIFY_ERROR;
 import static org.kohsuke.github.GHVerification.Reason.UNKNOWN_SIGNATURE_TYPE;
+import community.kotlin.conrib.github.GHCommitState;
+import community.kotlin.conrib.github.GHDirection;
+import community.kotlin.conrib.github.GHException;
+import community.kotlin.conrib.github.GHFileNotFoundException;
+import community.kotlin.conrib.github.GHFork;
+import community.kotlin.conrib.github.GHPermissionType;
+import community.kotlin.conrib.github.HttpException;
+import community.kotlin.conrib.github.MarkdownMode;
 
 // TODO: Auto-generated Javadoc
 /**

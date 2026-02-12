@@ -14,7 +14,8 @@ import java.util.Date;
  * Note that this is best effort only as nothing is documented in the GitHub documentation.
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
-public class GHProjectsV2ItemChanges extends GitHubBridgeAdapterObject {
+public class GHProjectsV2ItemChanges extends GitHubBridgeAdapterObject
+        implements community.kotlin.conrib.github.GHProjectsV2ItemChanges {
 
     /**
      * The Enum FieldType.

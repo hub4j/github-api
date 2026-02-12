@@ -12,7 +12,8 @@ import java.net.URL;
  *      documentation in the response schema</a>
  * @see GHPullRequestReviewComment
  */
-public class GHPullRequestReviewCommentReactions {
+public class GHPullRequestReviewCommentReactions
+        implements community.kotlin.conrib.github.GHPullRequestReviewCommentReactions {
 
     private int confused = -1;
 

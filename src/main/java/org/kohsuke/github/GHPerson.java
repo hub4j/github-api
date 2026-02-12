@@ -18,7 +18,8 @@ import java.util.TreeMap;
  *
  * @author Kohsuke Kawaguchi
  */
-public abstract class GHPerson extends GHObject {
+public abstract class GHPerson extends GHObject
+        implements community.kotlin.conrib.github.GHPerson {
 
     /** The public gists. */
     protected int followers, following, publicRepos, publicGists;

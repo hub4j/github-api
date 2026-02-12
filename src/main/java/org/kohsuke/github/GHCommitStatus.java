@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+
+import community.kotlin.conrib.github.GHCommitState;
 // TODO: Auto-generated Javadoc
 /**
  * Represents a status of a commit.
@@ -10,7 +12,8 @@ package org.kohsuke.github;
  * @see GHRepository#createCommitStatus(String, GHCommitState, String, String) GHRepository#createCommitStatus(String,
  *      GHCommitState, String, String)
  */
-public class GHCommitStatus extends GHObject {
+public class GHCommitStatus extends GHObject
+        implements community.kotlin.conrib.github.GHCommitStatus {
 
     /** The context. */
     String context;

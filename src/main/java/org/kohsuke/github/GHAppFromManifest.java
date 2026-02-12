@@ -6,7 +6,8 @@ package org.kohsuke.github;
  * @author Daniel Baur
  * @see GitHub#createAppFromManifest(String)
  */
-public class GHAppFromManifest extends GHApp {
+public class GHAppFromManifest extends GHApp
+        implements community.kotlin.conrib.github.GHAppFromManifest {
 
     private String clientId;
 

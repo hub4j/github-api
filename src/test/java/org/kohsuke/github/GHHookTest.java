@@ -15,6 +15,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import community.kotlin.conrib.github.GHEvent;
+import community.kotlin.conrib.github.GHFileNotFoundException;
 
 // TODO: Auto-generated Javadoc
 /**

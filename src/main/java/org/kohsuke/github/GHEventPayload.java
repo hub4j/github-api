@@ -13,6 +13,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import community.kotlin.conrib.github.GHCommitState;
+import community.kotlin.conrib.github.GHException;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -24,7 +26,8 @@ import java.util.Map;
  *      and payloads</a>
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" }, justification = "JSON API")
-public abstract class GHEventPayload extends GitHubInteractiveObject {
+public abstract class GHEventPayload extends GitHubInteractiveObject
+        implements community.kotlin.conrib.github.GHEventPayload {
     /**
      * A check run event has been created, rerequested, completed, or has a requested_action.
      *

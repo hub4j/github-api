@@ -8,12 +8,14 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import community.kotlin.conrib.github.GHException;
 
 // TODO: Auto-generated Javadoc
 /**
  * Builder pattern for creating a new tree. Based on https://developer.github.com/v3/git/trees/#create-a-tree
  */
-public class GHTreeBuilder {
+public class GHTreeBuilder
+        implements community.kotlin.conrib.github.GHTreeBuilder {
     private static class DeleteTreeEntry extends TreeEntry {
         /**
          * According to reference doc https://docs.github.com/en/rest/git/trees?apiVersion=2022-11-28#create-a-tree: if

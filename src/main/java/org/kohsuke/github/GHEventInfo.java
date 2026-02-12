@@ -7,6 +7,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
+import community.kotlin.conrib.github.GHEvent;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -15,7 +16,8 @@ import java.util.*;
  * @author Kohsuke Kawaguchi
  */
 @SuppressFBWarnings(value = "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", justification = "JSON API")
-public class GHEventInfo extends GitHubInteractiveObject {
+public class GHEventInfo extends GitHubInteractiveObject
+        implements community.kotlin.conrib.github.GHEventInfo {
 
     /**
      * Inside the event JSON model, GitHub uses a slightly different format.

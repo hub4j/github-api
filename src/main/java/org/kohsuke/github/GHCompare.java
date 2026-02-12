@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Iterator;
 
 import javax.annotation.Nonnull;
+import community.kotlin.conrib.github.GHException;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -16,7 +17,8 @@ import javax.annotation.Nonnull;
  *
  * @author Michael Clarke
  */
-public class GHCompare {
+public class GHCompare
+        implements community.kotlin.conrib.github.GHCompare {
 
     /**
      * Compare commits had a child commit element with additional details we want to capture. This extension of GHCommit

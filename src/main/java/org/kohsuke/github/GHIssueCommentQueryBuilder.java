@@ -20,7 +20,8 @@ import java.util.Date;
  * @see GHIssue#queryComments() GHIssue#queryComments()
  * @see <a href="https://docs.github.com/en/rest/issues/comments#list-issue-comments">List issue comments</a>
  */
-public class GHIssueCommentQueryBuilder {
+public class GHIssueCommentQueryBuilder
+        implements community.kotlin.conrib.github.GHIssueCommentQueryBuilder {
     private final GHIssue issue;
     private final Requester req;
 

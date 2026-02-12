@@ -11,7 +11,9 @@ import java.net.URL;
  *
  * @author Miguel Esteban Gutiérrez
  */
-public class GHError implements Serializable {
+public class GHError
+        implements Serializable,
+        community.kotlin.conrib.github.GHError {
 
     /**
      * The serial version UID of the error

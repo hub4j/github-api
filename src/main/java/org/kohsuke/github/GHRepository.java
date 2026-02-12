@@ -58,6 +58,13 @@ import javax.annotation.Nullable;
 
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
+import community.kotlin.conrib.github.GHCommitState;
+import community.kotlin.conrib.github.GHEvent;
+import community.kotlin.conrib.github.GHException;
+import community.kotlin.conrib.github.GHIssueState;
+import community.kotlin.conrib.github.GHPermissionType;
+import community.kotlin.conrib.github.HttpException;
+import community.kotlin.conrib.github.MarkdownMode;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -68,7 +75,8 @@ import static java.util.Objects.requireNonNull;
 @SuppressWarnings({ "UnusedDeclaration" })
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
-public class GHRepository extends GHObject {
+public class GHRepository extends GHObject
+        implements community.kotlin.conrib.github.GHRepository {
 
     /**
      * Affiliation of a repository collaborator.

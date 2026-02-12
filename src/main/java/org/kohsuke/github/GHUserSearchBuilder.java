@@ -1,5 +1,7 @@
 package org.kohsuke.github;
 
+
+import community.kotlin.conrib.github.GHDirection;
 // TODO: Auto-generated Javadoc
 /**
  * Search users.
@@ -7,7 +9,8 @@ package org.kohsuke.github;
  * @author Kohsuke Kawaguchi
  * @see GitHub#searchUsers() GitHub#searchUsers()
  */
-public class GHUserSearchBuilder extends GHSearchBuilder<GHUser> {
+public class GHUserSearchBuilder extends GHSearchBuilder<GHUser>
+        implements community.kotlin.conrib.github.GHUserSearchBuilder {
 
     /**
      * The enum Sort.

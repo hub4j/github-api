@@ -28,6 +28,9 @@ import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import community.kotlin.conrib.github.GHCommentAuthorAssociation;
+import community.kotlin.conrib.github.Reactable;
+import community.kotlin.conrib.github.ReactionContent;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -37,7 +40,9 @@ import java.net.URL;
  * @see GHIssue#comment(String) GHIssue#comment(String)
  * @see GHIssue#listComments() GHIssue#listComments()
  */
-public class GHIssueComment extends GHObject implements Reactable {
+public class GHIssueComment extends GHObject
+        implements Reactable,
+        community.kotlin.conrib.github.GHIssueComment {
 
     private String body, gravatarId, htmlUrl, authorAssociation;
 

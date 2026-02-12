@@ -16,7 +16,8 @@ import java.net.URL;
         value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
                 "UUF_UNUSED_FIELD" },
         justification = "JSON API")
-public class GHInvitation extends GHObject {
+public class GHInvitation extends GHObject
+        implements community.kotlin.conrib.github.GHInvitation {
 
     private String htmlUrl;
 

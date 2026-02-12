@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Map;
+import community.kotlin.conrib.github.GHDeploymentState;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -13,7 +14,8 @@ import java.util.Map;
  *      String, String)
  * @see GHRepository#getDeployment(long) GHRepository#getDeployment(long)
  */
-public class GHDeployment extends GHObject {
+public class GHDeployment extends GHObject
+        implements community.kotlin.conrib.github.GHDeployment {
 
     private GHRepository owner;
 

@@ -13,7 +13,8 @@ import java.util.Date;
  * @author Paulo Miguel Almeida
  * @see GHMarketplaceListAccountBuilder#createRequest() GHMarketplaceListAccountBuilder#createRequest()
  */
-public class GHMarketplacePurchase extends GitHubInteractiveObject {
+public class GHMarketplacePurchase extends GitHubInteractiveObject
+        implements community.kotlin.conrib.github.GHMarketplacePurchase {
 
     private String billingCycle;
 

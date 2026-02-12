@@ -9,7 +9,8 @@ import java.io.IOException;
  * @author Kohsuke Kawaguchi
  * @see GHRelease#update() GHRelease#update()
  */
-public class GHReleaseUpdater {
+public class GHReleaseUpdater
+        implements community.kotlin.conrib.github.GHReleaseUpdater {
     private final GHRelease base;
     private final Requester builder;
 

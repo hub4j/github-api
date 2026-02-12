@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.*;
+import community.kotlin.conrib.github.HttpException;
 
 // TODO: Auto-generated Javadoc
 /**

@@ -11,7 +11,8 @@ import java.util.Date;
 /**
  * The type GHDeployKey.
  */
-public class GHDeployKey {
+public class GHDeployKey
+        implements community.kotlin.conrib.github.GHDeployKey {
 
     /** Name of user that added the deploy key */
     private String addedBy;

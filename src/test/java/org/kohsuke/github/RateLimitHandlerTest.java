@@ -11,6 +11,8 @@ import javax.annotation.Nonnull;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import community.kotlin.conrib.github.GHIOException;
+import community.kotlin.conrib.github.HttpException;
 
 // TODO: Auto-generated Javadoc
 /**

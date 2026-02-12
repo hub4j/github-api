@@ -15,7 +15,8 @@ import java.util.Locale;
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
-public class GHMembership extends GitHubInteractiveObject {
+public class GHMembership extends GitHubInteractiveObject
+        implements community.kotlin.conrib.github.GHMembership {
 
     /**
      * Role of a user in an organization.

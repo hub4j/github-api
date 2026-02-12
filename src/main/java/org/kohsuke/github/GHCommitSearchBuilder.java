@@ -4,6 +4,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import community.kotlin.conrib.github.GHDirection;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -12,7 +13,8 @@ import java.io.IOException;
  * @author Marc de Verdelhan
  * @see GitHub#searchCommits() GitHub#searchCommits()
  */
-public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit> {
+public class GHCommitSearchBuilder extends GHSearchBuilder<GHCommit>
+        implements community.kotlin.conrib.github.GHCommitSearchBuilder {
 
     /**
      * The enum Sort.

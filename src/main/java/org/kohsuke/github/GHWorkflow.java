@@ -17,7 +17,8 @@ import java.util.Objects;
  * @author Guillaume Smet
  * @see GHRepository#getWorkflow(long)
  */
-public class GHWorkflow extends GHObject {
+public class GHWorkflow extends GHObject
+        implements community.kotlin.conrib.github.GHWorkflow {
 
     private String badgeUrl;
 

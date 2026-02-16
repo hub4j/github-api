@@ -162,7 +162,7 @@ class GitHubResponse<T> {
      * @param body
      *            the body
      */
-    GitHubResponse(GitHubResponse<T> response, @CheckForNull T body) {
+    GitHubResponse(GitHubResponse<?> response, @CheckForNull T body) {
         this.statusCode = response.statusCode();
         this.headers = response.headers;
         this.body = body;

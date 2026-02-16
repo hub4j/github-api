@@ -38,7 +38,7 @@ public class GHUserSearchBuilder extends GHSearchBuilder<GHUser> {
      *            the root
      */
     GHUserSearchBuilder(GitHub root) {
-        super(root, UserSearchResult.class);
+        super(root, UserSearchResult.class, GHUser.class);
     }
 
     /**

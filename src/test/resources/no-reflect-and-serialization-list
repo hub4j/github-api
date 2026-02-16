@@ -25,7 +25,7 @@ org.kohsuke.github.GitHubClient$BodyHandler
 org.kohsuke.github.GitHubClient$GHApiInfo
 org.kohsuke.github.GitHubClient$RetryRequestException
 org.kohsuke.github.GitHubConnectorResponseErrorHandler
-org.kohsuke.github.GitHubPageIterator
+org.kohsuke.github.GitHubEndpointPageIterator
 org.kohsuke.github.GitHubRateLimitChecker
 org.kohsuke.github.GitHubRateLimitHandler
 org.kohsuke.github.GitHubRateLimitHandler$1

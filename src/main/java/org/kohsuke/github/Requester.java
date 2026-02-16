@@ -189,16 +189,47 @@ class Requester extends GitHubRequest.Builder<Requester> {
      * or {@link Iterator#hasNext()} are called.
      * </p>
      *
+     * @param <P>
+     *            the page type for the pages returned from
      * @param <R>
      *            the element type for the pages returned from
-     * @param type
+     * @param pageType
      *            the type of the pages to retrieve.
      * @param itemInitializer
      *            the consumer to execute on each paged item retrieved.
      * @return the {@link PagedIterable} for this builder.
      */
-    public <R> PagedIterable<R> toIterable(Class<R[]> type, Consumer<R> itemInitializer) {
-        return new GitHubPageContentsIterable<>(client, build(), type, itemInitializer);
-
+    public <P extends GitHubPage<R>, R> PagedIterable<R> toIterable(Class<P> pageType,
+            Class<R> itemType,
+            Consumer<R> itemInitializer) {
+        return new PagedIterable<>(toPaginatedEndpoint(pageType, itemType, itemInitializer));
     }
+
+    /**
+     * Creates {@link PagedIterable <R>} from this builder using the provided {@link Consumer}{@code <R>}.
+     * <p>
+     * This method and the {@link PagedIterable <R>} do not actually begin fetching data until {@link Iterator#next()}
+     * or {@link Iterator#hasNext()} are called.
+     * </p>
+     *
+     * @param <R>
+     *            the element type for the pages returned from
+     * @param receiverType
+     *            the type of the array to retrieve.
+     * @param itemInitializer
+     *            the consumer to execute on each paged item retrieved.
+     * @return the {@link PagedIterable} for this builder.
+     */
+    public <R> PagedIterable<R> toIterable(Class<R[]> receiverType, Consumer<R> itemInitializer) {
+        GitHubRequest request = build();
+        return new PagedIterable<>(PaginatedEndpoint.ofArrayEndpoint(client, request, receiverType, itemInitializer));
+    }
+
+    <P extends GitHubPage<R>, R> PaginatedEndpoint<P, R> toPaginatedEndpoint(Class<P> pageType,
+            Class<R> itemType,
+            Consumer<R> itemInitializer) {
+        GitHubRequest request = build();
+        return new PaginatedEndpoint<>(client, request, pageType, itemType, itemInitializer);
+    }
+
 }

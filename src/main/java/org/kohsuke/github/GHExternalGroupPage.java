@@ -7,7 +7,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  *
  * @author Miguel Esteban Gutiérrez
  */
-class GHExternalGroupPage {
+class GHExternalGroupPage implements GitHubPage<GHExternalGroup> {
 
     private static final GHExternalGroup[] GH_EXTERNAL_GROUPS = new GHExternalGroup[0];
 
@@ -31,4 +31,8 @@ class GHExternalGroupPage {
         return groups;
     }
 
+    @Override
+    public GHExternalGroup[] getItems() {
+        return getGroups();
+    }
 }

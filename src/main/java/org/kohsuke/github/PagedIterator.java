@@ -1,14 +1,7 @@
 package org.kohsuke.github;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.function.Consumer;
-
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -24,135 +17,37 @@ import javax.annotation.Nonnull;
  * @param <T>
  *            the type parameter
  */
+@Deprecated
 public class PagedIterator<T> implements Iterator<T> {
 
-    /**
-     * Current batch of items. Each time {@link #next()} is called the next item in this array will be returned. After
-     * the last item of the array is returned, when {@link #next()} is called again, a new page of items will be fetched
-     * and iterating will continue from the first item in the new page.
-     *
-     * @see #fetch() {@link #fetch()} for details on how this field is used.
-     */
-    private T[] currentPage;
-
-    @CheckForNull
-    private final Consumer<T> itemInitializer;
-
-    /**
-     * The index of the next item on the page, the item that will be returned when {@link #next()} is called.
-     *
-     * @see #fetch() {@link #fetch()} for details on how this field is used.
-     */
-    private int nextItemIndex;
-
-    /** The base. */
-    @Nonnull
-    protected final Iterator<T[]> base;
+    private final PaginatedEndpointItems<? extends GitHubPage<T>, T> endpointIterator;
 
     /**
      * Instantiates a new paged iterator.
      *
-     * @param base
+     * @param endpointIterator
      *            the base
-     * @param itemInitializer
-     *            the item initializer
      */
-    PagedIterator(@Nonnull Iterator<T[]> base, @CheckForNull Consumer<T> itemInitializer) {
-        this.base = base;
-        this.itemInitializer = itemInitializer;
+    PagedIterator(PaginatedEndpointItems<? extends GitHubPage<T>, T> endpointIterator) {
+        this.endpointIterator = endpointIterator;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public boolean hasNext() {
-        fetch();
-        return (currentPage != null && currentPage.length > nextItemIndex);
+        return endpointIterator.hasNext();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public T next() {
-        if (!hasNext())
-            throw new NoSuchElementException();
-        return currentPage[nextItemIndex++];
+        return endpointIterator.next();
     }
 
     /**
-     * Gets the next page worth of data.
+     * Get the next page of items.
      *
-     * @return the list
+     * @return a list of the next page of items.
+     * @deprecated use PagedIterable.pages().
      */
+    @Deprecated
     public List<T> nextPage() {
-        return Arrays.asList(nextPageArray());
-    }
-
-    /**
-     * Fetch is called at the start of {@link #next()} or {@link #hasNext()} to fetch another page of data if it is
-     * needed and available.
-     * <p>
-     * If there is no current page yet (at the start of iterating), a page is fetched. If {@link #nextItemIndex} points
-     * to an item in the current page array, the state is valid - no more work is needed. If {@link #nextItemIndex} is
-     * greater than the last index in the current page array, the method checks if there is another page of data
-     * available.
-     * </p>
-     * <p>
-     * If there is another page, get that page of data and reset the check {@link #nextItemIndex} to the start of the
-     * new page.
-     * </p>
-     * <p>
-     * If no more pages are available, leave the page and index unchanged. In this case, {@link #hasNext()} will return
-     * {@code false} and {@link #next()} will throw an exception.
-     * </p>
-     */
-    private void fetch() {
-        if ((currentPage == null || currentPage.length <= nextItemIndex) && base.hasNext()) {
-            // On first call, always get next page (may be empty array)
-            T[] result = Objects.requireNonNull(base.next());
-            wrapUp(result);
-            currentPage = result;
-            nextItemIndex = 0;
-        }
-    }
-
-    /**
-     * This poorly named method, initializes items with local data after they are fetched. It is up to the implementer
-     * to decide what local data to apply.
-     *
-     * @param page
-     *            the page of items to be initialized
-     */
-    protected void wrapUp(T[] page) {
-        if (itemInitializer != null) {
-            for (T item : page) {
-                itemInitializer.accept(item);
-            }
-        }
-    }
-
-    /**
-     * Gets the next page worth of data.
-     *
-     * @return the list
-     */
-    @Nonnull
-    T[] nextPageArray() {
-        // if we have not fetched any pages yet, always fetch.
-        // If we have fetched at least one page, check hasNext()
-        if (currentPage == null) {
-            fetch();
-        } else if (!hasNext()) {
-            throw new NoSuchElementException();
-        }
-
-        // Current should never be null after fetch
-        Objects.requireNonNull(currentPage);
-        T[] r = currentPage;
-        if (nextItemIndex != 0) {
-            r = Arrays.copyOfRange(r, nextItemIndex, r.length);
-        }
-        nextItemIndex = currentPage.length;
-        return r;
+        return endpointIterator.nextPage();
     }
 }

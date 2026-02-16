@@ -30,6 +30,8 @@ Prerequisites
 
   * A User or an organisation that has already installed your GitHub App as described {{{https://developer.github.com/apps/installing-github-apps/}here}}
 
+  * [If you intend to use the device flow]: the *Enable Device Flow* option must be enabled in your GitHub App settings.
+
   []
 
 What next?
@@ -37,5 +39,7 @@ What next?
   * Authenticating as a GitHub App via the {{{/githubappjwtauth.html}JWT Authentication}}
 
   * Authenticating as an installation via the {{{/githubappappinsttokenauth.html}App Installation Token}}
+
+  * Authenticating as a user via the {{{/githubappdeviceflowauth.html}Device Flow}}
 
   []

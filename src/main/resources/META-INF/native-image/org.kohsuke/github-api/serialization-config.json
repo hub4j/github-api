@@ -1366,5 +1366,14 @@
   },
   {
     "name": "org.kohsuke.github.GitHubBridgeAdapterObject"
+  },
+  {
+    "name": "org.kohsuke.github.authorization.DeviceFlowGithubAppCredentials"
+  },
+  {
+    "name": "org.kohsuke.github.DeviceFlowGithubAppAuthorizationProvider$DeviceFlowAccessTokenResponse"
+  },
+  {
+    "name": "org.kohsuke.github.DeviceFlowGithubAppAuthorizationProvider$DeviceFlowCodeResponse"
   }
 ]

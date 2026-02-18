@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
@@ -143,6 +144,60 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
                     endsWith(
                             "/repos/hub4j-test-org/GHContentIntegrationTest/contents/test+directory%20%2350/test%20file-to+create-%231.txt {\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/reference/repos#get-repository-content\"}"));
         }
+    }
+
+    /**
+     * Test creating content with custom author and committer via GHContentBuilder.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @SuppressWarnings("deprecation")
+    @Test
+    public void testCreateWithAuthorCommitter() throws Exception {
+        GHRepository ghRepository = getTempRepository();
+        GHContentUpdateResponse response = ghRepository.createContent()
+                .message("Creating with custom author and committer")
+                .path("author-committer-test.md")
+                .content("test content\n")
+                .author("John Doe", "john@example.com")
+                .author("John Doe", "john@example.com", new Date(1234567890000L))
+                .committer("Service Account", "service@example.com")
+                .committer("Service Account", "service@example.com", new Date(1234567890000L))
+                .commit();
+
+        assertThat(response.getContent(), notNullValue());
+        assertThat(response.getCommit(), notNullValue());
+        assertThat(response.getCommit().getAuthor().getName(), equalTo("John Doe"));
+        assertThat(response.getCommit().getAuthor().getEmail(), equalTo("john@example.com"));
+        assertThat(response.getCommit().getCommitter().getName(), equalTo("Service Account"));
+        assertThat(response.getCommit().getCommitter().getEmail(), equalTo("service@example.com"));
+    }
+
+    /**
+     * Test deleting content with custom author and committer via GHContentDeleter.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @SuppressWarnings("deprecation")
+    @Test
+    public void testDeleteWithAuthorCommitter() throws Exception {
+        GHContent content = repo.getFileContent("ghcontent-ro/a-file-with-content");
+        GHContentUpdateResponse response = content.createDelete()
+                .message("Deleting with custom author and committer")
+                .branch("main")
+                .author("John Doe", "john@example.com")
+                .author("John Doe", "john@example.com", new Date(1234567890000L))
+                .committer("Service Account", "service@example.com")
+                .committer("Service Account", "service@example.com", new Date(1234567890000L))
+                .commit();
+
+        assertThat(response.getCommit(), notNullValue());
+        assertThat(response.getCommit().getAuthor().getName(), equalTo("John Doe"));
+        assertThat(response.getCommit().getAuthor().getEmail(), equalTo("john@example.com"));
+        assertThat(response.getCommit().getCommitter().getName(), equalTo("Service Account"));
+        assertThat(response.getCommit().getCommitter().getEmail(), equalTo("service@example.com"));
     }
 
     /**
@@ -318,6 +373,34 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         ghContentBuilder.path("MIME-Small.md");
         ghContentBuilder.content("123456789012345678901234567890123456789012345678901234567");
         ghContentBuilder.commit();
+    }
+
+    /**
+     * Test updating content with custom author and committer via GHContentUpdater.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @SuppressWarnings("deprecation")
+    @Test
+    public void testUpdateWithAuthorCommitter() throws Exception {
+        GHContent content = repo.getFileContent("ghcontent-ro/a-file-with-content");
+        GHContentUpdateResponse response = content.createUpdate()
+                .content("updated content\n")
+                .message("Updating with custom author and committer")
+                .branch("main")
+                .author("John Doe", "john@example.com")
+                .author("John Doe", "john@example.com", new Date(1234567890000L))
+                .committer("Service Account", "service@example.com")
+                .committer("Service Account", "service@example.com", new Date(1234567890000L))
+                .commit();
+
+        assertThat(response.getContent(), notNullValue());
+        assertThat(response.getCommit(), notNullValue());
+        assertThat(response.getCommit().getAuthor().getName(), equalTo("John Doe"));
+        assertThat(response.getCommit().getAuthor().getEmail(), equalTo("john@example.com"));
+        assertThat(response.getCommit().getCommitter().getName(), equalTo("Service Account"));
+        assertThat(response.getCommit().getCommitter().getEmail(), equalTo("service@example.com"));
     }
 
     /**

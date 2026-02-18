@@ -1,0 +1,31 @@
+{
+  "id": "a1b2c3d4-e5f6-7890-abcd-300000000002",
+  "name": "repos_hub4j-test-org_ghcontentintegrationtest_contents_ghcontent-ro_a-file-with-content_delete",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHContentIntegrationTest/contents/ghcontent-ro/a-file-with-content",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"path\":\"ghcontent-ro/a-file-with-content\",\"sha\":\"901fd87750a8e53fe39a219cad50d4f7c80ca272\",\"message\":\"Deleting with custom author and committer\",\"branch\":\"main\",\"author\":{\"name\":\"John Doe\",\"email\":\"john@example.com\",\"date\":\"2009-02-13T23:31:30Z\"},\"committer\":{\"name\":\"Service Account\",\"email\":\"service@example.com\",\"date\":\"2009-02-13T23:31:30Z\"}}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "4-r_h_g_contents_ghcontent-ro_a-file-with-content-delete.json",
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "200 OK"
+    }
+  },
+  "uuid": "a1b2c3d4-e5f6-7890-abcd-300000000002",
+  "persistent": true,
+  "insertionIndex": 4
+}

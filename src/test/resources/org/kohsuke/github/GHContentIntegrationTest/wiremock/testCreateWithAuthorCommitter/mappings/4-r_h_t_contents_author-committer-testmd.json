@@ -1,0 +1,31 @@
+{
+  "id": "a1b2c3d4-e5f6-7890-abcd-100000000002",
+  "name": "repos_hub4j-test-org_temp-testCreateWithAuthorCommitter_contents_author-committer-testmd",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-testCreateWithAuthorCommitter/contents/author-committer-test.md",
+    "method": "PUT",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"path\":\"author-committer-test.md\",\"message\":\"Creating with custom author and committer\",\"content\":\"dGVzdCBjb250ZW50Cg==\",\"author\":{\"name\":\"John Doe\",\"email\":\"john@example.com\",\"date\":\"2009-02-13T23:31:30Z\"},\"committer\":{\"name\":\"Service Account\",\"email\":\"service@example.com\",\"date\":\"2009-02-13T23:31:30Z\"}}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "4-r_h_t_contents_author-committer-testmd.json",
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "201 Created"
+    }
+  },
+  "uuid": "a1b2c3d4-e5f6-7890-abcd-100000000002",
+  "persistent": true,
+  "insertionIndex": 4
+}

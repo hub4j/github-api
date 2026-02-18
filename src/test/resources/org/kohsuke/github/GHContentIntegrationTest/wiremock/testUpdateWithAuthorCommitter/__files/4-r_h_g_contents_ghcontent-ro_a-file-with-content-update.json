@@ -1,0 +1,52 @@
+{
+  "content": {
+    "name": "a-file-with-content",
+    "path": "ghcontent-ro/a-file-with-content",
+    "sha": "bbccddee11223344556677889900aabbccddeeff",
+    "size": 16,
+    "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/contents/ghcontent-ro/a-file-with-content?ref=main",
+    "html_url": "https://github.com/hub4j-test-org/GHContentIntegrationTest/blob/main/ghcontent-ro/a-file-with-content",
+    "git_url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/blobs/bbccddee11223344556677889900aabbccddeeff",
+    "download_url": "https://raw.githubusercontent.com/hub4j-test-org/GHContentIntegrationTest/main/ghcontent-ro/a-file-with-content",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/contents/ghcontent-ro/a-file-with-content?ref=main",
+      "git": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/blobs/bbccddee11223344556677889900aabbccddeeff",
+      "html": "https://github.com/hub4j-test-org/GHContentIntegrationTest/blob/main/ghcontent-ro/a-file-with-content"
+    }
+  },
+  "commit": {
+    "sha": "2233445566778899001122334455667788990011",
+    "node_id": "MDY6Q29tbWl0NDA3NjM1Nzc6MjIzMzQ0NTU2Njc3ODg5OTAwMTEyMjMzNDQ1NTY2Nzc4ODk5MDAxMQ==",
+    "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/2233445566778899001122334455667788990011",
+    "html_url": "https://github.com/hub4j-test-org/GHContentIntegrationTest/commit/2233445566778899001122334455667788990011",
+    "author": {
+      "name": "John Doe",
+      "email": "john@example.com",
+      "date": "2024-01-01T00:00:00Z"
+    },
+    "committer": {
+      "name": "Service Account",
+      "email": "service@example.com",
+      "date": "2024-01-01T00:00:00Z"
+    },
+    "tree": {
+      "sha": "ccdd00112233445566778899aabb00112233eeff",
+      "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/trees/ccdd00112233445566778899aabb00112233eeff"
+    },
+    "message": "Updating with custom author and committer",
+    "parents": [
+      {
+        "sha": "aaaa111122223333444455556666777788889999",
+        "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/aaaa111122223333444455556666777788889999",
+        "html_url": "https://github.com/hub4j-test-org/GHContentIntegrationTest/commit/aaaa111122223333444455556666777788889999"
+      }
+    ],
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null
+    }
+  }
+}

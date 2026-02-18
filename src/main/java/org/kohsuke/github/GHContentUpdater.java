@@ -9,17 +9,15 @@ import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
 
-// TODO: Auto-generated Javadoc
 /**
- * Used to create/update content.
+ * Builder for updating existing repository content with support for specifying author and committer information.
  *
  * <p>
- * Call various methods to build up parameters, then call {@link #commit()} to make the change effective.
+ * Obtain an instance via {@link GHContent#createUpdate()}.
  *
- * @author Kohsuke Kawaguchi
- * @see GHRepository#createContent() GHRepository#createContent()
+ * @see GHContent#createUpdate()
  */
-public final class GHContentBuilder {
+public final class GHContentUpdater {
     @JsonInclude(Include.NON_NULL)
     private static final class UserInfo {
         private final String date;
@@ -33,19 +31,18 @@ public final class GHContentBuilder {
         }
     }
 
-    private String path;
-    private final GHRepository repo;
+    private final GHContent content;
+    private String encodedContent;
     private final Requester req;
 
-    /**
-     * Instantiates a new GH content builder.
-     *
-     * @param repo
-     *            the repo
-     */
-    GHContentBuilder(GHRepository repo) {
-        this.repo = repo;
-        this.req = repo.root().createRequest().method("PUT");
+    GHContentUpdater(GHContent content) {
+        this.content = content;
+        final GHRepository repository = content.getOwner();
+        this.req = repository.root()
+                .createRequest()
+                .method("PUT")
+                .with("path", content.getPath())
+                .with("sha", content.getSha());
     }
 
     /**
@@ -55,9 +52,9 @@ public final class GHContentBuilder {
      *            the name of the author
      * @param email
      *            the email of the author
-     * @return the gh content builder
+     * @return this updater
      */
-    public GHContentBuilder author(String name, String email) {
+    public GHContentUpdater author(String name, String email) {
         return author(name, email, (Instant) null);
     }
 
@@ -70,11 +67,11 @@ public final class GHContentBuilder {
      *            the email of the author
      * @param date
      *            the date of the authoring
-     * @return the gh content builder
+     * @return this updater
      * @deprecated use {@link #author(String, String, Instant)} instead
      */
     @Deprecated
-    public GHContentBuilder author(String name, String email, Date date) {
+    public GHContentUpdater author(String name, String email, Date date) {
         return author(name, email, GitHubClient.toInstantOrNull(date));
     }
 
@@ -87,38 +84,39 @@ public final class GHContentBuilder {
      *            the email of the author
      * @param date
      *            the timestamp for the authoring
-     * @return the gh content builder
+     * @return this updater
      */
-    public GHContentBuilder author(String name, String email, Instant date) {
+    public GHContentUpdater author(String name, String email, Instant date) {
         req.with("author", new UserInfo(name, email, date));
         return this;
     }
 
     /**
-     * Branch gh content builder.
+     * Sets the branch to update the content on.
      *
      * @param branch
-     *            the branch
-     * @return the gh content builder
+     *            the branch name
+     * @return this updater
      */
-    public GHContentBuilder branch(String branch) {
+    public GHContentUpdater branch(String branch) {
         req.with("branch", branch);
         return this;
     }
 
     /**
-     * Commits a new content.
+     * Commits the update.
      *
-     * @return the gh content update response
+     * @return the response containing the updated content and commit information
      * @throws IOException
      *             the io exception
      */
     public GHContentUpdateResponse commit() throws IOException {
-        GHContentUpdateResponse response = req.withUrlPath(GHContent.getApiRoute(repo, path))
+        final GHRepository repository = content.getOwner();
+        GHContentUpdateResponse response = req.withUrlPath(GHContent.getApiRoute(repository, content.getPath()))
                 .fetch(GHContentUpdateResponse.class);
 
-        response.getContent().wrap(repo);
-        response.getCommit().wrapUp(repo);
+        response.getContent().wrap(repository);
+        response.getCommit().wrapUp(repository);
 
         return response;
     }
@@ -130,9 +128,9 @@ public final class GHContentBuilder {
      *            the name of the committer
      * @param email
      *            the email of the committer
-     * @return the gh content builder
+     * @return this updater
      */
-    public GHContentBuilder committer(String name, String email) {
+    public GHContentUpdater committer(String name, String email) {
         return committer(name, email, (Instant) null);
     }
 
@@ -145,11 +143,11 @@ public final class GHContentBuilder {
      *            the email of the committer
      * @param date
      *            the date of the commit
-     * @return the gh content builder
+     * @return this updater
      * @deprecated use {@link #committer(String, String, Instant)} instead
      */
     @Deprecated
-    public GHContentBuilder committer(String name, String email, Date date) {
+    public GHContentUpdater committer(String name, String email, Date date) {
         return committer(name, email, GitHubClient.toInstantOrNull(date));
     }
 
@@ -162,70 +160,46 @@ public final class GHContentBuilder {
      *            the email of the committer
      * @param date
      *            the timestamp of the commit
-     * @return the gh content builder
+     * @return this updater
      */
-    public GHContentBuilder committer(String name, String email, Instant date) {
+    public GHContentUpdater committer(String name, String email, Instant date) {
         req.with("committer", new UserInfo(name, email, date));
         return this;
     }
 
     /**
-     * Content gh content builder.
+     * Sets the new file content as a string.
      *
-     * @param content
-     *            the content
-     * @return the gh content builder
+     * @param newContent
+     *            the new content
+     * @return this updater
      */
-    public GHContentBuilder content(String content) {
-        return content(content.getBytes(StandardCharsets.UTF_8));
+    public GHContentUpdater content(String newContent) {
+        return content(newContent.getBytes(StandardCharsets.UTF_8));
     }
 
     /**
-     * Content gh content builder.
+     * Sets the new file content as raw bytes.
      *
-     * @param content
-     *            the content
-     * @return the gh content builder
+     * @param newContent
+     *            the new content bytes
+     * @return this updater
      */
-    public GHContentBuilder content(byte[] content) {
-        req.with("content", Base64.getEncoder().encodeToString(content));
+    public GHContentUpdater content(byte[] newContent) {
+        this.encodedContent = Base64.getEncoder().encodeToString(newContent);
+        req.with("content", encodedContent);
         return this;
     }
 
     /**
-     * Message gh content builder.
+     * Sets the commit message.
      *
-     * @param commitMessage
+     * @param message
      *            the commit message
-     * @return the gh content builder
+     * @return this updater
      */
-    public GHContentBuilder message(String commitMessage) {
-        req.with("message", commitMessage);
-        return this;
-    }
-
-    /**
-     * Path gh content builder.
-     *
-     * @param path
-     *            the path
-     * @return the gh content builder
-     */
-    public GHContentBuilder path(String path) {
-        this.path = path;
-        req.with("path", path);
-        return this;
-    }
-
-    /**
-     * Used when updating (but not creating a new content) to specify the blob SHA of the file being replaced.
-     *
-     * @param sha
-     *            the sha
-     * @return the gh content builder
-     */
-    public GHContentBuilder sha(String sha) {
-        req.with("sha", sha);
+    public GHContentUpdater message(String message) {
+        req.with("message", message);
         return this;
     }
 }

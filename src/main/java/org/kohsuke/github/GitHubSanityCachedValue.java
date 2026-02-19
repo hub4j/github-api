@@ -3,6 +3,8 @@ package org.kohsuke.github;
 import org.kohsuke.github.function.SupplierThrows;
 
 import java.time.Instant;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Function;
 
 /**
@@ -12,7 +14,10 @@ class GitHubSanityCachedValue<T> {
 
     private long lastQueriedAtEpochSeconds = 0;
     private T lastResult = null;
-    private final Object lock = new Object();
+    // Allow concurrent readers while a refresh is not needed.
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+    private final Lock readLock = lock.readLock();
+    private final Lock writeLock = lock.writeLock();
 
     /**
      * Gets the value from the cache or calls the supplier if the cache is empty or out of date.
@@ -26,13 +31,27 @@ class GitHubSanityCachedValue<T> {
      *             the exception thrown by the supplier if it fails.
      */
     <E extends Throwable> T get(Function<T, Boolean> isExpired, SupplierThrows<T, E> query) throws E {
-        synchronized (lock) {
-            if (Instant.now().getEpochSecond() > lastQueriedAtEpochSeconds || isExpired.apply(lastResult)) {
+        readLock.lock();
+        try {
+            boolean expired = Instant.now().getEpochSecond() > lastQueriedAtEpochSeconds || isExpired.apply(lastResult);
+            if (!expired) {
+                return lastResult;
+            }
+        } finally {
+            readLock.unlock();
+        }
+
+        writeLock.lock();
+        try {
+            boolean stillExpired = Instant.now().getEpochSecond() > lastQueriedAtEpochSeconds || isExpired.apply(lastResult);
+            if (stillExpired) {
                 lastResult = query.get();
                 lastQueriedAtEpochSeconds = Instant.now().getEpochSecond();
             }
+            return lastResult;
+        } finally {
+            writeLock.unlock();
         }
-        return lastResult;
     }
 
     /**

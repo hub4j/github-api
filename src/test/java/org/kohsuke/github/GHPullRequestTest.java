@@ -739,16 +739,32 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(review.getBody(), is("Some draft review"));
         assertThat(review.getCommitId(), notNullValue());
         draftReview.submit("Some review comment", GHPullRequestReviewEvent.COMMENT);
-        List<GHPullRequestReviewComment> comments = review.listReviewComments().toList();
+        List<GHPullRequestReview.ReviewComment> comments = review.listReviewComments().toList();
         assertThat(comments.size(), equalTo(3));
-        GHPullRequestReviewComment comment = comments.get(0);
+        GHPullRequestReview.ReviewComment comment = comments.get(0);
         assertThat(comment.getBody(), equalTo("Some niggle"));
+        assertThat(comment.getPath(), equalTo("README.md"));
+        assertThat(comment.getCommitId(), equalTo("07374fe73aff1c2024a8d4114b32406c7a8e89b7"));
+        assertThat(comment.getOriginalCommitId(), equalTo("07374fe73aff1c2024a8d4114b32406c7a8e89b7"));
+        assertThat(comment.getDiffHunk(), notNullValue());
+        assertThat(comment.getAuthorAssociation(), equalTo(GHCommentAuthorAssociation.MEMBER));
+        assertThat(comment.getOriginalPosition(), equalTo(1));
+        assertThat(comment.getHtmlUrl(), notNullValue());
+        assertThat(comment.getPullRequestReviewId(), equalTo(2121304234L));
+        assertThat(comment.getPullRequestUrl(), notNullValue());
+        assertThat(comment.getReactions(), notNullValue());
         comment = comments.get(1);
         assertThat(comment.getBody(), equalTo("A single line comment"));
         assertThat(comment.getPosition(), equalTo(4));
         comment = comments.get(2);
         assertThat(comment.getBody(), equalTo("A multiline comment"));
         assertThat(comment.getPosition(), equalTo(5));
+
+        // Verify that readPullRequestReviewComment() fetches the full comment with line data
+        GHPullRequestReviewComment fullComment = comments.get(0).readPullRequestReviewComment();
+        assertThat(fullComment.getBody(), equalTo("Some niggle"));
+        assertThat(fullComment.getLine(), equalTo(1));
+
         draftReview = p.createReview().body("Some new review").comment("Some niggle", "README.md", 1).create();
         draftReview.delete();
     }

@@ -4335,6 +4335,21 @@
     "allDeclaredClasses": true
   },
   {
+    "name": "org.kohsuke.github.GHPullRequestReview$ReviewComment",
+    "allPublicFields": true,
+    "allDeclaredFields": true,
+    "queryAllPublicConstructors": true,
+    "queryAllDeclaredConstructors": true,
+    "allPublicConstructors": true,
+    "allDeclaredConstructors": true,
+    "queryAllPublicMethods": true,
+    "queryAllDeclaredMethods": true,
+    "allPublicMethods": true,
+    "allDeclaredMethods": true,
+    "allPublicClasses": true,
+    "allDeclaredClasses": true
+  },
+  {
     "name": "org.kohsuke.github.GHPullRequestReviewBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,

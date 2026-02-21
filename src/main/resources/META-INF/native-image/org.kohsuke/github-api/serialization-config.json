@@ -870,6 +870,9 @@
     "name": "org.kohsuke.github.GHPullRequestReview"
   },
   {
+    "name": "org.kohsuke.github.GHPullRequestReview$ReviewComment"
+  },
+  {
     "name": "org.kohsuke.github.GHPullRequestReviewBuilder"
   },
   {

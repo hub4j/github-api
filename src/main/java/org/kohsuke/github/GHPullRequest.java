@@ -530,7 +530,13 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     /**
      * Obtains all the review comments associated with this pull request.
      *
+     * <p>
+     * Unlike {@link GHPullRequestReview#listReviewComments()}, this method returns full
+     * {@link GHPullRequestReviewComment} objects including line-related fields such as
+     * {@link GHPullRequestReviewComment#getLine() line}, {@link GHPullRequestReviewComment#getSide() side}, etc.
+     *
      * @return the paged iterable
+     * @see GHPullRequestReview#listReviewComments()
      */
     public PagedIterable<GHPullRequestReviewComment> listReviewComments() {
         return root().createRequest()

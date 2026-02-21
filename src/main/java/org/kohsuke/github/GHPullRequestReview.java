@@ -43,6 +43,190 @@ import javax.annotation.CheckForNull;
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
 public class GHPullRequestReview extends GHObject {
 
+    /**
+     * Represents a review comment as returned by the review comments endpoint. This is a limited view that does not
+     * include line-related fields such as {@code line}, {@code originalLine}, {@code side}, etc.
+     *
+     * <p>
+     * To obtain the full {@link GHPullRequestReviewComment} with all fields, call
+     * {@link #readPullRequestReviewComment()}.
+     *
+     * @see GHPullRequest#listReviewComments()
+     */
+    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD" }, justification = "JSON API")
+    public static class ReviewComment extends GHObject {
+
+        private GHCommentAuthorAssociation authorAssociation;
+        private String body;
+        private String commitId;
+        private String diffHunk;
+        private String htmlUrl;
+        private String originalCommitId;
+        private int originalPosition = -1;
+        private String path;
+        private int position = -1;
+        private Long pullRequestReviewId = -1L;
+        private String pullRequestUrl;
+        private GHPullRequestReviewCommentReactions reactions;
+        private GHUser user;
+
+        GHPullRequest owner;
+
+        /**
+         * Create default ReviewComment instance
+         */
+        public ReviewComment() {
+        }
+
+        /**
+         * Gets the author association to the project.
+         *
+         * @return the author association to the project
+         */
+        public GHCommentAuthorAssociation getAuthorAssociation() {
+            return authorAssociation;
+        }
+
+        /**
+         * The comment itself.
+         *
+         * @return the body
+         */
+        public String getBody() {
+            return body;
+        }
+
+        /**
+         * Gets commit id.
+         *
+         * @return the commit id
+         */
+        public String getCommitId() {
+            return commitId;
+        }
+
+        /**
+         * Gets diff hunk.
+         *
+         * @return the diff hunk
+         */
+        public String getDiffHunk() {
+            return diffHunk;
+        }
+
+        /**
+         * Gets the html url.
+         *
+         * @return the html url
+         */
+        public URL getHtmlUrl() {
+            return GitHubClient.parseURL(htmlUrl);
+        }
+
+        /**
+         * Gets commit id.
+         *
+         * @return the original commit id
+         */
+        public String getOriginalCommitId() {
+            return originalCommitId;
+        }
+
+        /**
+         * Gets original position.
+         *
+         * @return the original position
+         */
+        public int getOriginalPosition() {
+            return originalPosition;
+        }
+
+        /**
+         * Gets path.
+         *
+         * @return the path
+         */
+        public String getPath() {
+            return path;
+        }
+
+        /**
+         * Gets position.
+         *
+         * @return the position
+         */
+        public int getPosition() {
+            return position;
+        }
+
+        /**
+         * Gets The ID of the pull request review to which the comment belongs.
+         *
+         * @return {@link Long} the ID of the pull request review
+         */
+        public Long getPullRequestReviewId() {
+            return pullRequestReviewId != null ? pullRequestReviewId : -1;
+        }
+
+        /**
+         * Gets URL for the pull request that the review comment belongs to.
+         *
+         * @return {@link URL} the URL of the pull request
+         */
+        public URL getPullRequestUrl() {
+            return GitHubClient.parseURL(pullRequestUrl);
+        }
+
+        /**
+         * Gets the Reaction Rollup.
+         *
+         * @return {@link GHPullRequestReviewCommentReactions} the reaction rollup
+         */
+        public GHPullRequestReviewCommentReactions getReactions() {
+            return reactions;
+        }
+
+        /**
+         * Gets the user who posted this comment.
+         *
+         * @return the user
+         * @throws IOException
+         *             the io exception
+         */
+        public GHUser getUser() throws IOException {
+            return owner.root().getUser(user.getLogin());
+        }
+
+        /**
+         * Fetches the full {@link GHPullRequestReviewComment} from the API, which includes all fields such as
+         * {@link GHPullRequestReviewComment#getLine() line}, {@link GHPullRequestReviewComment#getOriginalLine()
+         * originalLine}, {@link GHPullRequestReviewComment#getSide() side}, etc.
+         *
+         * @return the full {@link GHPullRequestReviewComment}
+         * @throws IOException
+         *             if an I/O error occurs
+         */
+        public GHPullRequestReviewComment readPullRequestReviewComment() throws IOException {
+            return owner.root()
+                    .createRequest()
+                    .withUrlPath("/repos/" + owner.getRepository().getFullName() + "/pulls/comments/" + getId())
+                    .fetch(GHPullRequestReviewComment.class)
+                    .wrapUp(owner);
+        }
+
+        /**
+         * Wrap up.
+         *
+         * @param owner
+         *            the owner
+         * @return the review comment
+         */
+        ReviewComment wrapUp(GHPullRequest owner) {
+            this.owner = owner;
+            return this;
+        }
+    }
+
     private String body;
 
     private String commitId;
@@ -175,24 +359,19 @@ public class GHPullRequestReview extends GHObject {
      * Obtains all the review comments associated with this pull request review.
      *
      * <p>
-     * <strong>Note:</strong> The GitHub API endpoint used by this method does not return line-related fields such as
-     * {@link GHPullRequestReviewComment#getLine() line}, {@link GHPullRequestReviewComment#getOriginalLine()
-     * originalLine}, {@link GHPullRequestReviewComment#getSide() side},
-     * {@link GHPullRequestReviewComment#getStartLine() startLine}, etc. These fields will return their default values
-     * (-1 or UNKNOWN).
+     * The GitHub API endpoint used by this method returns a limited set of fields. To obtain full comment data
+     * including line numbers, use {@link ReviewComment#readPullRequestReviewComment()} on individual comments, or use
+     * {@link GHPullRequest#listReviewComments()} instead.
      *
-     * <p>
-     * If you need line number information, use {@link GHPullRequest#listReviewComments()} instead and filter by
-     * {@link GHPullRequestReviewComment#getPullRequestReviewId()} if needed.
-     *
-     * @return the paged iterable
+     * @return the paged iterable of {@link ReviewComment} objects
      * @see GHPullRequest#listReviewComments()
+     * @see ReviewComment#readPullRequestReviewComment()
      */
-    public PagedIterable<GHPullRequestReviewComment> listReviewComments() {
+    public PagedIterable<ReviewComment> listReviewComments() {
         return owner.root()
                 .createRequest()
                 .withUrlPath(getApiRoute() + "/comments")
-                .toIterable(GHPullRequestReviewComment[].class, item -> item.wrapUp(owner));
+                .toIterable(ReviewComment[].class, item -> item.wrapUp(owner));
     }
 
     /**

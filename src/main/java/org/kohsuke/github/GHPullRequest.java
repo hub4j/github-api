@@ -531,13 +531,9 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * Obtains all the review comments associated with this pull request.
      *
      * <p>
-     * This method uses the pull request comments endpoint which returns complete comment data including
-     * {@link GHPullRequestReviewComment#getLine() line}, {@link GHPullRequestReviewComment#getOriginalLine()
-     * originalLine}, {@link GHPullRequestReviewComment#getSide() side}, and other position-related fields.
-     *
-     * <p>
-     * If you need line number information, prefer this method over {@link GHPullRequestReview#listReviewComments()},
-     * which uses a different API endpoint that does not return line-related fields.
+     * Unlike {@link GHPullRequestReview#listReviewComments()}, this method returns full
+     * {@link GHPullRequestReviewComment} objects including line-related fields such as
+     * {@link GHPullRequestReviewComment#getLine() line}, {@link GHPullRequestReviewComment#getSide() side}, etc.
      *
      * @return the paged iterable
      * @see GHPullRequestReview#listReviewComments()

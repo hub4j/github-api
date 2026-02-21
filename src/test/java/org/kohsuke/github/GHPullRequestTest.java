@@ -739,25 +739,22 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(review.getBody(), is("Some draft review"));
         assertThat(review.getCommitId(), notNullValue());
         draftReview.submit("Some review comment", GHPullRequestReviewEvent.COMMENT);
-        List<GHPullRequestReviewComment> comments = review.listReviewComments().toList();
+        List<GHPullRequestReview.ReviewComment> comments = review.listReviewComments().toList();
         assertThat(comments.size(), equalTo(3));
-        GHPullRequestReviewComment comment = comments.get(0);
+        GHPullRequestReview.ReviewComment comment = comments.get(0);
         assertThat(comment.getBody(), equalTo("Some niggle"));
-
-        // Verify that line is not available when fetched via review.listReviewComments()
-        // due to GitHub API limitation (the review comments endpoint doesn't return line field)
-        assertThat(comment.getLine(), equalTo(-1));
-
-        // After refresh(), line information should be available
-        comment.refresh();
-        assertThat(comment.getLine(), equalTo(1));
-
         comment = comments.get(1);
         assertThat(comment.getBody(), equalTo("A single line comment"));
         assertThat(comment.getPosition(), equalTo(4));
         comment = comments.get(2);
         assertThat(comment.getBody(), equalTo("A multiline comment"));
         assertThat(comment.getPosition(), equalTo(5));
+
+        // Verify that readPullRequestReviewComment() fetches the full comment with line data
+        GHPullRequestReviewComment fullComment = comments.get(0).readPullRequestReviewComment();
+        assertThat(fullComment.getBody(), equalTo("Some niggle"));
+        assertThat(fullComment.getLine(), equalTo(1));
+
         draftReview = p.createReview().body("Some new review").comment("Some niggle", "README.md", 1).create();
         draftReview.delete();
     }

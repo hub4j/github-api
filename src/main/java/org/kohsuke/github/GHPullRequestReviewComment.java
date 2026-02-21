@@ -40,7 +40,7 @@ import javax.annotation.CheckForNull;
  * @see GHPullRequest#createReviewComment(String, String, String, int) GHPullRequest#createReviewComment(String, String,
  *      String, int)
  */
-public class GHPullRequestReviewComment extends GHObject implements Reactable, Refreshable {
+public class GHPullRequestReviewComment extends GHObject implements Reactable {
 
     /**
      * The side of the diff to which the comment applies
@@ -219,12 +219,12 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable, R
      * Gets The line of the blob to which the comment applies. The last line of the range for a multi-line comment.
      *
      * <p>
-     * <strong>Note:</strong> This field is only populated when comments are retrieved via
-     * {@link GHPullRequest#listReviewComments()}. When retrieved via {@link GHPullRequestReview#listReviewComments()},
-     * this method returns -1 due to limitations in the GitHub API.
+     * This field is not available on {@link GHPullRequestReview.ReviewComment} objects returned by
+     * {@link GHPullRequestReview#listReviewComments()}. Use
+     * {@link GHPullRequestReview.ReviewComment#readPullRequestReviewComment()} or
+     * {@link GHPullRequest#listReviewComments()} to obtain this value.
      *
      * @return the line to which the comment applies, or -1 if not available
-     * @see GHPullRequest#listReviewComments()
      */
     public int getLine() {
         return line;
@@ -243,12 +243,12 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable, R
      * Gets The line of the blob to which the comment applies. The last line of the range for a multi-line comment.
      *
      * <p>
-     * <strong>Note:</strong> This field is only populated when comments are retrieved via
-     * {@link GHPullRequest#listReviewComments()}. When retrieved via {@link GHPullRequestReview#listReviewComments()},
-     * this method returns -1 due to limitations in the GitHub API.
+     * This field is not available on {@link GHPullRequestReview.ReviewComment} objects returned by
+     * {@link GHPullRequestReview#listReviewComments()}. Use
+     * {@link GHPullRequestReview.ReviewComment#readPullRequestReviewComment()} or
+     * {@link GHPullRequest#listReviewComments()} to obtain this value.
      *
      * @return the line to which the comment applies, or -1 if not available
-     * @see GHPullRequest#listReviewComments()
      */
     public int getOriginalLine() {
         return originalLine;
@@ -267,12 +267,12 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable, R
      * Gets The first line of the range for a multi-line comment.
      *
      * <p>
-     * <strong>Note:</strong> This field is only populated when comments are retrieved via
-     * {@link GHPullRequest#listReviewComments()}. When retrieved via {@link GHPullRequestReview#listReviewComments()},
-     * this method returns -1 due to limitations in the GitHub API.
+     * This field is not available on {@link GHPullRequestReview.ReviewComment} objects returned by
+     * {@link GHPullRequestReview#listReviewComments()}. Use
+     * {@link GHPullRequestReview.ReviewComment#readPullRequestReviewComment()} or
+     * {@link GHPullRequest#listReviewComments()} to obtain this value.
      *
      * @return the original start line, or -1 if not available or not a multi-line comment
-     * @see GHPullRequest#listReviewComments()
      */
     public int getOriginalStartLine() {
         return originalStartLine != null ? originalStartLine : -1;
@@ -339,12 +339,12 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable, R
      * comment.
      *
      * <p>
-     * <strong>Note:</strong> This field is only populated when comments are retrieved via
-     * {@link GHPullRequest#listReviewComments()}. When retrieved via {@link GHPullRequestReview#listReviewComments()},
-     * this method returns {@link Side#UNKNOWN} due to limitations in the GitHub API.
+     * This field is not available on {@link GHPullRequestReview.ReviewComment} objects returned by
+     * {@link GHPullRequestReview#listReviewComments()}. Use
+     * {@link GHPullRequestReview.ReviewComment#readPullRequestReviewComment()} or
+     * {@link GHPullRequest#listReviewComments()} to obtain this value.
      *
      * @return {@link Side} the side of the diff to which the comment applies, or {@link Side#UNKNOWN} if not available
-     * @see GHPullRequest#listReviewComments()
      */
     public Side getSide() {
         return Side.from(side);
@@ -354,12 +354,12 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable, R
      * Gets The first line of the range for a multi-line comment.
      *
      * <p>
-     * <strong>Note:</strong> This field is only populated when comments are retrieved via
-     * {@link GHPullRequest#listReviewComments()}. When retrieved via {@link GHPullRequestReview#listReviewComments()},
-     * this method returns -1 due to limitations in the GitHub API.
+     * This field is not available on {@link GHPullRequestReview.ReviewComment} objects returned by
+     * {@link GHPullRequestReview#listReviewComments()}. Use
+     * {@link GHPullRequestReview.ReviewComment#readPullRequestReviewComment()} or
+     * {@link GHPullRequest#listReviewComments()} to obtain this value.
      *
      * @return the start line, or -1 if not available or not a multi-line comment
-     * @see GHPullRequest#listReviewComments()
      */
     public int getStartLine() {
         return startLine != null ? startLine : -1;
@@ -369,12 +369,12 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable, R
      * Gets The side of the first line of the range for a multi-line comment.
      *
      * <p>
-     * <strong>Note:</strong> This field is only populated when comments are retrieved via
-     * {@link GHPullRequest#listReviewComments()}. When retrieved via {@link GHPullRequestReview#listReviewComments()},
-     * this method returns {@link Side#UNKNOWN} due to limitations in the GitHub API.
+     * This field is not available on {@link GHPullRequestReview.ReviewComment} objects returned by
+     * {@link GHPullRequestReview#listReviewComments()}. Use
+     * {@link GHPullRequestReview.ReviewComment#readPullRequestReviewComment()} or
+     * {@link GHPullRequest#listReviewComments()} to obtain this value.
      *
      * @return {@link Side} the side of the first line, or {@link Side#UNKNOWN} if not available
-     * @see GHPullRequest#listReviewComments()
      */
     public Side getStartSide() {
         return Side.from(startSide);
@@ -401,22 +401,6 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable, R
                 .createRequest()
                 .withUrlPath(getApiRoute() + "/reactions")
                 .toIterable(GHReaction[].class, item -> owner.root());
-    }
-
-    /**
-     * Refreshes this comment by fetching the full data from the API.
-     *
-     * <p>
-     * This is useful when the comment was obtained via {@link GHPullRequestReview#listReviewComments()}, which uses a
-     * GitHub API endpoint that does not return line-related fields. After calling this method, fields like
-     * {@link #getLine()}, {@link #getOriginalLine()}, {@link #getSide()}, etc. will return their actual values.
-     *
-     * @throws IOException
-     *             if an I/O error occurs
-     * @see GHPullRequest#listReviewComments()
-     */
-    public void refresh() throws IOException {
-        owner.root().createRequest().withUrlPath(getApiRoute()).fetchInto(this).wrapUp(owner);
     }
 
     /**

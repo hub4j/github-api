@@ -743,6 +743,12 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         assertThat(comments.size(), equalTo(3));
         GHPullRequestReview.ReviewComment comment = comments.get(0);
         assertThat(comment.getBody(), equalTo("Some niggle"));
+        assertThat(comment.getPath(), equalTo("README.md"));
+        assertThat(comment.getCommitId(), equalTo("07374fe73aff1c2024a8d4114b32406c7a8e89b7"));
+        assertThat(comment.getOriginalCommitId(), equalTo("07374fe73aff1c2024a8d4114b32406c7a8e89b7"));
+        assertThat(comment.getDiffHunk(), notNullValue());
+        assertThat(comment.getAuthorAssociation(), equalTo(GHCommentAuthorAssociation.MEMBER));
+        assertThat(comment.getOriginalPosition(), equalTo(1));
         comment = comments.get(1);
         assertThat(comment.getBody(), equalTo("A single line comment"));
         assertThat(comment.getPosition(), equalTo(4));

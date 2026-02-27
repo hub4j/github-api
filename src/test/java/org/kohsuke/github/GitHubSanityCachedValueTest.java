@@ -21,6 +21,13 @@ public class GitHubSanityCachedValueTest {
         }
     }
 
+    /**
+     * Tests that the cache returns the same value without querying again when accessed multiple times within the same
+     * second.
+     *
+     * @throws Exception
+     *             if the test fails
+     */
     @Test
     public void cachesWithinSameSecond() throws Exception {
         alignToStartOfSecond();
@@ -41,6 +48,13 @@ public class GitHubSanityCachedValueTest {
         assertThat(calls.get(), equalTo(1));
     }
 
+    /**
+     * Tests that multiple concurrent callers only trigger a single refresh of the cached value, preventing redundant
+     * queries.
+     *
+     * @throws Exception
+     *             if the test fails
+     */
     @Test
     public void concurrentCallersOnlyRefreshOnce() throws Exception {
         alignToStartOfSecond();
@@ -82,6 +96,13 @@ public class GitHubSanityCachedValueTest {
         }
     }
 
+    /**
+     * Tests that the cache is refreshed after one second has elapsed, triggering a new query to retrieve the updated
+     * value.
+     *
+     * @throws Exception
+     *             if the test fails
+     */
     @Test
     public void refreshesAfterOneSecond() throws Exception {
         GitHubSanityCachedValue<String> cachedValue = new GitHubSanityCachedValue<>();

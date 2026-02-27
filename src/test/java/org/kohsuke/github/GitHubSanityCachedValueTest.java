@@ -15,6 +15,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class GitHubSanityCachedValueTest {
 
+    private static void alignToStartOfSecond() {
+        while (Instant.now().getNano() > 100_000_000) {
+            Thread.yield();
+        }
+    }
+
     @Test
     public void cachesWithinSameSecond() throws Exception {
         alignToStartOfSecond();
@@ -33,28 +39,6 @@ public class GitHubSanityCachedValueTest {
         assertThat(first, equalTo("value"));
         assertThat(second, equalTo("value"));
         assertThat(calls.get(), equalTo(1));
-    }
-
-    @Test
-    public void refreshesAfterOneSecond() throws Exception {
-        GitHubSanityCachedValue<String> cachedValue = new GitHubSanityCachedValue<>();
-        AtomicInteger calls = new AtomicInteger();
-
-        String first = cachedValue.get(() -> {
-            calls.incrementAndGet();
-            return "value";
-        });
-
-        Thread.sleep(1100);
-
-        String second = cachedValue.get(() -> {
-            calls.incrementAndGet();
-            return "value";
-        });
-
-        assertThat(first, equalTo("value"));
-        assertThat(second, equalTo("value"));
-        assertThat(calls.get(), equalTo(2));
     }
 
     @Test
@@ -98,10 +82,25 @@ public class GitHubSanityCachedValueTest {
         }
     }
 
-    private static void alignToStartOfSecond() {
-        while (Instant.now().getNano() > 100_000_000) {
-            Thread.yield();
-        }
+    @Test
+    public void refreshesAfterOneSecond() throws Exception {
+        GitHubSanityCachedValue<String> cachedValue = new GitHubSanityCachedValue<>();
+        AtomicInteger calls = new AtomicInteger();
+
+        String first = cachedValue.get(() -> {
+            calls.incrementAndGet();
+            return "value";
+        });
+
+        Thread.sleep(1100);
+
+        String second = cachedValue.get(() -> {
+            calls.incrementAndGet();
+            return "value";
+        });
+
+        assertThat(first, equalTo("value"));
+        assertThat(second, equalTo("value"));
+        assertThat(calls.get(), equalTo(2));
     }
 }
-

@@ -40,7 +40,6 @@ class GitHubSanityCachedValue<T> {
         } finally {
             readLock.unlock();
         }
-
         writeLock.lock();
         try {
             boolean stillExpired = Instant.now().getEpochSecond() > lastQueriedAtEpochSeconds || isExpired.apply(lastResult);

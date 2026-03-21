@@ -73,12 +73,12 @@ public class GHRepositoryRuleTest {
      */
     @Test
     public void testParameters() {
-        assertThat(Parameters.REQUIRED_DEPLOYMENT_ENVIRONMENTS.getType(), is(notNullValue()));
-        assertThat(Parameters.REQUIRED_STATUS_CHECKS.getType(), is(notNullValue()));
-        assertThat(Parameters.OPERATOR.getType(), is(notNullValue()));
-        assertThat(Parameters.WORKFLOWS.getType(), is(notNullValue()));
-        assertThat(Parameters.CODE_SCANNING_TOOLS.getType(), is(notNullValue()));
-        assertThat(new StringParameter("any").getType(), is(notNullValue()));
+        assertThat(Parameters.REQUIRED_DEPLOYMENT_ENVIRONMENTS, is(notNullValue()));
+        assertThat(Parameters.REQUIRED_STATUS_CHECKS, is(notNullValue()));
+        assertThat(Parameters.OPERATOR, is(notNullValue()));
+        assertThat(Parameters.WORKFLOWS, is(notNullValue()));
+        assertThat(Parameters.CODE_SCANNING_TOOLS, is(notNullValue()));
+        assertThat(new StringParameter("any"), is(notNullValue()));
     }
 
     /**

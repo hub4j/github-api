@@ -117,8 +117,8 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
     /**
      * List parameter for a ruleset.
      *
-     * @param <T>
-     *            the type of the list
+     * @param <U>
+     *            the type of the items in the list
      */
     public abstract static class ListParameter<U> extends Parameter<List<U>> {
 
@@ -132,7 +132,7 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          */
         public ListParameter(String key) {
             super(key, null);
-            throw new NoClassDefFoundError("This constructor should not have been public.");
+            throw new GHException("This constructor should not have been public.");
         }
 
         /**
@@ -201,7 +201,7 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          *            the key
          */
         protected Parameter(String key) {
-            throw new NoClassDefFoundError("This constructor should not have been protected.");
+            throw new GHException("This constructor should not have been protected.");
         }
 
         /**

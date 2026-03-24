@@ -100,6 +100,42 @@ public class GitHubSanityCachedValueTest {
     }
 
     /**
+     * Tests that the {@code isExpired} predicate alone can force a cache refresh even when the cached value is still
+     * current within the same second. This exercises the branch where the time-check condition ({@code A}) evaluates to
+     * {@code false} but the {@code isExpired} predicate ({@code B}) evaluates to {@code true}, covering the
+     * {@code A=false, B=true} path in both the read-lock check and the write-lock double-check inside
+     * {@code GitHubSanityCachedValue}.
+     *
+     * @throws Exception
+     *             if the test fails
+     */
+    @Test
+    public void isExpiredPredicateTriggersRefreshWithinSameSecond() throws Exception {
+        alignToStartOfSecond();
+        GitHubSanityCachedValue<String> cachedValue = new GitHubSanityCachedValue<>();
+        AtomicInteger calls = new AtomicInteger();
+
+        // Populate the cache within the current second using an isExpired predicate that never
+        // expires on its own.
+        String first = cachedValue.get(result -> false, () -> {
+            calls.incrementAndGet();
+            return "stale";
+        });
+
+        // Within the same second, pass an isExpired predicate that always returns true. This forces
+        // re-evaluation through the write lock even though the time has not elapsed, covering the
+        // A=false, B=true branch in both compound conditions.
+        String second = cachedValue.get(result -> true, () -> {
+            calls.incrementAndGet();
+            return "fresh";
+        });
+
+        assertThat(first, equalTo("stale"));
+        assertThat(second, equalTo("fresh"));
+        assertThat(calls.get(), equalTo(2));
+    }
+
+    /**
      * Tests that the cache is refreshed after one second has elapsed, triggering a new query to retrieve the updated
      * value.
      *

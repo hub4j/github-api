@@ -226,6 +226,49 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test marking a draft pull request as ready for review.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void convertToDraft() throws Exception {
+        // Create a draft PR first
+        GHPullRequest p = getRepository()
+                .createPullRequest("convertToDraft", "test/stable", "main", "## test", false, false);
+        assertThat(p.isDraft(), is(false));
+
+        // Mark it ready for review
+        p.convertToDraft();
+
+        // Verify it's no longer a draft
+        assertThat(p.isDraft(), is(true));
+    }
+
+    /**
+     * Test marking a draft pull request as ready for review.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void convertToDraftFromDraft() throws Exception {
+        // Create a draft PR first
+        GHPullRequest p = getRepository()
+                .createPullRequest("convertToDraft", "test/stable", "main", "## test", false, true);
+        assertThat(p.isDraft(), is(true));
+
+        // Mark it ready for review
+        try {
+            p.convertToDraft();
+            fail("Expected IllegalStateException");
+        } catch (IllegalStateException e) {
+            assertThat(e.getMessage(), equalTo("Pull request is already a draft"));
+        }
+
+    }
+
+    /**
      * Creates the draft pull request.
      *
      * @throws Exception

@@ -649,6 +649,24 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test rerun variants.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testRerunVariants() throws IOException {
+        GHWorkflowRun workflowRun = repo.getWorkflowRun(686036126L);
+
+        assertThat(workflowRun.getId(), is(686036126L));
+
+        workflowRun.rerunFailedJobs();
+        workflowRun.rerunFailedJobs(true);
+        workflowRun.rerun(true);
+        workflowRun.rerun();
+    }
+
+    /**
      * Test search on branch.
      *
      * @throws IOException

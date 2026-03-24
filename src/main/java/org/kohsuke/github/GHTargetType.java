@@ -13,6 +13,8 @@ import java.util.Locale;
  */
 public enum GHTargetType {
 
+    /** The enterprise. */
+    ENTERPRISE,
     /** The organization. */
     ORGANIZATION,
     /** The user. */

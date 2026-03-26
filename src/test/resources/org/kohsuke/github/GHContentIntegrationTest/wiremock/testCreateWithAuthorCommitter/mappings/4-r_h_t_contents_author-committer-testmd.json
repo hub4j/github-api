@@ -11,7 +11,7 @@
     },
     "bodyPatterns": [
       {
-        "equalToJson": "{\"path\":\"author-committer-test.md\",\"message\":\"Creating with custom author and committer\",\"content\":\"dGVzdCBjb250ZW50Cg==\",\"author\":{\"name\":\"John Doe\",\"email\":\"john@example.com\",\"date\":\"2009-02-13T23:31:30Z\"},\"committer\":{\"name\":\"Service Account\",\"email\":\"service@example.com\",\"date\":\"2009-02-13T23:31:30Z\"}}",
+        "equalToJson": "{\"path\":\"author-committer-test.md\",\"message\":\"Creating with custom author and committer\",\"content\":\"dGVzdCBjb250ZW50Cg==\",\"author\":{\"name\":\"John Doe\",\"email\":\"john@example.com\"},\"committer\":{\"name\":\"Service Account\",\"email\":\"service@example.com\"}}",
         "ignoreArrayOrder": true,
         "ignoreExtraElements": false
       }

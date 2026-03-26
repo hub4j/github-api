@@ -1,0 +1,24 @@
+{
+  "id": "a1b2c3d4-e5f6-7890-abcd-300000000001",
+  "name": "repos_hub4j-test-org_ghcontentintegrationtest_contents_ghcontent-ro_a-file-with-content",
+  "request": {
+    "url": "/repos/hub4j-test-org/GHContentIntegrationTest/contents/ghcontent-ro/a-file-with-content",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "3-r_h_g_contents_ghcontent-ro_a-file-with-content.json",
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "200 OK"
+    }
+  },
+  "uuid": "a1b2c3d4-e5f6-7890-abcd-300000000001",
+  "persistent": true,
+  "insertionIndex": 3
+}

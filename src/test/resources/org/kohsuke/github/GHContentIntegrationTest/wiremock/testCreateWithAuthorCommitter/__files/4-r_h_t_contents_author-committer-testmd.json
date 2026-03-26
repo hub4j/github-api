@@ -1,0 +1,52 @@
+{
+  "content": {
+    "name": "author-committer-test.md",
+    "path": "author-committer-test.md",
+    "sha": "aabbccdd11223344556677889900aabbccddeeff",
+    "size": 13,
+    "url": "https://api.github.com/repos/hub4j-test-org/temp-testCreateWithAuthorCommitter/contents/author-committer-test.md?ref=main",
+    "html_url": "https://github.com/hub4j-test-org/temp-testCreateWithAuthorCommitter/blob/main/author-committer-test.md",
+    "git_url": "https://api.github.com/repos/hub4j-test-org/temp-testCreateWithAuthorCommitter/git/blobs/aabbccdd11223344556677889900aabbccddeeff",
+    "download_url": "https://raw.githubusercontent.com/hub4j-test-org/temp-testCreateWithAuthorCommitter/main/author-committer-test.md",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/hub4j-test-org/temp-testCreateWithAuthorCommitter/contents/author-committer-test.md?ref=main",
+      "git": "https://api.github.com/repos/hub4j-test-org/temp-testCreateWithAuthorCommitter/git/blobs/aabbccdd11223344556677889900aabbccddeeff",
+      "html": "https://github.com/hub4j-test-org/temp-testCreateWithAuthorCommitter/blob/main/author-committer-test.md"
+    }
+  },
+  "commit": {
+    "sha": "1122334455667788990011223344556677889900",
+    "node_id": "MDY6Q29tbWl0OTk5MDAwMDAxOjExMjIzMzQ0NTU2Njc3ODg5OTAwMTEyMjMzNDQ1NTY2Nzc4ODk5MDA=",
+    "url": "https://api.github.com/repos/hub4j-test-org/temp-testCreateWithAuthorCommitter/git/commits/1122334455667788990011223344556677889900",
+    "html_url": "https://github.com/hub4j-test-org/temp-testCreateWithAuthorCommitter/commit/1122334455667788990011223344556677889900",
+    "author": {
+      "name": "John Doe",
+      "email": "john@example.com",
+      "date": "2024-01-01T00:00:00Z"
+    },
+    "committer": {
+      "name": "Service Account",
+      "email": "service@example.com",
+      "date": "2024-01-01T00:00:00Z"
+    },
+    "tree": {
+      "sha": "aabb00112233445566778899aabb00112233ccdd",
+      "url": "https://api.github.com/repos/hub4j-test-org/temp-testCreateWithAuthorCommitter/git/trees/aabb00112233445566778899aabb00112233ccdd"
+    },
+    "message": "Creating with custom author and committer",
+    "parents": [
+      {
+        "sha": "0000111122223333444455556666777788889999",
+        "url": "https://api.github.com/repos/hub4j-test-org/temp-testCreateWithAuthorCommitter/git/commits/0000111122223333444455556666777788889999",
+        "html_url": "https://github.com/hub4j-test-org/temp-testCreateWithAuthorCommitter/commit/0000111122223333444455556666777788889999"
+      }
+    ],
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null
+    }
+  }
+}

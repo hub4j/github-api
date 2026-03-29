@@ -80,6 +80,7 @@ public class AotIntegrationTest {
 
     private Stream<String> readAotConfigToStreamOfClassNames(String reflectionConfig) throws IOException {
         byte[] reflectionConfigFileAsBytes = Files.readAllBytes(Path.of(reflectionConfig));
+        // Test methods are allowed to directly use whatever jackson is available.
         ArrayNode reflectConfigJsonArray = (ArrayNode) JsonMapper.builder()
                 .build()
                 .readTree(reflectionConfigFileAsBytes);

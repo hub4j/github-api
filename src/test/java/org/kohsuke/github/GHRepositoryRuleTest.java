@@ -16,11 +16,12 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThrows;
 
 /**
  * Test class for GHRepositoryRule.
  */
-public class GHRepositoryRuleTest {
+public class GHRepositoryRuleTest extends AbstractGitHubWireMockTest {
 
     /**
      * Create default GHRepositoryRuleTest instance
@@ -70,15 +71,24 @@ public class GHRepositoryRuleTest {
 
     /**
      * Test to cover the constructor of the Parameters class.
+     *
+     * @throws Exception
+     *             if something goes wrong.
      */
     @Test
-    public void testParameters() {
-        assertThat(Parameters.REQUIRED_DEPLOYMENT_ENVIRONMENTS.getType(), is(notNullValue()));
-        assertThat(Parameters.REQUIRED_STATUS_CHECKS.getType(), is(notNullValue()));
-        assertThat(Parameters.OPERATOR.getType(), is(notNullValue()));
-        assertThat(Parameters.WORKFLOWS.getType(), is(notNullValue()));
-        assertThat(Parameters.CODE_SCANNING_TOOLS.getType(), is(notNullValue()));
-        assertThat(new StringParameter("any").getType(), is(notNullValue()));
+    public void testParameters() throws Exception {
+        assertThat(Parameters.REQUIRED_DEPLOYMENT_ENVIRONMENTS, is(notNullValue()));
+        assertThat(Parameters.REQUIRED_STATUS_CHECKS, is(notNullValue()));
+        assertThat(Parameters.OPERATOR, is(notNullValue()));
+        assertThat(Parameters.WORKFLOWS, is(notNullValue()));
+        assertThat(Parameters.CODE_SCANNING_TOOLS, is(notNullValue()));
+        assertThat(Parameters.CODE_SCANNING_TOOLS.apply("[]", this.gitHub), is(notNullValue()));
+        assertThat(new StringParameter("any"), is(notNullValue()));
+
+        assertThrows(GHException.class, () -> new GHRepositoryRule.ListParameter<Object>("") {
+        });
+        assertThrows(GHException.class, () -> new GHRepositoryRule.Parameter<Object>("") {
+        });
     }
 
     /**

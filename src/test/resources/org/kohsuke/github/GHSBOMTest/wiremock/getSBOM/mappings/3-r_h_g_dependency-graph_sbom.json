@@ -1,0 +1,47 @@
+{
+  "id": "9f660fc2-8293-47e1-9a02-ff520ec1a3c8",
+  "name": "repos_hub4j_github-api_dependency-graph_sbom",
+  "request": {
+    "url": "/repos/hub4j/github-api/dependency-graph/sbom",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "3-r_h_g_dependency-graph_sbom.json",
+    "headers": {
+      "Date": "Sun, 25 Jan 2026 20:41:52 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
+      "ETag": "W/\"6a7fd8420f2ebcb127ef4b8379638f4d547d2e1bb1a100de08eaf29fb98364d3\"",
+      "X-OAuth-Scopes": "repo",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "github-authentication-token-expiration": "2026-02-19 19:55:13 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-RateLimit-Limit": "100",
+      "X-RateLimit-Remaining": "99",
+      "X-RateLimit-Reset": "1769373772",
+      "X-RateLimit-Used": "1",
+      "X-RateLimit-Resource": "dependency_sbom",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Server": "github.com",
+      "X-GitHub-Request-Id": "D814:19034C:6982F8E:5A5E487:6976800F"
+    }
+  },
+  "uuid": "9f660fc2-8293-47e1-9a02-ff520ec1a3c8",
+  "persistent": true,
+  "insertionIndex": 3
+}

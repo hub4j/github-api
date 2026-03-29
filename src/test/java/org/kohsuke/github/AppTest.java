@@ -856,6 +856,52 @@ public class AppTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test issue search with isIssue filter to exclude pull requests.
+     */
+    @Test
+    public void testIssueSearchIssuesOnly() {
+        PagedSearchIterable<GHIssue> r = gitHub.searchIssues()
+                .repo("hub4j", "github-api")
+                .isPullRequest()
+                .isIssue()
+                .isClosed()
+                .sort(GHIssueSearchBuilder.Sort.CREATED)
+                .list();
+        assertThat(r.getTotalCount(), greaterThan(0));
+        int count = 0;
+        for (GHIssue issue : r) {
+            assertThat(issue.getTitle(), notNullValue());
+            assertThat(issue.getPullRequest(), nullValue());
+            if (++count >= 3) {
+                break;
+            }
+        }
+    }
+
+    /**
+     * Test issue search with isPullRequest filter to only return pull requests.
+     */
+    @Test
+    public void testIssueSearchPullRequestsOnly() {
+        PagedSearchIterable<GHIssue> r = gitHub.searchIssues()
+                .repo("hub4j", "github-api")
+                .isIssue()
+                .isPullRequest()
+                .isClosed()
+                .sort(GHIssueSearchBuilder.Sort.CREATED)
+                .list();
+        assertThat(r.getTotalCount(), greaterThan(0));
+        int count = 0;
+        for (GHIssue issue : r) {
+            assertThat(issue.getTitle(), notNullValue());
+            assertThat(issue.getPullRequest(), notNullValue());
+            if (++count >= 3) {
+                break;
+            }
+        }
+    }
+
+    /**
      * Test issue with comment.
      *
      * @throws IOException

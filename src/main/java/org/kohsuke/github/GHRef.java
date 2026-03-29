@@ -126,6 +126,24 @@ public class GHRef extends GitHubInteractiveObject {
         return repository.root().createRequest().withUrlPath(url).toIterable(GHRef[].class, item -> repository.root());
     }
 
+    /**
+     * Retrieves all refs that match the given prefix using the matching-refs endpoint.
+     *
+     * @param repository
+     *            the repository to read from
+     * @param refPrefix
+     *            the ref prefix to search for e.g. <code>heads/main</code> or <code>tags/v1</code>
+     * @return paged iterable of all refs matching the specified prefix
+     */
+    static PagedIterable<GHRef> readMatchingRefs(GHRepository repository, String refPrefix) {
+        if (refPrefix.startsWith("refs/")) {
+            refPrefix = refPrefix.replaceFirst("refs/", "");
+        }
+
+        String url = repository.getApiTailUrl(String.format("git/matching-refs/%s", refPrefix));
+        return repository.root().createRequest().withUrlPath(url).toIterable(GHRef[].class, item -> repository.root());
+    }
+
     private GHObject object;
 
     private String ref, url;

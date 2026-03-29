@@ -1081,6 +1081,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getPullRequest().getBase().getLabel(), is("baxterthehacker:main"));
         assertThat(event.getPullRequest().getBase().getSha(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
         assertThat(event.getPullRequest().isMerged(), is(false));
+        assertThat(event.getPullRequest().isPullRequest(), is(true));
         assertThat(event.getPullRequest().getMergeable(), nullValue());
         assertThat(event.getPullRequest().getMergeableState(), is("unknown"));
         assertThat(event.getPullRequest().getMergedBy(), nullValue());

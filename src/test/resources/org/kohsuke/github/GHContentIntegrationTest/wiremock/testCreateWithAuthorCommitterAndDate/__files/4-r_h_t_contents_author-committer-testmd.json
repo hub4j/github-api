@@ -23,12 +23,12 @@
     "author": {
       "name": "John Doe",
       "email": "john@example.com",
-      "date": "2024-01-01T00:00:00Z"
+      "date": "2009-02-13T23:31:30Z"
     },
     "committer": {
       "name": "Service Account",
       "email": "service@example.com",
-      "date": "2024-01-01T00:00:00Z"
+      "date": "2009-02-13T23:31:30Z"
     },
     "tree": {
       "sha": "aabb00112233445566778899aabb00112233ccdd",

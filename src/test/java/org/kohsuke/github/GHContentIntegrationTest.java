@@ -193,8 +193,10 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         assertThat(response.getCommit(), notNullValue());
         assertThat(response.getCommit().getAuthor().getName(), equalTo("John Doe"));
         assertThat(response.getCommit().getAuthor().getEmail(), equalTo("john@example.com"));
+        assertThat(response.getCommit().getAuthoredDate(), equalTo(GitHubClient.parseInstant("2009-02-13T23:31:30Z")));
         assertThat(response.getCommit().getCommitter().getName(), equalTo("Service Account"));
         assertThat(response.getCommit().getCommitter().getEmail(), equalTo("service@example.com"));
+        assertThat(response.getCommit().getCommitDate(), equalTo(GitHubClient.parseInstant("2009-02-13T23:31:30Z")));
     }
 
     /**
@@ -240,8 +242,10 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         assertThat(response.getCommit(), notNullValue());
         assertThat(response.getCommit().getAuthor().getName(), equalTo("John Doe"));
         assertThat(response.getCommit().getAuthor().getEmail(), equalTo("john@example.com"));
+        assertThat(response.getCommit().getAuthoredDate(), equalTo(GitHubClient.parseInstant("2009-02-13T23:31:30Z")));
         assertThat(response.getCommit().getCommitter().getName(), equalTo("Service Account"));
         assertThat(response.getCommit().getCommitter().getEmail(), equalTo("service@example.com"));
+        assertThat(response.getCommit().getCommitDate(), equalTo(GitHubClient.parseInstant("2009-02-13T23:31:30Z")));
     }
 
     /**
@@ -466,8 +470,10 @@ public class GHContentIntegrationTest extends AbstractGitHubWireMockTest {
         assertThat(response.getCommit(), notNullValue());
         assertThat(response.getCommit().getAuthor().getName(), equalTo("John Doe"));
         assertThat(response.getCommit().getAuthor().getEmail(), equalTo("john@example.com"));
+        assertThat(response.getCommit().getAuthoredDate(), equalTo(GitHubClient.parseInstant("2009-02-13T23:31:30Z")));
         assertThat(response.getCommit().getCommitter().getName(), equalTo("Service Account"));
         assertThat(response.getCommit().getCommitter().getEmail(), equalTo("service@example.com"));
+        assertThat(response.getCommit().getCommitDate(), equalTo(GitHubClient.parseInstant("2009-02-13T23:31:30Z")));
     }
 
     /**

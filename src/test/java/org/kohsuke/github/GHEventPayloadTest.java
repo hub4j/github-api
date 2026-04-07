@@ -691,6 +691,21 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Issue unlabeled when label was deleted from repository.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void issue_unlabeled_deleted_label() throws Exception {
+        final GHEventPayload.Issue event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Issue.class);
+        assertThat(event.getAction(), is("unlabeled"));
+        assertThat(event.getIssue().getNumber(), is(42));
+        assertThat(event.getLabel(), is(nullValue()));
+    }
+
+    /**
      * Issues.
      *
      * @throws Exception

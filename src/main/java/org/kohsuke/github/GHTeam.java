@@ -511,6 +511,58 @@ public class GHTeam extends GHObject implements Refreshable {
         root().createRequest().method("PATCH").with("privacy", privacy).withUrlPath(api("")).send();
     }
 
+    /**
+     * Sets the team's name.
+     *
+     * @param name
+     *            the new name
+     * @throws IOException
+     *             the io exception
+     */
+    public void setName(String name) throws IOException {
+        root().createRequest().method("PATCH").with("name", name).withUrlPath(api("")).send();
+    }
+
+    /**
+     * Sets the team's notification setting.
+     *
+     * @param notificationSetting
+     *            the notification setting (e.g. "notifications_enabled" or "notifications_disabled")
+     * @throws IOException
+     *             the io exception
+     */
+    public void setNotificationSetting(String notificationSetting) throws IOException {
+        root().createRequest()
+                .method("PATCH")
+                .with("notification_setting", notificationSetting)
+                .withUrlPath(api(""))
+                .send();
+    }
+
+    /**
+     * Sets the team's permission.
+     *
+     * @param permission
+     *            the permission (e.g. "pull", "push", or "admin")
+     * @throws IOException
+     *             the io exception
+     */
+    public void setPermission(String permission) throws IOException {
+        root().createRequest().method("PATCH").with("permission", permission).withUrlPath(api("")).send();
+    }
+
+    /**
+     * Sets the team's parent team by ID.
+     *
+     * @param parentTeamId
+     *            the ID of the parent team, or {@code null} to remove the parent
+     * @throws IOException
+     *             the io exception
+     */
+    public void setParentTeamId(Long parentTeamId) throws IOException {
+        root().createRequest().method("PATCH").with("parent_team_id", parentTeamId).withUrlPath(api("")).send();
+    }
+
     private String api(String tail) {
         if (organization == null) {
             // Teams returned from pull requests to do not have an organization. Attempt to use url.

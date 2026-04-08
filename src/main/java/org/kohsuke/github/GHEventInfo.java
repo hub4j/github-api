@@ -1,6 +1,5 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -84,8 +83,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
     private long id;
     private GHOrganization org;
 
-    // we don't want to expose Jackson dependency to the user. This needs databinding
-    private ObjectNode payload;
+    private Object payload;
 
     // these are all shallow objects
     private GHEventRepository repo;
@@ -174,7 +172,9 @@ public class GHEventInfo extends GitHubInteractiveObject {
      *             if payload cannot be parsed
      */
     public <T extends GHEventPayload> T getPayload(Class<T> type) throws IOException {
-        T v = GitHubClient.getMappingObjectReader(root()).forType(type).readValue(payload);
+        T v = GitHubClient.getMappingObjectReader(root())
+                .forType(type)
+                .readValue(GitHubClient.getMappingObjectWriter().writeValueAsString(payload));
         v.lateBind();
         return v;
     }

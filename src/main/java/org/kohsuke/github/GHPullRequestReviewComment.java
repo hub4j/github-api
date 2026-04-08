@@ -167,7 +167,13 @@ public class GHPullRequestReviewComment extends GHIssueComment implements Refres
     /**
      * Gets The line of the blob to which the comment applies. The last line of the range for a multi-line comment.
      *
-     * @return the line to which the comment applies
+     * <p>
+     * This field is not available on {@link GHPullRequestReview.ReviewComment} objects returned by
+     * {@link GHPullRequestReview#listReviewComments()}. Use
+     * {@link GHPullRequestReview.ReviewComment#readPullRequestReviewComment()} or
+     * {@link GHPullRequest#listReviewComments()} to obtain this value.
+     *
+     * @return the line to which the comment applies, or -1 if not available
      */
     public int getLine() {
         return line;
@@ -185,7 +191,13 @@ public class GHPullRequestReviewComment extends GHIssueComment implements Refres
     /**
      * Gets The line of the blob to which the comment applies. The last line of the range for a multi-line comment.
      *
-     * @return the line to which the comment applies
+     * <p>
+     * This field is not available on {@link GHPullRequestReview.ReviewComment} objects returned by
+     * {@link GHPullRequestReview#listReviewComments()}. Use
+     * {@link GHPullRequestReview.ReviewComment#readPullRequestReviewComment()} or
+     * {@link GHPullRequest#listReviewComments()} to obtain this value.
+     *
+     * @return the line to which the comment applies, or -1 if not available
      */
     public int getOriginalLine() {
         return originalLine;
@@ -203,7 +215,13 @@ public class GHPullRequestReviewComment extends GHIssueComment implements Refres
     /**
      * Gets The first line of the range for a multi-line comment.
      *
-     * @return the original start line
+     * <p>
+     * This field is not available on {@link GHPullRequestReview.ReviewComment} objects returned by
+     * {@link GHPullRequestReview#listReviewComments()}. Use
+     * {@link GHPullRequestReview.ReviewComment#readPullRequestReviewComment()} or
+     * {@link GHPullRequest#listReviewComments()} to obtain this value.
+     *
+     * @return the original start line, or -1 if not available or not a multi-line comment
      */
     public int getOriginalStartLine() {
         return originalStartLine != null ? originalStartLine : -1;
@@ -267,9 +285,15 @@ public class GHPullRequestReviewComment extends GHIssueComment implements Refres
 
     /**
      * Gets The side of the diff to which the comment applies. The side of the last line of the range for a multi-line
-     * comment
+     * comment.
      *
-     * @return {@link Side} the side if the diff to which the comment applies
+     * <p>
+     * This field is not available on {@link GHPullRequestReview.ReviewComment} objects returned by
+     * {@link GHPullRequestReview#listReviewComments()}. Use
+     * {@link GHPullRequestReview.ReviewComment#readPullRequestReviewComment()} or
+     * {@link GHPullRequest#listReviewComments()} to obtain this value.
+     *
+     * @return {@link Side} the side of the diff to which the comment applies, or {@link Side#UNKNOWN} if not available
      */
     public Side getSide() {
         return Side.from(side);
@@ -278,7 +302,13 @@ public class GHPullRequestReviewComment extends GHIssueComment implements Refres
     /**
      * Gets The first line of the range for a multi-line comment.
      *
-     * @return the start line
+     * <p>
+     * This field is not available on {@link GHPullRequestReview.ReviewComment} objects returned by
+     * {@link GHPullRequestReview#listReviewComments()}. Use
+     * {@link GHPullRequestReview.ReviewComment#readPullRequestReviewComment()} or
+     * {@link GHPullRequest#listReviewComments()} to obtain this value.
+     *
+     * @return the start line, or -1 if not available or not a multi-line comment
      */
     public int getStartLine() {
         return startLine != null ? startLine : -1;
@@ -287,7 +317,13 @@ public class GHPullRequestReviewComment extends GHIssueComment implements Refres
     /**
      * Gets The side of the first line of the range for a multi-line comment.
      *
-     * @return {@link Side} the side of the first line
+     * <p>
+     * This field is not available on {@link GHPullRequestReview.ReviewComment} objects returned by
+     * {@link GHPullRequestReview#listReviewComments()}. Use
+     * {@link GHPullRequestReview.ReviewComment#readPullRequestReviewComment()} or
+     * {@link GHPullRequest#listReviewComments()} to obtain this value.
+     *
+     * @return {@link Side} the side of the first line, or {@link Side#UNKNOWN} if not available
      */
     public Side getStartSide() {
         return Side.from(startSide);
@@ -302,7 +338,7 @@ public class GHPullRequestReviewComment extends GHIssueComment implements Refres
      */
     @Override
     public GHUser getUser() throws IOException {
-        return owner.root().getUser(user.getLogin());
+        return owner.root().intern(user);
     }
 
     /**

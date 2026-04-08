@@ -1,7 +1,7 @@
 package org.kohsuke.github;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectReader;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github.internal.EnumUtils;
 
@@ -13,7 +13,9 @@ import java.util.Optional;
 /**
  * Represents a repository rule.
  */
-@SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
+@SuppressFBWarnings(
+        value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD",
+                "CT_CONSTRUCTOR_THROW" },
         justification = "JSON API")
 public class GHRepositoryRule extends GitHubInteractiveObject {
 
@@ -53,13 +55,7 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          *            the key
          */
         public BooleanParameter(String key) {
-            super(key);
-        }
-
-        @Override
-        TypeReference<Boolean> getType() {
-            return new TypeReference<Boolean>() {
-            };
+            super(key, Boolean.class);
         }
     }
     /**
@@ -115,22 +111,19 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          *            the key
          */
         public IntegerParameter(String key) {
-            super(key);
-        }
-
-        @Override
-        TypeReference<Integer> getType() {
-            return new TypeReference<Integer>() {
-            };
+            super(key, Integer.class);
         }
     }
     /**
      * List parameter for a ruleset.
      *
-     * @param <T>
-     *            the type of the list
+     * @param <U>
+     *            the type of the items in the list
      */
-    public abstract static class ListParameter<T> extends Parameter<List<T>> {
+    public abstract static class ListParameter<U> extends Parameter<List<U>> {
+
+        private final Class<U> itemClass;
+
         /**
          * Instantiates a new list parameter.
          *
@@ -138,7 +131,31 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          *            the key
          */
         public ListParameter(String key) {
-            super(key);
+            super(key, null);
+            throw new GHException("This constructor should not have been public.");
+        }
+
+        /**
+         * Instantiates a new list parameter.
+         *
+         * @param key
+         *            the key
+         * @param itemClass
+         *            the class of items in the list parameter
+         */
+        ListParameter(String key, Class<U> itemClass) {
+            super(key, null);
+            this.itemClass = itemClass;
+        }
+
+        @Override
+        List<U> apply(String value, GitHub root) throws IOException {
+            if (value == null) {
+                return null;
+            }
+            ObjectReader objectReader = GitHubClient.getMappingObjectReader(root);
+            JavaType javaType = objectReader.getTypeFactory().constructParametricType(List.class, itemClass);
+            return objectReader.forType(javaType).readValue(value);
         }
     }
     /**
@@ -174,6 +191,7 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
      */
     public abstract static class Parameter<T> {
 
+        private final Class<T> clazz;
         private final String key;
 
         /**
@@ -183,14 +201,28 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          *            the key
          */
         protected Parameter(String key) {
-            this.key = key;
+            throw new GHException("This constructor should not have been protected.");
         }
 
-        T apply(JsonNode jsonNode, GitHub root) throws IOException {
-            if (jsonNode == null) {
+        /**
+         * Instantiates a new parameter.
+         *
+         * @param key
+         *            the key
+         * @param clazz
+         *            the class the the parameter
+         */
+        Parameter(String key, Class<T> clazz) {
+            this.key = key;
+            this.clazz = clazz;
+        }
+
+        T apply(String value, GitHub root) throws IOException {
+            if (value == null) {
                 return null;
             }
-            return GitHubClient.getMappingObjectReader(root).forType(this.getType()).readValue(jsonNode);
+            ObjectReader objectReader = GitHubClient.getMappingObjectReader(root);
+            return objectReader.forType(clazz).readValue(value);
         }
 
         /**
@@ -201,11 +233,6 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
         String getKey() {
             return this.key;
         }
-
-        /**
-         * Get the parameter type reference for type mapping.
-         */
-        abstract TypeReference<T> getType();
     }
 
     /**
@@ -216,12 +243,8 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          * code_scanning_tools parameter
          */
         public static final ListParameter<CodeScanningTool> CODE_SCANNING_TOOLS = new ListParameter<CodeScanningTool>(
-                "code_scanning_tools") {
-            @Override
-            TypeReference<List<CodeScanningTool>> getType() {
-                return new TypeReference<List<CodeScanningTool>>() {
-                };
-            }
+                "code_scanning_tools",
+                CodeScanningTool.class) {
         };
         /**
          * dismiss_stale_reviews_on_push parameter
@@ -239,12 +262,7 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
         /**
          * operator parameter
          */
-        public static final Parameter<Operator> OPERATOR = new Parameter<Operator>("operator") {
-            @Override
-            TypeReference<Operator> getType() {
-                return new TypeReference<Operator>() {
-                };
-            }
+        public static final Parameter<Operator> OPERATOR = new Parameter<Operator>("operator", Operator.class) {
         };
         /**
          * regex parameter
@@ -259,12 +277,8 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          * required_deployment_environments parameter
          */
         public static final ListParameter<String> REQUIRED_DEPLOYMENT_ENVIRONMENTS = new ListParameter<String>(
-                "required_deployment_environments") {
-            @Override
-            TypeReference<List<String>> getType() {
-                return new TypeReference<List<String>>() {
-                };
-            }
+                "required_deployment_environments",
+                String.class) {
         };
         /**
          * required_review_thread_resolution parameter
@@ -275,12 +289,8 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          * required_status_checks parameter
          */
         public static final ListParameter<StatusCheckConfiguration> REQUIRED_STATUS_CHECKS = new ListParameter<StatusCheckConfiguration>(
-                "required_status_checks") {
-            @Override
-            TypeReference<List<StatusCheckConfiguration>> getType() {
-                return new TypeReference<List<StatusCheckConfiguration>>() {
-                };
-            }
+                "required_status_checks",
+                StatusCheckConfiguration.class) {
         };
         /**
          * require_code_owner_review parameter
@@ -306,12 +316,8 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          * workflows parameter
          */
         public static final ListParameter<WorkflowFileReference> WORKFLOWS = new ListParameter<WorkflowFileReference>(
-                "workflows") {
-            @Override
-            TypeReference<List<WorkflowFileReference>> getType() {
-                return new TypeReference<List<WorkflowFileReference>>() {
-                };
-            }
+                "workflows",
+                WorkflowFileReference.class) {
         };
     }
 
@@ -409,13 +415,7 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          *            the key
          */
         public StringParameter(String key) {
-            super(key);
-        }
-
-        @Override
-        TypeReference<String> getType() {
-            return new TypeReference<String>() {
-            };
+            super(key, String.class);
         }
     }
 
@@ -562,7 +562,7 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
         }
     }
 
-    private Map<String, JsonNode> parameters;
+    private Map<String, Object> parameters;
 
     private long rulesetId;
 
@@ -593,11 +593,12 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
         if (this.parameters == null) {
             return Optional.empty();
         }
-        JsonNode jsonNode = this.parameters.get(parameter.getKey());
-        if (jsonNode == null) {
+        Object value = this.parameters.get(parameter.getKey());
+        if (value == null) {
             return Optional.empty();
         }
-        return Optional.ofNullable(parameter.apply(jsonNode, root()));
+        return Optional
+                .ofNullable(parameter.apply(GitHubClient.getMappingObjectWriter().writeValueAsString(value), root()));
     }
 
     /**

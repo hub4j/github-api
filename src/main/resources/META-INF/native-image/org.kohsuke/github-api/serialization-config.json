@@ -870,6 +870,9 @@
     "name": "org.kohsuke.github.GHPullRequestReview"
   },
   {
+    "name": "org.kohsuke.github.GHPullRequestReview$ReviewComment"
+  },
+  {
     "name": "org.kohsuke.github.GHPullRequestReviewBuilder"
   },
   {
@@ -1096,6 +1099,24 @@
   },
   {
     "name": "org.kohsuke.github.GHRequestedAction"
+  },
+  {
+    "name": "org.kohsuke.github.GHSBOM"
+  },
+  {
+    "name": "org.kohsuke.github.GHSBOM$CreationInfo"
+  },
+  {
+    "name": "org.kohsuke.github.GHSBOM$ExternalRef"
+  },
+  {
+    "name": "org.kohsuke.github.GHSBOM$Package"
+  },
+  {
+    "name": "org.kohsuke.github.GHSBOM$Relationship"
+  },
+  {
+    "name": "org.kohsuke.github.GHSBOMExportResult"
   },
   {
     "name": "org.kohsuke.github.GHSearchBuilder"

@@ -48,6 +48,6 @@ public class GHWorkflowJobQueryBuilder extends GHQueryBuilder<GHWorkflowJob> {
      */
     @Override
     public PagedIterable<GHWorkflowJob> list() {
-        return new GHWorkflowJobsIterable(repo, req.build());
+        return req.toIterable(GHWorkflowJobsPage.class, GHWorkflowJob.class, item -> item.wrapUp(repo));
     }
 }

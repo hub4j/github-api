@@ -294,10 +294,11 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
 
         PagedSearchIterable<GHContent> r4 = searchBuilder.list();
 
-        GHContent c4 = r4.iterator().next();
+        GHContent c4 = r4.withPageSize(25).iterator().next();
         assertThat(c4.getPath(), not(equalTo(c2.getPath())));
         assertThat(c4.getPath(), not(equalTo(c3.getPath())));
         assertThat(r4.getTotalCount(), equalTo(r2.getTotalCount()));
+        assertThat(r4.isIncomplete(), equalTo(false));
 
         // Verify qualifier not allowed to be empty
         IllegalArgumentException e = Assert.assertThrows(IllegalArgumentException.class,

@@ -10,7 +10,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class GHAppInstallationRequest extends GHObject {
     private GHOrganization account;
-
     private GHUser requester;
 
     /**

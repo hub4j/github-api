@@ -35,11 +35,9 @@ public class GHAuthenticatedAppInstallation extends GitHubInteractiveObject {
      * @return the paged iterable
      */
     public PagedSearchIterable<GHRepository> listRepositories() {
-        GitHubRequest request;
-
-        request = root().createRequest().withUrlPath("/installation/repositories").build();
-
-        return new PagedSearchIterable<>(root(), request, GHAuthenticatedAppInstallationRepositoryResult.class);
+        return new PagedSearchIterable<>(root().createRequest()
+                .withUrlPath("/installation/repositories")
+                .toPaginatedEndpoint(GHAuthenticatedAppInstallationRepositoryResult.class, GHRepository.class, null));
     }
 
 }

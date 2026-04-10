@@ -372,6 +372,15 @@
     "name": "org.kohsuke.github.GHContentBuilder"
   },
   {
+    "name": "org.kohsuke.github.GHContentBuilder$UserInfo"
+  },
+  {
+    "name": "org.kohsuke.github.GHContentDeleter"
+  },
+  {
+    "name": "org.kohsuke.github.GHContentDeleter$UserInfo"
+  },
+  {
     "name": "org.kohsuke.github.GHContentSearchBuilder"
   },
   {
@@ -379,6 +388,12 @@
   },
   {
     "name": "org.kohsuke.github.GHContentSearchBuilder$Sort"
+  },
+  {
+    "name": "org.kohsuke.github.GHContentUpdater"
+  },
+  {
+    "name": "org.kohsuke.github.GHContentUpdater$UserInfo"
   },
   {
     "name": "org.kohsuke.github.GHContentUpdateResponse"

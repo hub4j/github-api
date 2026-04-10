@@ -589,7 +589,15 @@ public class GitHubRequest implements GitHubConnectorRequest {
                 // backward compatibility
                 apiUrl = GitHubClient.GITHUB_URL;
             }
-            return new URI(apiUrl + tailApiUrl).toURL();
+
+            String fullApiUrl = apiUrl + tailApiUrl;
+            try {
+                return new URI(fullApiUrl).toURL();
+            } catch (URISyntaxException e) {
+                // Some API URL fields include unescaped square brackets in path segments.
+                // Keep existing escaping as-is while making the URL URI-safe for connectors.
+                return new URI(encodeSquareBrackets(fullApiUrl)).toURL();
+            }
         } catch (Exception e) {
             // The data going into constructing this URL should be controlled by the GitHub API framework,
             // so a malformed URL here is a framework runtime error.
@@ -597,6 +605,35 @@ public class GitHubRequest implements GitHubConnectorRequest {
             // indicating the functionality should be moved to the common code path.
             throw new GHException("Unable to build GitHub API URL", e);
         }
+    }
+
+    @Nonnull
+    private static String encodeSquareBrackets(@Nonnull String url) {
+        URL parsedUrl;
+        try {
+            parsedUrl = new URL(url);
+        } catch (MalformedURLException e) {
+            // Preserve the original input when URL parsing fails so existing error behavior is unchanged.
+            return url;
+        }
+
+        String path = parsedUrl.getPath();
+        String query = parsedUrl.getQuery();
+        String ref = parsedUrl.getRef();
+
+        StringBuilder encodedUrl = new StringBuilder();
+        encodedUrl.append(parsedUrl.getProtocol()).append("://").append(parsedUrl.getAuthority());
+        if (path != null) {
+            encodedUrl.append(path.replace("[", "%5B").replace("]", "%5D"));
+        }
+        if (query != null) {
+            encodedUrl.append('?').append(query.replace("[", "%5B").replace("]", "%5D"));
+        }
+        if (ref != null) {
+            encodedUrl.append('#').append(ref.replace("[", "%5B").replace("]", "%5D"));
+        }
+
+        return encodedUrl.toString();
     }
     /**
      * Create a new {@link Builder}.

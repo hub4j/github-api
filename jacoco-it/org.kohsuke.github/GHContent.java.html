@@ -57,6 +57,34 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
 <span class="fc" id="L57">    }</span>
 
     /**
+     * Creates a builder that can be used to delete this file.
+     *
+     * &lt;p&gt;
+     * Unlike the {@link #delete(String)} convenience methods, this builder supports setting the author and committer of
+     * the resulting commit.
+     *
+     * @return a content deleter
+     * @see GHContentDeleter
+     */
+    public GHContentDeleter createDelete() {
+<span class="fc" id="L70">        return new GHContentDeleter(this);</span>
+    }
+
+    /**
+     * Creates a builder that can be used to update this file's content.
+     *
+     * &lt;p&gt;
+     * Unlike the {@link #update(String, String)} convenience methods, this builder supports setting the author and
+     * committer of the resulting commit.
+     *
+     * @return a content updater
+     * @see GHContentUpdater
+     */
+    public GHContentUpdater createUpdate() {
+<span class="fc" id="L84">        return new GHContentUpdater(this);</span>
+    }
+
+    /**
      * Delete gh content update response.
      *
      * @param message
@@ -66,7 +94,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      *             the io exception
      */
     public GHContentUpdateResponse delete(String message) throws IOException {
-<span class="fc" id="L69">        return delete(message, null);</span>
+<span class="fc" id="L97">        return delete(message, null);</span>
     }
 
     /**
@@ -81,21 +109,21 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      *             the io exception
      */
     public GHContentUpdateResponse delete(String commitMessage, String branch) throws IOException {
-<span class="fc" id="L84">        Requester requester = root().createRequest()</span>
-<span class="fc" id="L85">                .method(&quot;DELETE&quot;)</span>
-<span class="fc" id="L86">                .with(&quot;path&quot;, path)</span>
-<span class="fc" id="L87">                .with(&quot;message&quot;, commitMessage)</span>
-<span class="fc" id="L88">                .with(&quot;sha&quot;, sha);</span>
+<span class="fc" id="L112">        Requester requester = root().createRequest()</span>
+<span class="fc" id="L113">                .method(&quot;DELETE&quot;)</span>
+<span class="fc" id="L114">                .with(&quot;path&quot;, path)</span>
+<span class="fc" id="L115">                .with(&quot;message&quot;, commitMessage)</span>
+<span class="fc" id="L116">                .with(&quot;sha&quot;, sha);</span>
 
-<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        if (branch != null) {</span>
-<span class="nc" id="L91">            requester.with(&quot;branch&quot;, branch);</span>
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        if (branch != null) {</span>
+<span class="nc" id="L119">            requester.with(&quot;branch&quot;, branch);</span>
         }
 
-<span class="fc" id="L94">        GHContentUpdateResponse response = requester.withUrlPath(getApiRoute(repository, path))</span>
-<span class="fc" id="L95">                .fetch(GHContentUpdateResponse.class);</span>
+<span class="fc" id="L122">        GHContentUpdateResponse response = requester.withUrlPath(getApiRoute(repository, path))</span>
+<span class="fc" id="L123">                .fetch(GHContentUpdateResponse.class);</span>
 
-<span class="fc" id="L97">        response.getCommit().wrapUp(repository);</span>
-<span class="fc" id="L98">        return response;</span>
+<span class="fc" id="L125">        response.getCommit().wrapUp(repository);</span>
+<span class="fc" id="L126">        return response;</span>
     }
 
     /**
@@ -113,7 +141,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
     @Deprecated
     @SuppressFBWarnings(&quot;DM_DEFAULT_ENCODING&quot;)
     public String getContent() throws IOException {
-<span class="fc" id="L116">        return new String(readDecodedContent());</span>
+<span class="fc" id="L144">        return new String(readDecodedContent());</span>
     }
 
     /**
@@ -124,8 +152,8 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      *             the io exception
      */
     public String getDownloadUrl() throws IOException {
-<span class="fc" id="L127">        refresh(downloadUrl);</span>
-<span class="fc" id="L128">        return downloadUrl;</span>
+<span class="fc" id="L155">        refresh(downloadUrl);</span>
+<span class="fc" id="L156">        return downloadUrl;</span>
     }
 
     /**
@@ -142,8 +170,8 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      */
     @Deprecated
     public String getEncodedContent() throws IOException {
-<span class="fc" id="L145">        refresh(content);</span>
-<span class="fc" id="L146">        return content;</span>
+<span class="fc" id="L173">        refresh(content);</span>
+<span class="fc" id="L174">        return content;</span>
     }
 
     /**
@@ -152,7 +180,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @return the encoding
      */
     public String getEncoding() {
-<span class="fc" id="L155">        return encoding;</span>
+<span class="fc" id="L183">        return encoding;</span>
     }
 
     /**
@@ -161,7 +189,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @return the git url
      */
     public String getGitUrl() {
-<span class="fc" id="L164">        return gitUrl;</span>
+<span class="fc" id="L192">        return gitUrl;</span>
     }
 
     /**
@@ -170,7 +198,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @return the html url
      */
     public String getHtmlUrl() {
-<span class="fc" id="L173">        return htmlUrl;</span>
+<span class="fc" id="L201">        return htmlUrl;</span>
     }
 
     /**
@@ -179,7 +207,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @return the name
      */
     public String getName() {
-<span class="fc" id="L182">        return name;</span>
+<span class="fc" id="L210">        return name;</span>
     }
 
     /**
@@ -189,7 +217,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHRepository getOwner() {
-<span class="fc" id="L192">        return repository;</span>
+<span class="fc" id="L220">        return repository;</span>
     }
 
     /**
@@ -198,7 +226,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @return the path
      */
     public String getPath() {
-<span class="fc" id="L201">        return path;</span>
+<span class="fc" id="L229">        return path;</span>
     }
 
     /**
@@ -207,7 +235,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @return the sha
      */
     public String getSha() {
-<span class="fc" id="L210">        return sha;</span>
+<span class="fc" id="L238">        return sha;</span>
     }
 
     /**
@@ -216,7 +244,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @return the size
      */
     public long getSize() {
-<span class="fc" id="L219">        return size;</span>
+<span class="fc" id="L247">        return size;</span>
     }
 
     /**
@@ -225,7 +253,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @return the target
      */
     public String getTarget() {
-<span class="fc" id="L228">        return target;</span>
+<span class="fc" id="L256">        return target;</span>
     }
 
     /**
@@ -234,7 +262,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @return the type
      */
     public String getType() {
-<span class="fc" id="L237">        return type;</span>
+<span class="fc" id="L265">        return type;</span>
     }
 
     /**
@@ -243,7 +271,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @return the url
      */
     public String getUrl() {
-<span class="fc" id="L246">        return url;</span>
+<span class="fc" id="L274">        return url;</span>
     }
 
     /**
@@ -252,7 +280,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @return the boolean
      */
     public boolean isDirectory() {
-<span class="fc" id="L255">        return &quot;dir&quot;.equals(type);</span>
+<span class="fc" id="L283">        return &quot;dir&quot;.equals(type);</span>
     }
 
     /**
@@ -261,7 +289,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @return the boolean
      */
     public boolean isFile() {
-<span class="fc" id="L264">        return &quot;file&quot;.equals(type);</span>
+<span class="fc" id="L292">        return &quot;file&quot;.equals(type);</span>
     }
 
     /**
@@ -270,10 +298,10 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHContent&gt; listDirectoryContent() {
-<span class="pc bpc" id="L273" title="1 of 2 branches missed.">        if (!isDirectory())</span>
-<span class="nc" id="L274">            throw new IllegalStateException(path + &quot; is not a directory&quot;);</span>
+<span class="pc bpc" id="L301" title="1 of 2 branches missed.">        if (!isDirectory())</span>
+<span class="nc" id="L302">            throw new IllegalStateException(path + &quot; is not a directory&quot;);</span>
 
-<span class="fc" id="L276">        return root().createRequest().setRawUrlPath(url).toIterable(GHContent[].class, item -&gt; item.wrap(repository));</span>
+<span class="fc" id="L304">        return root().createRequest().setRawUrlPath(url).toIterable(GHContent[].class, item -&gt; item.wrap(repository));</span>
     }
 
     /**
@@ -284,7 +312,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      *             the io exception
      */
     public InputStream read() throws IOException {
-<span class="fc" id="L287">        return new ByteArrayInputStream(readDecodedContent());</span>
+<span class="fc" id="L315">        return new ByteArrayInputStream(readDecodedContent());</span>
     }
 
     /**
@@ -297,8 +325,8 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      */
     @Override
     public synchronized void refresh() throws IOException {
-<span class="fc" id="L300">        root().createRequest().setRawUrlPath(url).fetchInto(this);</span>
-<span class="fc" id="L301">    }</span>
+<span class="fc" id="L328">        root().createRequest().setRawUrlPath(url).fetchInto(this);</span>
+<span class="fc" id="L329">    }</span>
 
     /**
      * Update gh content update response.
@@ -313,7 +341,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      */
     @SuppressFBWarnings(&quot;DM_DEFAULT_ENCODING&quot;)
     public GHContentUpdateResponse update(String newContent, String commitMessage) throws IOException {
-<span class="fc" id="L316">        return update(newContent.getBytes(), commitMessage, null);</span>
+<span class="fc" id="L344">        return update(newContent.getBytes(), commitMessage, null);</span>
     }
 
     /**
@@ -331,7 +359,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      */
     @SuppressFBWarnings(&quot;DM_DEFAULT_ENCODING&quot;)
     public GHContentUpdateResponse update(String newContent, String commitMessage, String branch) throws IOException {
-<span class="nc" id="L334">        return update(newContent.getBytes(), commitMessage, branch);</span>
+<span class="nc" id="L362">        return update(newContent.getBytes(), commitMessage, branch);</span>
     }
 
     /**
@@ -346,7 +374,7 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      *             the io exception
      */
     public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage) throws IOException {
-<span class="nc" id="L349">        return update(newContentBytes, commitMessage, null);</span>
+<span class="nc" id="L377">        return update(newContentBytes, commitMessage, null);</span>
     }
 
     /**
@@ -364,27 +392,27 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      */
     public GHContentUpdateResponse update(byte[] newContentBytes, String commitMessage, String branch)
             throws IOException {
-<span class="fc" id="L367">        String encodedContent = Base64.getEncoder().encodeToString(newContentBytes);</span>
+<span class="fc" id="L395">        String encodedContent = Base64.getEncoder().encodeToString(newContentBytes);</span>
 
-<span class="fc" id="L369">        Requester requester = root().createRequest()</span>
-<span class="fc" id="L370">                .method(&quot;PUT&quot;)</span>
-<span class="fc" id="L371">                .with(&quot;path&quot;, path)</span>
-<span class="fc" id="L372">                .with(&quot;message&quot;, commitMessage)</span>
-<span class="fc" id="L373">                .with(&quot;sha&quot;, sha)</span>
-<span class="fc" id="L374">                .with(&quot;content&quot;, encodedContent);</span>
+<span class="fc" id="L397">        Requester requester = root().createRequest()</span>
+<span class="fc" id="L398">                .method(&quot;PUT&quot;)</span>
+<span class="fc" id="L399">                .with(&quot;path&quot;, path)</span>
+<span class="fc" id="L400">                .with(&quot;message&quot;, commitMessage)</span>
+<span class="fc" id="L401">                .with(&quot;sha&quot;, sha)</span>
+<span class="fc" id="L402">                .with(&quot;content&quot;, encodedContent);</span>
 
-<span class="pc bpc" id="L376" title="1 of 2 branches missed.">        if (branch != null) {</span>
-<span class="nc" id="L377">            requester.with(&quot;branch&quot;, branch);</span>
+<span class="pc bpc" id="L404" title="1 of 2 branches missed.">        if (branch != null) {</span>
+<span class="nc" id="L405">            requester.with(&quot;branch&quot;, branch);</span>
         }
 
-<span class="fc" id="L380">        GHContentUpdateResponse response = requester.withUrlPath(getApiRoute(repository, path))</span>
-<span class="fc" id="L381">                .fetch(GHContentUpdateResponse.class);</span>
+<span class="fc" id="L408">        GHContentUpdateResponse response = requester.withUrlPath(getApiRoute(repository, path))</span>
+<span class="fc" id="L409">                .fetch(GHContentUpdateResponse.class);</span>
 
-<span class="fc" id="L383">        response.getContent().wrap(repository);</span>
-<span class="fc" id="L384">        response.getCommit().wrapUp(repository);</span>
+<span class="fc" id="L411">        response.getContent().wrap(repository);</span>
+<span class="fc" id="L412">        response.getCommit().wrapUp(repository);</span>
 
-<span class="fc" id="L386">        this.content = encodedContent;</span>
-<span class="fc" id="L387">        return response;</span>
+<span class="fc" id="L414">        this.content = encodedContent;</span>
+<span class="fc" id="L415">        return response;</span>
     }
 
     /**
@@ -395,17 +423,17 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      *             the io exception
      */
     private byte[] readDecodedContent() throws IOException {
-<span class="fc" id="L398">        String encodedContent = getEncodedContent();</span>
-<span class="pc bpc" id="L399" title="1 of 2 branches missed.">        if (encoding.equals(&quot;base64&quot;)) {</span>
+<span class="fc" id="L426">        String encodedContent = getEncodedContent();</span>
+<span class="pc bpc" id="L427" title="1 of 2 branches missed.">        if (encoding.equals(&quot;base64&quot;)) {</span>
             try {
-<span class="fc" id="L401">                Base64.Decoder decoder = Base64.getMimeDecoder();</span>
-<span class="fc" id="L402">                return decoder.decode(encodedContent.getBytes(StandardCharsets.US_ASCII));</span>
-<span class="nc" id="L403">            } catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L404">                throw new AssertionError(e); // US-ASCII is mandatory</span>
+<span class="fc" id="L429">                Base64.Decoder decoder = Base64.getMimeDecoder();</span>
+<span class="fc" id="L430">                return decoder.decode(encodedContent.getBytes(StandardCharsets.US_ASCII));</span>
+<span class="nc" id="L431">            } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L432">                throw new AssertionError(e); // US-ASCII is mandatory</span>
             }
         }
 
-<span class="nc" id="L408">        throw new UnsupportedOperationException(&quot;Unrecognized encoding: &quot; + encoding);</span>
+<span class="nc" id="L436">        throw new UnsupportedOperationException(&quot;Unrecognized encoding: &quot; + encoding);</span>
     }
 
     /**
@@ -417,8 +445,8 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      *             the io exception
      */
     protected synchronized void populate() throws IOException {
-<span class="nc" id="L420">        root().createRequest().withUrlPath(url).fetchInto(this);</span>
-<span class="nc" id="L421">    }</span>
+<span class="nc" id="L448">        root().createRequest().withUrlPath(url).fetchInto(this);</span>
+<span class="nc" id="L449">    }</span>
 
     /**
      * Wrap.
@@ -428,8 +456,8 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
      * @return the GH content
      */
     GHContent wrap(GHRepository owner) {
-<span class="fc" id="L431">        this.repository = owner;</span>
-<span class="fc" id="L432">        return this;</span>
+<span class="fc" id="L459">        this.repository = owner;</span>
+<span class="fc" id="L460">        return this;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

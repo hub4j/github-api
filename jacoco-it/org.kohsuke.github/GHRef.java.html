@@ -126,6 +126,24 @@ public class GHRef extends GitHubInteractiveObject {
 <span class="fc" id="L126">        return repository.root().createRequest().withUrlPath(url).toIterable(GHRef[].class, item -&gt; repository.root());</span>
     }
 
+    /**
+     * Retrieves all refs that match the given prefix using the matching-refs endpoint.
+     *
+     * @param repository
+     *            the repository to read from
+     * @param refPrefix
+     *            the ref prefix to search for e.g. &lt;code&gt;heads/main&lt;/code&gt; or &lt;code&gt;tags/v1&lt;/code&gt;
+     * @return paged iterable of all refs matching the specified prefix
+     */
+    static PagedIterable&lt;GHRef&gt; readMatchingRefs(GHRepository repository, String refPrefix) {
+<span class="fc bfc" id="L139" title="All 2 branches covered.">        if (refPrefix.startsWith(&quot;refs/&quot;)) {</span>
+<span class="fc" id="L140">            refPrefix = refPrefix.replaceFirst(&quot;refs/&quot;, &quot;&quot;);</span>
+        }
+
+<span class="fc" id="L143">        String url = repository.getApiTailUrl(String.format(&quot;git/matching-refs/%s&quot;, refPrefix));</span>
+<span class="fc" id="L144">        return repository.root().createRequest().withUrlPath(url).toIterable(GHRef[].class, item -&gt; repository.root());</span>
+    }
+
     private GHObject object;
 
     private String ref, url;
@@ -133,8 +151,8 @@ public class GHRef extends GitHubInteractiveObject {
     /**
      * Create default GHRef instance
      */
-<span class="fc" id="L136">    public GHRef() {</span>
-<span class="fc" id="L137">    }</span>
+<span class="fc" id="L154">    public GHRef() {</span>
+<span class="fc" id="L155">    }</span>
 
     /**
      * Deletes this ref from the repository using the GitHub API.
@@ -143,8 +161,8 @@ public class GHRef extends GitHubInteractiveObject {
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="fc" id="L146">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(url).send();</span>
-<span class="fc" id="L147">    }</span>
+<span class="fc" id="L164">        root().createRequest().method(&quot;DELETE&quot;).withUrlPath(url).send();</span>
+<span class="fc" id="L165">    }</span>
 
     /**
      * The object that this ref points to.
@@ -152,7 +170,7 @@ public class GHRef extends GitHubInteractiveObject {
      * @return the object
      */
     public GHObject getObject() {
-<span class="fc" id="L155">        return object;</span>
+<span class="fc" id="L173">        return object;</span>
     }
 
     /**
@@ -161,7 +179,7 @@ public class GHRef extends GitHubInteractiveObject {
      * @return the ref
      */
     public String getRef() {
-<span class="fc" id="L164">        return ref;</span>
+<span class="fc" id="L182">        return ref;</span>
     }
 
     /**
@@ -170,7 +188,7 @@ public class GHRef extends GitHubInteractiveObject {
      * @return the url
      */
     public URL getUrl() {
-<span class="fc" id="L173">        return GitHubClient.parseURL(url);</span>
+<span class="fc" id="L191">        return GitHubClient.parseURL(url);</span>
     }
 
     /**
@@ -182,8 +200,8 @@ public class GHRef extends GitHubInteractiveObject {
      *             the io exception
      */
     public void updateTo(String sha) throws IOException {
-<span class="fc" id="L185">        updateTo(sha, false);</span>
-<span class="fc" id="L186">    }</span>
+<span class="fc" id="L203">        updateTo(sha, false);</span>
+<span class="fc" id="L204">    }</span>
 
     /**
      * Updates this ref to the specified commit.
@@ -196,12 +214,12 @@ public class GHRef extends GitHubInteractiveObject {
      *             the io exception
      */
     public void updateTo(String sha, Boolean force) throws IOException {
-<span class="fc" id="L199">        root().createRequest()</span>
-<span class="fc" id="L200">                .method(&quot;PATCH&quot;)</span>
-<span class="fc" id="L201">                .with(&quot;sha&quot;, sha)</span>
-<span class="fc" id="L202">                .with(&quot;force&quot;, force)</span>
-<span class="fc" id="L203">                .withUrlPath(url)</span>
-<span class="fc" id="L204">                .fetch(GHRef.class);</span>
-<span class="fc" id="L205">    }</span>
+<span class="fc" id="L217">        root().createRequest()</span>
+<span class="fc" id="L218">                .method(&quot;PATCH&quot;)</span>
+<span class="fc" id="L219">                .with(&quot;sha&quot;, sha)</span>
+<span class="fc" id="L220">                .with(&quot;force&quot;, force)</span>
+<span class="fc" id="L221">                .withUrlPath(url)</span>
+<span class="fc" id="L222">                .fetch(GHRef.class);</span>
+<span class="fc" id="L223">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

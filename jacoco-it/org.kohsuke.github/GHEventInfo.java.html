@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHEventInfo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHEventInfo.java</span></div><h1>GHEventInfo.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -35,12 +34,12 @@ public class GHEventInfo extends GitHubInteractiveObject {
         /**
          * Create default GHEventRepository instance
          */
-<span class="fc" id="L38">        public GHEventRepository() {</span>
-<span class="fc" id="L39">        }</span>
+<span class="fc" id="L37">        public GHEventRepository() {</span>
+<span class="fc" id="L38">        }</span>
     }
 
     /** The Constant mapTypeStringToEvent. */
-<span class="fc" id="L43">    static final Map&lt;String, GHEvent&gt; mapTypeStringToEvent = createEventMap();</span>
+<span class="fc" id="L42">    static final Map&lt;String, GHEvent&gt; mapTypeStringToEvent = createEventMap();</span>
 
     /**
      * Map for GitHub Event API Event Type to GHEvent.
@@ -49,23 +48,23 @@ public class GHEventInfo extends GitHubInteractiveObject {
      *      types&lt;/a&gt;
      */
     private static Map&lt;String, GHEvent&gt; createEventMap() {
-<span class="fc" id="L52">        HashMap&lt;String, GHEvent&gt; map = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L53">        map.put(&quot;CommitCommentEvent&quot;, GHEvent.COMMIT_COMMENT);</span>
-<span class="fc" id="L54">        map.put(&quot;CreateEvent&quot;, GHEvent.CREATE);</span>
-<span class="fc" id="L55">        map.put(&quot;DeleteEvent&quot;, GHEvent.DELETE);</span>
-<span class="fc" id="L56">        map.put(&quot;ForkEvent&quot;, GHEvent.FORK);</span>
-<span class="fc" id="L57">        map.put(&quot;GollumEvent&quot;, GHEvent.GOLLUM);</span>
-<span class="fc" id="L58">        map.put(&quot;IssueCommentEvent&quot;, GHEvent.ISSUE_COMMENT);</span>
-<span class="fc" id="L59">        map.put(&quot;IssuesEvent&quot;, GHEvent.ISSUES);</span>
-<span class="fc" id="L60">        map.put(&quot;MemberEvent&quot;, GHEvent.MEMBER);</span>
-<span class="fc" id="L61">        map.put(&quot;PublicEvent&quot;, GHEvent.PUBLIC);</span>
-<span class="fc" id="L62">        map.put(&quot;PullRequestEvent&quot;, GHEvent.PULL_REQUEST);</span>
-<span class="fc" id="L63">        map.put(&quot;PullRequestReviewEvent&quot;, GHEvent.PULL_REQUEST_REVIEW);</span>
-<span class="fc" id="L64">        map.put(&quot;PullRequestReviewCommentEvent&quot;, GHEvent.PULL_REQUEST_REVIEW_COMMENT);</span>
-<span class="fc" id="L65">        map.put(&quot;PushEvent&quot;, GHEvent.PUSH);</span>
-<span class="fc" id="L66">        map.put(&quot;ReleaseEvent&quot;, GHEvent.RELEASE);</span>
-<span class="fc" id="L67">        map.put(&quot;WatchEvent&quot;, GHEvent.WATCH);</span>
-<span class="fc" id="L68">        return Collections.unmodifiableMap(map);</span>
+<span class="fc" id="L51">        HashMap&lt;String, GHEvent&gt; map = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L52">        map.put(&quot;CommitCommentEvent&quot;, GHEvent.COMMIT_COMMENT);</span>
+<span class="fc" id="L53">        map.put(&quot;CreateEvent&quot;, GHEvent.CREATE);</span>
+<span class="fc" id="L54">        map.put(&quot;DeleteEvent&quot;, GHEvent.DELETE);</span>
+<span class="fc" id="L55">        map.put(&quot;ForkEvent&quot;, GHEvent.FORK);</span>
+<span class="fc" id="L56">        map.put(&quot;GollumEvent&quot;, GHEvent.GOLLUM);</span>
+<span class="fc" id="L57">        map.put(&quot;IssueCommentEvent&quot;, GHEvent.ISSUE_COMMENT);</span>
+<span class="fc" id="L58">        map.put(&quot;IssuesEvent&quot;, GHEvent.ISSUES);</span>
+<span class="fc" id="L59">        map.put(&quot;MemberEvent&quot;, GHEvent.MEMBER);</span>
+<span class="fc" id="L60">        map.put(&quot;PublicEvent&quot;, GHEvent.PUBLIC);</span>
+<span class="fc" id="L61">        map.put(&quot;PullRequestEvent&quot;, GHEvent.PULL_REQUEST);</span>
+<span class="fc" id="L62">        map.put(&quot;PullRequestReviewEvent&quot;, GHEvent.PULL_REQUEST_REVIEW);</span>
+<span class="fc" id="L63">        map.put(&quot;PullRequestReviewCommentEvent&quot;, GHEvent.PULL_REQUEST_REVIEW_COMMENT);</span>
+<span class="fc" id="L64">        map.put(&quot;PushEvent&quot;, GHEvent.PUSH);</span>
+<span class="fc" id="L65">        map.put(&quot;ReleaseEvent&quot;, GHEvent.RELEASE);</span>
+<span class="fc" id="L66">        map.put(&quot;WatchEvent&quot;, GHEvent.WATCH);</span>
+<span class="fc" id="L67">        return Collections.unmodifiableMap(map);</span>
     }
     /**
      * Transform type to GH event.
@@ -75,7 +74,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
      * @return the GH event
      */
     static GHEvent transformTypeToGHEvent(String type) {
-<span class="fc" id="L78">        return mapTypeStringToEvent.getOrDefault(type, GHEvent.UNKNOWN);</span>
+<span class="fc" id="L77">        return mapTypeStringToEvent.getOrDefault(type, GHEvent.UNKNOWN);</span>
     }
 
     private GHUser actor;
@@ -84,8 +83,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
     private long id;
     private GHOrganization org;
 
-    // we don't want to expose Jackson dependency to the user. This needs databinding
-    private ObjectNode payload;
+    private Object payload;
 
     // these are all shallow objects
     private GHEventRepository repo;
@@ -104,8 +102,8 @@ public class GHEventInfo extends GitHubInteractiveObject {
     /**
      * Create default GHEventInfo instance
      */
-<span class="fc" id="L107">    public GHEventInfo() {</span>
-<span class="fc" id="L108">    }</span>
+<span class="fc" id="L105">    public GHEventInfo() {</span>
+<span class="fc" id="L106">    }</span>
 
     /**
      * Gets actor.
@@ -117,7 +115,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
     @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot; },
             justification = &quot;The field comes from JSON deserialization&quot;)
     public GHUser getActor() throws IOException {
-<span class="nc" id="L120">        return root().getUser(actor.getLogin());</span>
+<span class="nc" id="L118">        return root().getUser(actor.getLogin());</span>
     }
 
     /**
@@ -126,7 +124,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
      * @return the login of the actor.
      */
     public String getActorLogin() {
-<span class="fc" id="L129">        return actor.getLogin();</span>
+<span class="fc" id="L127">        return actor.getLogin();</span>
     }
 
     /**
@@ -136,7 +134,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
      */
     @WithBridgeMethods(value = Date.class, adapterMethod = &quot;instantToDate&quot;)
     public Instant getCreatedAt() {
-<span class="fc" id="L139">        return GitHubClient.parseInstant(createdAt);</span>
+<span class="fc" id="L137">        return GitHubClient.parseInstant(createdAt);</span>
     }
 
     /**
@@ -145,7 +143,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
      * @return the id
      */
     public long getId() {
-<span class="fc" id="L148">        return id;</span>
+<span class="fc" id="L146">        return id;</span>
     }
 
     /**
@@ -158,7 +156,7 @@ public class GHEventInfo extends GitHubInteractiveObject {
     @SuppressFBWarnings(value = { &quot;UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR&quot; },
             justification = &quot;The field comes from JSON deserialization&quot;)
     public GHOrganization getOrganization() throws IOException {
-<span class="pc bpc" id="L161" title="1 of 4 branches missed.">        return (org == null || org.getLogin() == null) ? null : root().getOrganization(org.getLogin());</span>
+<span class="pc bpc" id="L159" title="1 of 4 branches missed.">        return (org == null || org.getLogin() == null) ? null : root().getOrganization(org.getLogin());</span>
     }
 
     /**
@@ -174,7 +172,9 @@ public class GHEventInfo extends GitHubInteractiveObject {
      *             if payload cannot be parsed
      */
     public &lt;T extends GHEventPayload&gt; T getPayload(Class&lt;T&gt; type) throws IOException {
-<span class="fc" id="L177">        T v = GitHubClient.getMappingObjectReader(root()).readValue(payload.traverse(), type);</span>
+<span class="fc" id="L175">        T v = GitHubClient.getMappingObjectReader(root())</span>
+<span class="fc" id="L176">                .forType(type)</span>
+<span class="fc" id="L177">                .readValue(GitHubClient.getMappingObjectWriter().writeValueAsString(payload));</span>
 <span class="fc" id="L178">        v.lateBind();</span>
 <span class="fc" id="L179">        return v;</span>
     }
@@ -201,4 +201,4 @@ public class GHEventInfo extends GitHubInteractiveObject {
 <span class="fc" id="L201">        return transformTypeToGHEvent(type);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -1285,9 +1285,10 @@ public class GitHub {
     @Nonnull
     Requester createGraphQLRequest(String query) {
 <span class="fc" id="L1287">        return createRequest().method(&quot;POST&quot;)</span>
-<span class="fc" id="L1288">                .rateLimit(RateLimitTarget.GRAPHQL)</span>
-<span class="fc" id="L1289">                .with(&quot;query&quot;, query)</span>
-<span class="fc" id="L1290">                .withUrlPath(&quot;/graphql&quot;);</span>
+<span class="fc" id="L1288">                .withApiUrl(getApiUrl().replace(&quot;/api/v3&quot;, &quot;/api&quot;))</span>
+<span class="fc" id="L1289">                .rateLimit(RateLimitTarget.GRAPHQL)</span>
+<span class="fc" id="L1290">                .with(&quot;query&quot;, query)</span>
+<span class="fc" id="L1291">                .withUrlPath(&quot;/graphql&quot;);</span>
     }
 
     /**
@@ -1297,13 +1298,13 @@ public class GitHub {
      */
     @Nonnull
     Requester createRequest() {
-<span class="fc" id="L1300">        Requester requester = new Requester(client);</span>
-<span class="fc" id="L1301">        requester.injectMappingValue(this);</span>
-<span class="fc bfc" id="L1302" title="All 2 branches covered.">        if (!this.getClass().equals(GitHub.class)) {</span>
+<span class="fc" id="L1301">        Requester requester = new Requester(client);</span>
+<span class="fc" id="L1302">        requester.injectMappingValue(this);</span>
+<span class="fc bfc" id="L1303" title="All 2 branches covered.">        if (!this.getClass().equals(GitHub.class)) {</span>
             // For classes that extend GitHub, treat them still as a GitHub instance
-<span class="fc" id="L1304">            requester.injectMappingValue(GitHub.class.getName(), this);</span>
+<span class="fc" id="L1305">            requester.injectMappingValue(GitHub.class.getName(), this);</span>
         }
-<span class="fc" id="L1306">        return requester;</span>
+<span class="fc" id="L1307">        return requester;</span>
     }
 
     /**
@@ -1313,7 +1314,7 @@ public class GitHub {
      */
     @Nonnull
     GitHubClient getClient() {
-<span class="fc" id="L1316">        return client;</span>
+<span class="fc" id="L1317">        return client;</span>
     }
 
     /**
@@ -1324,15 +1325,15 @@ public class GitHub {
      * @return the GH user
      */
     GHUser intern(GHUser user) {
-<span class="fc bfc" id="L1327" title="All 2 branches covered.">        if (user != null) {</span>
+<span class="fc bfc" id="L1328" title="All 2 branches covered.">        if (user != null) {</span>
             // if we already have this user in our map, get it
             // if not, remember this new user
-<span class="fc" id="L1330">            GHUser existingUser = users.putIfAbsent(user.getLogin(), user);</span>
-<span class="fc bfc" id="L1331" title="All 2 branches covered.">            if (existingUser != null) {</span>
-<span class="fc" id="L1332">                user = existingUser;</span>
+<span class="fc" id="L1331">            GHUser existingUser = users.putIfAbsent(user.getLogin(), user);</span>
+<span class="fc bfc" id="L1332" title="All 2 branches covered.">            if (existingUser != null) {</span>
+<span class="fc" id="L1333">                user = existingUser;</span>
             }
         }
-<span class="fc" id="L1335">        return user;</span>
+<span class="fc" id="L1336">        return user;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

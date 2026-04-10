@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHRepositoryRule.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHRepositoryRule.java</span></div><h1>GHRepositoryRule.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectReader;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.kohsuke.github.internal.EnumUtils;
 
@@ -13,33 +13,35 @@ import java.util.Optional;
 /**
  * Represents a repository rule.
  */
-@SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot; },
+@SuppressFBWarnings(
+        value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot;, &quot;NP_UNWRITTEN_FIELD&quot;,
+                &quot;CT_CONSTRUCTOR_THROW&quot; },
         justification = &quot;JSON API&quot;)
 public class GHRepositoryRule extends GitHubInteractiveObject {
 
     /**
      * Alerts threshold parameter.
      */
-<span class="fc" id="L23">    public static enum AlertsThreshold {</span>
+<span class="fc" id="L25">    public static enum AlertsThreshold {</span>
         /**
          * all
          */
-<span class="fc" id="L27">        ALL,</span>
+<span class="fc" id="L29">        ALL,</span>
 
         /**
          * errors
          */
-<span class="fc" id="L32">        ERRORS,</span>
+<span class="fc" id="L34">        ERRORS,</span>
 
         /**
          * errors_and_warnings
          */
-<span class="fc" id="L37">        ERRORS_AND_WARNINGS,</span>
+<span class="fc" id="L39">        ERRORS_AND_WARNINGS,</span>
 
         /**
          * none
          */
-<span class="fc" id="L42">        NONE</span>
+<span class="fc" id="L44">        NONE</span>
     }
 
     /**
@@ -53,14 +55,8 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          *            the key
          */
         public BooleanParameter(String key) {
-<span class="fc" id="L56">            super(key);</span>
-<span class="fc" id="L57">        }</span>
-
-        @Override
-        TypeReference&lt;Boolean&gt; getType() {
-<span class="fc" id="L61">            return new TypeReference&lt;Boolean&gt;() {</span>
-            };
-        }
+<span class="fc" id="L58">            super(key, Boolean.class);</span>
+<span class="fc" id="L59">        }</span>
     }
     /**
      * Code scanning tool parameter.
@@ -74,8 +70,8 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
         /**
          * Create default CodeScanningTool instance
          */
-<span class="fc" id="L77">        public CodeScanningTool() {</span>
-<span class="fc" id="L78">        }</span>
+<span class="fc" id="L73">        public CodeScanningTool() {</span>
+<span class="fc" id="L74">        }</span>
 
         /**
          * Gets the alerts threshold.
@@ -83,7 +79,7 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          * @return the alerts threshold
          */
         public AlertsThreshold getAlertsThreshold() {
-<span class="fc" id="L86">            return this.alertsThreshold;</span>
+<span class="fc" id="L82">            return this.alertsThreshold;</span>
         }
 
         /**
@@ -92,7 +88,7 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          * @return the security alerts threshold
          */
         public SecurityAlertsThreshold getSecurityAlertsThreshold() {
-<span class="fc" id="L95">            return this.securityAlertsThreshold;</span>
+<span class="fc" id="L91">            return this.securityAlertsThreshold;</span>
         }
 
         /**
@@ -101,7 +97,7 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          * @return the tool
          */
         public String getTool() {
-<span class="fc" id="L104">            return this.tool;</span>
+<span class="fc" id="L100">            return this.tool;</span>
         }
     }
     /**
@@ -115,22 +111,19 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          *            the key
          */
         public IntegerParameter(String key) {
-<span class="fc" id="L118">            super(key);</span>
-<span class="fc" id="L119">        }</span>
-
-        @Override
-        TypeReference&lt;Integer&gt; getType() {
-<span class="fc" id="L123">            return new TypeReference&lt;Integer&gt;() {</span>
-            };
-        }
+<span class="fc" id="L114">            super(key, Integer.class);</span>
+<span class="fc" id="L115">        }</span>
     }
     /**
      * List parameter for a ruleset.
      *
-     * @param &lt;T&gt;
-     *            the type of the list
+     * @param &lt;U&gt;
+     *            the type of the items in the list
      */
-    public abstract static class ListParameter&lt;T&gt; extends Parameter&lt;List&lt;T&gt;&gt; {
+    public abstract static class ListParameter&lt;U&gt; extends Parameter&lt;List&lt;U&gt;&gt; {
+
+        private final Class&lt;U&gt; itemClass;
+
         /**
          * Instantiates a new list parameter.
          *
@@ -138,32 +131,56 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          *            the key
          */
         public ListParameter(String key) {
-<span class="fc" id="L141">            super(key);</span>
-<span class="fc" id="L142">        }</span>
+<span class="fc" id="L134">            super(key, null);</span>
+<span class="fc" id="L135">            throw new GHException(&quot;This constructor should not have been public.&quot;);</span>
+        }
+
+        /**
+         * Instantiates a new list parameter.
+         *
+         * @param key
+         *            the key
+         * @param itemClass
+         *            the class of items in the list parameter
+         */
+        ListParameter(String key, Class&lt;U&gt; itemClass) {
+<span class="fc" id="L147">            super(key, null);</span>
+<span class="fc" id="L148">            this.itemClass = itemClass;</span>
+<span class="fc" id="L149">        }</span>
+
+        @Override
+        List&lt;U&gt; apply(String value, GitHub root) throws IOException {
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">            if (value == null) {</span>
+<span class="nc" id="L154">                return null;</span>
+            }
+<span class="fc" id="L156">            ObjectReader objectReader = GitHubClient.getMappingObjectReader(root);</span>
+<span class="fc" id="L157">            JavaType javaType = objectReader.getTypeFactory().constructParametricType(List.class, itemClass);</span>
+<span class="fc" id="L158">            return objectReader.forType(javaType).readValue(value);</span>
+        }
     }
     /**
      * Operator parameter.
      */
-<span class="fc" id="L147">    public static enum Operator {</span>
+<span class="fc" id="L164">    public static enum Operator {</span>
         /**
          * contains
          */
-<span class="fc" id="L151">        CONTAINS,</span>
+<span class="fc" id="L168">        CONTAINS,</span>
 
         /**
          * ends_with
          */
-<span class="fc" id="L156">        ENDS_WITH,</span>
+<span class="fc" id="L173">        ENDS_WITH,</span>
 
         /**
          * regex
          */
-<span class="fc" id="L161">        REGEX,</span>
+<span class="fc" id="L178">        REGEX,</span>
 
         /**
          * starts_with
          */
-<span class="fc" id="L166">        STARTS_WITH</span>
+<span class="fc" id="L183">        STARTS_WITH</span>
     }
 
     /**
@@ -174,6 +191,7 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
      */
     public abstract static class Parameter&lt;T&gt; {
 
+        private final Class&lt;T&gt; clazz;
         private final String key;
 
         /**
@@ -182,15 +200,29 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          * @param key
          *            the key
          */
-<span class="fc" id="L185">        protected Parameter(String key) {</span>
-<span class="fc" id="L186">            this.key = key;</span>
-<span class="fc" id="L187">        }</span>
+<span class="fc" id="L203">        protected Parameter(String key) {</span>
+<span class="fc" id="L204">            throw new GHException(&quot;This constructor should not have been protected.&quot;);</span>
+        }
 
-        T apply(JsonNode jsonNode, GitHub root) throws IOException {
-<span class="fc bfc" id="L190" title="All 2 branches covered.">            if (jsonNode == null) {</span>
-<span class="fc" id="L191">                return null;</span>
+        /**
+         * Instantiates a new parameter.
+         *
+         * @param key
+         *            the key
+         * @param clazz
+         *            the class the the parameter
+         */
+<span class="fc" id="L215">        Parameter(String key, Class&lt;T&gt; clazz) {</span>
+<span class="fc" id="L216">            this.key = key;</span>
+<span class="fc" id="L217">            this.clazz = clazz;</span>
+<span class="fc" id="L218">        }</span>
+
+        T apply(String value, GitHub root) throws IOException {
+<span class="fc bfc" id="L221" title="All 2 branches covered.">            if (value == null) {</span>
+<span class="fc" id="L222">                return null;</span>
             }
-<span class="fc" id="L193">            return GitHubClient.getMappingObjectReader(root).forType(this.getType()).readValue(jsonNode);</span>
+<span class="fc" id="L224">            ObjectReader objectReader = GitHubClient.getMappingObjectReader(root);</span>
+<span class="fc" id="L225">            return objectReader.forType(clazz).readValue(value);</span>
         }
 
         /**
@@ -199,13 +231,8 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          * @return the key
          */
         String getKey() {
-<span class="fc" id="L202">            return this.key;</span>
+<span class="fc" id="L234">            return this.key;</span>
         }
-
-        /**
-         * Get the parameter type reference for type mapping.
-         */
-        abstract TypeReference&lt;T&gt; getType();
     }
 
     /**
@@ -215,154 +242,133 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
         /**
          * code_scanning_tools parameter
          */
-<span class="fc" id="L218">        public static final ListParameter&lt;CodeScanningTool&gt; CODE_SCANNING_TOOLS = new ListParameter&lt;CodeScanningTool&gt;(</span>
-<span class="fc" id="L219">                &quot;code_scanning_tools&quot;) {</span>
-            @Override
-            TypeReference&lt;List&lt;CodeScanningTool&gt;&gt; getType() {
-<span class="fc" id="L222">                return new TypeReference&lt;List&lt;CodeScanningTool&gt;&gt;() {</span>
-                };
-            }
+<span class="fc" id="L245">        public static final ListParameter&lt;CodeScanningTool&gt; CODE_SCANNING_TOOLS = new ListParameter&lt;CodeScanningTool&gt;(</span>
+                &quot;code_scanning_tools&quot;,
+<span class="fc" id="L247">                CodeScanningTool.class) {</span>
         };
         /**
          * dismiss_stale_reviews_on_push parameter
          */
-<span class="fc" id="L229">        public static final BooleanParameter DISMISS_STALE_REVIEWS_ON_PUSH = new BooleanParameter(</span>
+<span class="fc" id="L252">        public static final BooleanParameter DISMISS_STALE_REVIEWS_ON_PUSH = new BooleanParameter(</span>
                 &quot;dismiss_stale_reviews_on_push&quot;);
         /**
          * name parameter
          */
-<span class="fc" id="L234">        public static final StringParameter NAME = new StringParameter(&quot;name&quot;);</span>
+<span class="fc" id="L257">        public static final StringParameter NAME = new StringParameter(&quot;name&quot;);</span>
         /**
          * negate parameter
          */
-<span class="fc" id="L238">        public static final BooleanParameter NEGATE = new BooleanParameter(&quot;negate&quot;);</span>
+<span class="fc" id="L261">        public static final BooleanParameter NEGATE = new BooleanParameter(&quot;negate&quot;);</span>
         /**
          * operator parameter
          */
-<span class="fc" id="L242">        public static final Parameter&lt;Operator&gt; OPERATOR = new Parameter&lt;Operator&gt;(&quot;operator&quot;) {</span>
-            @Override
-            TypeReference&lt;Operator&gt; getType() {
-<span class="fc" id="L245">                return new TypeReference&lt;Operator&gt;() {</span>
-                };
-            }
+<span class="fc" id="L265">        public static final Parameter&lt;Operator&gt; OPERATOR = new Parameter&lt;Operator&gt;(&quot;operator&quot;, Operator.class) {</span>
         };
         /**
          * regex parameter
          */
-<span class="fc" id="L252">        public static final StringParameter REGEX = new StringParameter(&quot;regex&quot;);</span>
+<span class="fc" id="L270">        public static final StringParameter REGEX = new StringParameter(&quot;regex&quot;);</span>
         /**
          * required_approving_review_count parameter
          */
-<span class="fc" id="L256">        public static final IntegerParameter REQUIRED_APPROVING_REVIEW_COUNT = new IntegerParameter(</span>
+<span class="fc" id="L274">        public static final IntegerParameter REQUIRED_APPROVING_REVIEW_COUNT = new IntegerParameter(</span>
                 &quot;required_approving_review_count&quot;);
         /**
          * required_deployment_environments parameter
          */
-<span class="fc" id="L261">        public static final ListParameter&lt;String&gt; REQUIRED_DEPLOYMENT_ENVIRONMENTS = new ListParameter&lt;String&gt;(</span>
-<span class="fc" id="L262">                &quot;required_deployment_environments&quot;) {</span>
-            @Override
-            TypeReference&lt;List&lt;String&gt;&gt; getType() {
-<span class="fc" id="L265">                return new TypeReference&lt;List&lt;String&gt;&gt;() {</span>
-                };
-            }
+<span class="fc" id="L279">        public static final ListParameter&lt;String&gt; REQUIRED_DEPLOYMENT_ENVIRONMENTS = new ListParameter&lt;String&gt;(</span>
+                &quot;required_deployment_environments&quot;,
+<span class="fc" id="L281">                String.class) {</span>
         };
         /**
          * required_review_thread_resolution parameter
          */
-<span class="fc" id="L272">        public static final BooleanParameter REQUIRED_REVIEW_THREAD_RESOLUTION = new BooleanParameter(</span>
+<span class="fc" id="L286">        public static final BooleanParameter REQUIRED_REVIEW_THREAD_RESOLUTION = new BooleanParameter(</span>
                 &quot;required_review_thread_resolution&quot;);
         /**
          * required_status_checks parameter
          */
-<span class="fc" id="L277">        public static final ListParameter&lt;StatusCheckConfiguration&gt; REQUIRED_STATUS_CHECKS = new ListParameter&lt;StatusCheckConfiguration&gt;(</span>
-<span class="fc" id="L278">                &quot;required_status_checks&quot;) {</span>
-            @Override
-            TypeReference&lt;List&lt;StatusCheckConfiguration&gt;&gt; getType() {
-<span class="fc" id="L281">                return new TypeReference&lt;List&lt;StatusCheckConfiguration&gt;&gt;() {</span>
-                };
-            }
+<span class="fc" id="L291">        public static final ListParameter&lt;StatusCheckConfiguration&gt; REQUIRED_STATUS_CHECKS = new ListParameter&lt;StatusCheckConfiguration&gt;(</span>
+                &quot;required_status_checks&quot;,
+<span class="fc" id="L293">                StatusCheckConfiguration.class) {</span>
         };
         /**
          * require_code_owner_review parameter
          */
-<span class="fc" id="L288">        public static final BooleanParameter REQUIRE_CODE_OWNER_REVIEW = new BooleanParameter(</span>
+<span class="fc" id="L298">        public static final BooleanParameter REQUIRE_CODE_OWNER_REVIEW = new BooleanParameter(</span>
                 &quot;require_code_owner_review&quot;);
         /**
          * require_last_push_approval parameter
          */
-<span class="fc" id="L293">        public static final BooleanParameter REQUIRE_LAST_PUSH_APPROVAL = new BooleanParameter(</span>
+<span class="fc" id="L303">        public static final BooleanParameter REQUIRE_LAST_PUSH_APPROVAL = new BooleanParameter(</span>
                 &quot;require_last_push_approval&quot;);
         /**
          * strict_required_status_checks_policy parameter
          */
-<span class="fc" id="L298">        public static final BooleanParameter STRICT_REQUIRED_STATUS_CHECKS_POLICY = new BooleanParameter(</span>
+<span class="fc" id="L308">        public static final BooleanParameter STRICT_REQUIRED_STATUS_CHECKS_POLICY = new BooleanParameter(</span>
                 &quot;strict_required_status_checks_policy&quot;);
         /**
          * update_allows_fetch_and_merge parameter
          */
-<span class="fc" id="L303">        public static final BooleanParameter UPDATE_ALLOWS_FETCH_AND_MERGE = new BooleanParameter(</span>
+<span class="fc" id="L313">        public static final BooleanParameter UPDATE_ALLOWS_FETCH_AND_MERGE = new BooleanParameter(</span>
                 &quot;update_allows_fetch_and_merge&quot;);
         /**
          * workflows parameter
          */
-<span class="fc" id="L308">        public static final ListParameter&lt;WorkflowFileReference&gt; WORKFLOWS = new ListParameter&lt;WorkflowFileReference&gt;(</span>
-<span class="fc" id="L309">                &quot;workflows&quot;) {</span>
-            @Override
-            TypeReference&lt;List&lt;WorkflowFileReference&gt;&gt; getType() {
-<span class="fc" id="L312">                return new TypeReference&lt;List&lt;WorkflowFileReference&gt;&gt;() {</span>
-                };
-            }
+<span class="fc" id="L318">        public static final ListParameter&lt;WorkflowFileReference&gt; WORKFLOWS = new ListParameter&lt;WorkflowFileReference&gt;(</span>
+                &quot;workflows&quot;,
+<span class="fc" id="L320">                WorkflowFileReference.class) {</span>
         };
     }
 
     /**
      * The source of the ruleset type.
      */
-<span class="fc" id="L321">    public enum RulesetSourceType {</span>
+<span class="fc" id="L327">    public enum RulesetSourceType {</span>
         /**
          * Organization
          */
-<span class="fc" id="L325">        ORGANIZATION,</span>
+<span class="fc" id="L331">        ORGANIZATION,</span>
 
         /**
          * Repository
          */
-<span class="fc" id="L330">        REPOSITORY,</span>
+<span class="fc" id="L336">        REPOSITORY,</span>
 
         /**
          * unknown
          */
-<span class="fc" id="L335">        UNKNOWN</span>
+<span class="fc" id="L341">        UNKNOWN</span>
     }
 
     /**
      * Security alerts threshold parameter.
      */
-<span class="fc" id="L341">    public static enum SecurityAlertsThreshold {</span>
+<span class="fc" id="L347">    public static enum SecurityAlertsThreshold {</span>
         /**
          * all
          */
-<span class="fc" id="L345">        ALL,</span>
+<span class="fc" id="L351">        ALL,</span>
 
         /**
          * critical
          */
-<span class="fc" id="L350">        CRITICAL,</span>
+<span class="fc" id="L356">        CRITICAL,</span>
 
         /**
          * high_or_higher
          */
-<span class="fc" id="L355">        HIGH_OR_HIGHER,</span>
+<span class="fc" id="L361">        HIGH_OR_HIGHER,</span>
 
         /**
          * medium_or_higher
          */
-<span class="fc" id="L360">        MEDIUM_OR_HIGHER,</span>
+<span class="fc" id="L366">        MEDIUM_OR_HIGHER,</span>
 
         /**
          * none
          */
-<span class="fc" id="L365">        NONE</span>
+<span class="fc" id="L371">        NONE</span>
     }
 
     /**
@@ -376,8 +382,8 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
         /**
          * Create default StatusCheckConfiguration instance
          */
-<span class="fc" id="L379">        public StatusCheckConfiguration() {</span>
-<span class="fc" id="L380">        }</span>
+<span class="fc" id="L385">        public StatusCheckConfiguration() {</span>
+<span class="fc" id="L386">        }</span>
 
         /**
          * Gets the context.
@@ -385,7 +391,7 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          * @return the context
          */
         public String getContext() {
-<span class="fc" id="L388">            return this.context;</span>
+<span class="fc" id="L394">            return this.context;</span>
         }
 
         /**
@@ -394,7 +400,7 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          * @return the integration id
          */
         public Integer getIntegrationId() {
-<span class="fc" id="L397">            return this.integrationId;</span>
+<span class="fc" id="L403">            return this.integrationId;</span>
         }
     }
 
@@ -409,14 +415,8 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
          *            the key
          */
         public StringParameter(String key) {
-<span class="fc" id="L412">            super(key);</span>
-<span class="fc" id="L413">        }</span>
-
-        @Override
-        TypeReference&lt;String&gt; getType() {
-<span class="fc" id="L417">            return new TypeReference&lt;String&gt;() {</span>
-            };
-        }
+<span class="fc" id="L418">            super(key, String.class);</span>
+<span class="fc" id="L419">        }</span>
     }
 
     /**
@@ -562,7 +562,7 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
         }
     }
 
-    private Map&lt;String, JsonNode&gt; parameters;
+    private Map&lt;String, Object&gt; parameters;
 
     private long rulesetId;
 
@@ -593,11 +593,12 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
 <span class="pc bpc" id="L593" title="1 of 2 branches missed.">        if (this.parameters == null) {</span>
 <span class="nc" id="L594">            return Optional.empty();</span>
         }
-<span class="fc" id="L596">        JsonNode jsonNode = this.parameters.get(parameter.getKey());</span>
-<span class="fc bfc" id="L597" title="All 2 branches covered.">        if (jsonNode == null) {</span>
+<span class="fc" id="L596">        Object value = this.parameters.get(parameter.getKey());</span>
+<span class="fc bfc" id="L597" title="All 2 branches covered.">        if (value == null) {</span>
 <span class="fc" id="L598">            return Optional.empty();</span>
         }
-<span class="fc" id="L600">        return Optional.ofNullable(parameter.apply(jsonNode, root()));</span>
+<span class="fc" id="L600">        return Optional</span>
+<span class="fc" id="L601">                .ofNullable(parameter.apply(GitHubClient.getMappingObjectWriter().writeValueAsString(value), root()));</span>
     }
 
     /**
@@ -606,7 +607,7 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
      * @return the ruleset id
      */
     public long getRulesetId() {
-<span class="fc" id="L609">        return this.rulesetId;</span>
+<span class="fc" id="L610">        return this.rulesetId;</span>
     }
 
     /**
@@ -615,7 +616,7 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
      * @return the ruleset source
      */
     public String getRulesetSource() {
-<span class="fc" id="L618">        return this.rulesetSource;</span>
+<span class="fc" id="L619">        return this.rulesetSource;</span>
     }
 
     /**
@@ -624,7 +625,7 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
      * @return the ruleset source type
      */
     public RulesetSourceType getRulesetSourceType() {
-<span class="fc" id="L627">        return EnumUtils.getEnumOrDefault(RulesetSourceType.class, this.rulesetSourceType, RulesetSourceType.UNKNOWN);</span>
+<span class="fc" id="L628">        return EnumUtils.getEnumOrDefault(RulesetSourceType.class, this.rulesetSourceType, RulesetSourceType.UNKNOWN);</span>
     }
 
     /**
@@ -633,7 +634,7 @@ public class GHRepositoryRule extends GitHubInteractiveObject {
      * @return the type
      */
     public Type getType() {
-<span class="fc" id="L636">        return EnumUtils.getEnumOrDefault(Type.class, this.type, Type.UNKNOWN);</span>
+<span class="fc" id="L637">        return EnumUtils.getEnumOrDefault(Type.class, this.type, Type.UNKNOWN);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

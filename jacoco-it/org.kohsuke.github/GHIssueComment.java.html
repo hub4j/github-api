@@ -39,17 +39,48 @@ import java.net.URL;
  */
 public class GHIssueComment extends GHObject implements Reactable {
 
-    private String body, gravatarId, htmlUrl, authorAssociation;
+    /**
+     * Legacy field for gravatar ID (no longer returned by GitHub API).
+     */
+    private String gravatarId;
 
-    private GHUser user; // not fully populated. beware.
+    /**
+     * The author's association with the repository.
+     */
+    protected String authorAssociation;
+
+    /**
+     * The comment body.
+     */
+    protected String body;
+
+    /**
+     * The comment body in HTML format.
+     */
+    protected String bodyHtml;
+
+    /**
+     * The comment body in plain text format.
+     */
+    protected String bodyText;
+
+    /**
+     * The HTML URL of the comment.
+     */
+    protected String htmlUrl;
+
+    /**
+     * The user who created the comment. Note: not fully populated, use getUser() for full details.
+     */
+    protected GHUser user;
 
     /** The owner. */
     GHIssue owner;
     /**
      * Create default GHIssueComment instance
      */
-<span class="fc" id="L51">    public GHIssueComment() {</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L82">    public GHIssueComment() {</span>
+<span class="fc" id="L83">    }</span>
 
     /**
      * Creates the reaction.
@@ -61,12 +92,12 @@ public class GHIssueComment extends GHObject implements Reactable {
      *             Signals that an I/O exception has occurred.
      */
     public GHReaction createReaction(ReactionContent content) throws IOException {
-<span class="fc" id="L64">        return owner.root()</span>
-<span class="fc" id="L65">                .createRequest()</span>
-<span class="fc" id="L66">                .method(&quot;POST&quot;)</span>
-<span class="fc" id="L67">                .with(&quot;content&quot;, content.getContent())</span>
-<span class="fc" id="L68">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
-<span class="fc" id="L69">                .fetch(GHReaction.class);</span>
+<span class="fc" id="L95">        return owner.root()</span>
+<span class="fc" id="L96">                .createRequest()</span>
+<span class="fc" id="L97">                .method(&quot;POST&quot;)</span>
+<span class="fc" id="L98">                .with(&quot;content&quot;, content.getContent())</span>
+<span class="fc" id="L99">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L100">                .fetch(GHReaction.class);</span>
     }
 
     /**
@@ -76,8 +107,8 @@ public class GHIssueComment extends GHObject implements Reactable {
      *             the io exception
      */
     public void delete() throws IOException {
-<span class="nc" id="L79">        owner.root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
-<span class="nc" id="L80">    }</span>
+<span class="nc" id="L110">        owner.root().createRequest().method(&quot;DELETE&quot;).withUrlPath(getApiRoute()).send();</span>
+<span class="nc" id="L111">    }</span>
 
     /**
      * Delete reaction.
@@ -88,12 +119,12 @@ public class GHIssueComment extends GHObject implements Reactable {
      *             Signals that an I/O exception has occurred.
      */
     public void deleteReaction(GHReaction reaction) throws IOException {
-<span class="fc" id="L91">        owner.root()</span>
-<span class="fc" id="L92">                .createRequest()</span>
-<span class="fc" id="L93">                .method(&quot;DELETE&quot;)</span>
-<span class="fc" id="L94">                .withUrlPath(getApiRoute(), &quot;reactions&quot;, String.valueOf(reaction.getId()))</span>
-<span class="fc" id="L95">                .send();</span>
-<span class="fc" id="L96">    }</span>
+<span class="fc" id="L122">        owner.root()</span>
+<span class="fc" id="L123">                .createRequest()</span>
+<span class="fc" id="L124">                .method(&quot;DELETE&quot;)</span>
+<span class="fc" id="L125">                .withUrlPath(getApiRoute(), &quot;reactions&quot;, String.valueOf(reaction.getId()))</span>
+<span class="fc" id="L126">                .send();</span>
+<span class="fc" id="L127">    }</span>
 
     /**
      * Gets author association.
@@ -101,7 +132,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      * @return the author association
      */
     public GHCommentAuthorAssociation getAuthorAssociation() {
-<span class="fc" id="L104">        return EnumUtils.getEnumOrDefault(GHCommentAuthorAssociation.class,</span>
+<span class="fc" id="L135">        return EnumUtils.getEnumOrDefault(GHCommentAuthorAssociation.class,</span>
                 authorAssociation,
                 GHCommentAuthorAssociation.UNKNOWN);
     }
@@ -112,7 +143,25 @@ public class GHIssueComment extends GHObject implements Reactable {
      * @return the body
      */
     public String getBody() {
-<span class="fc" id="L115">        return body;</span>
+<span class="fc" id="L146">        return body;</span>
+    }
+
+    /**
+     * Gets the body in HTML format.
+     *
+     * @return the body in HTML format
+     */
+    public String getBodyHtml() {
+<span class="fc" id="L155">        return bodyHtml;</span>
+    }
+
+    /**
+     * Gets the body in plain text format.
+     *
+     * @return the body in plain text format
+     */
+    public String getBodyText() {
+<span class="fc" id="L164">        return bodyText;</span>
     }
 
     /**
@@ -121,7 +170,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      * @return the html url
      */
     public URL getHtmlUrl() {
-<span class="fc" id="L124">        return GitHubClient.parseURL(htmlUrl);</span>
+<span class="fc" id="L173">        return GitHubClient.parseURL(htmlUrl);</span>
     }
 
     /**
@@ -131,7 +180,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      */
     @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
     public GHIssue getParent() {
-<span class="fc" id="L134">        return owner;</span>
+<span class="fc" id="L183">        return owner;</span>
     }
 
     /**
@@ -142,7 +191,7 @@ public class GHIssueComment extends GHObject implements Reactable {
      *             the io exception
      */
     public GHUser getUser() throws IOException {
-<span class="pc bpc" id="L145" title="1 of 4 branches missed.">        return owner == null || owner.isOffline() ? user : owner.root().getUser(user.getLogin());</span>
+<span class="pc bpc" id="L194" title="1 of 4 branches missed.">        return owner == null || owner.isOffline() ? user : owner.root().getUser(user.getLogin());</span>
     }
 
     /**
@@ -151,10 +200,10 @@ public class GHIssueComment extends GHObject implements Reactable {
      * @return the paged iterable
      */
     public PagedIterable&lt;GHReaction&gt; listReactions() {
-<span class="fc" id="L154">        return owner.root()</span>
-<span class="fc" id="L155">                .createRequest()</span>
-<span class="fc" id="L156">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
-<span class="fc" id="L157">                .toIterable(GHReaction[].class, item -&gt; owner.root());</span>
+<span class="fc" id="L203">        return owner.root()</span>
+<span class="fc" id="L204">                .createRequest()</span>
+<span class="fc" id="L205">                .withUrlPath(getApiRoute() + &quot;/reactions&quot;)</span>
+<span class="fc" id="L206">                .toIterable(GHReaction[].class, item -&gt; owner.root());</span>
     }
 
     /**
@@ -166,18 +215,18 @@ public class GHIssueComment extends GHObject implements Reactable {
      *             the io exception
      */
     public void update(String body) throws IOException {
-<span class="nc" id="L169">        owner.root()</span>
-<span class="nc" id="L170">                .createRequest()</span>
-<span class="nc" id="L171">                .method(&quot;PATCH&quot;)</span>
-<span class="nc" id="L172">                .with(&quot;body&quot;, body)</span>
-<span class="nc" id="L173">                .withUrlPath(getApiRoute())</span>
-<span class="nc" id="L174">                .fetch(GHIssueComment.class);</span>
-<span class="nc" id="L175">        this.body = body;</span>
-<span class="nc" id="L176">    }</span>
+<span class="nc" id="L218">        owner.root()</span>
+<span class="nc" id="L219">                .createRequest()</span>
+<span class="nc" id="L220">                .method(&quot;PATCH&quot;)</span>
+<span class="nc" id="L221">                .with(&quot;body&quot;, body)</span>
+<span class="nc" id="L222">                .withUrlPath(getApiRoute())</span>
+<span class="nc" id="L223">                .fetch(GHIssueComment.class);</span>
+<span class="nc" id="L224">        this.body = body;</span>
+<span class="nc" id="L225">    }</span>
 
     private String getApiRoute() {
-<span class="fc" id="L179">        return &quot;/repos/&quot; + owner.getRepository().getOwnerName() + &quot;/&quot; + owner.getRepository().getName()</span>
-<span class="fc" id="L180">                + &quot;/issues/comments/&quot; + getId();</span>
+<span class="fc" id="L228">        return &quot;/repos/&quot; + owner.getRepository().getOwnerName() + &quot;/&quot; + owner.getRepository().getName()</span>
+<span class="fc" id="L229">                + &quot;/issues/comments/&quot; + getId();</span>
     }
 
     /**
@@ -188,8 +237,8 @@ public class GHIssueComment extends GHObject implements Reactable {
      * @return the GH issue comment
      */
     GHIssueComment wrapUp(GHIssue owner) {
-<span class="fc" id="L191">        this.owner = owner;</span>
-<span class="fc" id="L192">        return this;</span>
+<span class="fc" id="L240">        this.owner = owner;</span>
+<span class="fc" id="L241">        return this;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -57,157 +57,160 @@ import java.util.Locale;
     /** The download. */
 <span class="fc" id="L58">    DOWNLOAD,</span>
 
+    /** The dynamic events like Dependabot autorun. */
+<span class="fc" id="L61">    DYNAMIC,</span>
+
     /** The follow. */
-<span class="fc" id="L61">    FOLLOW,</span>
+<span class="fc" id="L64">    FOLLOW,</span>
 
     /** The fork. */
-<span class="fc" id="L64">    FORK,</span>
+<span class="fc" id="L67">    FORK,</span>
 
     /** The fork apply. */
-<span class="fc" id="L67">    FORK_APPLY,</span>
+<span class="fc" id="L70">    FORK_APPLY,</span>
 
     /** The gist. */
-<span class="fc" id="L70">    GIST,</span>
+<span class="fc" id="L73">    GIST,</span>
 
     /** The github app authorization. */
-<span class="fc" id="L73">    GITHUB_APP_AUTHORIZATION,</span>
+<span class="fc" id="L76">    GITHUB_APP_AUTHORIZATION,</span>
 
     /** The gollum. */
-<span class="fc" id="L76">    GOLLUM,</span>
+<span class="fc" id="L79">    GOLLUM,</span>
 
     /** The installation. */
-<span class="fc" id="L79">    INSTALLATION,</span>
+<span class="fc" id="L82">    INSTALLATION,</span>
 
     /** The installation repositories. */
-<span class="fc" id="L82">    INSTALLATION_REPOSITORIES,</span>
+<span class="fc" id="L85">    INSTALLATION_REPOSITORIES,</span>
 
     /** The integration installation repositories. */
-<span class="fc" id="L85">    INTEGRATION_INSTALLATION_REPOSITORIES,</span>
+<span class="fc" id="L88">    INTEGRATION_INSTALLATION_REPOSITORIES,</span>
 
     /** The issues. */
-<span class="fc" id="L88">    ISSUES,</span>
+<span class="fc" id="L91">    ISSUES,</span>
 
     /** The issue comment. */
-<span class="fc" id="L91">    ISSUE_COMMENT,</span>
+<span class="fc" id="L94">    ISSUE_COMMENT,</span>
 
     /** The label. */
-<span class="fc" id="L94">    LABEL,</span>
+<span class="fc" id="L97">    LABEL,</span>
 
     /** The marketplace purchase. */
-<span class="fc" id="L97">    MARKETPLACE_PURCHASE,</span>
+<span class="fc" id="L100">    MARKETPLACE_PURCHASE,</span>
 
     /** The member. */
-<span class="fc" id="L100">    MEMBER,</span>
+<span class="fc" id="L103">    MEMBER,</span>
 
     /** The membership. */
-<span class="fc" id="L103">    MEMBERSHIP,</span>
+<span class="fc" id="L106">    MEMBERSHIP,</span>
 
     /** The merge group entry. */
-<span class="fc" id="L106">    MERGE_GROUP,</span>
+<span class="fc" id="L109">    MERGE_GROUP,</span>
 
     /** The merge queue entry. */
-<span class="fc" id="L109">    MERGE_QUEUE_ENTRY,</span>
+<span class="fc" id="L112">    MERGE_QUEUE_ENTRY,</span>
 
     /** The meta. */
-<span class="fc" id="L112">    META,</span>
+<span class="fc" id="L115">    META,</span>
 
     /** The milestone. */
-<span class="fc" id="L115">    MILESTONE,</span>
+<span class="fc" id="L118">    MILESTONE,</span>
 
     /** The organization. */
-<span class="fc" id="L118">    ORGANIZATION,</span>
+<span class="fc" id="L121">    ORGANIZATION,</span>
 
     /** The org block. */
-<span class="fc" id="L121">    ORG_BLOCK,</span>
+<span class="fc" id="L124">    ORG_BLOCK,</span>
 
     /** The package. */
-<span class="fc" id="L124">    PACKAGE,</span>
+<span class="fc" id="L127">    PACKAGE,</span>
 
     /** The page build. */
-<span class="fc" id="L127">    PAGE_BUILD,</span>
+<span class="fc" id="L130">    PAGE_BUILD,</span>
 
     /** The ping. */
-<span class="fc" id="L130">    PING,</span>
+<span class="fc" id="L133">    PING,</span>
 
     /** The project. */
-<span class="fc" id="L133">    PROJECT,</span>
+<span class="fc" id="L136">    PROJECT,</span>
 
     /** The project card. */
-<span class="fc" id="L136">    PROJECT_CARD,</span>
+<span class="fc" id="L139">    PROJECT_CARD,</span>
 
     /** The project column. */
-<span class="fc" id="L139">    PROJECT_COLUMN,</span>
+<span class="fc" id="L142">    PROJECT_COLUMN,</span>
 
     /** The public. */
-<span class="fc" id="L142">    PUBLIC,</span>
+<span class="fc" id="L145">    PUBLIC,</span>
 
     /** The pull request. */
-<span class="fc" id="L145">    PULL_REQUEST,</span>
+<span class="fc" id="L148">    PULL_REQUEST,</span>
 
     /** The pull request review. */
-<span class="fc" id="L148">    PULL_REQUEST_REVIEW,</span>
+<span class="fc" id="L151">    PULL_REQUEST_REVIEW,</span>
 
     /** The pull request review comment. */
-<span class="fc" id="L151">    PULL_REQUEST_REVIEW_COMMENT,</span>
+<span class="fc" id="L154">    PULL_REQUEST_REVIEW_COMMENT,</span>
 
     /** The pull request review thread. */
-<span class="fc" id="L154">    PULL_REQUEST_REVIEW_THREAD,</span>
+<span class="fc" id="L157">    PULL_REQUEST_REVIEW_THREAD,</span>
 
     /** The push. */
-<span class="fc" id="L157">    PUSH,</span>
+<span class="fc" id="L160">    PUSH,</span>
 
     /** The registry package. */
-<span class="fc" id="L160">    REGISTRY_PACKAGE,</span>
+<span class="fc" id="L163">    REGISTRY_PACKAGE,</span>
 
     /** The release. */
-<span class="fc" id="L163">    RELEASE,</span>
+<span class="fc" id="L166">    RELEASE,</span>
     /** The repository. */
     // only valid for org hooks
-<span class="fc" id="L166">    REPOSITORY,</span>
+<span class="fc" id="L169">    REPOSITORY,</span>
 
     /** The repository dispatch. */
-<span class="fc" id="L169">    REPOSITORY_DISPATCH,</span>
+<span class="fc" id="L172">    REPOSITORY_DISPATCH,</span>
 
     /** The repository import. */
-<span class="fc" id="L172">    REPOSITORY_IMPORT,</span>
+<span class="fc" id="L175">    REPOSITORY_IMPORT,</span>
 
     /** The repository vulnerability alert. */
-<span class="fc" id="L175">    REPOSITORY_VULNERABILITY_ALERT,</span>
+<span class="fc" id="L178">    REPOSITORY_VULNERABILITY_ALERT,</span>
 
     /** The schedule. */
-<span class="fc" id="L178">    SCHEDULE,</span>
+<span class="fc" id="L181">    SCHEDULE,</span>
 
     /** The security advisory. */
-<span class="fc" id="L181">    SECURITY_ADVISORY,</span>
+<span class="fc" id="L184">    SECURITY_ADVISORY,</span>
 
     /** The star. */
-<span class="fc" id="L184">    STAR,</span>
+<span class="fc" id="L187">    STAR,</span>
 
     /** The status. */
-<span class="fc" id="L187">    STATUS,</span>
+<span class="fc" id="L190">    STATUS,</span>
 
     /** The team. */
-<span class="fc" id="L190">    TEAM,</span>
+<span class="fc" id="L193">    TEAM,</span>
 
     /** The team add. */
-<span class="fc" id="L193">    TEAM_ADD,</span>
+<span class="fc" id="L196">    TEAM_ADD,</span>
 
     /**
      * Special event type that means we haven't found an enum value corresponding to the event.
      */
-<span class="fc" id="L198">    UNKNOWN,</span>
+<span class="fc" id="L201">    UNKNOWN,</span>
 
     /** The watch. */
-<span class="fc" id="L201">    WATCH,</span>
+<span class="fc" id="L204">    WATCH,</span>
 
     /** The workflow dispatch. */
-<span class="fc" id="L204">    WORKFLOW_DISPATCH,</span>
+<span class="fc" id="L207">    WORKFLOW_DISPATCH,</span>
 
     /** The workflow job. */
-<span class="fc" id="L207">    WORKFLOW_JOB,</span>
+<span class="fc" id="L210">    WORKFLOW_JOB,</span>
 
     /** The workflow run. */
-<span class="fc" id="L210">    WORKFLOW_RUN;</span>
+<span class="fc" id="L213">    WORKFLOW_RUN;</span>
 
     /**
      * Returns GitHub's internal representation of this event.
@@ -215,9 +218,9 @@ import java.util.Locale;
      * @return the string
      */
     String symbol() {
-<span class="fc bfc" id="L218" title="All 2 branches covered.">        if (this == ALL)</span>
-<span class="fc" id="L219">            return &quot;*&quot;;</span>
-<span class="fc" id="L220">        return name().toLowerCase(Locale.ENGLISH);</span>
+<span class="fc bfc" id="L221" title="All 2 branches covered.">        if (this == ALL)</span>
+<span class="fc" id="L222">            return &quot;*&quot;;</span>
+<span class="fc" id="L223">        return name().toLowerCase(Locale.ENGLISH);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

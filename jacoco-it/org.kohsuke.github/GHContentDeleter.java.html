@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHContentDeleter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHContentDeleter.java</span></div><h1>GHContentDeleter.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+import java.io.IOException;
+import java.time.Instant;
+import java.util.Date;
+
+/**
+ * Builder for deleting repository content with support for specifying author and committer information.
+ *
+ * &lt;p&gt;
+ * Obtain an instance via {@link GHContent#createDelete()}.
+ *
+ * @see GHContent#createDelete()
+ */
+public final class GHContentDeleter {
+    @JsonInclude(Include.NON_NULL)
+    private static final class UserInfo {
+        private final String date;
+        private final String email;
+        private final String name;
+
+<span class="fc" id="L25">        private UserInfo(String name, String email, Instant date) {</span>
+<span class="fc" id="L26">            this.name = name;</span>
+<span class="fc" id="L27">            this.email = email;</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">            this.date = date != null ? GitHubClient.printInstant(date) : null;</span>
+<span class="fc" id="L29">        }</span>
+    }
+
+    private final GHContent content;
+    private final Requester req;
+
+<span class="fc" id="L35">    GHContentDeleter(GHContent content) {</span>
+<span class="fc" id="L36">        this.content = content;</span>
+<span class="fc" id="L37">        final GHRepository repository = content.getOwner();</span>
+<span class="fc" id="L38">        this.req = repository.root()</span>
+<span class="fc" id="L39">                .createRequest()</span>
+<span class="fc" id="L40">                .method(&quot;DELETE&quot;)</span>
+<span class="fc" id="L41">                .inBody()</span>
+<span class="fc" id="L42">                .with(&quot;path&quot;, content.getPath())</span>
+<span class="fc" id="L43">                .with(&quot;sha&quot;, content.getSha());</span>
+<span class="fc" id="L44">    }</span>
+
+    /**
+     * Configures the author of the commit. If not specified, the authenticated user is used as the author.
+     *
+     * @param name
+     *            the name of the author
+     * @param email
+     *            the email of the author
+     * @return this deleter
+     */
+    public GHContentDeleter author(String name, String email) {
+<span class="fc" id="L56">        return author(name, email, (Instant) null);</span>
+    }
+
+    /**
+     * Configures the author of the commit. If not specified, the authenticated user is used as the author.
+     *
+     * @param name
+     *            the name of the author
+     * @param email
+     *            the email of the author
+     * @param date
+     *            the date of the authoring
+     * @return this deleter
+     * @deprecated use {@link #author(String, String, Instant)} instead
+     */
+    @Deprecated
+    public GHContentDeleter author(String name, String email, Date date) {
+<span class="fc" id="L73">        return author(name, email, GitHubClient.toInstantOrNull(date));</span>
+    }
+
+    /**
+     * Configures the author of the commit. If not specified, the authenticated user is used as the author.
+     *
+     * @param name
+     *            the name of the author
+     * @param email
+     *            the email of the author
+     * @param date
+     *            the timestamp for the authoring
+     * @return this deleter
+     */
+    public GHContentDeleter author(String name, String email, Instant date) {
+<span class="fc" id="L88">        req.with(&quot;author&quot;, new UserInfo(name, email, date));</span>
+<span class="fc" id="L89">        return this;</span>
+    }
+
+    /**
+     * Sets the branch to delete the content from.
+     *
+     * @param branch
+     *            the branch name
+     * @return this deleter
+     */
+    public GHContentDeleter branch(String branch) {
+<span class="fc" id="L100">        req.with(&quot;branch&quot;, branch);</span>
+<span class="fc" id="L101">        return this;</span>
+    }
+
+    /**
+     * Commits the deletion.
+     *
+     * @return the response containing the commit information
+     * @throws IOException
+     *             the io exception
+     */
+    public GHContentUpdateResponse commit() throws IOException {
+<span class="fc" id="L112">        final GHRepository repository = content.getOwner();</span>
+<span class="fc" id="L113">        GHContentUpdateResponse response = req.withUrlPath(GHContent.getApiRoute(repository, content.getPath()))</span>
+<span class="fc" id="L114">                .fetch(GHContentUpdateResponse.class);</span>
+
+<span class="fc" id="L116">        response.getCommit().wrapUp(repository);</span>
+<span class="fc" id="L117">        return response;</span>
+    }
+
+    /**
+     * Configures the committer of the commit. If not specified, the authenticated user is used as the committer.
+     *
+     * @param name
+     *            the name of the committer
+     * @param email
+     *            the email of the committer
+     * @return this deleter
+     */
+    public GHContentDeleter committer(String name, String email) {
+<span class="fc" id="L130">        return committer(name, email, (Instant) null);</span>
+    }
+
+    /**
+     * Configures the committer of the commit. If not specified, the authenticated user is used as the committer.
+     *
+     * @param name
+     *            the name of the committer
+     * @param email
+     *            the email of the committer
+     * @param date
+     *            the date of the commit
+     * @return this deleter
+     * @deprecated use {@link #committer(String, String, Instant)} instead
+     */
+    @Deprecated
+    public GHContentDeleter committer(String name, String email, Date date) {
+<span class="fc" id="L147">        return committer(name, email, GitHubClient.toInstantOrNull(date));</span>
+    }
+
+    /**
+     * Configures the committer of the commit. If not specified, the authenticated user is used as the committer.
+     *
+     * @param name
+     *            the name of the committer
+     * @param email
+     *            the email of the committer
+     * @param date
+     *            the timestamp of the commit
+     * @return this deleter
+     */
+    public GHContentDeleter committer(String name, String email, Instant date) {
+<span class="fc" id="L162">        req.with(&quot;committer&quot;, new UserInfo(name, email, date));</span>
+<span class="fc" id="L163">        return this;</span>
+    }
+
+    /**
+     * Sets the commit message.
+     *
+     * @param message
+     *            the commit message
+     * @return this deleter
+     */
+    public GHContentDeleter message(String message) {
+<span class="fc" id="L174">        req.with(&quot;message&quot;, message);</span>
+<span class="fc" id="L175">        return this;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

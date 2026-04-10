@@ -87,6 +87,18 @@ public class GHPullRequestQueryBuilder extends GHQueryBuilder&lt;GHPullRequest&g
     }
 
     /**
+     * Page size gh pull request query builder.
+     *
+     * @param pageSize
+     *            the page size
+     * @return the gh pull request query builder
+     */
+    public GHPullRequestQueryBuilder pageSize(int pageSize) {
+<span class="fc" id="L97">        req.with(&quot;per_page&quot;, pageSize);</span>
+<span class="fc" id="L98">        return this;</span>
+    }
+
+    /**
      * Sort gh pull request query builder.
      *
      * @param sort
@@ -94,8 +106,8 @@ public class GHPullRequestQueryBuilder extends GHQueryBuilder&lt;GHPullRequest&g
      * @return the gh pull request query builder
      */
     public GHPullRequestQueryBuilder sort(Sort sort) {
-<span class="fc" id="L97">        req.with(&quot;sort&quot;, sort);</span>
-<span class="fc" id="L98">        return this;</span>
+<span class="fc" id="L109">        req.with(&quot;sort&quot;, sort);</span>
+<span class="fc" id="L110">        return this;</span>
     }
 
     /**
@@ -106,8 +118,8 @@ public class GHPullRequestQueryBuilder extends GHQueryBuilder&lt;GHPullRequest&g
      * @return the gh pull request query builder
      */
     public GHPullRequestQueryBuilder state(GHIssueState state) {
-<span class="fc" id="L109">        req.with(&quot;state&quot;, state);</span>
-<span class="fc" id="L110">        return this;</span>
+<span class="fc" id="L121">        req.with(&quot;state&quot;, state);</span>
+<span class="fc" id="L122">        return this;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

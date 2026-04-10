@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHSBOM.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHSBOM.java</span></div><h1>GHSBOM.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.util.Collections;
+import java.util.List;
+
+import javax.annotation.CheckForNull;
+
+/**
+ * Represents an SPDX Software Bill of Materials (SBOM) for a repository.
+ *
+ * @see GHRepository#getSBOM()
+ * @see &lt;a href=&quot;https://docs.github.com/en/rest/dependency-graph/sboms&quot;&gt;GitHub SBOM API&lt;/a&gt;
+ */
+@SuppressFBWarnings(value = { &quot;UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD&quot;, &quot;UWF_UNWRITTEN_FIELD&quot; },
+        justification = &quot;JSON API&quot;)
+public class GHSBOM {
+
+    /**
+     * Represents the creation information for an SBOM.
+     */
+    public static class CreationInfo {
+
+        private String created;
+        private List&lt;String&gt; creators;
+
+        /**
+         * Create default CreationInfo instance.
+         */
+<span class="fc" id="L32">        public CreationInfo() {</span>
+<span class="fc" id="L33">        }</span>
+
+        /**
+         * Gets the creation timestamp.
+         *
+         * @return the creation timestamp in ISO 8601 format
+         */
+        public String getCreated() {
+<span class="fc" id="L41">            return created;</span>
+        }
+
+        /**
+         * Gets the list of creators.
+         *
+         * @return the list of creators (e.g., &quot;Tool: GitHub.com-Dependency-Graph&quot;)
+         */
+        public List&lt;String&gt; getCreators() {
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">            return creators != null ? Collections.unmodifiableList(creators) : Collections.emptyList();</span>
+        }
+    }
+
+    /**
+     * Represents an external reference for a package.
+     */
+    public static class ExternalRef {
+
+        @JsonProperty(&quot;referenceCategory&quot;)
+        private String referenceCategory;
+        @JsonProperty(&quot;referenceLocator&quot;)
+        private String referenceLocator;
+        @JsonProperty(&quot;referenceType&quot;)
+        private String referenceType;
+
+        /**
+         * Create default ExternalRef instance.
+         */
+<span class="fc" id="L69">        public ExternalRef() {</span>
+<span class="fc" id="L70">        }</span>
+
+        /**
+         * Gets the reference category.
+         *
+         * @return the reference category (e.g., &quot;PACKAGE-MANAGER&quot;)
+         */
+        public String getReferenceCategory() {
+<span class="fc" id="L78">            return referenceCategory;</span>
+        }
+
+        /**
+         * Gets the reference locator.
+         *
+         * @return the reference locator in PURL format
+         */
+        public String getReferenceLocator() {
+<span class="fc" id="L87">            return referenceLocator;</span>
+        }
+
+        /**
+         * Gets the reference type.
+         *
+         * @return the reference type (e.g., &quot;purl&quot;)
+         */
+        public String getReferenceType() {
+<span class="fc" id="L96">            return referenceType;</span>
+        }
+    }
+
+    /**
+     * Represents a package in the SBOM.
+     */
+    public static class Package {
+
+        @JsonProperty(&quot;copyrightText&quot;)
+        private String copyrightText;
+        @JsonProperty(&quot;downloadLocation&quot;)
+        private String downloadLocation;
+        @JsonProperty(&quot;externalRefs&quot;)
+        private List&lt;ExternalRef&gt; externalRefs;
+        @JsonProperty(&quot;filesAnalyzed&quot;)
+        private boolean filesAnalyzed;
+        @JsonProperty(&quot;licenseConcluded&quot;)
+        private String licenseConcluded;
+        @JsonProperty(&quot;licenseDeclared&quot;)
+        private String licenseDeclared;
+        private String name;
+        @JsonProperty(&quot;SPDXID&quot;)
+        private String spdxid;
+        private String supplier;
+        @JsonProperty(&quot;versionInfo&quot;)
+        private String versionInfo;
+
+        /**
+         * Create default Package instance.
+         */
+<span class="fc" id="L127">        public Package() {</span>
+<span class="fc" id="L128">        }</span>
+
+        /**
+         * Gets the copyright text.
+         *
+         * @return the copyright text, or null if not specified
+         */
+        @CheckForNull
+        public String getCopyrightText() {
+<span class="fc" id="L137">            return copyrightText;</span>
+        }
+
+        /**
+         * Gets the download location.
+         *
+         * @return the download location
+         */
+        public String getDownloadLocation() {
+<span class="fc" id="L146">            return downloadLocation;</span>
+        }
+
+        /**
+         * Gets the external references.
+         *
+         * @return the external references
+         */
+        public List&lt;ExternalRef&gt; getExternalRefs() {
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">            return externalRefs != null ? Collections.unmodifiableList(externalRefs) : Collections.emptyList();</span>
+        }
+
+        /**
+         * Gets the concluded license.
+         *
+         * @return the concluded license, or null if not specified
+         */
+        @CheckForNull
+        public String getLicenseConcluded() {
+<span class="fc" id="L165">            return licenseConcluded;</span>
+        }
+
+        /**
+         * Gets the declared license.
+         *
+         * @return the declared license, or null if not specified
+         */
+        @CheckForNull
+        public String getLicenseDeclared() {
+<span class="fc" id="L175">            return licenseDeclared;</span>
+        }
+
+        /**
+         * Gets the package name.
+         *
+         * @return the package name
+         */
+        public String getName() {
+<span class="fc" id="L184">            return name;</span>
+        }
+
+        /**
+         * Gets the SPDX identifier.
+         *
+         * @return the SPDX identifier
+         */
+        public String getSPDXID() {
+<span class="fc" id="L193">            return spdxid;</span>
+        }
+
+        /**
+         * Gets the supplier.
+         *
+         * @return the supplier, or null if not specified
+         */
+        @CheckForNull
+        public String getSupplier() {
+<span class="fc" id="L203">            return supplier;</span>
+        }
+
+        /**
+         * Gets the version info.
+         *
+         * @return the version info, or null if not specified
+         */
+        @CheckForNull
+        public String getVersionInfo() {
+<span class="fc" id="L213">            return versionInfo;</span>
+        }
+
+        /**
+         * Returns whether files were analyzed.
+         *
+         * @return true if files were analyzed
+         */
+        public boolean isFilesAnalyzed() {
+<span class="fc" id="L222">            return filesAnalyzed;</span>
+        }
+    }
+
+    /**
+     * Represents a relationship between SPDX elements.
+     */
+    public static class Relationship {
+
+        @JsonProperty(&quot;relatedSpdxElement&quot;)
+        private String relatedSpdxElement;
+        @JsonProperty(&quot;relationshipType&quot;)
+        private String relationshipType;
+        @JsonProperty(&quot;spdxElementId&quot;)
+        private String spdxElementId;
+
+        /**
+         * Create default Relationship instance.
+         */
+<span class="fc" id="L241">        public Relationship() {</span>
+<span class="fc" id="L242">        }</span>
+
+        /**
+         * Gets the related SPDX element.
+         *
+         * @return the related SPDX element ID
+         */
+        public String getRelatedSpdxElement() {
+<span class="fc" id="L250">            return relatedSpdxElement;</span>
+        }
+
+        /**
+         * Gets the relationship type.
+         *
+         * @return the relationship type (e.g., &quot;DEPENDS_ON&quot;)
+         */
+        public String getRelationshipType() {
+<span class="fc" id="L259">            return relationshipType;</span>
+        }
+
+        /**
+         * Gets the SPDX element ID.
+         *
+         * @return the SPDX element ID
+         */
+        public String getSpdxElementId() {
+<span class="fc" id="L268">            return spdxElementId;</span>
+        }
+    }
+
+    @JsonProperty(&quot;creationInfo&quot;)
+    private CreationInfo creationInfo;
+    @JsonProperty(&quot;dataLicense&quot;)
+    private String dataLicense;
+    @JsonProperty(&quot;documentDescribes&quot;)
+    private String documentDescribes;
+    @JsonProperty(&quot;documentNamespace&quot;)
+    private String documentNamespace;
+    private String name;
+    private List&lt;Package&gt; packages;
+    private List&lt;Relationship&gt; relationships;
+    @JsonProperty(&quot;spdxVersion&quot;)
+    private String spdxVersion;
+    @JsonProperty(&quot;SPDXID&quot;)
+    private String spdxid;
+
+    /**
+     * Create default GHSBOM instance.
+     */
+<span class="fc" id="L291">    public GHSBOM() {</span>
+<span class="fc" id="L292">    }</span>
+
+    /**
+     * Gets the creation info.
+     *
+     * @return the creation info
+     */
+    @SuppressFBWarnings(value = { &quot;EI_EXPOSE_REP&quot; }, justification = &quot;Expected behavior&quot;)
+    public CreationInfo getCreationInfo() {
+<span class="fc" id="L301">        return creationInfo;</span>
+    }
+
+    /**
+     * Gets the data license.
+     *
+     * @return the data license (typically &quot;CC0-1.0&quot;)
+     */
+    public String getDataLicense() {
+<span class="fc" id="L310">        return dataLicense;</span>
+    }
+
+    /**
+     * Gets the document describes field.
+     *
+     * @return the document describes field, or null if not specified
+     */
+    @CheckForNull
+    public String getDocumentDescribes() {
+<span class="fc" id="L320">        return documentDescribes;</span>
+    }
+
+    /**
+     * Gets the document namespace.
+     *
+     * @return the document namespace URI
+     */
+    public String getDocumentNamespace() {
+<span class="fc" id="L329">        return documentNamespace;</span>
+    }
+
+    /**
+     * Gets the document name.
+     *
+     * @return the document name
+     */
+    public String getName() {
+<span class="fc" id="L338">        return name;</span>
+    }
+
+    /**
+     * Gets the list of packages.
+     *
+     * @return the list of packages
+     */
+    public List&lt;Package&gt; getPackages() {
+<span class="pc bpc" id="L347" title="1 of 2 branches missed.">        return packages != null ? Collections.unmodifiableList(packages) : Collections.emptyList();</span>
+    }
+
+    /**
+     * Gets the relationships.
+     *
+     * @return the relationships between SPDX elements
+     */
+    public List&lt;Relationship&gt; getRelationships() {
+<span class="pc bpc" id="L356" title="1 of 2 branches missed.">        return relationships != null ? Collections.unmodifiableList(relationships) : Collections.emptyList();</span>
+    }
+
+    /**
+     * Gets the SPDX identifier.
+     *
+     * @return the SPDX identifier (typically &quot;SPDXRef-DOCUMENT&quot;)
+     */
+    public String getSPDXID() {
+<span class="fc" id="L365">        return spdxid;</span>
+    }
+
+    /**
+     * Gets the SPDX version.
+     *
+     * @return the SPDX version (e.g., &quot;SPDX-2.3&quot;)
+     */
+    public String getSpdxVersion() {
+<span class="fc" id="L374">        return spdxVersion;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

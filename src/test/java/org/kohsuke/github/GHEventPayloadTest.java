@@ -691,6 +691,21 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Issue unlabeled when label was deleted from repository.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void issue_unlabeled_deleted_label() throws Exception {
+        final GHEventPayload.Issue event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Issue.class);
+        assertThat(event.getAction(), is("unlabeled"));
+        assertThat(event.getIssue().getNumber(), is(42));
+        assertThat(event.getLabel(), is(nullValue()));
+    }
+
+    /**
      * Issues.
      *
      * @throws Exception
@@ -1081,6 +1096,7 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(event.getPullRequest().getBase().getLabel(), is("baxterthehacker:main"));
         assertThat(event.getPullRequest().getBase().getSha(), is("9049f1265b7d61be4a8904a9a27120d2064dab3b"));
         assertThat(event.getPullRequest().isMerged(), is(false));
+        assertThat(event.getPullRequest().isPullRequest(), is(true));
         assertThat(event.getPullRequest().getMergeable(), nullValue());
         assertThat(event.getPullRequest().getMergeableState(), is("unknown"));
         assertThat(event.getPullRequest().getMergedBy(), nullValue());

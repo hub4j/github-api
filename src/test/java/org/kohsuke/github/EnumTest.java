@@ -41,7 +41,7 @@ public class EnumTest extends AbstractGitHubWireMockTest {
 
         assertThat(GHDirection.values().length, equalTo(2));
 
-        assertThat(GHEvent.values().length, equalTo(65));
+        assertThat(GHEvent.values().length, equalTo(66));
         assertThat(GHEvent.ALL.symbol(), equalTo("*"));
         assertThat(GHEvent.PULL_REQUEST.symbol(), equalTo(GHEvent.PULL_REQUEST.toString().toLowerCase()));
 
@@ -109,7 +109,7 @@ public class EnumTest extends AbstractGitHubWireMockTest {
 
         assertThat(GHRepositorySelection.values().length, equalTo(2));
 
-        assertThat(GHTargetType.values().length, equalTo(2));
+        assertThat(GHTargetType.values().length, equalTo(3));
 
         assertThat(GHTeam.Role.values().length, equalTo(2));
         assertThat(GHTeam.Privacy.values().length, equalTo(3));

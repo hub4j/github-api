@@ -2,6 +2,7 @@ package org.kohsuke.github;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.authorization.AuthorizationProvider;
@@ -109,20 +110,18 @@ class GitHubClient {
     /** The Constant DEFAULT_MINIMUM_RETRY_TIMEOUT_MILLIS. */
     private static final int DEFAULT_MINIMUM_RETRY_MILLIS = DEFAULT_MAXIMUM_RETRY_MILLIS;
     private static final Logger LOGGER = Logger.getLogger(GitHubClient.class.getName());
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final ObjectMapper MAPPER = JsonMapper.builder()
+            .addModule(new JavaTimeModule())
+            .visibility(new VisibilityChecker.Std(NONE, NONE, NONE, NONE, ANY))
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
+            .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+            .build();
 
     private static final ThreadLocal<String> sendRequestTraceId = new ThreadLocal<>();
 
     /** The Constant GITHUB_URL. */
     static final String GITHUB_URL = "https://api.github.com";
-
-    static {
-        MAPPER.registerModule(new JavaTimeModule());
-        MAPPER.setVisibility(new VisibilityChecker.Std(NONE, NONE, NONE, NONE, ANY));
-        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        MAPPER.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true);
-        MAPPER.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
-    }
 
     @Nonnull
     private static <T> GitHubResponse<T> createResponse(@Nonnull GitHubConnectorResponse connectorResponse,

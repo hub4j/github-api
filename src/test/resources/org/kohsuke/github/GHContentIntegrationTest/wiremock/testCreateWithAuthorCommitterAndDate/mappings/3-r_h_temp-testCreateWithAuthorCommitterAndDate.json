@@ -1,0 +1,24 @@
+{
+  "id": "a1b2c3d4-e5f6-7890-abcd-110000000001",
+  "name": "repos_hub4j-test-org_temp-testCreateWithAuthorCommitterAndDate",
+  "request": {
+    "url": "/repos/hub4j-test-org/temp-testCreateWithAuthorCommitterAndDate",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "3-r_h_temp-testCreateWithAuthorCommitterAndDate.json",
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8",
+      "Status": "200 OK"
+    }
+  },
+  "uuid": "a1b2c3d4-e5f6-7890-abcd-110000000001",
+  "persistent": true,
+  "insertionIndex": 3
+}

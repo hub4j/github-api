@@ -208,6 +208,35 @@ public class GitHubConnectionTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test that GitHub.com GraphQL URL is correctly constructed.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testGitHubCloudGraphQLUrl() throws Exception {
+        GitHub hub = GitHub.connect("bogus", "bogus");
+        GitHubRequest request = hub.createGraphQLRequest("test query").build();
+        assertThat(request.url().toString(), equalTo("https://api.github.com/graphql"));
+    }
+
+    /**
+     * Test that GitHub Enterprise GraphQL URL is correctly constructed.
+     * <p>
+     * GitHub Enterprise Server has REST API at /api/v3 but GraphQL at /api/graphql.
+     * </p>
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testGitHubEnterpriseGraphQLUrl() throws Exception {
+        GitHub hub = GitHub.connectToEnterpriseWithOAuth("https://enterprise.kohsuke.org/api/v3", "bogus", "bogus");
+        GitHubRequest request = hub.createGraphQLRequest("test query").build();
+        assertThat(request.url().toString(), equalTo("https://enterprise.kohsuke.org/api/graphql"));
+    }
+
+    /**
      * Test git hub is api url valid.
      *
      * @throws IOException

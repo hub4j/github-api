@@ -1984,6 +1984,20 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Exports the software bill of materials (SBOM) for a repository.
+     *
+     * @return the SBOM export result containing the SPDX-formatted SBOM
+     * @throws IOException
+     *             the io exception
+     * @see <a href="https://docs.github.com/en/rest/dependency-graph/sboms">SBOM API documentation</a>
+     */
+    public GHSBOMExportResult getSBOM() throws IOException {
+        return root().createRequest()
+                .withUrlPath(getApiTailUrl("dependency-graph/sbom"))
+                .fetch(GHSBOMExportResult.class);
+    }
+
+    /**
      * Gets size.
      *
      * @return the size
@@ -2801,6 +2815,18 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Retrieves all refs that match the given prefix using the matching-refs endpoint. This is useful to avoid fetching
+     * all available refs.
+     *
+     * @param refPrefix
+     *            the ref prefix to match e.g. <code>heads/main</code> or <code>tags/v1</code>
+     * @return paged iterable of all refs matching the specified prefix
+     */
+    public PagedIterable<GHRef> listMatchingRefs(String refPrefix) {
+        return GHRef.readMatchingRefs(this, refPrefix);
+    }
+
+    /**
      * Lists up all the milestones in this repository.
      *
      * @param state
@@ -3397,7 +3423,7 @@ public class GHRepository extends GHObject {
      * @return the api tail url
      */
     String getApiTailUrl(String tail) {
-        if (tail.length() > 0 && !tail.startsWith("/")) {
+        if (!tail.isEmpty() && !tail.startsWith("/")) {
             tail = '/' + tail;
         }
         return "/repos/" + fullName + tail;

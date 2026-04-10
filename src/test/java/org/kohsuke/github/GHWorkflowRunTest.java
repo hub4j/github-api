@@ -459,6 +459,46 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test force cancel a run.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testForceCancel() throws IOException {
+        GHWorkflow workflow = repo.getWorkflow(SLOW_WORKFLOW_PATH);
+
+        long latestPreexistingWorkflowRunId = getLatestPreexistingWorkflowRunId();
+
+        workflow.dispatch(MAIN_BRANCH);
+
+        // now that we have triggered the workflow run, we will wait until it's in progress and then force cancel it
+        await((nonRecordingRepo) -> getWorkflowRun(nonRecordingRepo,
+                SLOW_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.IN_PROGRESS,
+                latestPreexistingWorkflowRunId).isPresent());
+
+        GHWorkflowRun workflowRun = getWorkflowRun(SLOW_WORKFLOW_NAME,
+                MAIN_BRANCH,
+                Status.IN_PROGRESS,
+                latestPreexistingWorkflowRunId)
+                .orElseThrow(() -> new IllegalStateException("We must have a valid workflow run starting from here"));
+
+        assertThat(workflowRun.getId(), notNullValue());
+
+        workflowRun.forceCancel();
+        long cancelledWorkflowRunId = workflowRun.getId();
+
+        // let's wait until it's completed
+        await((nonRecordingRepo) -> getWorkflowRunStatus(nonRecordingRepo, cancelledWorkflowRunId) == Status.COMPLETED);
+
+        // let's check that it has been properly cancelled
+        workflowRun = repo.getWorkflowRun(cancelledWorkflowRunId);
+        assertThat(workflowRun.getConclusion(), equalTo(Conclusion.CANCELLED));
+    }
+
+    /**
      * Test jobs.
      *
      * @throws IOException
@@ -606,6 +646,24 @@ public class GHWorkflowRunTest extends AbstractGitHubWireMockTest {
         assertThat(workflowRun.getHeadSha(), notNullValue());
         assertThat(workflowRun.getActor(), hasProperty("login", equalTo("octocat")));
         assertThat(workflowRun.getTriggeringActor(), hasProperty("login", equalTo("octocat_trigger")));
+    }
+
+    /**
+     * Test rerun variants.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testRerunVariants() throws IOException {
+        GHWorkflowRun workflowRun = repo.getWorkflowRun(686036126L);
+
+        assertThat(workflowRun.getId(), is(686036126L));
+
+        workflowRun.rerunFailedJobs();
+        workflowRun.rerunFailedJobs(true);
+        workflowRun.rerun(true);
+        workflowRun.rerun();
     }
 
     /**

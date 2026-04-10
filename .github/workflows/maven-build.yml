@@ -25,7 +25,7 @@ jobs:
     strategy:
       fail-fast: true
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - name: Set up JDK
       uses: actions/setup-java@v5
       with:
@@ -36,7 +36,7 @@ jobs:
       env:
         MAVEN_OPTS: ${{ env.JAVA_11_PLUS_MAVEN_OPTS }}
       run: mvn -B clean install -DskipTests --file pom.xml
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       with:
         name: maven-target-directory
         path: target/
@@ -47,7 +47,7 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - name: Set up JDK
       uses: actions/setup-java@v5
       with:
@@ -68,7 +68,7 @@ jobs:
     strategy:
       fail-fast: true
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - name: Set up JDK
       uses: actions/setup-java@v5
       with:
@@ -90,7 +90,7 @@ jobs:
         os: [ ubuntu, windows ]
         java: [ 17, 21 ]
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - name: Set up JDK
       uses: actions/setup-java@v5
       with:
@@ -110,7 +110,7 @@ jobs:
       run: mvn -B clean install -D enable-ci --file pom.xml "-Dsurefire.argLine=--add-opens java.base/java.net=ALL-UNNAMED"
     - name: Save coverage data
       if: matrix.os == 'ubuntu' && matrix.java == '17'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: maven-test-target-directory
         path: target/
@@ -120,13 +120,13 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
-    - uses: actions/download-artifact@v5
+    - uses: actions/checkout@v6
+    - uses: actions/download-artifact@v8
       with:
         name: maven-test-target-directory
         path: target
     - name: Codecov Report
-      uses: codecov/codecov-action@v5.5.0
+      uses: codecov/codecov-action@v6.0.0
       with:
         # Codecov token from https://app.codecov.io/gh/hub4j/github-api/settings
         token: ${{ secrets.CODECOV_TOKEN }}
@@ -138,8 +138,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
-    - uses: actions/download-artifact@v5
+    - uses: actions/checkout@v6
+    - uses: actions/download-artifact@v8
       with:
         name: maven-target-directory
         path: target

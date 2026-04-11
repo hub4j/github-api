@@ -35,6 +35,28 @@ public class GHTeam extends GHObject implements Refreshable {
     }
 
     /**
+     * Notification setting for a team. Controls whether members receive notifications when the team is mentioned.
+     */
+    public enum NotificationSetting {
+
+        /** Notifications enabled: members receive notifications when the team is @mentioned. */
+        NOTIFICATIONS_ENABLED("notifications_enabled"),
+        /** Notifications disabled: mentions of the team do not generate notifications. */
+        NOTIFICATIONS_DISABLED("notifications_disabled");
+
+        private final String apiValue;
+
+        NotificationSetting(String apiValue) {
+            this.apiValue = apiValue;
+        }
+
+        @Override
+        public String toString() {
+            return apiValue;
+        }
+    }
+
+    /**
      * Member's role in a team.
      */
     public enum Role {
@@ -509,6 +531,58 @@ public class GHTeam extends GHObject implements Refreshable {
      */
     public void setPrivacy(Privacy privacy) throws IOException {
         root().createRequest().method("PATCH").with("privacy", privacy).withUrlPath(api("")).send();
+    }
+
+    /**
+     * Sets the team's name.
+     *
+     * @param name
+     *            the new name
+     * @throws IOException
+     *             the io exception
+     */
+    public void setName(String name) throws IOException {
+        root().createRequest().method("PATCH").with("name", name).withUrlPath(api("")).send();
+    }
+
+    /**
+     * Sets the team's notification setting.
+     *
+     * @param notificationSetting
+     *            the notification setting
+     * @throws IOException
+     *             the io exception
+     */
+    public void setNotificationSetting(NotificationSetting notificationSetting) throws IOException {
+        root().createRequest()
+                .method("PATCH")
+                .with("notification_setting", notificationSetting.toString())
+                .withUrlPath(api(""))
+                .send();
+    }
+
+    /**
+     * Sets the team's permission.
+     *
+     * @param permission
+     *            the permission
+     * @throws IOException
+     *             the io exception
+     */
+    public void setPermission(GHOrganization.Permission permission) throws IOException {
+        root().createRequest().method("PATCH").with("permission", permission).withUrlPath(api("")).send();
+    }
+
+    /**
+     * Sets the team's parent team by ID.
+     *
+     * @param parentTeamId
+     *            the ID of the parent team, or {@code null} to remove the parent
+     * @throws IOException
+     *             the io exception
+     */
+    public void setParentTeamId(Long parentTeamId) throws IOException {
+        root().createRequest().method("PATCH").with("parent_team_id", parentTeamId).withUrlPath(api("")).send();
     }
 
     private String api(String tail) {

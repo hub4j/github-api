@@ -35,6 +35,28 @@ public class GHTeam extends GHObject implements Refreshable {
     }
 
     /**
+     * Notification setting for a team. Controls whether members receive notifications when the team is mentioned.
+     */
+    public enum NotificationSetting {
+
+        /** Notifications enabled: members receive notifications when the team is @mentioned. */
+        NOTIFICATIONS_ENABLED("notifications_enabled"),
+        /** Notifications disabled: mentions of the team do not generate notifications. */
+        NOTIFICATIONS_DISABLED("notifications_disabled");
+
+        private final String apiValue;
+
+        NotificationSetting(String apiValue) {
+            this.apiValue = apiValue;
+        }
+
+        @Override
+        public String toString() {
+            return apiValue;
+        }
+    }
+
+    /**
      * Member's role in a team.
      */
     public enum Role {
@@ -527,14 +549,14 @@ public class GHTeam extends GHObject implements Refreshable {
      * Sets the team's notification setting.
      *
      * @param notificationSetting
-     *            the notification setting (e.g. "notifications_enabled" or "notifications_disabled")
+     *            the notification setting
      * @throws IOException
      *             the io exception
      */
-    public void setNotificationSetting(String notificationSetting) throws IOException {
+    public void setNotificationSetting(NotificationSetting notificationSetting) throws IOException {
         root().createRequest()
                 .method("PATCH")
-                .with("notification_setting", notificationSetting)
+                .with("notification_setting", notificationSetting.toString())
                 .withUrlPath(api(""))
                 .send();
     }
@@ -543,11 +565,11 @@ public class GHTeam extends GHObject implements Refreshable {
      * Sets the team's permission.
      *
      * @param permission
-     *            the permission (e.g. "pull", "push", or "admin")
+     *            the permission
      * @throws IOException
      *             the io exception
      */
-    public void setPermission(String permission) throws IOException {
+    public void setPermission(GHOrganization.Permission permission) throws IOException {
         root().createRequest().method("PATCH").with("permission", permission).withUrlPath(api("")).send();
     }
 

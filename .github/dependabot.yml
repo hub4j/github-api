@@ -3,12 +3,32 @@ updates:
 - package-ecosystem: "maven"
   directory: "/"
   rebase-strategy: "disabled"
+  target-branch: "main"
+  open-pull-requests-limit: 10
   schedule:
     interval: "monthly"
     time: "02:00"
 - package-ecosystem: "github-actions"
   directory: "/"
   rebase-strategy: "disabled"
+  target-branch: "main"
+  open-pull-requests-limit: 10
+  schedule:
+    interval: "monthly"
+    time: "02:00"
+- package-ecosystem: "maven"
+  directory: "/"
+  rebase-strategy: "disabled"
+  target-branch: "main-1.x"
+  open-pull-requests-limit: 10
+  schedule:
+    interval: "monthly"
+    time: "02:00"
+- package-ecosystem: "github-actions"
+  directory: "/"
+  rebase-strategy: "disabled"
+  target-branch: "main-1.x"
+  open-pull-requests-limit: 10
   schedule:
     interval: "monthly"
     time: "02:00"

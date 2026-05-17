@@ -52,9 +52,21 @@ public class GHCommitPointer {
      * @throws IOException
      *             the io exception
      */
+
+    //original code
+    // public GHCommit getCommit() throws IOException {
+    //     return getRepository().getCommit(getSha()); //when repo is null, so this will throw NPE
+    // }
+
+    //fixed code
     public GHCommit getCommit() throws IOException {
-        return getRepository().getCommit(getSha());
+    GHRepository repository = getRepository();
+    if (repository == null) 
+        throw new IOException("Cannot commit because repository is null.");
+        
+        return repository.getCommit(getSha());
     }
+
 
     /**
      * String that looks like "USERNAME:REF".

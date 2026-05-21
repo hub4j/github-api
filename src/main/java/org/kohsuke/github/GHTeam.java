@@ -21,6 +21,24 @@ import static org.kohsuke.github.GitHubRequest.transformEnum;
 public class GHTeam extends GHObject implements Refreshable {
 
     /**
+     * Notification setting across a team
+     */
+    public enum NotificationSetting {
+        /**
+         * No one receives notifications.
+         */
+        NOTIFICATIONS_DISABLED,
+        /**
+         * Team members receive notifications when the team is @mentioned.
+         */
+        NOTIFICATIONS_ENABLED,
+        /**
+         * Unknown notification setting.
+         */
+        UNKNOWN
+    }
+
+    /**
      * The Enum Privacy.
      */
     public enum Privacy {
@@ -47,24 +65,6 @@ public class GHTeam extends GHObject implements Refreshable {
         /** A normal member of the team. */
         MEMBER,
         /** Unknown role. */
-        UNKNOWN
-    }
-
-    /**
-     * Notification setting across a team
-     */
-    public enum NotificationSetting {
-        /**
-         * Team members receive notifications when the team is @mentioned.
-         */
-        NOTIFICATIONS_ENABLED,
-        /**
-         * No one receives notifications.
-         */
-        NOTIFICATIONS_DISABLED,
-        /**
-         * Unknown notification setting.
-         */
         UNKNOWN
     }
 

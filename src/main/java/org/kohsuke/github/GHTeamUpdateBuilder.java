@@ -12,8 +12,8 @@ import java.io.IOException;
  */
 public class GHTeamUpdateBuilder extends GitHubInteractiveObject {
 
-    private final String orgName;
     private final String existingName;
+    private final String orgName;
     /** The builder. */
     protected final Requester builder;
 
@@ -36,29 +36,6 @@ public class GHTeamUpdateBuilder extends GitHubInteractiveObject {
     }
 
     /**
-     * Updates a team with all the provided parameters.
-     *
-     * @return the gh team
-     * @throws IOException
-     *             if team cannot be updated
-     */
-    public GHTeam update() throws IOException {
-        return builder.method("PATCH").withUrlPath("/orgs/" + orgName + "/teams/" + existingName).fetch(GHTeam.class).wrapUp(root());
-    }
-
-    /**
-     * Name for this team.
-     *
-     * @param name
-     *            name of team
-     * @return a builder to continue with building
-     */
-    public GHTeamUpdateBuilder name(String name) {
-        this.builder.with("name", name);
-        return this;
-    }
-
-    /**
      * Description for this team.
      *
      * @param description
@@ -71,14 +48,14 @@ public class GHTeamUpdateBuilder extends GitHubInteractiveObject {
     }
 
     /**
-     * Privacy for this team.
+     * Name for this team.
      *
-     * @param privacy
-     *            privacy of team
+     * @param name
+     *            name of team
      * @return a builder to continue with building
      */
-    public GHTeamUpdateBuilder privacy(GHTeam.Privacy privacy) {
-        this.builder.with("privacy", privacy);
+    public GHTeamUpdateBuilder name(String name) {
+        this.builder.with("name", name);
         return this;
     }
 
@@ -95,21 +72,6 @@ public class GHTeamUpdateBuilder extends GitHubInteractiveObject {
     }
 
     /**
-     * The permission that new repositories will be added to the team with when none is specified.
-     *
-     * @param permission
-     *            permission to be applied
-     * @return a builder to continue with building
-     * @deprecated see
-     *              <a href=https://developer.github.com/v3/teams/#update-team>Update team docs</a>
-     */
-    @Deprecated
-    public GHTeamUpdateBuilder permission(GHOrganization.Permission permission) {
-        this.builder.with("permission", permission);
-        return this;
-    }
-
-    /**
      * Parent team id for this team.
      *
      * @param parentTeamId
@@ -119,5 +81,45 @@ public class GHTeamUpdateBuilder extends GitHubInteractiveObject {
     public GHTeamUpdateBuilder parentTeamId(Long parentTeamId) {
         this.builder.with("parent_team_id", parentTeamId);
         return this;
+    }
+
+    /**
+     * The permission that new repositories will be added to the team with when none is specified.
+     *
+     * @param permission
+     *            permission to be applied
+     * @return a builder to continue with building
+     * @deprecated see <a href=https://developer.github.com/v3/teams/#update-team>Update team docs</a>
+     */
+    @Deprecated
+    public GHTeamUpdateBuilder permission(GHOrganization.Permission permission) {
+        this.builder.with("permission", permission);
+        return this;
+    }
+
+    /**
+     * Privacy for this team.
+     *
+     * @param privacy
+     *            privacy of team
+     * @return a builder to continue with building
+     */
+    public GHTeamUpdateBuilder privacy(GHTeam.Privacy privacy) {
+        this.builder.with("privacy", privacy);
+        return this;
+    }
+
+    /**
+     * Updates a team with all the provided parameters.
+     *
+     * @return the gh team
+     * @throws IOException
+     *             if team cannot be updated
+     */
+    public GHTeam update() throws IOException {
+        return builder.method("PATCH")
+                .withUrlPath("/orgs/" + orgName + "/teams/" + existingName)
+                .fetch(GHTeam.class)
+                .wrapUp(root());
     }
 }

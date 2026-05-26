@@ -1,13 +1,17 @@
 package org.kohsuke.github;
 
+import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InterruptedIOException;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 
@@ -56,6 +60,18 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
      * On a wait, even if the response suggests a very short wait, wait for a minimum duration.
      */
     private static final int MINIMUM_ABUSE_RETRY_MILLIS = 1000;
+
+    /**
+     * Pattern matching the marker GitHub returns in the response body when the request is rejected by a secondary rate
+     * limit, regardless of whether {@code Retry-After} or {@code gh-limited-by} headers are present. Used as a fallback
+     * detection path so that responses without those headers are still recognized.
+     *
+     * @see <a href=
+     *      "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28#about-secondary-rate-limits">About
+     *      secondary rate limits</a>
+     */
+    private static final Pattern SECONDARY_RATE_LIMIT_BODY_PATTERN = Pattern.compile("\\bsecondary rate\\b",
+            Pattern.CASE_INSENSITIVE);
 
     // If "Retry-After" missing, wait for unambiguously over one minute per GitHub guidance
     static long DEFAULT_WAIT_MILLIS = Duration.ofSeconds(61).toMillis();
@@ -147,6 +163,25 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
     }
 
     /**
+     * Checks if the response body contains the secondary rate limit marker. GitHub does not always return
+     * {@code Retry-After} or {@code gh-limited-by} headers when a secondary rate limit is hit; in those cases the body
+     * still contains a "secondary rate" marker that can be matched as a fallback detection path.
+     *
+     * @param connectorResponse
+     *            the response from the GitHub connector
+     * @return true if the response body contains the secondary rate limit marker
+     * @throws IOException
+     *             if reading the response body fails
+     * @see <a href="https://github.com/hub4j/github-api/issues/2009">hub4j/github-api#2009</a>
+     */
+    private boolean hasSecondaryRateLimitBodyMarker(GitHubConnectorResponse connectorResponse) throws IOException {
+        try (InputStream bodyStream = connectorResponse.bodyStream()) {
+            String body = IOUtils.toString(bodyStream, StandardCharsets.UTF_8);
+            return SECONDARY_RATE_LIMIT_BODY_PATTERN.matcher(body).find();
+        }
+    }
+
+    /**
      * Checks if the response status code is HTTP_FORBIDDEN (403).
      *
      * @param connectorResponse
@@ -178,9 +213,14 @@ public abstract class GitHubAbuseLimitHandler extends GitHubConnectorResponseErr
      *             Signals that an I/O exception has occurred.
      */
     @Override
-    boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) {
-        return isTooManyRequests(connectorResponse)
-                || (isForbidden(connectorResponse) && hasRetryOrLimitHeader(connectorResponse));
+    boolean isError(@Nonnull GitHubConnectorResponse connectorResponse) throws IOException {
+        if (isTooManyRequests(connectorResponse)) {
+            return true;
+        }
+        if (!isForbidden(connectorResponse)) {
+            return false;
+        }
+        return hasRetryOrLimitHeader(connectorResponse) || hasSecondaryRateLimitBodyMarker(connectorResponse);
     }
 
 }

@@ -1,6 +1,10 @@
 package org.kohsuke.github;
 
+import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.time.Instant;
+import java.util.Date;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -15,7 +19,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
-public class GHVerification {
+public class GHVerification extends GitHubBridgeAdapterObject {
 
     /**
      * The possible values for reason in verification object from github.
@@ -84,6 +88,7 @@ public class GHVerification {
     private Reason reason;
     private String signature, payload;
     private boolean verified;
+    private String verifiedAt;
 
     /**
      * Create default GHVerification instance
@@ -117,6 +122,16 @@ public class GHVerification {
      */
     public String getSignature() {
         return signature;
+    }
+
+    /**
+     * Gets the time when the signature was verified by GitHub.
+     *
+     * @return the instant the signature was verified, or null if not available.
+     */
+    @WithBridgeMethods(value = Date.class, adapterMethod = "instantToDate")
+    public Instant getVerifiedAt() {
+        return GitHubClient.parseInstant(verifiedAt);
     }
 
     /**

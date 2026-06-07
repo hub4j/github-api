@@ -139,7 +139,8 @@ GitHub github = GitHubBuilder.fromEnvironment().build();
 Pluggable HTTP client
 
   This library comes with a pluggable connector to use different HTTP client implementations
-  through <<<HttpConnector>>>. In particular, this means you can use {{{https://square.github.io/okhttp/}OkHttp}},
+  through <<<GitHubConnector>>>. In particular, this means you can use {{{https://square.github.io/okhttp/}OkHttp}}
+  via <<<OkHttpGitHubConnector>>> (from the <<<org.kohsuke.github.extras.okhttp3>>> package),
   so we can make use of its HTTP response cache.
   Making a conditional request against the GitHub API and receiving a 304 response
   {{{https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#conditional-requests}does not count against the rate limit}}.
@@ -148,7 +149,8 @@ Pluggable HTTP client
 
 +-----+
 Cache cache = new Cache(cacheDirectory, 10 * 1024 * 1024); // 10MB cache
+OkHttpClient client = new OkHttpClient.Builder().cache(cache).build();
 GitHub gitHub = GitHubBuilder.fromEnvironment()
-    .withConnector(new OkHttpConnector(new OkUrlFactory(new OkHttpClient().setCache(cache))))
+    .withConnector(new OkHttpGitHubConnector(client))
     .build();
 +-----+

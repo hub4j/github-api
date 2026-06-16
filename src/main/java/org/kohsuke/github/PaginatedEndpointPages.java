@@ -1,64 +1,40 @@
 package org.kohsuke.github;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 
-// TODO: Auto-generated Javadoc
 /**
- * May be used for any item that has pagination information. Iterates over paginated {@code T} objects (not the items
- * inside the page). Also exposes {@link #finalResponse()} to allow getting a full {@link GitHubResponse}{@code <T>}
- * after iterating completes.
- *
+ * May be used for any item that has pagination information. Iterates over paginated {@code P} objects (not the items
+ * inside the page). Also exposes {@link #finalResponse()} to allow getting a full {@link GitHubResponse<Page>} after
+ * iterating completes.
+ * <p>
  * Works for array responses, also works for search results which are single instances with an array of items inside.
- *
+ * <p>
  * This class is not thread-safe. Any one instance should only be called from a single thread.
  *
  * @author Liam Newman
- * @param <T>
+ * @param <Page>
  *            type of each page (not the items in the page).
  */
-class GitHubPageIterator<T> implements Iterator<T> {
+class PaginatedEndpointPages<Page extends GitHubPage<Item>, Item> implements Iterator<Page> {
 
-    /**
-     * Loads paginated resources.
-     *
-     * @param <T>
-     *            type of each page (not the items in the page).
-     * @param client
-     *            the {@link GitHubClient} from which to request responses
-     * @param type
-     *            type of each page (not the items in the page).
-     * @param request
-     *            the request
-     * @param pageSize
-     *            the page size
-     * @return iterator
-     */
-    static <T> GitHubPageIterator<T> create(GitHubClient client, Class<T> type, GitHubRequest request, int pageSize) {
-
-        if (pageSize > 0) {
-            GitHubRequest.Builder<?> builder = request.toBuilder().with("per_page", pageSize);
-            request = builder.build();
-        }
-
-        if (!"GET".equals(request.method())) {
-            throw new IllegalArgumentException("Request method \"GET\" is required for page iterator.");
-        }
-
-        return new GitHubPageIterator<>(client, type, request);
+    static <P extends GitHubPage<I>, I> PaginatedEndpointPages<P, I> fromSinglePage(Class<P> pageType, final P page) {
+        return new PaginatedEndpointPages<>(pageType, page);
     }
-    private final GitHubClient client;
 
     /**
      * When done iterating over pages, it is on rare occasions useful to be able to get information from the final
      * response that was retrieved.
      */
-    private GitHubResponse<T> finalResponse = null;
-
+    private GitHubResponse<Page> finalResponse = null;
+    private final Consumer<Item> itemInitializer;
     /**
      * The page that will be returned when {@link #next()} is called.
      *
@@ -66,22 +42,43 @@ class GitHubPageIterator<T> implements Iterator<T> {
      * Will be {@code null} after {@link #next()} is called.
      * </p>
      * <p>
-     * Will not be {@code null} after {@link #fetch()} is called if a new page was fetched.
+     * Will not be {@code null} after {@link #fetchNext()} is called if a new page was fetched.
      * </p>
      */
-    private T next;
+    private Page next;
+
+    protected final GitHubClient client;
 
     /**
      * The request that will be sent when to get a new response page if {@link #next} is {@code null}. Will be
      * {@code null} when there are no more pages to fetch.
      */
-    private GitHubRequest nextRequest;
+    protected GitHubRequest nextRequest;
 
-    private final Class<T> type;
+    protected final Class<Page> pageType;
 
-    private GitHubPageIterator(GitHubClient client, Class<T> type, GitHubRequest request) {
+    /*
+     * Constructor for PaginatedEndpointPages for single page
+     */
+    PaginatedEndpointPages(Class<Page> pageType, Page page) {
+        this(null, pageType, null, 0, null);
+        this.next = page;
+    }
+
+    PaginatedEndpointPages(GitHubClient client,
+            Class<Page> pageType,
+            GitHubRequest request,
+            int pageSize,
+            Consumer<Item> itemInitializer) {
+        this.pageType = pageType;
+        this.itemInitializer = itemInitializer;
         this.client = client;
-        this.type = type;
+
+        if (pageSize > 0) {
+            GitHubRequest.Builder<?> builder = request.toBuilder().with("per_page", pageSize);
+            request = builder.build();
+        }
+
         this.nextRequest = request;
     }
 
@@ -90,7 +87,7 @@ class GitHubPageIterator<T> implements Iterator<T> {
      *
      * @return the final response of the iterator.
      */
-    public GitHubResponse<T> finalResponse() {
+    public GitHubResponse<Page> finalResponse() {
         if (hasNext()) {
             throw new GHException("Final response is not available until after iterator is done.");
         }
@@ -101,24 +98,34 @@ class GitHubPageIterator<T> implements Iterator<T> {
      * {@inheritDoc}
      */
     public boolean hasNext() {
-        fetch();
-        return next != null;
+        return peek() != null;
     }
 
     /**
-     * Gets the next page.
-     *
-     * @return the next page.
+     * {@inheritDoc}
      */
     @Nonnull
-    public T next() {
-        fetch();
-        T result = next;
+    public Page next() {
+        Page result = peek();
         if (result == null)
             throw new NoSuchElementException();
-        // If this is the last page, keep the response
         next = null;
         return result;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Page peek() {
+        if (next == null) {
+            Page result = fetchNext();
+            if (result != null) {
+                next = result;
+                initializeItems();
+            }
+        }
+        return next;
     }
 
     /**
@@ -134,33 +141,43 @@ class GitHubPageIterator<T> implements Iterator<T> {
      * after the current response, {@link #nextRequest} is set to {@code null}.
      * </p>
      */
-    private void fetch() {
-        if (next != null)
-            return; // already fetched
+    private Page fetchNext() {
         if (nextRequest == null)
-            return; // no more data to fetch
+            return null; // no more data to fetch
+
+        Page result;
 
         URL url = nextRequest.url();
         try {
-            GitHubResponse<T> nextResponse = client.sendRequest(nextRequest,
-                    (connectorResponse) -> GitHubResponse.parseBody(connectorResponse, type));
+            GitHubResponse<Page> nextResponse = sendNextRequest();
             assert nextResponse.body() != null;
-            next = nextResponse.body();
-            nextRequest = findNextURL(nextRequest, nextResponse);
-            if (nextRequest == null) {
-                finalResponse = nextResponse;
-            }
+            result = nextResponse.body();
+            updateNextRequest(nextResponse);
         } catch (IOException e) {
             // Iterators do not throw IOExceptions, so we wrap any IOException
             // in a runtime GHException to bubble out if needed.
             throw new GHException("Failed to retrieve " + url, e);
+        }
+        return result;
+    }
+
+    /**
+     * This method initializes items with local data after they are fetched. It is up to the implementer to decide what
+     * local data to apply.
+     *
+     */
+    private void initializeItems() {
+        if (itemInitializer != null) {
+            for (Item item : next.getItems()) {
+                itemInitializer.accept(item);
+            }
         }
     }
 
     /**
      * Locate the next page from the pagination "Link" tag.
      */
-    private GitHubRequest findNextURL(GitHubRequest nextRequest, GitHubResponse<T> nextResponse) {
+    private void updateNextRequest(GitHubResponse<Page> nextResponse) {
         GitHubRequest result = null;
         String link = nextResponse.header("Link");
         if (link != null) {
@@ -174,7 +191,15 @@ class GitHubPageIterator<T> implements Iterator<T> {
                 }
             }
         }
-        return result;
+        nextRequest = result;
+        if (nextRequest == null) {
+            // If this is the last page, keep the response
+            finalResponse = nextResponse;
+        }
     }
 
+    @NotNull protected GitHubResponse<Page> sendNextRequest() throws IOException {
+        return client.sendRequest(nextRequest,
+                (connectorResponse) -> GitHubResponse.parseBody(connectorResponse, pageType));
+    }
 }

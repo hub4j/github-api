@@ -8,9 +8,14 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
-class GHWorkflowJobsPage {
+class GHWorkflowJobsPage implements GitHubPage<GHWorkflowJob> {
     private GHWorkflowJob[] jobs;
     private int totalCount;
+
+    @Override
+    public GHWorkflowJob[] getItems() {
+        return jobs;
+    }
 
     /**
      * Gets the total count.
@@ -19,19 +24,5 @@ class GHWorkflowJobsPage {
      */
     public int getTotalCount() {
         return totalCount;
-    }
-
-    /**
-     * Gets the workflow jobs.
-     *
-     * @param repo
-     *            the repo
-     * @return the workflow jobs
-     */
-    GHWorkflowJob[] getWorkflowJobs(GHRepository repo) {
-        for (GHWorkflowJob job : jobs) {
-            job.wrapUp(repo);
-        }
-        return jobs;
     }
 }

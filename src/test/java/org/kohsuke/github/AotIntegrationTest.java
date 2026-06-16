@@ -41,41 +41,62 @@ public class AotIntegrationTest {
     public void testIfAllRequiredClassesAreRegisteredForAot() throws IOException {
         String artifactId = System.getProperty("test.projectArtifactId", "default");
 
-        Stream<String> providedReflectionConfigStreamOfNames = readAotConfigToStreamOfClassNames(
-                "./target/classes/META-INF/native-image/org.kohsuke/" + artifactId + "/reflect-config.json");
-        Stream<String> providedNoReflectStreamOfNames = Files
-                .lines(Path.of("./target/test-classes/no-reflect-and-serialization-list"));
-        Stream<String> providedSerializationStreamOfNames = readAotConfigToStreamOfClassNames(
-                "./target/classes/META-INF/native-image/org.kohsuke/" + artifactId + "/serialization-config.json");
-        Stream<String> providedAotConfigClassNamesPart = Stream
-                .concat(providedSerializationStreamOfNames,
-                        Stream.concat(providedReflectionConfigStreamOfNames, providedNoReflectStreamOfNames))
-                .distinct();
-        List<String> providedReflectionAndNoReflectionConfigNames = providedAotConfigClassNamesPart
+        String reflectConfigPath = "./target/classes/META-INF/native-image/org.kohsuke/" + artifactId
+                + "/reflect-config.json";
+        String noReflectPath = "./target/test-classes/no-reflect-and-serialization-list";
+        String serializationConfigPath = "./target/classes/META-INF/native-image/org.kohsuke/" + artifactId
+                + "/serialization-config.json";
+        String generatedReflectConfigPath = "./target/spring-aot/test/resources/META-INF/native-image/org.kohsuke/"
+                + artifactId + "/reflect-config.json";
+        String generatedSerializationConfigPath = "./target/spring-aot/test/resources/META-INF/native-image/org.kohsuke/"
+                + artifactId + "/serialization-config.json";
+
+        Stream<String> reflectConfigNames = readAotConfigToStreamOfClassNames(reflectConfigPath);
+        Stream<String> noReflectNames = Files.lines(Path.of(noReflectPath));
+        Stream<String> serializationNames = readAotConfigToStreamOfClassNames(serializationConfigPath);
+        List<String> allConfigClassNames = Stream
+                .concat(serializationNames, Stream.concat(reflectConfigNames, noReflectNames))
+                .distinct()
+                .sorted()
                 .collect(Collectors.toList());
 
-        Stream<String> generatedReflectConfigStreamOfClassNames = readAotConfigToStreamOfClassNames(
-                "./target/spring-aot/test/resources/META-INF/native-image/org.kohsuke/" + artifactId
-                        + "/reflect-config.json");
-        Stream<String> generatedSerializationStreamOfNames = readAotConfigToStreamOfClassNames(
-                "./target/spring-aot/test/resources/META-INF/native-image/org.kohsuke/" + artifactId
-                        + "/serialization-config.json");
-        Stream<String> generatedAotConfigClassNames = Stream.concat(generatedReflectConfigStreamOfClassNames,
-                generatedSerializationStreamOfNames);
+        Stream<String> generatedReflectConfigNames = readAotConfigToStreamOfClassNames(generatedReflectConfigPath);
+        Stream<String> generatedSerializationNames = readAotConfigToStreamOfClassNames(
+                generatedSerializationConfigPath);
+        List<String> allGeneratedConfigClassNames = Stream
+                .concat(generatedReflectConfigNames, generatedSerializationNames)
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
 
-        generatedAotConfigClassNames.forEach(generatedReflectionConfigClassName -> {
+        StringBuilder failures = new StringBuilder();
+
+        allGeneratedConfigClassNames.forEach(generatedReflectionConfigClassName -> {
             try {
-                if (!providedReflectionAndNoReflectionConfigNames.contains(generatedReflectionConfigClassName)) {
-                    fail(String.format(
+                if (!allConfigClassNames.contains(generatedReflectionConfigClassName)) {
+                    failures.append(String.format(
                             Files.readString(
                                     Path.of("./target/test-classes/reflection-and-serialization-test-error-message")),
-                            generatedReflectionConfigClassName));
+                            generatedReflectionConfigClassName)).append('\n');
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
 
+        // Future cleanup
+        // allConfigClassNames.forEach(reflectionConfigClassName -> {
+        // if (!allGeneratedConfigClassNames.contains(reflectionConfigClassName)) {
+        // failures.append(
+        // String.format("Extra class name found in config files: %1$s\n", reflectionConfigClassName));
+        // }
+        // });
+
+        // Report all failures at once rather than one at a time
+        String failureString = failures.toString();
+        if (!failureString.isEmpty()) {
+            fail("\n" + failureString);
+        }
     }
 
     private Stream<String> readAotConfigToStreamOfClassNames(String reflectionConfig) throws IOException {

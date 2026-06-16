@@ -25,16 +25,17 @@ public class GHObjectTest extends org.kohsuke.github.AbstractGitHubWireMockTest 
     @Test
     public void test_toString() throws Exception {
         GHOrganization org = gitHub.getOrganization(GITHUB_API_TEST_ORG);
-        assertThat(org.toString(), containsString("login=hub4j-test-org"));
-        assertThat(org.toString(), containsString("location=<null>"));
-        assertThat(org.toString(), containsString("blog=<null>"));
-        assertThat(org.toString(), containsString("email=<null>"));
-        assertThat(org.toString(), containsString("bio=<null>"));
-        assertThat(org.toString(), containsString("name=<null>"));
-        assertThat(org.toString(), containsString("company=<null>"));
-        assertThat(org.toString(), containsString("type=Organization"));
-        assertThat(org.toString(), containsString("followers=0"));
-        assertThat(org.toString(), containsString("hireable=false"));
+        String orgString = org.toString();
+        assertThat(orgString, containsString("login=hub4j-test-org"));
+        assertThat(orgString, containsString("location=<null>"));
+        assertThat(orgString, containsString("blog=<null>"));
+        assertThat(orgString, containsString("email=<null>"));
+        assertThat(orgString, containsString("bio=<null>"));
+        assertThat(orgString, containsString("name=<null>"));
+        assertThat(orgString, containsString("company=<null>"));
+        assertThat(orgString, containsString("type=Organization"));
+        assertThat(orgString, containsString("followers=0"));
+        assertThat(orgString, containsString("hireable=false"));
 
         // getResponseHeaderFields is deprecated but we should not break it.
         assertThat(org.getResponseHeaderFields(), notNullValue());

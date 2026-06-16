@@ -7,24 +7,23 @@ import org.kohsuke.github.GHCommit.File;
  *
  * @author Stephen Horgan
  */
-class GHCommitFilesPage {
+class GHCommitFilesPage implements GitHubPage<GHCommit.File> {
     private File[] files;
 
     public GHCommitFilesPage() {
     }
 
-    public GHCommitFilesPage(File[] files) {
+    GHCommitFilesPage(File[] files) {
         this.files = files;
     }
 
     /**
      * Gets the files.
      *
-     * @param owner
-     *            the owner
      * @return the files
      */
-    File[] getFiles() {
+    @Override
+    public File[] getItems() {
         return files;
     }
 }

@@ -36,7 +36,7 @@ public class GHContentSearchBuilder extends GHSearchBuilder<GHContent> {
      *            the root
      */
     GHContentSearchBuilder(GitHub root) {
-        super(root, ContentSearchResult.class);
+        super(root, ContentSearchResult.class, GHContent.class);
     }
 
     /**

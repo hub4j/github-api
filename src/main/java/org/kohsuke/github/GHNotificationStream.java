@@ -143,8 +143,7 @@ public class GHNotificationStream extends GitHubInteractiveObject implements Ite
                         }
 
                         Requester requester = req.withUrlPath(apiUrl);
-                        GitHubResponse<GHThread[]> response = ((GitHubPageContentsIterable<GHThread>) requester
-                                .toIterable(GHThread[].class, null)).toResponse();
+                        GitHubResponse<GHThread[]> response = requester.toIterable(GHThread[].class, null).toResponse();
                         threads = response.body();
 
                         if (threads == null) {

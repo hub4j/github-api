@@ -8,9 +8,14 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 @SuppressFBWarnings(value = { "UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD", "UWF_UNWRITTEN_FIELD", "NP_UNWRITTEN_FIELD" },
         justification = "JSON API")
-class GHCheckRunsPage {
+class GHCheckRunsPage implements GitHubPage<GHCheckRun> {
     private GHCheckRun[] checkRuns;
     private int totalCount;
+
+    @Override
+    public GHCheckRun[] getItems() {
+        return checkRuns;
+    }
 
     /**
      * Gets the total count.
@@ -19,19 +24,5 @@ class GHCheckRunsPage {
      */
     public int getTotalCount() {
         return totalCount;
-    }
-
-    /**
-     * Gets the check runs.
-     *
-     * @param owner
-     *            the owner
-     * @return the check runs
-     */
-    GHCheckRun[] getCheckRuns(GHRepository owner) {
-        for (GHCheckRun checkRun : checkRuns) {
-            checkRun.wrap(owner);
-        }
-        return checkRuns;
     }
 }

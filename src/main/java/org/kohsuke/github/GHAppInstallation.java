@@ -263,10 +263,8 @@ public class GHAppInstallation extends GHObject {
      */
     @Deprecated
     public PagedSearchIterable<GHRepository> listRepositories() {
-        GitHubRequest request;
-
-        request = root().createRequest().withUrlPath("/installation/repositories").build();
-
-        return new PagedSearchIterable<>(root(), request, GHAppInstallationRepositoryResult.class);
+        return new PagedSearchIterable<>(root().createRequest()
+                .withUrlPath("/installation/repositories")
+                .toPaginatedEndpoint(GHAppInstallationRepositoryResult.class, GHRepository.class, null));
     }
 }

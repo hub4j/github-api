@@ -245,7 +245,7 @@ public class GHUserTest extends AbstractGitHubWireMockTest {
 
     private Set<GHUser> count30(PagedIterable<GHUser> l) {
         Set<GHUser> users = new HashSet<GHUser>();
-        PagedIterator<GHUser> itr = l.iterator();
+        Iterator<GHUser> itr = l.iterator();
         for (int i = 0; i < 30 && itr.hasNext(); i++) {
             users.add(itr.next());
         }

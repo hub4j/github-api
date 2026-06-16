@@ -38,6 +38,9 @@ public class GHMyself extends GHUser {
         PUBLIC;
     }
 
+    /** The Constant APP_INSTALLATIONS_URL. */
+    public static final String APP_INSTALLATIONS_URL = "/user/installations";
+
     /**
      * Create default GHMyself instance
      */
@@ -110,7 +113,9 @@ public class GHMyself extends GHUser {
      *      app installations accessible to the user access token</a>
      */
     public PagedIterable<GHAppInstallation> getAppInstallations() {
-        return new GHAppInstallationsIterable(root());
+        return root().createRequest()
+                .withUrlPath(APP_INSTALLATIONS_URL)
+                .toIterable(GHAppInstallationsPage.class, GHAppInstallation.class, null);
     }
 
     /**

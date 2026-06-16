@@ -362,7 +362,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
                 .getRepository("jenkins")
                 .getCommit("08c1c9970af4d609ae754fbe803e06186e3206f7");
         assertThat(commit.getParents().size(), equalTo(1));
-        assertThat(commit.listFiles().toList().size(), equalTo(1));
+        assertThat(commit.listFiles().withPageSize(50).toList().size(), equalTo(1));
         assertThat(commit.getHtmlUrl().toString(),
                 equalTo("https://github.com/jenkinsci/jenkins/commit/08c1c9970af4d609ae754fbe803e06186e3206f7"));
         assertThat(commit.getLinesAdded(), equalTo(40));
@@ -407,7 +407,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
     public void testCommitComment() throws Exception {
         GHRepository r = gitHub.getUser("jenkinsci").getRepository("jenkins");
         PagedIterable<GHCommitComment> comments = r.listCommitComments();
-        List<GHCommitComment> batch = comments.iterator().nextPage();
+        List<GHCommitComment> batch = comments.pages().next().getItemsList();
         for (GHCommitComment comment : batch) {
             // System.out.println(comment.getBody());
             assertThat(r, sameInstance(comment.getOwner()));
@@ -432,6 +432,18 @@ public class AppTest extends AbstractGitHubWireMockTest {
 
         GHCommit firstCommit = r.iterator().next();
         assertThat(firstCommit.listFiles().toList(), is(not(empty())));
+
+        GHCommitSearchBuilder builder = new GHCommitSearchBuilder(GitHub.offline());
+        GHException e = Assert.assertThrows(GHException.class, () -> builder.list().iterator().next());
+        assertThat(e.getMessage(), equalTo("Failed to retrieve https://api.github.invalid/search/commits?q="));
+
+        // Verify that this item initalizer does not throw when it otherwise would
+        builder.lateBindGHCommit(new GHCommit() {
+            @Override
+            public URL getUrl() {
+                return firstCommit.getUrl();
+            }
+        });
     }
 
     /**

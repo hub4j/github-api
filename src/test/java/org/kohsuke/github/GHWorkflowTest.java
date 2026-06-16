@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import org.assertj.core.util.Objects;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,13 +8,16 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.containing;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.notNullValue;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -184,7 +188,15 @@ public class GHWorkflowTest extends AbstractGitHubWireMockTest {
      */
     @Test
     public void testListWorkflows() throws IOException {
-        List<GHWorkflow> workflows = repo.listWorkflows().toList();
+
+        var endpointItems = repo.listWorkflows().items();
+        var currentPage = endpointItems.getCurrentPage();
+        var firstPage = Objects.castIfBelongsToType(currentPage, GHWorkflowsPage.class);
+        assertThat(firstPage.getTotalCount(), equalTo(1));
+
+        List<GHWorkflow> workflows = StreamSupport
+                .stream(Spliterators.spliteratorUnknownSize(endpointItems, Spliterator.ORDERED), false)
+                .collect(Collectors.toList());
 
         GHWorkflow workflow = workflows.get(0);
         assertThat(workflow.getId(), equalTo(6817859L));

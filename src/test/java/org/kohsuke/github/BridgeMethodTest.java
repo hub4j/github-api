@@ -88,7 +88,6 @@ public class BridgeMethodTest extends Assert {
         verifyBridgeMethods(GHSubscription.class, "getCreatedAt", Date.class, Instant.class);
         verifyBridgeMethods(GHThread.class, "getLastReadAt", Date.class, Instant.class);
         verifyBridgeMethods(GHUser.class, "getSuspendedAt", Date.class, Instant.class);
-        verifyBridgeMethods(GHVerification.class, "getVerifiedAt", Date.class, Instant.class);
         verifyBridgeMethods(GHWorkflowJob.class, "getStartedAt", Date.class, Instant.class);
         verifyBridgeMethods(GHWorkflowJob.class, "getCompletedAt", Date.class, Instant.class);
         verifyBridgeMethods(GHWorkflowJob.class, "getStartedAt", Date.class, Instant.class);

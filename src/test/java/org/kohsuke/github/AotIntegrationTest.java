@@ -63,18 +63,20 @@ public class AotIntegrationTest {
         Stream<String> generatedAotConfigClassNames = Stream.concat(generatedReflectConfigStreamOfClassNames,
                 generatedSerializationStreamOfNames);
 
-        generatedAotConfigClassNames.forEach(generatedReflectionConfigClassName -> {
+        List<String> missingClasses = generatedAotConfigClassNames
+                .filter(name -> !providedReflectionAndNoReflectionConfigNames.contains(name))
+                .collect(Collectors.toList());
+
+        if (!missingClasses.isEmpty()) {
             try {
-                if (!providedReflectionAndNoReflectionConfigNames.contains(generatedReflectionConfigClassName)) {
-                    fail(String.format(
-                            Files.readString(
-                                    Path.of("./target/test-classes/reflection-and-serialization-test-error-message")),
-                            generatedReflectionConfigClassName));
-                }
+                String errorTemplate = Files
+                        .readString(Path.of("./target/test-classes/reflection-and-serialization-test-error-message"));
+                String classList = missingClasses.stream().map(name -> "  - " + name).collect(Collectors.joining("\n"));
+                fail(String.format(errorTemplate, classList));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        });
+        }
 
     }
 

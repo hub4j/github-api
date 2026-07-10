@@ -3008,6 +3008,15 @@ public class GHRepository extends GHObject {
     }
 
     /**
+     * Retrieves milestones.
+     *
+     * @return the gh milestone query builder
+     */
+    public GHMilestoneQueryBuilder queryMilestones() {
+        return new GHMilestoneQueryBuilder(this);
+    }
+
+    /**
      * Retrieves pull requests.
      *
      * @return the gh pull request query builder

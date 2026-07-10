@@ -390,6 +390,50 @@ public class AbuseLimitHandlerTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Tests the behavior of the GitHub API client when the abuse limit handler encounters a 403 response that contains
+     * the secondary rate limit marker in the body, but neither the {@code Retry-After} nor the {@code gh-limited-by}
+     * header. Without body-based detection, this case slips through {@code isError()} and surfaces as a generic
+     * {@code HttpException} (see hub4j/github-api#2009).
+     *
+     * @throws Exception
+     *             if any error occurs during the test execution.
+     */
+    @Test
+    public void testHandler_Wait_Secondary_Limits_Body_Marker_Only() throws Exception {
+        snapshotNotAllowed();
+        gitHub = getGitHubBuilder().withEndpoint(mockGitHub.apiServer().baseUrl())
+                .withAbuseLimitHandler(new GitHubAbuseLimitHandler() {
+                    /**
+                     * Overriding method because the actual method will wait for one minute causing slowness in unit
+                     * tests.
+                     */
+                    @Override
+                    public void onError(@NotNull GitHubConnectorResponse connectorResponse) throws IOException {
+                        assertThat(connectorResponse.request().method(), equalTo("GET"));
+                        assertThat(connectorResponse.statusCode(), equalTo(403));
+                        assertThat(connectorResponse.request().url().toString(),
+                                endsWith(
+                                        "/repos/hub4j-test-org/temp-testHandler_Wait_Secondary_Limits_Body_Marker_Only"));
+                        assertThat(connectorResponse.header("Retry-After"), nullValue());
+                        assertThat(connectorResponse.header("gh-limited-by"), nullValue());
+
+                        checkErrorMessageMatches(connectorResponse,
+                                "You have exceeded a secondary rate limit. Please wait a few minutes before you try again");
+
+                        long waitTime = parseWaitTime(connectorResponse);
+                        assertThat(waitTime, equalTo(GitHubAbuseLimitHandler.DEFAULT_WAIT_MILLIS));
+                    }
+                })
+                .build();
+
+        gitHub.getMyself();
+        assertThat(mockGitHub.getRequestCount(), equalTo(1));
+
+        getTempRepository();
+        assertThat(mockGitHub.getRequestCount(), equalTo(3));
+    }
+
+    /**
      * Tests the behavior of the GitHub API client when the abuse limit handler is set to WAIT then the handler waits
      * appropriately when secondary rate limits are encountered.
      *

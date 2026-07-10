@@ -1,0 +1,53 @@
+{
+  "id": "0b0e08c9-a67f-403b-ae7a-8f0059f667ac",
+  "name": "repos_hub4j-test-org_github-api_milestones_8",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/milestones/8",
+    "method": "PATCH",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"due_on\":\"2025-12-01T00:00:00Z\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "6-r_h_g_milestones_8.json",
+    "headers": {
+      "Date": "Thu, 25 Jun 2026 07:59:07 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
+      "ETag": "W/\"744085c450b3ffaccc0df7189dffbdb4499b1c477396d6ec426fd4aede1bbd44\"",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, project, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset, Warning",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Server": "github.com",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4899",
+      "X-RateLimit-Reset": "1782377714",
+      "X-RateLimit-Used": "101",
+      "X-RateLimit-Resource": "core",
+      "X-GitHub-Request-Id": "C16C:168D37:3BDEB52:39E8FC3:6A3CDFCB"
+    }
+  },
+  "uuid": "0b0e08c9-a67f-403b-ae7a-8f0059f667ac",
+  "persistent": true,
+  "insertionIndex": 6
+}

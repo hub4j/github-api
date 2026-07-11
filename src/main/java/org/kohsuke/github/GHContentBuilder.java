@@ -1,8 +1,13 @@
 package org.kohsuke.github;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.Base64;
+import java.util.Date;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -15,6 +20,19 @@ import java.util.Base64;
  * @see GHRepository#createContent() GHRepository#createContent()
  */
 public final class GHContentBuilder {
+    @JsonInclude(Include.NON_NULL)
+    private static final class UserInfo {
+        private final String date;
+        private final String email;
+        private final String name;
+
+        private UserInfo(String name, String email, Instant date) {
+            this.name = name;
+            this.email = email;
+            this.date = date != null ? GitHubClient.printInstant(date) : null;
+        }
+    }
+
     private String path;
     private final GHRepository repo;
     private final Requester req;
@@ -28,6 +46,52 @@ public final class GHContentBuilder {
     GHContentBuilder(GHRepository repo) {
         this.repo = repo;
         this.req = repo.root().createRequest().method("PUT");
+    }
+
+    /**
+     * Configures the author of the commit. If not specified, the authenticated user is used as the author.
+     *
+     * @param name
+     *            the name of the author
+     * @param email
+     *            the email of the author
+     * @return the gh content builder
+     */
+    public GHContentBuilder author(String name, String email) {
+        return author(name, email, (Instant) null);
+    }
+
+    /**
+     * Configures the author of the commit. If not specified, the authenticated user is used as the author.
+     *
+     * @param name
+     *            the name of the author
+     * @param email
+     *            the email of the author
+     * @param date
+     *            the date of the authoring
+     * @return the gh content builder
+     * @deprecated use {@link #author(String, String, Instant)} instead
+     */
+    @Deprecated
+    public GHContentBuilder author(String name, String email, Date date) {
+        return author(name, email, GitHubClient.toInstantOrNull(date));
+    }
+
+    /**
+     * Configures the author of the commit. If not specified, the authenticated user is used as the author.
+     *
+     * @param name
+     *            the name of the author
+     * @param email
+     *            the email of the author
+     * @param date
+     *            the timestamp for the authoring
+     * @return the gh content builder
+     */
+    public GHContentBuilder author(String name, String email, Instant date) {
+        req.with("author", new UserInfo(name, email, date));
+        return this;
     }
 
     /**
@@ -57,6 +121,52 @@ public final class GHContentBuilder {
         response.getCommit().wrapUp(repo);
 
         return response;
+    }
+
+    /**
+     * Configures the committer of the commit. If not specified, the authenticated user is used as the committer.
+     *
+     * @param name
+     *            the name of the committer
+     * @param email
+     *            the email of the committer
+     * @return the gh content builder
+     */
+    public GHContentBuilder committer(String name, String email) {
+        return committer(name, email, (Instant) null);
+    }
+
+    /**
+     * Configures the committer of the commit. If not specified, the authenticated user is used as the committer.
+     *
+     * @param name
+     *            the name of the committer
+     * @param email
+     *            the email of the committer
+     * @param date
+     *            the date of the commit
+     * @return the gh content builder
+     * @deprecated use {@link #committer(String, String, Instant)} instead
+     */
+    @Deprecated
+    public GHContentBuilder committer(String name, String email, Date date) {
+        return committer(name, email, GitHubClient.toInstantOrNull(date));
+    }
+
+    /**
+     * Configures the committer of the commit. If not specified, the authenticated user is used as the committer.
+     *
+     * @param name
+     *            the name of the committer
+     * @param email
+     *            the email of the committer
+     * @param date
+     *            the timestamp of the commit
+     * @return the gh content builder
+     */
+    public GHContentBuilder committer(String name, String email, Instant date) {
+        req.with("committer", new UserInfo(name, email, date));
+        return this;
     }
 
     /**

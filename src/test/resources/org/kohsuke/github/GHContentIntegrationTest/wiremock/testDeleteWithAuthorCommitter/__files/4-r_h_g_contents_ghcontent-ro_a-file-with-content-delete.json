@@ -1,0 +1,37 @@
+{
+  "content": null,
+  "commit": {
+    "sha": "3344556677889900112233445566778899001122",
+    "node_id": "MDY6Q29tbWl0NDA3NjM1Nzc6MzM0NDU1NjY3Nzg4OTkwMDExMjIzMzQ0NTU2Njc3ODg5OTAwMTEyMg==",
+    "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/3344556677889900112233445566778899001122",
+    "html_url": "https://github.com/hub4j-test-org/GHContentIntegrationTest/commit/3344556677889900112233445566778899001122",
+    "author": {
+      "name": "John Doe",
+      "email": "john@example.com",
+      "date": "2024-01-01T00:00:00Z"
+    },
+    "committer": {
+      "name": "Service Account",
+      "email": "service@example.com",
+      "date": "2024-01-01T00:00:00Z"
+    },
+    "tree": {
+      "sha": "eeff00112233445566778899aabb00112233ddee",
+      "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/trees/eeff00112233445566778899aabb00112233ddee"
+    },
+    "message": "Deleting with custom author and committer",
+    "parents": [
+      {
+        "sha": "bbbb111122223333444455556666777788889999",
+        "url": "https://api.github.com/repos/hub4j-test-org/GHContentIntegrationTest/git/commits/bbbb111122223333444455556666777788889999",
+        "html_url": "https://github.com/hub4j-test-org/GHContentIntegrationTest/commit/bbbb111122223333444455556666777788889999"
+      }
+    ],
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null
+    }
+  }
+}

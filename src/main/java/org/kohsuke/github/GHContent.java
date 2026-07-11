@@ -57,6 +57,34 @@ public class GHContent extends GitHubInteractiveObject implements Refreshable {
     }
 
     /**
+     * Creates a builder that can be used to delete this file.
+     *
+     * <p>
+     * Unlike the {@link #delete(String)} convenience methods, this builder supports setting the author and committer of
+     * the resulting commit.
+     *
+     * @return a content deleter
+     * @see GHContentDeleter
+     */
+    public GHContentDeleter createDelete() {
+        return new GHContentDeleter(this);
+    }
+
+    /**
+     * Creates a builder that can be used to update this file's content.
+     *
+     * <p>
+     * Unlike the {@link #update(String, String)} convenience methods, this builder supports setting the author and
+     * committer of the resulting commit.
+     *
+     * @return a content updater
+     * @see GHContentUpdater
+     */
+    public GHContentUpdater createUpdate() {
+        return new GHContentUpdater(this);
+    }
+
+    /**
      * Delete gh content update response.
      *
      * @param message

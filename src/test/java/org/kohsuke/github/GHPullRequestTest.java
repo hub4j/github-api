@@ -764,6 +764,9 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         GHPullRequestReviewComment fullComment = comments.get(0).readPullRequestReviewComment();
         assertThat(fullComment.getBody(), equalTo("Some niggle"));
         assertThat(fullComment.getLine(), equalTo(1));
+        assertThat(fullComment.getParent().getNumber(), equalTo(p.getNumber()));
+        fullComment.refresh();
+        assertThat(fullComment.getLine(), equalTo(1));
 
         draftReview = p.createReview().body("Some new review").comment("Some niggle", "README.md", 1).create();
         draftReview.delete();

@@ -3,6 +3,7 @@ package org.kohsuke.github;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
@@ -445,8 +446,11 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         /**
          * Gets the added or removed label for labeled/unlabeled events.
          *
-         * @return label the added or removed label
+         * May be {@code null} when the unlabeled event was triggered by deleting the label from the repository.
+         *
+         * @return label the added or removed label, or {@code null} if the label was deleted
          */
+        @CheckForNull
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHLabel getLabel() {
             return label;
@@ -525,7 +529,7 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     // ContentReferenceEvent
     // DeployKeyEvent DownloadEvent FollowEvent ForkApplyEvent GitHubAppAuthorizationEvent GistEvent GollumEvent
     // InstallationEvent InstallationRepositoriesEvent IssuesEvent LabelEvent MarketplacePurchaseEvent MemberEvent
-    // MembershipEvent MetaEvent MilestoneEvent OrganizationEvent OrgBlockEvent PackageEvent PageBuildEvent
+    // MembershipEvent MetaEvent OrganizationEvent OrgBlockEvent PackageEvent PageBuildEvent
     // ProjectCardEvent ProjectColumnEvent ProjectEvent RepositoryDispatchEvent RepositoryImportEvent
     // RepositoryVulnerabilityAlertEvent SecurityAdvisoryEvent StarEvent StatusEvent TeamEvent TeamAddEvent WatchEvent
 
@@ -785,8 +789,11 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         /**
          * Gets the added or removed label for labeled/unlabeled events.
          *
-         * @return label the added or removed label
+         * May be {@code null} when the unlabeled event was triggered by deleting the label from the repository.
+         *
+         * @return label the added or removed label, or {@code null} if the label was deleted
          */
+        @CheckForNull
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHLabel getLabel() {
             return label;
@@ -999,6 +1006,41 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
     }
 
     /**
+     * A milestone event has been triggered.
+     *
+     * @see <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads#milestone">milestone event</a>
+     */
+    public static class Milestone extends GHEventPayload {
+
+        private GHMilestone milestone;
+
+        /**
+         * Create default Milestone instance
+         */
+        public Milestone() {
+        }
+
+        /**
+         * Gets the milestone.
+         *
+         * @return the milestone
+         */
+        @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+        public GHMilestone getMilestone() {
+            return milestone;
+        }
+
+        @Override
+        void lateBind() {
+            super.lateBind();
+            GHRepository repository = getRepository();
+            if (repository != null && milestone != null) {
+                milestone.lateBind(repository);
+            }
+        }
+    }
+
+    /**
      * A ping.
      *
      * <a href="https://docs.github.com/en/developers/webhooks-and-events/webhook-events-and-payloads#ping"> ping
@@ -1103,8 +1145,11 @@ public abstract class GHEventPayload extends GitHubInteractiveObject {
         /**
          * Gets the added or removed label for labeled/unlabeled events.
          *
-         * @return label the added or removed label
+         * May be {@code null} when the unlabeled event was triggered by deleting the label from the repository.
+         *
+         * @return label the added or removed label, or {@code null} if the label was deleted
          */
+        @CheckForNull
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected")
         public GHLabel getLabel() {
             return label;

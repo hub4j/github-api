@@ -73,7 +73,7 @@ public class GitHubSanityCachedValueTest {
                 try {
                     ready.countDown();
                     start.await();
-                    String value = cachedValue.get((result) -> result == null, () -> {
+                    String value = cachedValue.get(() -> {
                         calls.incrementAndGet();
                         return "value";
                     });
@@ -100,39 +100,36 @@ public class GitHubSanityCachedValueTest {
     }
 
     /**
-     * Tests that the {@code isExpired} predicate alone can force a cache refresh even when the cached value is still
-     * current within the same second. This exercises the branch where the time-check condition ({@code A}) evaluates to
-     * {@code false} but the {@code isExpired} predicate ({@code B}) evaluates to {@code true}, covering the
-     * {@code A=false, B=true} path in both the read-lock check and the write-lock double-check inside
-     * {@code GitHubSanityCachedValue}.
+     * Tests that a result which is already expired on arrival — for example, the {@code GHRateLimit.UnknownLimitRecord}
+     * returned when a GitHub Enterprise {@code /rate_limit} endpoint responds with 404 — is still held for one second.
+     * Without the time-based TTL, re-checking expiry immediately after a refresh would cause every subsequent call to
+     * re-query, creating a query storm.
      *
      * @throws Exception
      *             if the test fails
      */
     @Test
-    public void isExpiredPredicateTriggersRefreshWithinSameSecond() throws Exception {
+    public void doesNotReQueryWhenResultIsAlreadyExpiredOnArrival() throws Exception {
         alignToStartOfSecond();
         GitHubSanityCachedValue<String> cachedValue = new GitHubSanityCachedValue<>();
         AtomicInteger calls = new AtomicInteger();
 
-        // Populate the cache within the current second using an isExpired predicate that never
-        // expires on its own.
-        String first = cachedValue.get(result -> false, () -> {
+        // Supplier always returns a value that an isExpired() check would immediately reject,
+        // e.g. GHRateLimit.UnknownLimitRecord when GitHub Enterprise returns 404 for /rate_limit.
+        cachedValue.get(() -> {
             calls.incrementAndGet();
-            return "stale";
+            return "expired-on-arrival";
+        });
+        cachedValue.get(() -> {
+            calls.incrementAndGet();
+            return "expired-on-arrival";
+        });
+        cachedValue.get(() -> {
+            calls.incrementAndGet();
+            return "expired-on-arrival";
         });
 
-        // Within the same second, pass an isExpired predicate that always returns true. This forces
-        // re-evaluation through the write lock even though the time has not elapsed, covering the
-        // A=false, B=true branch in both compound conditions.
-        String second = cachedValue.get(result -> true, () -> {
-            calls.incrementAndGet();
-            return "fresh";
-        });
-
-        assertThat(first, equalTo("stale"));
-        assertThat(second, equalTo("fresh"));
-        assertThat(calls.get(), equalTo(2));
+        assertThat(calls.get(), equalTo(1));
     }
 
     /**

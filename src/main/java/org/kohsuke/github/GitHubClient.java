@@ -953,32 +953,29 @@ class GitHubClient {
     GHRateLimit getRateLimit(@Nonnull RateLimitTarget rateLimitTarget) throws IOException {
         // Even when explicitly asking for rate limit, restrict to sane query frequency
         // return cached value if available
-        GHRateLimit output = sanityCachedRateLimit.get(
-                (currentValue) -> currentValue == null || currentValue.getRecord(rateLimitTarget).isExpired(),
-                () -> {
-                    GHRateLimit result;
-                    try {
-                        final GitHubRequest request = GitHubRequest.newBuilder()
-                                .rateLimit(RateLimitTarget.NONE)
-                                .withApiUrl(getApiUrl())
-                                .withUrlPath("/rate_limit")
-                                .build();
-                        result = this
-                                .sendRequest(request,
-                                        (connectorResponse) -> GitHubResponse.parseBody(connectorResponse,
-                                                JsonRateLimit.class))
-                                .body().resources;
-                    } catch (FileNotFoundException e) {
-                        // For some versions of GitHub Enterprise, the rate_limit endpoint returns a 404.
-                        LOGGER.log(FINE, "(%s) /rate_limit returned 404 Not Found.", sendRequestTraceId.get());
+        GHRateLimit output = sanityCachedRateLimit.get(() -> {
+            GHRateLimit result;
+            try {
+                final GitHubRequest request = GitHubRequest.newBuilder()
+                        .rateLimit(RateLimitTarget.NONE)
+                        .withApiUrl(getApiUrl())
+                        .withUrlPath("/rate_limit")
+                        .build();
+                result = this
+                        .sendRequest(request,
+                                (connectorResponse) -> GitHubResponse.parseBody(connectorResponse, JsonRateLimit.class))
+                        .body().resources;
+            } catch (FileNotFoundException e) {
+                // For some versions of GitHub Enterprise, the rate_limit endpoint returns a 404.
+                LOGGER.log(FINE, "(%s) /rate_limit returned 404 Not Found.", sendRequestTraceId.get());
 
-                        // However some newer versions of GHE include rate limit header information
-                        // If the header info is missing and the endpoint returns 404, fill the rate limit
-                        // with unknown
-                        result = GHRateLimit.fromRecord(GHRateLimit.UnknownLimitRecord.current(), rateLimitTarget);
-                    }
-                    return result;
-                });
+                // However some newer versions of GHE include rate limit header information
+                // If the header info is missing and the endpoint returns 404, fill the rate limit
+                // with unknown
+                result = GHRateLimit.fromRecord(GHRateLimit.UnknownLimitRecord.current(), rateLimitTarget);
+            }
+            return result;
+        });
         return updateRateLimit(output);
     }
 

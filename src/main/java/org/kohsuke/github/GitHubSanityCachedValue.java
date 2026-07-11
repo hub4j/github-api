@@ -5,7 +5,6 @@ import org.kohsuke.github.function.SupplierThrows;
 import java.time.Instant;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.function.Function;
 
 /**
  * GitHubSanityCachedValue limits queries for a particular value to once per second.
@@ -22,41 +21,6 @@ class GitHubSanityCachedValue<T> {
     /**
      * Gets the value from the cache or calls the supplier if the cache is empty or out of date.
      *
-     * @param isExpired
-     *            a supplier that returns true if the cached value is no longer valid.
-     * @param query
-     *            a supplier the returns an updated value. Only called if the cache is empty or out of date.
-     * @return the value from the cache or the value returned from the supplier.
-     * @throws E
-     *             the exception thrown by the supplier if it fails.
-     */
-    <E extends Throwable> T get(Function<T, Boolean> isExpired, SupplierThrows<T, E> query) throws E {
-        readLock.lock();
-        try {
-            boolean expired = Instant.now().getEpochSecond() > lastQueriedAtEpochSeconds || isExpired.apply(lastResult);
-            if (!expired) {
-                return lastResult;
-            }
-        } finally {
-            readLock.unlock();
-        }
-        writeLock.lock();
-        try {
-            boolean stillExpired = Instant.now().getEpochSecond() > lastQueriedAtEpochSeconds
-                    || isExpired.apply(lastResult);
-            if (stillExpired) {
-                lastResult = query.get();
-                lastQueriedAtEpochSeconds = Instant.now().getEpochSecond();
-            }
-            return lastResult;
-        } finally {
-            writeLock.unlock();
-        }
-    }
-
-    /**
-     * Gets the value from the cache or calls the supplier if the cache is empty or out of date.
-     *
      * @param query
      *            a supplier the returns an updated value. Only called if the cache is empty or out of date.
      * @return the value from the cache or the value returned from the supplier.
@@ -64,6 +28,23 @@ class GitHubSanityCachedValue<T> {
      *             the exception thrown by the supplier if it fails.
      */
     <E extends Throwable> T get(SupplierThrows<T, E> query) throws E {
-        return get((value) -> Boolean.FALSE, query);
+        readLock.lock();
+        try {
+            if (Instant.now().getEpochSecond() <= lastQueriedAtEpochSeconds) {
+                return lastResult;
+            }
+        } finally {
+            readLock.unlock();
+        }
+        writeLock.lock();
+        try {
+            if (Instant.now().getEpochSecond() > lastQueriedAtEpochSeconds) {
+                lastResult = query.get();
+                lastQueriedAtEpochSeconds = Instant.now().getEpochSecond();
+            }
+            return lastResult;
+        } finally {
+            writeLock.unlock();
+        }
     }
 }

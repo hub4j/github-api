@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHMilestoneQueryBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GitHub API for Java</a> &gt; <a href="index.source.html" class="el_package">org.kohsuke.github</a> &gt; <span class="el_source">GHMilestoneQueryBuilder.java</span></div><h1>GHMilestoneQueryBuilder.java</h1><pre class="source lang-java linenums">package org.kohsuke.github;
+
+/**
+ * Lists up milestones with filtering and sorting.
+ *
+ * @see GHRepository#queryMilestones() GHRepository#queryMilestones()
+ */
+public class GHMilestoneQueryBuilder extends GHQueryBuilder&lt;GHMilestone&gt; {
+    /**
+     * The enum Sort.
+     */
+<span class="fc" id="L12">    public enum Sort {</span>
+
+        /** Sort by completeness (percentage of issues closed). */
+<span class="fc" id="L15">        COMPLETENESS,</span>
+        /** Sort by due date. */
+<span class="fc" id="L17">        DUE_ON</span>
+    }
+
+    private final GHRepository repo;
+
+    /**
+     * Instantiates a new GH milestone query builder.
+     *
+     * @param repo
+     *            the repo
+     */
+    GHMilestoneQueryBuilder(GHRepository repo) {
+<span class="fc" id="L29">        super(repo.root());</span>
+<span class="fc" id="L30">        this.repo = repo;</span>
+<span class="fc" id="L31">    }</span>
+
+    /**
+     * Direction gh milestone query builder.
+     *
+     * @param d
+     *            the d
+     * @return the gh milestone query builder
+     */
+    public GHMilestoneQueryBuilder direction(GHDirection d) {
+<span class="fc" id="L41">        req.with(&quot;direction&quot;, d);</span>
+<span class="fc" id="L42">        return this;</span>
+    }
+
+    /**
+     * List.
+     *
+     * @return the paged iterable
+     */
+    @Override
+    public PagedIterable&lt;GHMilestone&gt; list() {
+<span class="fc" id="L52">        return req.withUrlPath(repo.getApiTailUrl(&quot;milestones&quot;))</span>
+<span class="fc" id="L53">                .toIterable(GHMilestone[].class, item -&gt; item.lateBind(repo));</span>
+    }
+
+    /**
+     * Sort gh milestone query builder.
+     *
+     * @param sort
+     *            the sort
+     * @return the gh milestone query builder
+     */
+    public GHMilestoneQueryBuilder sort(Sort sort) {
+<span class="fc" id="L64">        req.with(&quot;sort&quot;, sort);</span>
+<span class="fc" id="L65">        return this;</span>
+    }
+
+    /**
+     * State gh milestone query builder.
+     *
+     * @param state
+     *            the state
+     * @return the gh milestone query builder
+     */
+    public GHMilestoneQueryBuilder state(GHIssueState state) {
+<span class="fc" id="L76">        req.with(&quot;state&quot;, state);</span>
+<span class="fc" id="L77">        return this;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

@@ -282,6 +282,13 @@ public class GitHubStaticTest extends AbstractGitHubWireMockTest {
                 equalTo("ftp://whoa.github.com/endpoint"));
         assertThat(GitHubRequest.getApiURL(null, "ftp://api.test.github.com/endpoint").toString(),
                 equalTo("ftp://api.test.github.com/endpoint"));
+        assertThat(
+                GitHubRequest
+                        .getApiURL(null,
+                                "https://api.github.com/repositories/694641495/contents/Alfred.alfredpreferences/workflows/menubar-search%20[3rd-Party]/menu/Package.swift?ref=073e7b4493d088fdf1995a74cf5da201a5795181")
+                        .toString(),
+                equalTo(
+                        "https://api.github.com/repositories/694641495/contents/Alfred.alfredpreferences/workflows/menubar-search%20%5B3rd-Party%5D/menu/Package.swift?ref=073e7b4493d088fdf1995a74cf5da201a5795181"));
 
         GHException e;
         e = Assert.assertThrows(GHException.class,

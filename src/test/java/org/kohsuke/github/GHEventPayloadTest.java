@@ -493,10 +493,6 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
 
     // TODO implement support classes and write test
     // @Test
-    // public void milestone() throws Exception {}
-
-    // TODO implement support classes and write test
-    // @Test
     // public void page_build() throws Exception {}
 
     /**
@@ -899,6 +895,38 @@ public class GHEventPayloadTest extends AbstractGitHubWireMockTest {
         assertThat(team.getDescription(), is("Description"));
         assertThat(team.getPrivacy(), is(Privacy.CLOSED));
         assertThat(team.getOrganization().getLogin(), is("gsmet-bot-playground"));
+    }
+
+    /**
+     * Milestone closed.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    @Payload("milestone")
+    public void milestone() throws Exception {
+        final GHEventPayload.Milestone event = GitHub.offline()
+                .parseEventPayload(payload.asReader(), GHEventPayload.Milestone.class);
+        assertThat(event.getAction(), is("closed"));
+
+        final GHMilestone milestone = event.getMilestone();
+        assertThat(milestone.getId(), is(16523020L));
+        assertThat(milestone.getNumber(), is(2));
+        assertThat(milestone.getTitle(), is("Test milestone"));
+        assertThat(milestone.getDescription(), is(""));
+        assertThat(milestone.getState(), is(GHMilestoneState.CLOSED));
+        assertThat(milestone.getOpenIssues(), is(0));
+        assertThat(milestone.getClosedIssues(), is(0));
+        assertThat(milestone.getCreatedAt().toEpochMilli(), is(1782373293000L));
+        assertThat(milestone.getUpdatedAt().toEpochMilli(), is(1782373452000L));
+        assertThat(milestone.getClosedAt().toEpochMilli(), is(1782373452000L));
+        assertThat(milestone.getDueOn().toEpochMilli(), is(1782432000000L));
+        assertThat(milestone.getCreator().getLogin(), is("gsmet"));
+
+        assertThat(event.getSender().getLogin(), is("gsmet"));
+        assertThat(event.getRepository().getFullName(), is("gsmet/quarkus-bot-java-playground"));
+        assertThat(event.getInstallation().getId(), is(90470530L));
     }
 
     /**

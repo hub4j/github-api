@@ -1,7 +1,6 @@
 package org.kohsuke.github;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
@@ -95,9 +94,6 @@ class GitHubResponse<T> {
 
         String data = getBodyAsString(connectorResponse);
         try {
-            InjectableValues.Std inject = new InjectableValues.Std();
-            inject.addValue(GitHubConnectorResponse.class, connectorResponse);
-
             return GitHubClient.getMappingObjectReader(connectorResponse).forType(type).readValue(data);
         } catch (JsonMappingException | JsonParseException e) {
             String message = "Failed to deserialize: " + data;

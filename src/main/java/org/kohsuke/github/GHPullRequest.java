@@ -340,7 +340,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the head
      */
     public GHCommitPointer getHead() {
-        return head;
+        return head; //return head directly, no null check
     }
 
     /**

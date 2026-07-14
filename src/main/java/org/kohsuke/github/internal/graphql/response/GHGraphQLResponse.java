@@ -8,6 +8,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 /**
  * A response of GraphQL.
  * <p>
@@ -33,27 +36,15 @@ public class GHGraphQLResponse<T> {
          */
         @JsonCreator
         @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
-        public ObjectResponse(@JsonProperty("data") Object data, @JsonProperty("errors") List<GraphQLError> errors) {
+        public ObjectResponse(@JsonProperty("data") Object data, @JsonProperty("errors") List<GHGraphQLError> errors) {
             super(data, errors);
-        }
-    }
-
-    /**
-     * A error of GraphQL response. Minimum implementation for GraphQL error.
-     */
-    @SuppressFBWarnings(value = { "UWF_UNWRITTEN_FIELD", "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" },
-            justification = "JSON API")
-    private static class GraphQLError {
-        private String message;
-
-        public String getMessage() {
-            return message;
         }
     }
 
     private final T data;
 
-    private final List<GraphQLError> errors;
+    @Nonnull
+    private final List<GHGraphQLError> errors;
 
     /**
      * GHGraphQLResponse constructor
@@ -65,24 +56,47 @@ public class GHGraphQLResponse<T> {
      */
     @JsonCreator
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP2" }, justification = "Spotbugs also doesn't like this")
-    public GHGraphQLResponse(@JsonProperty("data") T data, @JsonProperty("errors") List<GraphQLError> errors) {
-        if (errors == null) {
-            errors = Collections.emptyList();
-        }
+    public GHGraphQLResponse(@JsonProperty("data") T data, @JsonProperty("errors") List<GHGraphQLError> errors) {
         this.data = data;
-        this.errors = Collections.unmodifiableList(errors);
+        this.errors = errors == null ? Collections.emptyList() : Collections.unmodifiableList(errors);
+    }
+
+    /**
+     * Build a human-readable summary that lists every error message returned by the server.
+     *
+     * @param prefix
+     *            short headline prepended before the bullet list
+     * @return the multi-line summary
+     */
+    public String buildErrorSummary(String prefix) {
+        return errors.stream()
+                .map(GHGraphQLError::getMessage)
+                .collect(Collectors.joining("\n - ", prefix + ":\n - ", ""));
     }
 
     /**
      * Get response data.
      *
      * @return GraphQL success response
+     * @throws RuntimeException
+     *             if the response carried errors. The exception message lists each error message.
      */
     public T getData() {
         if (!isSuccessful()) {
-            throw new RuntimeException("Response not successful, data invalid");
+            throw new RuntimeException(buildErrorSummary("Response not successful, data invalid"));
         }
 
+        return data;
+    }
+
+    /**
+     * Get response data, including any partial data the server returned alongside errors. Unlike {@link #getData()},
+     * this method never throws.
+     *
+     * @return the data payload, or {@code null} if absent
+     */
+    @CheckForNull
+    public T getDataUnchecked() {
         return data;
     }
 
@@ -92,11 +106,23 @@ public class GHGraphQLResponse<T> {
      * @return GraphQL error messages from Github Response. Empty list when no errors occurred.
      */
     public List<String> getErrorMessages() {
-        return errors.stream().map(GraphQLError::getMessage).collect(Collectors.toList());
+        return errors.stream().map(GHGraphQLError::getMessage).collect(Collectors.toList());
     }
 
     /**
-     * Is response succesful.
+     * Get the structured GraphQL errors returned by the server.
+     *
+     * @return the errors, never {@code null}; empty when the response succeeded
+     */
+    @Nonnull
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP",
+            justification = "errors list is wrapped with Collections.unmodifiableList in the constructor")
+    public List<GHGraphQLError> getErrors() {
+        return errors;
+    }
+
+    /**
+     * Is response successful.
      *
      * @return request is succeeded. True when error list is empty.
      */

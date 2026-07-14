@@ -6975,7 +6975,7 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.internal.graphql.response.GHGraphQLResponse",
+    "name": "org.kohsuke.github.internal.graphql.response.GHGraphQLError",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -6990,7 +6990,22 @@
     "allDeclaredClasses": true
   },
   {
-    "name": "org.kohsuke.github.internal.graphql.response.GHGraphQLResponse$GraphQLError",
+    "name": "org.kohsuke.github.internal.graphql.response.GHGraphQLError$Location",
+    "allPublicFields": true,
+    "allDeclaredFields": true,
+    "queryAllPublicConstructors": true,
+    "queryAllDeclaredConstructors": true,
+    "allPublicConstructors": true,
+    "allDeclaredConstructors": true,
+    "queryAllPublicMethods": true,
+    "queryAllDeclaredMethods": true,
+    "allPublicMethods": true,
+    "allDeclaredMethods": true,
+    "allPublicClasses": true,
+    "allDeclaredClasses": true
+  },
+  {
+    "name": "org.kohsuke.github.internal.graphql.response.GHGraphQLResponse",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,

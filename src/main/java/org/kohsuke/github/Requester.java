@@ -102,6 +102,9 @@ class Requester extends GitHubRequest.Builder<Requester> {
      * @param type
      *            the type
      * @return an instance of {@code GHGraphQLResponse<T>}
+     * @throws GHGraphQLException
+     *             if the server returns a successful HTTP response whose body contains a non-empty {@code errors}
+     *             array.
      * @throws IOException
      *             if the server returns 4xx/5xx responses.
      */
@@ -109,7 +112,11 @@ class Requester extends GitHubRequest.Builder<Requester> {
         T response = fetch(type);
 
         if (!response.isSuccessful()) {
-            throw new IOException("GraphQL request failed by:" + response.getErrorMessages());
+            String message = response.buildErrorSummary("Request failed due to following response errors");
+            throw new GHGraphQLException(message,
+                    response.getErrors(),
+                    response.getDataUnchecked(),
+                    extractGraphQLQuery());
         }
 
         return response.getData();
@@ -200,5 +207,20 @@ class Requester extends GitHubRequest.Builder<Requester> {
     public <R> PagedIterable<R> toIterable(Class<R[]> type, Consumer<R> itemInitializer) {
         return new GitHubPageContentsIterable<>(client, build(), type, itemInitializer);
 
+    }
+
+    /**
+     * Best-effort lookup of the {@code query} parameter set by {@link GitHub#createGraphQLRequest(String)}. Returns
+     * {@code null} if the parameter is missing, e.g. when the request was assembled by hand.
+     *
+     * @return the query string sent in this request, or {@code null}
+     */
+    private String extractGraphQLQuery() {
+        for (GitHubRequest.Entry entry : build().args()) {
+            if ("query".equals(entry.key) && entry.value instanceof String) {
+                return (String) entry.value;
+            }
+        }
+        return null;
     }
 }

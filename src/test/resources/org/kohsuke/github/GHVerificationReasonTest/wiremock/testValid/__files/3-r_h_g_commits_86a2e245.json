@@ -22,6 +22,7 @@
     "verification": {
       "verified": true,
       "reason": "valid",
+      "verified_at": "2021-03-15T12:00:00Z",
       "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJdWt+iCRBK7hj4Ov3rIwAAdHIIAF2vncFEFRwkJdZrVZEkT30N\neYJXFeILq+wFRDuWEDOueIkUwCy9Z4xYnM/n7fw+51LsRK+4kaFNjP6HFJGr/+m5\nioCArE27vaXnZjTAldpAG0Jku3eIfChutub0HcBy4UURozLw70ajWpbA3vOQ560B\ntontgx2I/pJmwOqkXRVvM7yxTlW751kyTVWScCtOeX2efuveeotECsDrqScKxq66\nkvJ1xmb9olWdlTjChOgqNrLbLC0jUHqc1nMGCkkVL0Pl2BMB8cXrKBQyU71ZuVJt\n4EW8IBWBtuHwHFtwABBCHXdtSsCGPat0hVag72CHiqKoZV/EAPecIlyiZMAYYig=\n=7zTb\n-----END PGP SIGNATURE-----\n",
       "payload": "tree 859fffa8ce0c958e4e4209c7a758be16f0c97c55\nparent 2a971c4e38c6d6693f7ad8b6768e4d74840d6679\nauthor Jeff Thompson <37345299+jeffret-b@users.noreply.github.com> 1566236578 -0600\ncommitter GitHub <noreply@github.com> 1566236578 -0600\n\nUpdate BSD license reference.\n\nCo-Authored-By: Jesse Glick <jglick@cloudbees.com>"
     }

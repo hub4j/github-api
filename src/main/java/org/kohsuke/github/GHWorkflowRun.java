@@ -598,7 +598,41 @@ public class GHWorkflowRun extends GHObject {
      *             the io exception
      */
     public void rerun() throws IOException {
-        root().createRequest().method("POST").withUrlPath(getApiRoute(), "rerun").send();
+        rerun(false);
+    }
+
+    /**
+     * Rerun the workflow run.
+     *
+     * @param enableDebugLogging
+     *            whether to enable debug logging for the rerun
+     * @throws IOException
+     *             the io exception
+     */
+    public void rerun(boolean enableDebugLogging) throws IOException {
+        rerun("rerun", enableDebugLogging);
+    }
+
+    /**
+     * Rerun failed jobs and their dependent jobs for this workflow run.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    public void rerunFailedJobs() throws IOException {
+        rerunFailedJobs(false);
+    }
+
+    /**
+     * Rerun failed jobs and their dependent jobs for this workflow run.
+     *
+     * @param enableDebugLogging
+     *            whether to enable debug logging for the rerun
+     * @throws IOException
+     *             the io exception
+     */
+    public void rerunFailedJobs(boolean enableDebugLogging) throws IOException {
+        rerun("rerun-failed-jobs", enableDebugLogging);
     }
 
     private String getApiRoute() {
@@ -609,6 +643,14 @@ public class GHWorkflowRun extends GHObject {
 
         }
         return "/repos/" + owner.getOwnerName() + "/" + owner.getName() + "/actions/runs/" + getId();
+    }
+
+    private void rerun(String endpoint, boolean enableDebugLogging) throws IOException {
+        Requester requester = root().createRequest().method("POST").withUrlPath(getApiRoute(), endpoint);
+        if (enableDebugLogging) {
+            requester.with("enable_debug_logging", true);
+        }
+        requester.send();
     }
 
     /**

@@ -29,8 +29,6 @@ import org.kohsuke.github.internal.EnumUtils;
 import java.io.IOException;
 import java.net.URL;
 
-import javax.annotation.CheckForNull;
-
 // TODO: Auto-generated Javadoc
 /**
  * Review comment to the pull request.
@@ -40,10 +38,12 @@ import javax.annotation.CheckForNull;
  * @see GHPullRequest#createReviewComment(String, String, String, int) GHPullRequest#createReviewComment(String, String,
  *      String, int)
  */
-public class GHPullRequestReviewComment extends GHObject implements Reactable {
+public class GHPullRequestReviewComment extends GHIssueComment implements Refreshable {
 
     /**
-     * The side of the diff to which the comment applies
+     * The side of the diff to which the comment applies.
+     *
+     * @see <a href="https://docs.github.com/en/rest/pulls/comments">Pull Request Review Comments API</a>
      */
     public static enum Side {
         /** Left side */
@@ -66,31 +66,23 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
 
     }
 
-    private GHCommentAuthorAssociation authorAssociation;
-
-    private String body;
-    private String bodyHtml;
-    private String bodyText;
+    // PR review comment specific fields (not in GHIssueComment)
     private String commitId;
     private String diffHunk;
-    private String htmlUrl;
     private long inReplyToId = -1L;
     private int line = -1;
     private String originalCommitId;
     private int originalLine = -1;
     private int originalPosition = -1;
-    private Integer originalStartLine = -1;
+    private Integer originalStartLine;
     private String path;
     private int position = -1;
-    private Long pullRequestReviewId = -1L;
+    private Long pullRequestReviewId;
     private String pullRequestUrl;
     private GHPullRequestReviewCommentReactions reactions;
     private String side;
-    private Integer startLine = -1;
+    private Integer startLine;
     private String startSide;
-    private GHUser user;
-    /** The owner. */
-    GHPullRequest owner;
 
     /**
      * Create default GHPullRequestReviewComment instance
@@ -107,6 +99,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
+    @Override
     public GHReaction createReaction(ReactionContent content) throws IOException {
         return owner.root()
                 .createRequest()
@@ -122,6 +115,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @throws IOException
      *             the io exception
      */
+    @Override
     public void delete() throws IOException {
         owner.root().createRequest().method("DELETE").withUrlPath(getApiRoute()).send();
     }
@@ -134,48 +128,13 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
+    @Override
     public void deleteReaction(GHReaction reaction) throws IOException {
         owner.root()
                 .createRequest()
                 .method("DELETE")
                 .withUrlPath(getApiRoute(), "reactions", String.valueOf(reaction.getId()))
                 .send();
-    }
-
-    /**
-     * Gets the author association to the project.
-     *
-     * @return the author association to the project
-     */
-    public GHCommentAuthorAssociation getAuthorAssociation() {
-        return authorAssociation;
-    }
-
-    /**
-     * The comment itself.
-     *
-     * @return the body
-     */
-    public String getBody() {
-        return body;
-    }
-
-    /**
-     * Gets The body in html format.
-     *
-     * @return {@link String} the body in html format
-     */
-    public String getBodyHtml() {
-        return bodyHtml;
-    }
-
-    /**
-     * Gets The body text.
-     *
-     * @return {@link String} the body text
-     */
-    public String getBodyText() {
-        return bodyText;
     }
 
     /**
@@ -197,20 +156,10 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     }
 
     /**
-     * Gets the html url.
-     *
-     * @return the html url
-     */
-    public URL getHtmlUrl() {
-        return GitHubClient.parseURL(htmlUrl);
-    }
-
-    /**
      * Gets in reply to id.
      *
-     * @return the in reply to id
+     * @return the in reply to id, or -1 if not a reply
      */
-    @CheckForNull
     public long getInReplyToId() {
         return inReplyToId;
     }
@@ -218,7 +167,13 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     /**
      * Gets The line of the blob to which the comment applies. The last line of the range for a multi-line comment.
      *
-     * @return the line to which the comment applies
+     * <p>
+     * This field is not available on {@link GHPullRequestReview.ReviewComment} objects returned by
+     * {@link GHPullRequestReview#listReviewComments()}. Use
+     * {@link GHPullRequestReview.ReviewComment#readPullRequestReviewComment()} or
+     * {@link GHPullRequest#listReviewComments()} to obtain this value.
+     *
+     * @return the line to which the comment applies, or -1 if not available
      */
     public int getLine() {
         return line;
@@ -236,7 +191,13 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     /**
      * Gets The line of the blob to which the comment applies. The last line of the range for a multi-line comment.
      *
-     * @return the line to which the comment applies
+     * <p>
+     * This field is not available on {@link GHPullRequestReview.ReviewComment} objects returned by
+     * {@link GHPullRequestReview#listReviewComments()}. Use
+     * {@link GHPullRequestReview.ReviewComment#readPullRequestReviewComment()} or
+     * {@link GHPullRequest#listReviewComments()} to obtain this value.
+     *
+     * @return the line to which the comment applies, or -1 if not available
      */
     public int getOriginalLine() {
         return originalLine;
@@ -254,7 +215,13 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     /**
      * Gets The first line of the range for a multi-line comment.
      *
-     * @return the original start line
+     * <p>
+     * This field is not available on {@link GHPullRequestReview.ReviewComment} objects returned by
+     * {@link GHPullRequestReview#listReviewComments()}. Use
+     * {@link GHPullRequestReview.ReviewComment#readPullRequestReviewComment()} or
+     * {@link GHPullRequest#listReviewComments()} to obtain this value.
+     *
+     * @return the original start line, or -1 if not available or not a multi-line comment
      */
     public int getOriginalStartLine() {
         return originalStartLine != null ? originalStartLine : -1;
@@ -263,11 +230,12 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     /**
      * Gets the pull request to which this review comment is associated.
      *
-     * @return the parent
+     * @return the parent pull request
      */
+    @Override
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHPullRequest getParent() {
-        return owner;
+        return (GHPullRequest) owner;
     }
 
     /**
@@ -282,9 +250,8 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     /**
      * Gets position.
      *
-     * @return the position
+     * @return the position, or -1 if not available
      */
-    @CheckForNull
     public int getPosition() {
         return position;
     }
@@ -318,9 +285,15 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
 
     /**
      * Gets The side of the diff to which the comment applies. The side of the last line of the range for a multi-line
-     * comment
+     * comment.
      *
-     * @return {@link Side} the side if the diff to which the comment applies
+     * <p>
+     * This field is not available on {@link GHPullRequestReview.ReviewComment} objects returned by
+     * {@link GHPullRequestReview#listReviewComments()}. Use
+     * {@link GHPullRequestReview.ReviewComment#readPullRequestReviewComment()} or
+     * {@link GHPullRequest#listReviewComments()} to obtain this value.
+     *
+     * @return {@link Side} the side of the diff to which the comment applies, or {@link Side#UNKNOWN} if not available
      */
     public Side getSide() {
         return Side.from(side);
@@ -329,7 +302,13 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     /**
      * Gets The first line of the range for a multi-line comment.
      *
-     * @return the start line
+     * <p>
+     * This field is not available on {@link GHPullRequestReview.ReviewComment} objects returned by
+     * {@link GHPullRequestReview#listReviewComments()}. Use
+     * {@link GHPullRequestReview.ReviewComment#readPullRequestReviewComment()} or
+     * {@link GHPullRequest#listReviewComments()} to obtain this value.
+     *
+     * @return the start line, or -1 if not available or not a multi-line comment
      */
     public int getStartLine() {
         return startLine != null ? startLine : -1;
@@ -338,7 +317,13 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     /**
      * Gets The side of the first line of the range for a multi-line comment.
      *
-     * @return {@link Side} the side of the first line
+     * <p>
+     * This field is not available on {@link GHPullRequestReview.ReviewComment} objects returned by
+     * {@link GHPullRequestReview#listReviewComments()}. Use
+     * {@link GHPullRequestReview.ReviewComment#readPullRequestReviewComment()} or
+     * {@link GHPullRequest#listReviewComments()} to obtain this value.
+     *
+     * @return {@link Side} the side of the first line, or {@link Side#UNKNOWN} if not available
      */
     public Side getStartSide() {
         return Side.from(startSide);
@@ -351,8 +336,9 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @throws IOException
      *             the io exception
      */
+    @Override
     public GHUser getUser() throws IOException {
-        return owner.root().getUser(user.getLogin());
+        return owner.root().intern(user);
     }
 
     /**
@@ -360,11 +346,29 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      *
      * @return the paged iterable
      */
+    @Override
     public PagedIterable<GHReaction> listReactions() {
         return owner.root()
                 .createRequest()
                 .withUrlPath(getApiRoute() + "/reactions")
                 .toIterable(GHReaction[].class, item -> owner.root());
+    }
+
+    /**
+     * Refreshes this comment by fetching the full data from the API.
+     *
+     * <p>
+     * This is useful when the comment was obtained via {@link GHPullRequestReview#listReviewComments()}, which uses a
+     * GitHub API endpoint that does not return all fields. After calling this method, fields like {@link #getLine()},
+     * {@link #getOriginalLine()}, {@link #getSide()}, etc. will return their actual values.
+     *
+     * @throws IOException
+     *             if an I/O error occurs
+     * @see GHPullRequest#listReviewComments()
+     */
+    @Override
+    public void refresh() throws IOException {
+        owner.root().createRequest().withUrlPath(getApiRoute()).fetchInto(this).wrapUp(getParent());
     }
 
     /**
@@ -383,7 +387,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
                 .with("body", body)
                 .withUrlPath(getApiRoute(true) + "/replies")
                 .fetch(GHPullRequestReviewComment.class)
-                .wrapUp(owner);
+                .wrapUp(getParent());
     }
 
     /**
@@ -394,6 +398,7 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
      * @throws IOException
      *             the io exception
      */
+    @Override
     public void update(String body) throws IOException {
         owner.root().createRequest().method("PATCH").with("body", body).withUrlPath(getApiRoute()).fetchInto(this);
         this.body = body;
@@ -424,12 +429,12 @@ public class GHPullRequestReviewComment extends GHObject implements Reactable {
     /**
      * Wrap up.
      *
-     * @param owner
-     *            the owner
+     * @param pullRequest
+     *            the pull request owner
      * @return the GH pull request review comment
      */
-    GHPullRequestReviewComment wrapUp(GHPullRequest owner) {
-        this.owner = owner;
+    GHPullRequestReviewComment wrapUp(GHPullRequest pullRequest) {
+        this.owner = pullRequest;
         return this;
     }
 }

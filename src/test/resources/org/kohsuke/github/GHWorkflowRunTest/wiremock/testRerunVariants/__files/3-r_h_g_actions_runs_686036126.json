@@ -1,0 +1,10 @@
+{
+  "id": 686036126,
+  "name": "Slow workflow",
+  "url": "https://api.github.com/repos/hub4j-test-org/GHWorkflowRunTest/actions/runs/686036126",
+  "html_url": "https://github.com/hub4j-test-org/GHWorkflowRunTest/actions/runs/686036126",
+  "status": "completed",
+  "conclusion": "failure",
+  "workflow_id": 6820849,
+  "run_attempt": 1
+}

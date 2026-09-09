@@ -1,0 +1,54 @@
+{
+  "id": "c9fc8fb6-9fb1-48ca-a422-02483d91c9e0",
+  "name": "repos_hub4j-test-org_github-api_milestones",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/milestones",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"description\":\"First milestone\",\"title\":\"Milestone Sort A\"}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "3-r_h_g_milestones.json",
+    "headers": {
+      "Date": "Thu, 25 Jun 2026 07:59:06 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
+      "ETag": "\"fd9d4b6915e2734f59480acda63faac6a6b9f7d7853651ad25a06a8ed220e5e7\"",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, project, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset, Warning",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Server": "github.com",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4902",
+      "X-RateLimit-Reset": "1782377714",
+      "X-RateLimit-Used": "98",
+      "X-RateLimit-Resource": "core",
+      "X-GitHub-Request-Id": "C154:38FA88:3A50130:3859644:6A3CDFCA",
+      "Location": "https://api.github.com/repos/hub4j-test-org/github-api/milestones/7"
+    }
+  },
+  "uuid": "c9fc8fb6-9fb1-48ca-a422-02483d91c9e0",
+  "persistent": true,
+  "insertionIndex": 3
+}

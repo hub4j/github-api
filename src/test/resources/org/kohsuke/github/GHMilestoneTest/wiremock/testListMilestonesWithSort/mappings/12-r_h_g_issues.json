@@ -1,0 +1,57 @@
+{
+  "id": "4a7d5f5c-bef7-4b26-8fe0-75d050042637",
+  "name": "repos_hub4j-test-org_github-api_issues",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/issues",
+    "method": "POST",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": "{\"milestone\":8,\"assignees\":[],\"title\":\"Issue B1 for sort test\",\"labels\":[]}",
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": false
+      }
+    ]
+  },
+  "response": {
+    "status": 201,
+    "bodyFileName": "12-r_h_g_issues.json",
+    "headers": {
+      "Date": "Thu, 25 Jun 2026 07:59:11 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
+      "ETag": "\"5871ad07e78dc332c24eed805e2f5edfe96a50562bb520befb219f0d9badb498\"",
+      "X-OAuth-Scopes": "admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, gist, notifications, project, repo, user, workflow, write:discussion",
+      "X-Accepted-OAuth-Scopes": "",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "Deprecation": "Tue, 10 Mar 2026 00:00:00 GMT",
+      "Sunset": "Fri, 10 Mar 2028 00:00:00 GMT",
+      "x-github-api-version-selected": "2022-11-28",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset, Warning",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Server": "github.com",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4893",
+      "X-RateLimit-Reset": "1782377714",
+      "X-RateLimit-Used": "107",
+      "X-RateLimit-Resource": "core",
+      "X-GitHub-Request-Id": "D3D4:13D7F2:396CA76:376754C:6A3CDFCF",
+      "Link": "<https://docs.github.com/en/rest/about-the-rest-api/api-versions>; rel=\"deprecation\"; type=\"text/html\"",
+      "Location": "https://api.github.com/repos/hub4j-test-org/github-api/issues/490"
+    }
+  },
+  "uuid": "4a7d5f5c-bef7-4b26-8fe0-75d050042637",
+  "persistent": true,
+  "insertionIndex": 12
+}

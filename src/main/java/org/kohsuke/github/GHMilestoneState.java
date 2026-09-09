@@ -11,5 +11,7 @@ public enum GHMilestoneState {
     /** The closed. */
     CLOSED,
     /** The open. */
-    OPEN
+    OPEN,
+    /** The unknown. */
+    UNKNOWN
 }

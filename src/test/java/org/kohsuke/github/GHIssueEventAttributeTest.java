@@ -14,6 +14,7 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -24,7 +25,10 @@ public class GHIssueEventAttributeTest extends AbstractGitHubWireMockTest {
     private enum Type implements Predicate<GHIssueEvent>, Consumer<GHIssueEvent> {
         assignment(e -> assertThat(e.getAssignee(), notNullValue()), "assigned", "unassigned"),
         label(e -> assertThat(e.getLabel(), notNullValue()), "labeled", "unlabeled"),
-        milestone(e -> assertThat(e.getMilestone(), notNullValue()), "milestoned", "demilestoned");
+        milestone(e -> {
+            assertThat(e.getMilestone(), notNullValue());
+            assertThat(e.getMilestone().getState(), nullValue());
+        }, "milestoned", "demilestoned");
 
         private final Consumer<GHIssueEvent> assertion;
         private final Set<String> subtypes;

@@ -1,13 +1,14 @@
 package org.kohsuke.github;
 
 import com.infradna.tool.bridge_method_injector.WithBridgeMethods;
+import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.kohsuke.github.internal.EnumUtils;
 
 import java.io.IOException;
 import java.net.URL;
 import java.time.Instant;
 import java.util.Date;
-import java.util.Locale;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -141,10 +142,11 @@ public class GHMilestone extends GHObject {
     /**
      * Gets state.
      *
-     * @return the state
+     * @return the state, or {@code null} if the state is not available
      */
+    @CheckForNull
     public GHMilestoneState getState() {
-        return Enum.valueOf(GHMilestoneState.class, state.toUpperCase(Locale.ENGLISH));
+        return EnumUtils.getNullableEnumOrDefault(GHMilestoneState.class, state, GHMilestoneState.UNKNOWN);
     }
 
     /**

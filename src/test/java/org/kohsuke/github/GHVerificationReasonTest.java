@@ -2,6 +2,8 @@ package org.kohsuke.github;
 
 import org.junit.Test;
 
+import java.time.Instant;
+
 import static org.hamcrest.Matchers.*;
 
 // TODO: Auto-generated Javadoc
@@ -306,5 +308,21 @@ public class GHVerificationReasonTest extends AbstractGitHubWireMockTest {
         assertThat(commit.getCommitShortInfo().getVerification().getReason(), equalTo(GHVerification.Reason.VALID));
         assertThat(commit.getCommitShortInfo().getVerification().getPayload(), notNullValue());
         assertThat(commit.getCommitShortInfo().getVerification().getSignature(), notNullValue());
+        assertThat(commit.getCommitShortInfo().getVerification().getVerifiedAt(),
+                equalTo(Instant.ofEpochMilli(1615809600000L)));
+    }
+
+    /**
+     * Test verified at is null when not verified.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void testVerifiedAtNullWhenUnsigned() throws Exception {
+        GHRepository r = gitHub.getRepository("hub4j/github-api");
+        GHCommit commit = r.getCommit("86a2e245aa6d71d54923655066049d9e21a15f05");
+        assertThat(commit.getCommitShortInfo().getVerification().isVerified(), is(false));
+        assertThat(commit.getCommitShortInfo().getVerification().getVerifiedAt(), nullValue());
     }
 }

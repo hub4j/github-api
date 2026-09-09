@@ -161,6 +161,30 @@ public class GHPullRequest extends GHIssue implements Refreshable {
     }
 
     /**
+     * Converts a pull request from ready for review to draft
+     *
+     * @throws IOException
+     *             the io exception
+     * @throws IllegalStateException
+     *             if the pull request is not a draft
+     */
+    public void convertToDraft() throws IOException {
+        if (draft) {
+            throw new IllegalStateException("Pull request is already a draft");
+        }
+
+        StringBuilder inputBuilder = new StringBuilder();
+        addParameter(inputBuilder, "pullRequestId", this.getNodeId());
+
+        String graphqlBody = "mutation ConvertToDraft { convertPullRequestToDraft(input: {" + inputBuilder
+                + "}) { pullRequest { id } } }";
+
+        root().createGraphQLRequest(graphqlBody).sendGraphQL();
+
+        refresh();
+    }
+
+    /**
      * Create review gh pull request review builder.
      *
      * @return the gh pull request review builder
@@ -275,6 +299,10 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         return base;
     }
 
+    //
+    // details that are only available via get with ID
+    //
+
     /**
      * Gets changed files.
      *
@@ -286,10 +314,6 @@ public class GHPullRequest extends GHIssue implements Refreshable {
         populate();
         return changedFiles;
     }
-
-    //
-    // details that are only available via get with ID
-    //
 
     /**
      * Gets the closed by.

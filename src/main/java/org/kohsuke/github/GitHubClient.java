@@ -823,7 +823,7 @@ class GitHubClient {
 
     private void logResponse(@Nonnull final GitHubConnectorResponse response) {
         LOGGER.log(FINER, () -> {
-            return String.format("(%s) GitHub API response: %s",
+            return String.format("(%s) GitHub API response: %s %d",
                     sendRequestTraceId.get(),
                     response.request().url().toString(),
                     response.statusCode());

@@ -79,7 +79,12 @@ org.kohsuke.github.function.FunctionThrows
 org.kohsuke.github.function.InputStreamFunction
 org.kohsuke.github.function.SupplierThrows
 org.kohsuke.github.internal.DefaultGitHubConnector
+org.kohsuke.github.internal.DefaultGitHubJackson
 org.kohsuke.github.internal.EnumUtils
+org.kohsuke.github.internal.GitHubJackson
+org.kohsuke.github.internal.GitHubJackson2
+org.kohsuke.github.internal.GitHubJackson3
+org.kohsuke.github.internal.GitHubJacksonException
 org.kohsuke.github.internal.Previews
 org.kohsuke.github.EnterpriseManagedSupport
 org.kohsuke.github.GHAutolinkBuilder

@@ -30,6 +30,7 @@ import org.kohsuke.github.authorization.AuthorizationProvider;
 import org.kohsuke.github.authorization.ImmutableAuthorizationProvider;
 import org.kohsuke.github.authorization.UserAuthorizationProvider;
 import org.kohsuke.github.connector.GitHubConnector;
+import org.kohsuke.github.internal.GitHubJackson;
 
 import java.io.*;
 import java.util.*;
@@ -379,6 +380,8 @@ public class GitHub {
      *            rateLimitChecker
      * @param authorizationProvider
      *            a authorization provider
+     * @param jackson
+     *            the Jackson implementation to use for JSON serialization
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
@@ -388,7 +391,8 @@ public class GitHub {
             GitHubRateLimitHandler rateLimitHandler,
             GitHubAbuseLimitHandler abuseLimitHandler,
             GitHubRateLimitChecker rateLimitChecker,
-            AuthorizationProvider authorizationProvider) throws IOException {
+            AuthorizationProvider authorizationProvider,
+            GitHubJackson jackson) throws IOException {
         if (authorizationProvider instanceof DependentAuthorizationProvider) {
             ((DependentAuthorizationProvider) authorizationProvider).bind(this);
         } else if (authorizationProvider instanceof ImmutableAuthorizationProvider
@@ -408,7 +412,8 @@ public class GitHub {
                 rateLimitHandler,
                 abuseLimitHandler,
                 rateLimitChecker,
-                authorizationProvider);
+                authorizationProvider,
+                jackson);
 
         // Ensure we have the login if it is available
         // This preserves previously existing behavior. Consider removing in future.

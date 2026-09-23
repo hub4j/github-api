@@ -1,0 +1,24 @@
+{
+  "id": "4ecf8d7f-5a76-4f31-9e2c-2f770fa64eb3",
+  "name": "search_code",
+  "request": {
+    "url": "/search/code?q=filename%3APackage.swift+repo%3Achrisgrieser%2F.config",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "2-search_code.json",
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    }
+  },
+  "uuid": "4ecf8d7f-5a76-4f31-9e2c-2f770fa64eb3",
+  "persistent": true,
+  "insertionIndex": 2
+}
+

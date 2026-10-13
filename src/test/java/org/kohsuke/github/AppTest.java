@@ -737,6 +737,7 @@ public class AppTest extends AbstractGitHubWireMockTest {
         final GHAppInstallation ghAppInstallation = appInstallation.toList().get(0);
         assertThat(ghAppInstallation.getAppId(), is(122478L));
         assertThat(ghAppInstallation.getAccount().getLogin(), is("t0m4uk1991"));
+        assertThat(ghAppInstallation.getAccount(), instanceOf(GHUser.class));
     }
 
     /**

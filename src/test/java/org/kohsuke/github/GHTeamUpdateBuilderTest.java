@@ -95,20 +95,6 @@ public class GHTeamUpdateBuilderTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * Assert that the updated team has the expected updated values.
-     *
-     * @param updatedTeam
-     *            the team to assert the updated values on
-     */
-    private void validateUpdatedTeam(GHTeam updatedTeam) {
-        assertThat(updatedTeam.getName(), equalTo(TEAM_TO_UPDATE_NEW_NAME));
-        assertThat(updatedTeam.getDescription(), equalTo(TEAM_TO_UPDATE_NEW_DESCRIPTION));
-        assertThat(updatedTeam.getPrivacy(), equalTo(TEAM_TO_UPDATE_NEW_PRIVACY));
-        // assertThat(updatedTeam.getNotificationSetting(), equalTo(TEAM_TO_UPDATE_NEW_NOTIFICATIONS));
-        assertThat(updatedTeam.getPermission(), equalTo(TEAM_TO_UPDATE_NEW_PERMISSIONS.name().toLowerCase()));
-    }
-
-    /**
      * Get the GHTeamUpdateBuilder instance with the common fields set for updating a team, to be used in the different
      * update scenarios.
      *
@@ -123,5 +109,19 @@ public class GHTeamUpdateBuilderTest extends AbstractGitHubWireMockTest {
                 .privacy(TEAM_TO_UPDATE_NEW_PRIVACY)
                 .notifications(TEAM_TO_UPDATE_NEW_NOTIFICATIONS)
                 .permission(TEAM_TO_UPDATE_NEW_PERMISSIONS);
+    }
+
+    /**
+     * Assert that the updated team has the expected updated values.
+     *
+     * @param updatedTeam
+     *            the team to assert the updated values on
+     */
+    private void validateUpdatedTeam(GHTeam updatedTeam) {
+        assertThat(updatedTeam.getName(), equalTo(TEAM_TO_UPDATE_NEW_NAME));
+        assertThat(updatedTeam.getDescription(), equalTo(TEAM_TO_UPDATE_NEW_DESCRIPTION));
+        assertThat(updatedTeam.getPrivacy(), equalTo(TEAM_TO_UPDATE_NEW_PRIVACY));
+        // assertThat(updatedTeam.getNotificationSetting(), equalTo(TEAM_TO_UPDATE_NEW_NOTIFICATIONS));
+        assertThat(updatedTeam.getPermission(), equalTo(TEAM_TO_UPDATE_NEW_PERMISSIONS.name().toLowerCase()));
     }
 }

@@ -2,6 +2,8 @@ package org.kohsuke.github;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.time.Instant;
+
 // TODO: Auto-generated Javadoc
 /**
  * The commit/tag can be signed by user. This object holds the verification status. Whether the Commit/Tag is signed or
@@ -84,6 +86,7 @@ public class GHVerification {
     private Reason reason;
     private String signature, payload;
     private boolean verified;
+    private String verifiedAt;
 
     /**
      * Create default GHVerification instance
@@ -117,6 +120,15 @@ public class GHVerification {
      */
     public String getSignature() {
         return signature;
+    }
+
+    /**
+     * Gets the time when the signature was verified by GitHub.
+     *
+     * @return the instant the signature was verified, or null if not available.
+     */
+    public Instant getVerifiedAt() {
+        return GitHubClient.parseInstant(verifiedAt);
     }
 
     /**

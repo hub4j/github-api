@@ -169,6 +169,7 @@ public class GHIssueTest extends AbstractGitHubWireMockTest {
         GHRepository repo = getRepository();
         GHIssue issue = repo.createIssue(name).body("## test").create();
         assertThat(issue.getTitle(), equalTo(name));
+        assertThat(issue.getAuthorAssociation(), equalTo(GHCommentAuthorAssociation.NONE));
     }
 
     /**

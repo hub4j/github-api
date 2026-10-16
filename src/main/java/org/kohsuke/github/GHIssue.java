@@ -121,6 +121,9 @@ public class GHIssue extends GHObject implements Reactable {
     /** The assignees. */
     protected GHUser[] assignees;
 
+    /** The author's association with the repository. */
+    protected String authorAssociation;
+
     /** The body. */
     @SkipFromToString
     protected String body;
@@ -347,6 +350,17 @@ public class GHIssue extends GHObject implements Reactable {
      */
     public List<GHUser> getAssignees() {
         return Collections.unmodifiableList(Arrays.asList(assignees));
+    }
+
+    /**
+     * Gets the author's association with the repository.
+     *
+     * @return the author association
+     */
+    public GHCommentAuthorAssociation getAuthorAssociation() {
+        return EnumUtils.getEnumOrDefault(GHCommentAuthorAssociation.class,
+                authorAssociation,
+                GHCommentAuthorAssociation.UNKNOWN);
     }
 
     /**

@@ -1,19 +1,21 @@
-The class "%1$s" needs to be configured or excluded for reflection / serialization and was not mentioned in one of the following resources:
+The following classes need to be configured or excluded for reflection / serialization:
 
-Please do one of the following:
-1. add "%1$s" to serialization.json and / or reflect-config.json
-2. add "%1$s" to no-reflect-and-serialization-list 
+%1$s
 
-DO NOT do both. 
+For each class, please do one of the following:
+1. add it to serialization.json and / or reflect-config.json
+2. add it to no-reflect-and-serialization-list
+
+DO NOT do both.
 
 Option 1:
-The class is serialized or reflected over. Includes "GH*" classes the are populated using Jackson.
-Does not include Builders and other classes that are only used locally. 
+The class is serialized or reflected over. Includes "GH*" classes that are populated using Jackson.
+Does not include Builders and other classes that are only used locally.
 
 src/main/resources/META-INF/reflect-config.json - example:
 
   {
-    "name": "%1$s",
+    "name": "org.kohsuke.github.GHExample",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,
@@ -31,7 +33,7 @@ src/main/resources/META-INF/reflect-config.json - example:
 src/main/resources/META-INF/serialization.json - example:
 
   {
-    "name": "%1$s"
+    "name": "org.kohsuke.github.GHExample"
   }
 
 Option 2:
@@ -39,7 +41,7 @@ The class is not serialized or reflected over. This is less common.
 
 src/test/resources/no-reflect-and-serialization-list - example:
 
-  %1$s
+  org.kohsuke.github.GHExample
 
 
 

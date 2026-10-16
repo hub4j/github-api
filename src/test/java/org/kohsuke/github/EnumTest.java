@@ -64,7 +64,7 @@ public class EnumTest extends AbstractGitHubWireMockTest {
 
         assertThat(GHMembership.Role.values().length, equalTo(2));
 
-        assertThat(GHMilestoneState.values().length, equalTo(2));
+        assertThat(GHMilestoneState.values().length, equalTo(3));
 
         assertThat(GHMyself.RepositoryListFilter.values().length, equalTo(5));
 

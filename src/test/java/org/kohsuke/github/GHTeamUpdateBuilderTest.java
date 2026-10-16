@@ -18,12 +18,12 @@ public class GHTeamUpdateBuilderTest extends AbstractGitHubWireMockTest {
     // private static final String CURRENT_PARENT_TEAM_SLUG = "dummy-current-parent-team";
     private static final String NEW_PARENT_TEAM_SLUG = "dummy-new-parent-team";
 
-    private static final String TEAM_TO_UPDATE_NEW_DESCRIPTION = "This is an updated description!";
+    private static final String TEAM_TO_UPDATE_NEW_DESCRIPTION = "Updated by GHTeamUpdateBuilderTest";
     private static final String TEAM_TO_UPDATE_NEW_NAME = "dummy-team-updated";
     private static final GHTeam.NotificationSetting TEAM_TO_UPDATE_NEW_NOTIFICATIONS = GHTeam.NotificationSetting.NOTIFICATIONS_DISABLED;
     @Deprecated
     private static final GHOrganization.Permission TEAM_TO_UPDATE_NEW_PERMISSIONS = GHOrganization.Permission.PUSH;
-    private static final GHTeam.Privacy TEAM_TO_UPDATE_NEW_PRIVACY = GHTeam.Privacy.SECRET;
+    private static final GHTeam.Privacy TEAM_TO_UPDATE_NEW_PRIVACY = GHTeam.Privacy.CLOSED;
 
     private static final String TEAM_TO_UPDATE_SLUG = "dummy-team-to-update";
 
@@ -105,7 +105,7 @@ public class GHTeamUpdateBuilderTest extends AbstractGitHubWireMockTest {
         assertThat(updatedTeam.getDescription(), equalTo(TEAM_TO_UPDATE_NEW_DESCRIPTION));
         assertThat(updatedTeam.getPrivacy(), equalTo(TEAM_TO_UPDATE_NEW_PRIVACY));
         // assertThat(updatedTeam.getNotificationSetting(), equalTo(TEAM_TO_UPDATE_NEW_NOTIFICATIONS));
-        assertThat(updatedTeam.getPermission(), equalTo(TEAM_TO_UPDATE_NEW_PERMISSIONS));
+        assertThat(updatedTeam.getPermission(), equalTo(TEAM_TO_UPDATE_NEW_PERMISSIONS.name().toLowerCase()));
     }
 
     /**

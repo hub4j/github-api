@@ -1,0 +1,48 @@
+{
+  "id": "bbe3602e-b5f0-4d4c-89e6-c4dfe331cb19",
+  "name": "orgs_hub4j-test-org_teams_dummy-new-parent-team",
+  "request": {
+    "url": "/orgs/hub4j-test-org/teams/dummy-new-parent-team",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "4-o_h_t_dummy-new-parent-team.json",
+    "headers": {
+      "Date": "Fri, 16 Oct 2026 10:52:28 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
+      "ETag": "W/\"1b0f2d553e6b0f51cb498ac84f26c09244cecda0c6e1e98de207fb22b89d3d95\"",
+      "Last-Modified": "Fri, 16 Oct 2026 10:47:40 GMT",
+      "github-authentication-token-expiration": "2026-11-15 11:34:00 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-accepted-github-permissions": "members=read",
+      "x-github-api-version-selected": "2022-11-28",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset, Warning",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Server": "github.com",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4965",
+      "X-RateLimit-Reset": "1792150820",
+      "X-RateLimit-Used": "35",
+      "X-RateLimit-Resource": "core",
+      "X-GitHub-Request-Id": "21C6:1E492F:8D64E6:D62927:6AD201EC",
+      "x-github-edge-region": "uksouth"
+    }
+  },
+  "uuid": "bbe3602e-b5f0-4d4c-89e6-c4dfe331cb19",
+  "persistent": true,
+  "insertionIndex": 4
+}

@@ -5805,6 +5805,21 @@
     "allDeclaredClasses": true
   },
   {
+    "name": "org.kohsuke.github.GHTeam$NotificationSetting",
+    "allPublicFields": true,
+    "allDeclaredFields": true,
+    "queryAllPublicConstructors": true,
+    "queryAllDeclaredConstructors": true,
+    "allPublicConstructors": true,
+    "allDeclaredConstructors": true,
+    "queryAllPublicMethods": true,
+    "queryAllDeclaredMethods": true,
+    "allPublicMethods": true,
+    "allDeclaredMethods": true,
+    "allPublicClasses": true,
+    "allDeclaredClasses": true
+  },
+  {
     "name": "org.kohsuke.github.GHTeam$Privacy",
     "allPublicFields": true,
     "allDeclaredFields": true,
@@ -5926,6 +5941,21 @@
   },
   {
     "name": "org.kohsuke.github.GHTeamChanges$FromString",
+    "allPublicFields": true,
+    "allDeclaredFields": true,
+    "queryAllPublicConstructors": true,
+    "queryAllDeclaredConstructors": true,
+    "allPublicConstructors": true,
+    "allDeclaredConstructors": true,
+    "queryAllPublicMethods": true,
+    "queryAllDeclaredMethods": true,
+    "allPublicMethods": true,
+    "allDeclaredMethods": true,
+    "allPublicClasses": true,
+    "allDeclaredClasses": true
+  },
+  {
+    "name": "org.kohsuke.github.GHTeamUpdateBuilder",
     "allPublicFields": true,
     "allDeclaredFields": true,
     "queryAllPublicConstructors": true,

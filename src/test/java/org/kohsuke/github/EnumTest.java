@@ -111,7 +111,8 @@ public class EnumTest extends AbstractGitHubWireMockTest {
 
         assertThat(GHTargetType.values().length, equalTo(3));
 
-        assertThat(GHTeam.Role.values().length, equalTo(2));
+        assertThat(GHTeam.NotificationSetting.values().length, equalTo(3));
+        assertThat(GHTeam.Role.values().length, equalTo(3));
         assertThat(GHTeam.Privacy.values().length, equalTo(3));
 
         assertThat(GHUserSearchBuilder.Sort.values().length, equalTo(3));

@@ -50,7 +50,7 @@ public class GHTeamUpdateBuilderTest extends AbstractGitHubWireMockTest {
         // Update team with different parent team
         GHTeam updatedTeam = getCommonBuilder(teamToUpdate).parentTeamId(newParentTeam.getId()).update();
 
-        assertUpdatedTeam(updatedTeam);
+        validateUpdatedTeam(updatedTeam);
         // assertThat(updatedTeam.getParentTeam().getId(), equalTo(newParentTeam.getId()));
     }
 
@@ -71,7 +71,7 @@ public class GHTeamUpdateBuilderTest extends AbstractGitHubWireMockTest {
         // update team with no change to parent team
         GHTeam updatedTeam = getCommonBuilder(teamToUpdate).update();
 
-        assertUpdatedTeam(updatedTeam);
+        validateUpdatedTeam(updatedTeam);
         // assertThat(teamToUpdate.getParentTeam().getId(), equalTo(existingParentTeam.getId()));
     }
 
@@ -90,7 +90,7 @@ public class GHTeamUpdateBuilderTest extends AbstractGitHubWireMockTest {
         // Update team with removed parent team
         GHTeam updatedTeam = getCommonBuilder(teamToUpdate).parentTeamId(null).update();
 
-        assertUpdatedTeam(updatedTeam);
+        validateUpdatedTeam(updatedTeam);
         // assertThat(teamToUpdate.getParentTeam(), equalTo(null));
     }
 
@@ -100,7 +100,7 @@ public class GHTeamUpdateBuilderTest extends AbstractGitHubWireMockTest {
      * @param updatedTeam
      *            the team to assert the updated values on
      */
-    private void assertUpdatedTeam(GHTeam updatedTeam) {
+    private void validateUpdatedTeam(GHTeam updatedTeam) {
         assertThat(updatedTeam.getName(), equalTo(TEAM_TO_UPDATE_NEW_NAME));
         assertThat(updatedTeam.getDescription(), equalTo(TEAM_TO_UPDATE_NEW_DESCRIPTION));
         assertThat(updatedTeam.getPrivacy(), equalTo(TEAM_TO_UPDATE_NEW_PRIVACY));

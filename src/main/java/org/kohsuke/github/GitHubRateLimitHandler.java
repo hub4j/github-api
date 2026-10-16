@@ -2,12 +2,11 @@ package org.kohsuke.github;
 
 import org.jetbrains.annotations.NotNull;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
+import org.kohsuke.github.internal.WaitTimeUtils;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.time.Duration;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 import javax.annotation.Nonnull;
 
@@ -99,23 +98,13 @@ public abstract class GitHubRateLimitHandler extends GitHubConnectorResponseErro
     /*
      * Exposed for testability. Given an http response, find the rate limit reset header field and parse it. If no
      * header is found, wait for a reasonably amount of time.
+     *
+     * The implementation lives in WaitTimeUtils, shared with GitHubAbuseLimitHandler.
      */
     long parseWaitTime(GitHubConnectorResponse connectorResponse) {
-        String v = connectorResponse.header("X-RateLimit-Reset");
-        if (v == null)
-            return Duration.ofMinutes(1).toMillis(); // can't tell, return 1 min
-
-        // Don't use ZonedDateTime.now(), because the local and remote server times may not be in sync
-        // Instead, we can take advantage of the Date field in the response to see what time the remote server
-        // thinks it is
-        String dateField = connectorResponse.header("Date");
-        ZonedDateTime now;
-        if (dateField != null) {
-            now = ZonedDateTime.parse(dateField, DateTimeFormatter.RFC_1123_DATE_TIME);
-        } else {
-            now = ZonedDateTime.now();
-        }
-        return Math.max(MINIMUM_RATE_LIMIT_RETRY_MILLIS, (Long.parseLong(v) - now.toInstant().getEpochSecond()) * 1000);
+        return WaitTimeUtils.parseRateLimitResetWaitTime(connectorResponse,
+                Duration.ofMinutes(1).toMillis(), // can't tell, return 1 min
+                MINIMUM_RATE_LIMIT_RETRY_MILLIS);
     }
 
 }

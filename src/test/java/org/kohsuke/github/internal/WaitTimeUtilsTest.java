@@ -53,15 +53,6 @@ public class WaitTimeUtilsTest {
     }
 
     @Test
-    public void rateLimitResetReturnsDefaultWhenHeaderMissing() {
-        GitHubConnectorResponse response = mock(GitHubConnectorResponse.class);
-        when(response.header("X-RateLimit-Reset")).thenReturn(null);
-
-        assertThat(WaitTimeUtils.parseRateLimitResetWaitTime(response, DEFAULT_WAIT, MINIMUM_WAIT),
-                equalTo(DEFAULT_WAIT));
-    }
-
-    @Test
     public void rateLimitResetFallsBackToLocalTimeWhenDateHeaderMissing() {
         // No Date header: serverNow() must fall back to the local clock.
         // The result depends on the wall clock, so assert a range around the expected wait
@@ -75,6 +66,15 @@ public class WaitTimeUtilsTest {
         long wait = WaitTimeUtils.parseRateLimitResetWaitTime(response, DEFAULT_WAIT, MINIMUM_WAIT);
         assertThat(wait, greaterThanOrEqualTo(115_000L));
         assertThat(wait, lessThanOrEqualTo(120_000L));
+    }
+
+    @Test
+    public void rateLimitResetReturnsDefaultWhenHeaderMissing() {
+        GitHubConnectorResponse response = mock(GitHubConnectorResponse.class);
+        when(response.header("X-RateLimit-Reset")).thenReturn(null);
+
+        assertThat(WaitTimeUtils.parseRateLimitResetWaitTime(response, DEFAULT_WAIT, MINIMUM_WAIT),
+                equalTo(DEFAULT_WAIT));
     }
 
     @Test

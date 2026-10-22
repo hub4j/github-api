@@ -48,12 +48,18 @@ public class GHCommitPointer {
     /**
      * Obtains the commit that this pointer is referring to.
      *
+     * When repository information is unavailable, this method throws {@link IOException}.
+     *
      * @return the commit
      * @throws IOException
-     *             the io exception
+     *             if repository information is unavailable or the commit cannot be retrieved
      */
     public GHCommit getCommit() throws IOException {
-        return getRepository().getCommit(getSha());
+        GHRepository repository = getRepository();
+        if (repository == null) {
+            throw new IOException("Repository information is unavailable for this commit pointer");
+        }
+        return repository.getCommit(getSha());
     }
 
     /**
@@ -77,7 +83,9 @@ public class GHCommitPointer {
     /**
      * The repository that contains the commit.
      *
-     * @return the repository
+     * This value is {@code null} when repository information is unavailable.
+     *
+     * @return the repository, or {@code null} when repository information is unavailable
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getRepository() {

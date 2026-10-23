@@ -4,10 +4,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThrows;
 
@@ -24,29 +22,36 @@ public class GHCommitPointerTest extends AbstractGitHubWireMockTest {
     }
 
     /**
-     * A head repository of JSON {@code null} throws {@link IOException} instead of {@link NullPointerException}.
+     * The head of checkstyle/checkstyle#1 comes from a fork that no longer exists, so GitHub reports its repository as
+     * {@code null}. The head commit is still reachable through the base repository.
      *
      * @throws Exception
      *             the exception
      */
     @Test
-    public void getCommitThrowsWhenRepositoryIsNull() throws Exception {
-        snapshotNotAllowed();
-        mockGitHub.apiServer()
-                .stubFor(get(urlEqualTo("/repos/base-owner/base-repo")).willReturn(aResponse().withStatus(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody("{\"full_name\":\"base-owner/base-repo\"}")));
-        mockGitHub.apiServer()
-                .stubFor(get(urlEqualTo("/repos/base-owner/base-repo/pulls/1")).willReturn(aResponse().withStatus(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody(
-                                "{\"head\":{\"sha\":\"1111111111111111111111111111111111111111\",\"repo\":null}}")));
-
-        GHCommitPointer head = gitHub.getRepository("base-owner/base-repo").getPullRequest(1).getHead();
+    public void getCommitFromDeletedHeadRepository() throws Exception {
+        GHPullRequest pullRequest = gitHub.getRepository("checkstyle/checkstyle").getPullRequest(1);
+        GHCommitPointer head = pullRequest.getHead();
         assertThat(head.getRepository(), nullValue());
+        assertThat(head.getSha(), equalTo("4889a777da54c6848b92da273a28223cfaf8dfe9"));
 
-        IOException failure = assertThrows(IOException.class, head::getCommit);
-        assertThat(failure.getMessage(),
-                equalTo("Repository information is unavailable for this commit pointer"));
+        GHCommit commit = head.getCommit();
+        assertThat(commit, notNullValue());
+        assertThat(commit.getSHA1(), equalTo("4889a777da54c6848b92da273a28223cfaf8dfe9"));
+        assertThat(commit.getOwner().getFullName(), equalTo("checkstyle/checkstyle"));
+    }
+
+    /**
+     * A pointer that has neither a repository nor a pull request cannot resolve its commit.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void getCommitWithoutRepositoryOrPullRequest() throws Exception {
+        snapshotNotAllowed();
+        GHCommitPointer pointer = new GHCommitPointer();
+        IOException failure = assertThrows(IOException.class, pointer::getCommit);
+        assertThat(failure.getMessage(), equalTo("Repository information is unavailable for commit null"));
     }
 }

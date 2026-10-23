@@ -1,0 +1,101 @@
+{
+  "sha": "4889a777da54c6848b92da273a28223cfaf8dfe9",
+  "node_id": "MDY6Q29tbWl0MTI0OTkyNTE6NDg4OWE3NzdkYTU0YzY4NDhiOTJkYTI3M2EyODIyM2NmYWY4ZGZlOQ==",
+  "commit": {
+    "author": {
+      "name": "Ivan Sopov",
+      "email": "isopov@data357.com",
+      "date": "2013-09-02T06:52:59Z"
+    },
+    "committer": {
+      "name": "Ivan Sopov",
+      "email": "isopov@data357.com",
+      "date": "2013-09-10T14:33:22Z"
+    },
+    "message": "adding travis config file - additionally it is needed to activate travis on this github repo",
+    "tree": {
+      "sha": "6d003a0c9709e476ace405a50ffdb66720bcda5e",
+      "url": "https://api.github.com/repos/checkstyle/checkstyle/git/trees/6d003a0c9709e476ace405a50ffdb66720bcda5e"
+    },
+    "url": "https://api.github.com/repos/checkstyle/checkstyle/git/commits/4889a777da54c6848b92da273a28223cfaf8dfe9",
+    "comment_count": 0,
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null,
+      "verified_at": null
+    }
+  },
+  "url": "https://api.github.com/repos/checkstyle/checkstyle/commits/4889a777da54c6848b92da273a28223cfaf8dfe9",
+  "html_url": "https://github.com/checkstyle/checkstyle/commit/4889a777da54c6848b92da273a28223cfaf8dfe9",
+  "comments_url": "https://api.github.com/repos/checkstyle/checkstyle/commits/4889a777da54c6848b92da273a28223cfaf8dfe9/comments",
+  "author": {
+    "login": "isopov",
+    "id": 462800,
+    "node_id": "MDQ6VXNlcjQ2MjgwMA==",
+    "avatar_url": "https://avatars.githubusercontent.com/u/462800?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/isopov",
+    "html_url": "https://github.com/isopov",
+    "followers_url": "https://api.github.com/users/isopov/followers",
+    "following_url": "https://api.github.com/users/isopov/following{/other_user}",
+    "gists_url": "https://api.github.com/users/isopov/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/isopov/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/isopov/subscriptions",
+    "organizations_url": "https://api.github.com/users/isopov/orgs",
+    "repos_url": "https://api.github.com/users/isopov/repos",
+    "events_url": "https://api.github.com/users/isopov/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/isopov/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "isopov",
+    "id": 462800,
+    "node_id": "MDQ6VXNlcjQ2MjgwMA==",
+    "avatar_url": "https://avatars.githubusercontent.com/u/462800?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/isopov",
+    "html_url": "https://github.com/isopov",
+    "followers_url": "https://api.github.com/users/isopov/followers",
+    "following_url": "https://api.github.com/users/isopov/following{/other_user}",
+    "gists_url": "https://api.github.com/users/isopov/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/isopov/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/isopov/subscriptions",
+    "organizations_url": "https://api.github.com/users/isopov/orgs",
+    "repos_url": "https://api.github.com/users/isopov/repos",
+    "events_url": "https://api.github.com/users/isopov/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/isopov/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "c8b42075fe76f67ee744f1b1d3ef24e27ae932d7",
+      "url": "https://api.github.com/repos/checkstyle/checkstyle/commits/c8b42075fe76f67ee744f1b1d3ef24e27ae932d7",
+      "html_url": "https://github.com/checkstyle/checkstyle/commit/c8b42075fe76f67ee744f1b1d3ef24e27ae932d7"
+    }
+  ],
+  "stats": {
+    "total": 4,
+    "additions": 4,
+    "deletions": 0
+  },
+  "files": [
+    {
+      "sha": "68e0a3c8a069fe91c02ec9cb9b5f1f92c8ed83c5",
+      "filename": ".travis.yml",
+      "status": "added",
+      "additions": 4,
+      "deletions": 0,
+      "changes": 4,
+      "blob_url": "https://github.com/checkstyle/checkstyle/blob/4889a777da54c6848b92da273a28223cfaf8dfe9/.travis.yml",
+      "raw_url": "https://github.com/checkstyle/checkstyle/raw/4889a777da54c6848b92da273a28223cfaf8dfe9/.travis.yml",
+      "contents_url": "https://api.github.com/repos/checkstyle/checkstyle/contents/.travis.yml?ref=4889a777da54c6848b92da273a28223cfaf8dfe9",
+      "patch": "@@ -0,0 +1,4 @@\n+language: java\n+jdk:\n+  - openjdk6\n+  - openjdk7"
+    }
+  ]
+}

@@ -35,9 +35,12 @@ import java.io.IOException;
  */
 public class GHCommitPointer {
 
-    private String ref, sha, label;
+    /** The pull request this pointer belongs to, used when {@link #repo} is unavailable. */
+    private transient GHPullRequest pullRequest;
 
+    private String ref, sha, label;
     private GHRepository repo;
+
     private GHUser user;
     /**
      * Create default GHCommitPointer instance
@@ -48,16 +51,21 @@ public class GHCommitPointer {
     /**
      * Obtains the commit that this pointer is referring to.
      *
-     * When repository information is unavailable, this method throws {@link IOException}.
+     * If the repository is unavailable (for example, the head repository of a pull request opened from a fork that has
+     * since been deleted), the commit is looked up in the repository of the pull request instead. GitHub keeps pull
+     * request commits in the base repository, so they remain reachable there.
      *
      * @return the commit
      * @throws IOException
-     *             if repository information is unavailable or the commit cannot be retrieved
+     *             the io exception
      */
     public GHCommit getCommit() throws IOException {
         GHRepository repository = getRepository();
+        if (repository == null && pullRequest != null) {
+            repository = pullRequest.getRepository();
+        }
         if (repository == null) {
-            throw new IOException("Repository information is unavailable for this commit pointer");
+            throw new IOException("Repository information is unavailable for commit " + getSha());
         }
         return repository.getCommit(getSha());
     }
@@ -83,9 +91,10 @@ public class GHCommitPointer {
     /**
      * The repository that contains the commit.
      *
-     * This value is {@code null} when repository information is unavailable.
+     * This value is {@code null} when GitHub does not report a repository, for example when the head repository of a
+     * pull request has been deleted. {@link #getCommit()} still works in that case.
      *
-     * @return the repository, or {@code null} when repository information is unavailable
+     * @return the repository, or {@code null} when it is unavailable
      */
     @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
     public GHRepository getRepository() {
@@ -113,4 +122,15 @@ public class GHCommitPointer {
         return user;
     }
 
+    /**
+     * Binds this pointer to the pull request it belongs to.
+     *
+     * @param pullRequest
+     *            the pull request
+     * @return this pointer
+     */
+    GHCommitPointer wrapUp(GHPullRequest pullRequest) {
+        this.pullRequest = pullRequest;
+        return this;
+    }
 }

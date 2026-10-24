@@ -1,5 +1,6 @@
 package org.kohsuke.github;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -39,6 +40,26 @@ public class GHCommitPointerTest extends AbstractGitHubWireMockTest {
         assertThat(commit, notNullValue());
         assertThat(commit.getSHA1(), equalTo("4889a777da54c6848b92da273a28223cfaf8dfe9"));
         assertThat(commit.getOwner().getFullName(), equalTo("checkstyle/checkstyle"));
+
+        // Base still has its repository, so getCommit() must use that repository instead of the pull-request fallback.
+        // The recorded commit body is only for the head SHA; serve the same shape for the base SHA.
+        GHCommitPointer base = pullRequest.getBase();
+        assertThat(base, notNullValue());
+        assertThat(base.getRepository(), notNullValue());
+        assertThat(base.getRepository().getFullName(), equalTo("checkstyle/checkstyle"));
+        String baseSha = base.getSha();
+        mockGitHub.apiServer()
+                .stubFor(WireMock.get(WireMock.urlPathEqualTo("/repos/checkstyle/checkstyle/commits/" + baseSha))
+                        .withHeader("Accept", WireMock.equalTo("application/vnd.github+json"))
+                        .willReturn(WireMock.aResponse()
+                                .withStatus(200)
+                                .withHeader("Content-Type", "application/json; charset=utf-8")
+                                .withBody("{\"sha\":\"" + baseSha + "\"}")));
+
+        GHCommit baseCommit = base.getCommit();
+        assertThat(baseCommit, notNullValue());
+        assertThat(baseCommit.getSHA1(), equalTo(baseSha));
+        assertThat(baseCommit.getOwner().getFullName(), equalTo("checkstyle/checkstyle"));
     }
 
     /**
@@ -53,5 +74,16 @@ public class GHCommitPointerTest extends AbstractGitHubWireMockTest {
         GHCommitPointer pointer = new GHCommitPointer();
         IOException failure = assertThrows(IOException.class, pointer::getCommit);
         assertThat(failure.getMessage(), equalTo("Repository information is unavailable for commit null"));
+    }
+
+    /**
+     * {@link GHPullRequest#getHead()} and {@link GHPullRequest#getBase()} return null when the pointer was not set.
+     */
+    @Test
+    public void getHeadAndBaseWhenUnset() {
+        snapshotNotAllowed();
+        GHPullRequest pullRequest = new GHPullRequest();
+        assertThat(pullRequest.getHead(), nullValue());
+        assertThat(pullRequest.getBase(), nullValue());
     }
 }

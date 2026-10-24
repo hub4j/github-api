@@ -272,7 +272,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the base
      */
     public GHCommitPointer getBase() {
-        return base;
+        return base == null ? null : base.wrapUp(this);
     }
 
     /**
@@ -340,7 +340,7 @@ public class GHPullRequest extends GHIssue implements Refreshable {
      * @return the head
      */
     public GHCommitPointer getHead() {
-        return head;
+        return head == null ? null : head.wrapUp(this);
     }
 
     /**

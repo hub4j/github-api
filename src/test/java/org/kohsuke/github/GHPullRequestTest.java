@@ -416,6 +416,13 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
         }
     }
 
+    @Test
+    public void lockAndUnlock() throws Exception {
+        GHPullRequest p = getRepository().createPullRequest("lockAndUnlock", "test/stable", "main", "## test");
+        p.lock();
+        p.unlock();
+    }
+
     /**
      * Test marking a draft pull request as ready for review.
      *

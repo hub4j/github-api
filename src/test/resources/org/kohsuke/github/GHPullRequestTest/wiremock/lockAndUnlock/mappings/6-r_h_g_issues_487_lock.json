@@ -1,0 +1,19 @@
+{
+  "id": "f99462ff-b66b-40e6-8871-cbbb8c57fc75",
+  "name": "repos_hub4j-test-org_github-api_issues_487_lock",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/issues/487/lock",
+    "method": "DELETE",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 204
+  },
+  "uuid": "f99462ff-b66b-40e6-8871-cbbb8c57fc75",
+  "persistent": true,
+  "insertionIndex": 6
+}

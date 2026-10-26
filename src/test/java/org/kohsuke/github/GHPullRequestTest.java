@@ -417,6 +417,21 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Lock and unlock a pull request.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void lockAndUnlock() throws Exception {
+        GHPullRequest p = getRepository().createPullRequest("lockAndUnlock", "test/stable", "main", "## test");
+        p.lock();
+        assertThat(getRepository().getPullRequest(p.getNumber()).isLocked(), is(true));
+        p.unlock();
+        assertThat(getRepository().getPullRequest(p.getNumber()).isLocked(), is(false));
+    }
+
+    /**
      * Test marking a draft pull request as ready for review.
      *
      * @throws Exception

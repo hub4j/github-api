@@ -1,0 +1,25 @@
+{
+  "id": "ef8321ed-06c6-47ec-a29e-2c700a01d5c9",
+  "name": "repos_hub4j-test-org_github-api_pulls_487",
+  "request": {
+    "url": "/repos/hub4j-test-org/github-api/pulls/487",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "8-r_h_g_pulls_487.json",
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    }
+  },
+  "uuid": "ef8321ed-06c6-47ec-a29e-2c700a01d5c9",
+  "persistent": true,
+  "scenarioName": "scenario-1-repos-hub4j-test-org-github-api-pulls-487",
+  "requiredScenarioState": "scenario-1-repos-hub4j-test-org-github-api-pulls-487-2",
+  "insertionIndex": 8
+}

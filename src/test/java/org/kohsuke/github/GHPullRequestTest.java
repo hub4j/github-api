@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.kohsuke.github.GHPullRequest.AutoMerge;
+import org.kohsuke.github.internal.graphql.response.GHGraphQLError;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -332,8 +333,21 @@ public class GHPullRequestTest extends AbstractGitHubWireMockTest {
                     commitTitle,
                     expectedCommitHeadOid,
                     null);
-        } catch (IOException e) {
+            fail("Expected GHGraphQLException");
+        } catch (GHGraphQLException e) {
+            assertThat(e.getMessage(), containsString("Request failed due to following response errors"));
             assertThat(e.getMessage(), containsString("does not have a verified email"));
+
+            assertThat(e.getErrors(), hasSize(1));
+            GHGraphQLError error = e.getErrors().get(0);
+            assertThat(error.getType(), equalTo("UNPROCESSABLE"));
+            assertThat(error.getMessage(), containsString("does not have a verified email"));
+            assertThat(error.getPath(), contains((Object) "enablePullRequestAutoMerge"));
+            assertThat(error.getLocations(), hasSize(1));
+            assertThat(error.getLocations().get(0).getLine(), equalTo(1));
+            assertThat(error.getLocations().get(0).getColumn(), equalTo(28));
+
+            assertThat(e.getQuery(), containsString("enablePullRequestAutoMerge"));
         }
     }
 

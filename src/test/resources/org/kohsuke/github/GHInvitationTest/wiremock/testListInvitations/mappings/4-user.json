@@ -1,0 +1,49 @@
+{
+  "id": "c5a9a219-7f13-4459-94c3-faa67d3803e2",
+  "name": "user",
+  "request": {
+    "url": "/user",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "4-user.json",
+    "headers": {
+      "Date": "Fri, 30 Oct 2026 13:52:34 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
+      "ETag": "W/\"12918be026567debe49fad011c00cba55426ef532aec0a1439d528dd246653ec\"",
+      "Last-Modified": "Mon, 26 Oct 2026 11:39:23 GMT",
+      "X-OAuth-Scopes": "repo",
+      "X-Accepted-OAuth-Scopes": "",
+      "github-authentication-token-expiration": "2026-11-06 13:50:38 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset, Warning",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Server": "github.com",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4999",
+      "X-RateLimit-Reset": "1793371954",
+      "X-RateLimit-Used": "1",
+      "X-RateLimit-Resource": "core",
+      "X-GitHub-Request-Id": "A490:1E8157:D2D050:130F4CD:6AE4A122",
+      "x-github-edge-region": "fra"
+    }
+  },
+  "uuid": "c5a9a219-7f13-4459-94c3-faa67d3803e2",
+  "persistent": true,
+  "insertionIndex": 4
+}

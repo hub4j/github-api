@@ -21,6 +21,44 @@ public class GHInvitationTest extends AbstractGitHubWireMockTest {
     }
 
     /**
+     * Test accepting a repository invitation.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testAcceptInvitation() throws IOException {
+        List<GHInvitation> invitations = gitHub.getMyInvitations();
+        assertThat(invitations, hasSize(1));
+
+        GHInvitation invitation = invitations.get(0);
+        assertThat(invitation.getId(), not(equalTo(0L)));
+
+        invitation.accept();
+
+        assertThat(gitHub.getMyInvitations(), is(empty()));
+    }
+
+    /**
+     * Test declining a repository invitation.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    public void testDeclineInvitation() throws IOException {
+        List<GHInvitation> invitations = gitHub.getMyInvitations();
+        assertThat(invitations, hasSize(1));
+
+        GHInvitation invitation = invitations.get(0);
+        assertThat(invitation.getId(), not(equalTo(0L)));
+
+        invitation.decline();
+
+        assertThat(gitHub.getMyInvitations(), is(empty()));
+    }
+
+    /**
      * Test that listing repository invitations returns correct data for all fields.
      *
      * @throws IOException

@@ -1,0 +1,24 @@
+{
+  "id": "be779a3f-c503-4d48-9f35-0f8d39bb70a8",
+  "name": "repositories_694641495_contents_package_swift",
+  "request": {
+    "url": "/repositories/694641495/contents/Alfred.alfredpreferences/workflows/menubar-search%20%5B3rd-Party%5D/menu/Package.swift?ref=073e7b4493d088fdf1995a74cf5da201a5795181",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "3-repositories_694641495_contents_package.swift.json",
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    }
+  },
+  "uuid": "be779a3f-c503-4d48-9f35-0f8d39bb70a8",
+  "persistent": true,
+  "insertionIndex": 3
+}
+

@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.kohsuke.github.example.dataobject.ReadOnlyObjects;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static org.hamcrest.Matchers.*;
@@ -303,6 +304,31 @@ public class GitHubTest extends AbstractGitHubWireMockTest {
         IllegalArgumentException e = Assert.assertThrows(IllegalArgumentException.class,
                 () -> searchBuilder.q("", "not valid"));
         assertThat(e.getMessage(), equalTo("qualifier cannot be null or empty"));
+    }
+
+    /**
+     * Search content where the API item URL contains special characters in path segments.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    public void searchContentSpecialCharactersInUrl() throws Exception {
+        GHContent content = gitHub.searchContent()
+                .q("filename:Package.swift repo:chrisgrieser/.config")
+                .list()
+                .iterator()
+                .next();
+
+        assertThat(content.getPath(),
+                equalTo("Alfred.alfredpreferences/workflows/menubar-search [3rd-Party]/menu/Package.swift"));
+
+        byte[] data;
+        try (java.io.InputStream inputStream = content.read()) {
+            data = inputStream.readAllBytes();
+        }
+
+        assertThat(new String(data, StandardCharsets.UTF_8), equalTo("// content with special path chars\n"));
     }
 
     /**

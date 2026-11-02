@@ -1,0 +1,24 @@
+{
+  "id": "e173c8a1-fa95-4d0c-8b5c-b18f3ecc8bab",
+  "name": "user",
+  "request": {
+    "url": "/user",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "1-user.json",
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    }
+  },
+  "uuid": "e173c8a1-fa95-4d0c-8b5c-b18f3ecc8bab",
+  "persistent": true,
+  "insertionIndex": 1
+}
+

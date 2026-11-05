@@ -507,6 +507,19 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
+     * Lists the issue types configured for this organization.
+     *
+     * @return the issue types
+     * @see <a href="https://docs.github.com/en/rest/orgs/issue-types#list-issue-types-for-an-organization">List issue
+     *      types for an organization</a>
+     */
+    public PagedIterable<GHIssueType> listIssueTypes() {
+        return root().createRequest()
+                .withUrlPath(String.format("/orgs/%s/issue-types", login))
+                .toIterable(GHIssueType[].class, null);
+    }
+
+    /**
      * All the members of this organization.
      *
      * @return the paged iterable

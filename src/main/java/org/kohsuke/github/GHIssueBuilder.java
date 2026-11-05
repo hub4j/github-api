@@ -108,4 +108,17 @@ public class GHIssueBuilder {
             builder.with("milestone", milestone.getNumber());
         return this;
     }
+
+    /**
+     * Assigns an issue type by name.
+     *
+     * @param type
+     *            the issue type name
+     * @return the gh issue builder
+     */
+    public GHIssueBuilder type(String type) {
+        if (type != null)
+            builder.with("type", type);
+        return this;
+    }
 }

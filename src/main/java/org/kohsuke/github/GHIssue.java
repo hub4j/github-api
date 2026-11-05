@@ -161,6 +161,9 @@ public class GHIssue extends GHObject implements Reactable {
     /** The html url. */
     protected String title, htmlUrl;
 
+    /** The issue type. */
+    protected GHIssueType type;
+
     /** The user. */
     protected GHUser user;
 
@@ -520,6 +523,16 @@ public class GHIssue extends GHObject implements Reactable {
     }
 
     /**
+     * Gets the issue type.
+     *
+     * @return the issue type, or {@code null} if no type is assigned
+     */
+    @SuppressFBWarnings(value = { "EI_EXPOSE_REP" }, justification = "Expected behavior")
+    public GHIssueType getType() {
+        return type;
+    }
+
+    /**
      * User who submitted the issue.
      *
      * @return the user
@@ -782,6 +795,18 @@ public class GHIssue extends GHObject implements Reactable {
      */
     public void setTitle(String title) throws IOException {
         edit("title", title);
+    }
+
+    /**
+     * Sets the issue type.
+     *
+     * @param type
+     *            the issue type name, or {@code null} to remove the current type
+     * @throws IOException
+     *             the io exception
+     */
+    public void setType(String type) throws IOException {
+        editIssue("type", type);
     }
 
     /**

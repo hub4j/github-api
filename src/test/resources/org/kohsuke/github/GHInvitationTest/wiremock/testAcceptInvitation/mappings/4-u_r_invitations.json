@@ -1,0 +1,50 @@
+{
+  "id": "ee492612-d843-4bc4-83a2-ab5656687d75",
+  "name": "user_repository_invitations",
+  "request": {
+    "url": "/user/repository_invitations",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": "[]",
+    "headers": {
+      "Date": "Mon, 02 Nov 2026 13:24:21 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
+      "ETag": "\"1e2d905c5dc00df7d2cdd14168ee742552386c53ed3565f43b5e5140b51c2999\"",
+      "X-OAuth-Scopes": "repo",
+      "X-Accepted-OAuth-Scopes": "public_repo, repo, repo:invite",
+      "github-authentication-token-expiration": "2026-11-09 13:08:42 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset, Warning",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Server": "github.com",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4996",
+      "X-RateLimit-Reset": "1793629417",
+      "X-RateLimit-Used": "4",
+      "X-RateLimit-Resource": "core",
+      "X-GitHub-Request-Id": "ECCE:171C:498A900:6A40809:6AE88F05",
+      "x-github-edge-region": "fra"
+    }
+  },
+  "uuid": "ee492612-d843-4bc4-83a2-ab5656687d75",
+  "persistent": true,
+  "scenarioName": "scenario-1-user-repository_invitations",
+  "requiredScenarioState": "scenario-1-user-repository_invitations-2",
+  "insertionIndex": 4
+}

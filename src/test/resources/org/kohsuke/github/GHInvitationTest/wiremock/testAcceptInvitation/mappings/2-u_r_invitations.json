@@ -1,0 +1,51 @@
+{
+  "id": "4165881b-461e-42ca-9925-707da6a93216",
+  "name": "user_repository_invitations",
+  "request": {
+    "url": "/user/repository_invitations",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "2-u_r_invitations.json",
+    "headers": {
+      "Date": "Mon, 02 Nov 2026 13:24:20 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
+      "ETag": "W/\"e7f79be5d115e574783b3b0bec22147486669ea9f42126f1d16540986955efa7\"",
+      "X-OAuth-Scopes": "repo",
+      "X-Accepted-OAuth-Scopes": "public_repo, repo, repo:invite",
+      "github-authentication-token-expiration": "2026-11-09 13:08:42 UTC",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset, Warning",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Server": "github.com",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "4980",
+      "X-RateLimit-Reset": "1793628076",
+      "X-RateLimit-Used": "20",
+      "X-RateLimit-Resource": "core",
+      "X-GitHub-Request-Id": "ECBC:3EFA6:61AAC6E:8E7EB25:6AE88F04",
+      "x-github-edge-region": "fra"
+    }
+  },
+  "uuid": "4165881b-461e-42ca-9925-707da6a93216",
+  "persistent": true,
+  "scenarioName": "scenario-1-user-repository_invitations",
+  "requiredScenarioState": "Started",
+  "newScenarioState": "scenario-1-user-repository_invitations-2",
+  "insertionIndex": 2
+}

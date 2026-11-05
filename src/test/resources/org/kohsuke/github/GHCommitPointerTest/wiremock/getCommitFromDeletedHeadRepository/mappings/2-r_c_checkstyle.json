@@ -1,0 +1,49 @@
+{
+  "id": "ae7cad8a-a9d3-4834-a285-7c9184fa5381",
+  "name": "repos_checkstyle_checkstyle",
+  "request": {
+    "url": "/repos/checkstyle/checkstyle",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "2-r_c_checkstyle.json",
+    "headers": {
+      "Date": "Fri, 23 Oct 2026 14:17:58 GMT",
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With",
+      "ETag": "W/\"9e492775d392eb8d29fa10faa7bb58ab40f8092c9b92fdcd0b157722ebf0b72a\"",
+      "Last-Modified": "Fri, 23 Oct 2026 12:15:07 GMT",
+      "X-OAuth-Scopes": "admin:public_key, gist, read:org, read:packages, repo, workflow",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "x-oauth-client-id": "178c6fc778ccc68e1d6a",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-github-api-version-selected": "2022-11-28",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset, Warning",
+      "Access-Control-Allow-Origin": "*",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "X-Frame-Options": "deny",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "0",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Content-Security-Policy": "default-src 'none'",
+      "Server": "github.com",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "2861",
+      "X-RateLimit-Reset": "1792765442",
+      "X-RateLimit-Used": "2139",
+      "X-RateLimit-Resource": "core",
+      "X-GitHub-Request-Id": "EE44:22B09C:D5FC3:E9016:6ADB6C96",
+      "x-github-edge-region": "westus3"
+    }
+  },
+  "uuid": "ae7cad8a-a9d3-4834-a285-7c9184fa5381",
+  "persistent": true,
+  "insertionIndex": 2
+}

@@ -1,0 +1,52 @@
+{
+  "id": "36c8b4d1-82f0-40a2-84f7-bd80f658e7a6",
+  "name": "repos_checkstyle_checkstyle_pulls_1",
+  "request": {
+    "url": "/repos/checkstyle/checkstyle/pulls/1",
+    "method": "GET",
+    "headers": {
+      "Accept": {
+        "equalTo": "application/vnd.github+json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "3-r_c_c_pulls_1.json",
+    "headers": {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Expose-Headers": "ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset, Warning",
+      "Cache-Control": "private, max-age=60, s-maxage=60",
+      "Content-Security-Policy": "default-src 'none'",
+      "Content-Type": "application/json; charset=utf-8",
+      "Date": "Fri, 23 Oct 2026 14:17:59 GMT",
+      "ETag": "\"c9179d4e109f401cec8c830d851ab84e62ad6b57889022a612af0a8ba5a0ef0f\"",
+      "Last-Modified": "Sun, 11 Oct 2026 14:04:53 GMT",
+      "Referrer-Policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+      "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+      "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP, Accept-Encoding, Accept, X-Requested-With",
+      "X-Accepted-OAuth-Scopes": "repo",
+      "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "deny",
+      "x-github-api-version-selected": "2022-11-28",
+      "X-GitHub-Media-Type": "github.v3; format=json",
+      "x-oauth-client-id": [
+        "178c6fc778ccc68e1d6a",
+        "178c6fc778ccc68e1d6a"
+      ],
+      "X-OAuth-Scopes": "admin:public_key, gist, read:org, read:packages, repo, workflow",
+      "X-XSS-Protection": "0",
+      "Server": "github.com",
+      "X-RateLimit-Limit": "5000",
+      "X-RateLimit-Remaining": "2860",
+      "X-RateLimit-Reset": "1792765442",
+      "X-RateLimit-Used": "2140",
+      "X-RateLimit-Resource": "core",
+      "X-GitHub-Request-Id": "EE4D:6CC3C:D4542:E746A:6ADB6C96",
+      "x-github-edge-region": "westus3"
+    }
+  },
+  "uuid": "36c8b4d1-82f0-40a2-84f7-bd80f658e7a6",
+  "persistent": true,
+  "insertionIndex": 3
+}
